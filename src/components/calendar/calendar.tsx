@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { CalendarDays, Video } from "lucide-react";
+import { CalendarDays, Video, CircleX   } from "lucide-react";
 
 function getCurrentWeekDayStrings() {
   const today = new Date();
@@ -121,7 +121,7 @@ fetch("https://backstagepass.co.in/reactapi/get_events.php")
       style={{ top: `${idx * 65}px` }} // stacks neatly
     >
       <div className="flex items-center gap-1 font-semibold mb-1">
-        <Video className="w-4 h-4" />
+       {event.color === "green" ? <Video className="w-4 h-4" /> : <CircleX className="w-4 h-4" />} 
         {event.title}
       </div>
       {event.zoom && (
@@ -131,7 +131,8 @@ fetch("https://backstagepass.co.in/reactapi/get_events.php")
     rel="noopener noreferrer"
     className="text-blue-600 underline break-all"
   >
-    {event.zoom.slice(0, 30)}...
+    {event.color === "green" ? "Join Zoom" : ""}
+    
   </a>
 )}
       {/* <div className="text-[10px] text-gray-500 mt-1">with {event.mentor}</div> */}

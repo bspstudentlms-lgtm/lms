@@ -1612,7 +1612,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
 
 
   return (
-    <div className="min-h-screen">
+    <div className="h-full">
       {/* <p className="text-xl font-bold marquee">Your course completed on {courseEnddate}</p> */}
       <style jsx>{`
         .marquee {
@@ -1634,7 +1634,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
       <div className="flex flex-wrap items-center justify-between gap-6 bg-white coursedetails p-4">
         <h2 className="text-xl font-bold flex-1 min-w-[200px]">{courseName}</h2>
 
-        
+
 
         <div className="flex items-center gap-4 flex-1 min-w-[250px]" style={{ justifyContent: "flex-end" }}>
           <div className="w-12 h-12">
@@ -1658,7 +1658,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
       </div>
 
       <div className="max-w-9xl mx-auto bg-white overflow-hidden grid grid-cols-1 md:grid-cols-3 gap-2">
-        <div className="md:col-span-2 p-4">
+        <div className="md:col-span-2 p-4 flex flex-col">
           {modules.length > 0 && modules[openModule] ? (
             modules[openModule].title === "Assessment" ? (
 
@@ -1864,22 +1864,22 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
                       <p className="text-red-600 mb-2">You did not pass the quiz. Please try again.</p>
                     )}
                     <div className="mt-6 flex justify-center gap-4">
-  <button
-    onClick={() => setIsReviewMode(true)}
-    className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
-  >
-    Review Quiz
-  </button>
+                      <button
+                        onClick={() => setIsReviewMode(true)}
+                        className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
+                      >
+                        Review Quiz
+                      </button>
 
-  {isMandatory && !hasPassed && (
-    <button
-      onClick={handleRetake}
-      className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
-    >
-      Retake Quiz
-    </button>
-  )}
-</div>
+                      {isMandatory && !hasPassed && (
+                        <button
+                          onClick={handleRetake}
+                          className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+                        >
+                          Retake Quiz
+                        </button>
+                      )}
+                    </div>
 
 
 
@@ -2147,170 +2147,218 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
               ) : (
 
                 <>
-                <div className="relative rounded-xl overflow-hidden border bg-white">
-                  {!isPlaying[currentTopic.id] ? (
-                    <div className="video-thumbnail"
-                      style={{ position: 'relative', width: '100%', height: 'auto' }}
-                    >
-                      {/* Use the thumbnail image from currentTopic */}
-                      <img
-                        src={currentTopic?.thumbnail}
-                        alt="Video Thumbnail"
-                        className="thumbnail-image"
-                        style={{
-                          width: '100%',
-                          height: 'auto',
-                          display: 'block',
-                          borderRadius: '8px', // Optional: for rounded corners
-                        }}
-                      />
-                      {/* Play Icon - Overlayed on the Thumbnail */}
-                      {!isPlaying[currentTopic.id] && (
-                        <div
+                  <div className="relative rounded-xl overflow-hidden border bg-white">
+                    {!isPlaying[currentTopic.id] ? (
+                      <div className="video-thumbnail"
+                        style={{ position: 'relative', width: '100%', height: 'auto' }}
+                      >
+                        {/* Use the thumbnail image from currentTopic */}
+                        <img
+                          src={currentTopic?.thumbnail}
+                          alt="Video Thumbnail"
+                          className="thumbnail-image"
                           style={{
-                            position: 'absolute',
-                            top: '50%',
-                            left: '50%',
-                            transform: 'translate(-50%, -50%)',
-                            backgroundColor: 'rgba(255, 0, 0, 0.85)',
-                            padding: '15px',
-                            borderRadius: '50%',
-                            cursor: 'pointer',
-                            boxShadow: '0 0 12px rgba(255,0,0,0.6)',
+                            width: '100%',
+                            height: 'auto',
+                            display: 'block',
+                            borderRadius: '8px', // Optional: for rounded corners
                           }}
-                          onClick={() => handleThumbnailClick(String(currentTopic?.id ?? ""))}
-                        >
-                          {/* Play Button Styled */}
-                          <button
+                        />
+                        {/* Play Icon - Overlayed on the Thumbnail */}
+                        {!isPlaying[currentTopic.id] && (
+                          <div
                             style={{
-                              backgroundColor: 'transparent',
-                              border: 'none',
-                              color: 'white',
-                              fontSize: '25px',
-                              fontWeight: 'bold',
+                              position: 'absolute',
+                              top: '50%',
+                              left: '50%',
+                              transform: 'translate(-50%, -50%)',
+                              backgroundColor: 'rgba(255, 0, 0, 0.85)',
+                              padding: '15px',
+                              borderRadius: '50%',
                               cursor: 'pointer',
-                              padding: 0,
-                              width: '40px',
-                              height: '40px',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center'
+                              boxShadow: '0 0 12px rgba(255,0,0,0.6)',
                             }}
+                            onClick={() => handleThumbnailClick(String(currentTopic?.id ?? ""))}
                           >
-                            ▶
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <Muxvideo
-                      key={`module-${openModule}-topic-${currentPointIndex}-video-${currentVideoIndex}`}
-                      videos={
-                        (currentTopic && (currentTopic.type === "video" ? (currentTopic as VideoTopic).video : [])) ||
-                        []
-                      }
-                      userId={userId ?? ""}
-                      topicId={String(currentTopic?.id ?? "")}
-                      resumeTime={resumeTime}
-                      currentVideoIndex={currentVideoIndex}
-                      onFinish={handleVideoEnd}
-                      autoplay={true}
-                    />
-                  )}
+                            {/* Play Button Styled */}
+                            <button
+                              style={{
+                                backgroundColor: 'transparent',
+                                border: 'none',
+                                color: 'white',
+                                fontSize: '25px',
+                                fontWeight: 'bold',
+                                cursor: 'pointer',
+                                padding: 0,
+                                width: '40px',
+                                height: '40px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                              }}
+                            >
+                              ▶
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <Muxvideo
+                        key={`module-${openModule}-topic-${currentPointIndex}-video-${currentVideoIndex}`}
+                        videos={
+                          (currentTopic && (currentTopic.type === "video" ? (currentTopic as VideoTopic).video : [])) ||
+                          []
+                        }
+                        userId={userId ?? ""}
+                        topicId={String(currentTopic?.id ?? "")}
+                        resumeTime={resumeTime}
+                        currentVideoIndex={currentVideoIndex}
+                        onFinish={handleVideoEnd}
+                        autoplay={true}
+                      />
+                    )}
 
-                  <ul className="space-y-2">
-                    {modules.map((module, index) => {
-                      const hideAssessment = module.title === "Assessment" && !Array.from(watchedTopicIds).length;
-                      if (hideAssessment) return null;
+                    <ul className="mt-4 space-y-2">
+                      {modules.map((module, index) => {
+                        const hideAssessment = module.title === "Assessment" && !Array.from(watchedTopicIds).length;
+                        if (hideAssessment) return null;
 
-                      const isUnlocked = isModuleUnlocked(index);
-                      const isCompletedModule = completedModuleIds.includes(Number(module.id));
-                      const isOpen = openModule === index;
-                      return (
-                        <li key={index} className="rounded-lg">
-
-
-                          {isOpen && module.title !== "Assessment" && module.title !== "Assignment" && module.title?.toLowerCase?.() !== "final quiz" && (
-
-                            <ul className="pl-0 pb-4 text-sm list-disc text-gray-600">
-                              
-                              {Array.isArray(module?.topics) &&
-                                module.topics.map((point, idx) => {
-                                  const pointKey = `${index}-${idx}`;
-                                  const isCurrentPlaying = openModule === index && currentPointIndex === idx;
-                                  const isCompletedTopic = watchedTopicIds.has(Number(point.id));
+                        const isUnlocked = isModuleUnlocked(index);
+                        const isCompletedModule = completedModuleIds.includes(Number(module.id));
+                        const isOpen = openModule === index;
+                        return (
+                          <li key={index} className="rounded-lg">
 
 
-                                  return (
-                                    
-                                    <li
-                                      key={idx}
-                                      className={`mb-1 flex items-center p-1 justify-between ${isCurrentPlaying ? "bg-white-200 text-grey-800 font-medium" : "hover:bg-white-100"
-                                        }`}
-                                    >
-                                     
-                                      <div className="flex items-center gap-3 flex-1">
-                              <label className="flex items-center cursor-pointer">
-                                <input type="checkbox" checked={isCompletedTopic} readOnly />
-                              </label>
-                              <p className="flex-1">{point.text}</p>
-                              <span
-                                style={{
-                                  color: "#111",
-                                  fontSize: "12px",
-                                  backgroundColor: "#f0f0f0",
-                                  padding: "4px 8px",
-                                  borderRadius: "8px",
-                                  fontWeight: "400",
-                                }}
-                              >
-                                {point.video_duration ?? ""}
-                              </span>
-                            </div>
+                            {isOpen && module.title !== "Assessment" && module.title !== "Assignment" && module.title?.toLowerCase?.() !== "final quiz" && (
 
-{isCurrentPlaying && (
-    <div className="absolute bottom-0 left-0 right-0 bg-white/90 backdrop-blur border-t">
-      <div className="mx-auto max-w-5xl flex items-center justify-between px-4 py-3">
-        <button
-          onClick={() => goToPrevTopicOrModule(idx - 1)}
-          className="flex items-center gap-2 rounded-md border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition"
-        >
-          ← Previous
-        </button>
+                              <ul className="space-y-2 pb-24 pt-5 pl-3 pr-3">
+                                {Array.isArray(module?.topics) &&
+                                  module.topics.map((point, idx) => {
+                                    const isCurrentPlaying =
+                                      openModule === index && currentPointIndex === idx;
+                                    const isCompletedTopic = watchedTopicIds.has(Number(point.id));
 
-        <button
-          onClick={() => goToNextTopicOrModule(idx + 1)}
-          className="flex items-center gap-2 rounded-md bg-blue-600 px-5 py-2 text-sm font-medium text-white hover:bg-blue-700 transition"
-        >
-          Next →
-        </button>
-      </div>
+                                    return (
+                                      <li
+                                        key={idx}
+                                        className={`group flex items-center justify-between
+    rounded-xl border border-blue-500 bg-blue-50
+    px-5 py-3 transition
+                                          ${
+                                            isCurrentPlaying
+                                              ? "border-blue-500 bg-blue-50 shadow-sm"
+                                              : "border-gray-200 hover:bg-gray-50"
+                                          }
+                                        `}
+                                      >
+                                        {/* LEFT SIDE */}
+                                        <div className="flex items-start gap-3 flex-1">
+                                          {/* Checkbox */}
+                                          <div className="pt-1">
+                                            <span
+                                              className={`flex h-5 w-5 items-center justify-center rounded-full border
+                                                ${
+                                                  isCompletedTopic
+                                                    ? "bg-green-500 border-green-500 text-white"
+                                                    : "border-gray-300 bg-white"
+                                                }
+                                              `}
+                                            >
+                                              {isCompletedTopic && (
+                                                <svg
+                                                  width="12"
+                                                  height="12"
+                                                  viewBox="0 0 24 24"
+                                                  fill="none"
+                                                >
+                                                  <path
+                                                    d="M20 6L9 17l-5-5"
+                                                    stroke="white"
+                                                    strokeWidth="2"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                  />
+                                                </svg>
+                                              )}
+                                            </span>
+                                          </div>
+
+                                          {/* Title */}
+                                          <div className="flex-1">
+                                            <p
+                                              className={`text-sm font-medium leading-snug
+                                                ${
+                                                  isCurrentPlaying
+                                                    ? "text-blue-700"
+                                                    : "text-gray-800"
+                                                }
+                                              `}
+                                            >
+                                              {point.text}
+                                            </p>
+                                          </div>
+                                        </div>
+
+                                        {/* RIGHT SIDE */}
+                                        <div className="flex items-center gap-3">
+                                          {/* Duration */}
+                                          {point.video_duration && (
+                                            <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
+                                              {point.video_duration}
+                                            </span>
+                                          )}
+                                        </div>
+
+                                        {/* STICKY CONTROLS (ONLY FOR CURRENT ITEM) */}
+                                      {isCurrentPlaying && (
+  <div className="sticky bottom-0 z-40 bg-white border-t shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
+    <div className="mx-auto max-w-6xl  gap-2 flex items-center justify-between px-3 py-2">
+      
+      {/* PREV */}
+      <button
+        onClick={() => goToPrevTopicOrModule(idx - 1)}
+        disabled={idx === 0}
+        className="flex items-center gap-1 rounded-md border border-gray-300 px-3 py-1 text-xs text-gray-500 hover:bg-gray-100"
+      >
+        ← Prev
+      </button>
+
+      {/* NEXT */}
+      <button
+        onClick={() => goToNextTopicOrModule(idx + 1)}
+        className="flex items-center gap-1 rounded-md bg-blue-600 px-3 py-1 text-xs font-medium text-white hover:bg-blue-700"
+      >
+        Next →
+      </button>
+
     </div>
-  )}
-                                    </li>
-                                  );
-                                })}
-                            </ul>
-                            
-                          )}
+  </div>
+)}
 
-                          
+                                      </li>
+                                    );
+                                  })}
+                                </ul>
+                            )}
 
-                          {isOpen && module.title === "Assessment" && (
-                            <div className="p-4 text-sm text-gray-600 italic">Complete the quiz in the left panel.</div>
-                          )}
 
-                          {isOpen && module.title === "Assignment" && (
-                            <div className="p-4 text-sm text-gray-600 italic">Complete the assignment in the left panel.</div>
-                          )}
-                        </li>
-  
-                       
-                      );
-                      
-                    })}
-                    
-                  </ul></div></>
+
+                            {isOpen && module.title === "Assessment" && (
+                              <div className="p-4 text-sm text-gray-600 italic">Complete the quiz in the left panel.</div>
+                            )}
+
+                            {isOpen && module.title === "Assignment" && (
+                              <div className="p-4 text-sm text-gray-600 italic">Complete the assignment in the left panel.</div>
+                            )}
+                          </li>
+
+
+                        );
+
+                      })}
+
+                    </ul></div></>
 
               )
           ) : (
@@ -2324,105 +2372,104 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
 
 
 
-        <aside className="w-[360px] shrink-0 border-l bg-white px-4 py-6 sticky top-24 max-h-[calc(100vh-120px)] sidebar-scroll">
-  <ul className="space-y-3">
-    {(() => {
-      let visibleIndex = -1;
+        <aside className="w-[360px] shrink-0 border-l bg-white px-4 py-6 sticky top-4 max-h-[calc(100vh-120px)] sidebar-scroll">
+          <ul className="space-y-3">
+            {(() => {
+              let visibleIndex = -1;
 
-      return modules.map((module, index) => {
-        const hideAssessment =
-          module.title === "Assessment" &&
-          !Array.from(watchedTopicIds).length;
+              return modules.map((module, index) => {
+                const hideAssessment =
+                  module.title === "Assessment" &&
+                  !Array.from(watchedTopicIds).length;
 
-        if (hideAssessment) return null;
+                if (hideAssessment) return null;
 
-        visibleIndex++;
+                visibleIndex++;
 
-        const isUnlocked = isModuleUnlocked(index);
-        const isCompleted = completedModuleIds.includes(Number(module.id));
-        const isOpen = openModule === index;
+                const isUnlocked = isModuleUnlocked(index);
+                const isCompleted = completedModuleIds.includes(Number(module.id));
+                const isOpen = openModule === index;
 
-        return (
-          <React.Fragment key={index}>
-            {/* ===== MODULE CARD ===== */}
-            <li
-              className={`rounded-xl border transition
+                return (
+                  <React.Fragment key={index}>
+                    {/* ===== MODULE CARD ===== */}
+                    <li
+                      className={`rounded-xl border transition
                 ${isOpen ? "border-blue-300 shadow-sm" : "border-gray-200"}
                 ${!isUnlocked && module.title !== "Assignment" && module.title !== "Final Quiz"
-                  ? "opacity-60"
-                  : ""}
+                          ? "opacity-60"
+                          : ""}
               `}
-            >
-              <button
-                disabled={
-                  !isUnlocked &&
-                  module.title !== "Assignment" &&
-                  module.title !== "Final Quiz"
-                }
-                onClick={() => {
-                  if (
-                    isUnlocked ||
-                    module.title === "Assignment" ||
-                    module.title === "Final Quiz"
-                  ) {
-                    setOpenModule(index);
-                    setCurrentPointIndex(0);
-                  }
-                }}
-                className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition
-                  ${
-                    isOpen
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-50 text-gray-800 hover:bg-gray-100"
-                  }
+                    >
+                      <button
+                        disabled={
+                          !isUnlocked &&
+                          module.title !== "Assignment" &&
+                          module.title !== "Final Quiz"
+                        }
+                        onClick={() => {
+                          if (
+                            isUnlocked ||
+                            module.title === "Assignment" ||
+                            module.title === "Final Quiz"
+                          ) {
+                            setOpenModule(index);
+                            setCurrentPointIndex(0);
+                          }
+                        }}
+                        className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition
+                  ${isOpen
+                            ? "bg-blue-600 text-white"
+                            : "bg-gray-50 text-gray-800 hover:bg-gray-100"
+                          }
                 `}
-              >
-                <div className="flex items-center gap-3">
-                  {isCompleted ? (
-                    <span className="text-green-500 text-sm">✔</span>
-                  ) : !isUnlocked ? (
-                    <span className="text-gray-400 text-sm">🔒</span>
-                  ) : null}
+                      >
+                        <div className="flex items-center gap-3">
+                          {isCompleted ? (
+                            <span className="text-green-500 text-sm">✔</span>
+                          ) : !isUnlocked ? (
+                            <span className="text-gray-400 text-sm">🔒</span>
+                          ) : null}
 
-                  <span className="font-medium text-sm">
-                    {module.title
-                      .replace("selfassessment", "Self Assessment")
-                      .replace("resources", "Resources")}
-                  </span>
-                </div>
+                          <span className="font-medium text-sm">
+                            {module.title
+                              .replace("selfassessment", "Self Assessment")
+                              .replace("resources", "Resources")}
+                          </span>
+                        </div>
 
-                <span className="text-lg opacity-70">›</span>
-              </button>
+                        <span className="text-lg opacity-70">›</span>
+                      </button>
 
-              {isOpen && module.title === "Assessment" && (
-                <div className="px-4 py-3 text-xs text-gray-500 bg-gray-50">
-                  Complete the quiz in the left panel.
-                </div>
-              )}
+                      {isOpen && module.title === "Assessment" && (
+                        <div className="px-4 py-3 text-xs text-gray-500 bg-gray-50">
+                          Complete the quiz in the left panel.
+                        </div>
+                      )}
 
-              {isOpen && module.title === "Assignment" && (
-                <div className="px-4 py-3 text-xs text-gray-500 bg-gray-50">
-                  Complete the assignment in the left panel.
-                </div>
-              )}
-            </li>
+                      {isOpen && module.title === "Assignment" && (
+                        <div className="px-4 py-3 text-xs text-gray-500 bg-gray-50">
+                          Complete the assignment in the left panel.
+                        </div>
+                      )}
+                    </li>
 
-            {/* ===== NEXT SECTION DIVIDER ===== */}
-            {module.title === "Assessment" && (
-              <div className="my-5 flex items-center gap-3">
-                <div className="flex-1 h-px bg-gray-300" />
-                <span className="text-[11px] font-semibold tracking-widest text-gray-400">
-                  NEXT SECTION
-                </span>
-                <div className="flex-1 h-px bg-gray-300" />
-              </div>
-            )}
-          </React.Fragment>
-        );
-      });
-    })()}
-  </ul>
-</aside>
+                    {/* ===== NEXT SECTION DIVIDER ===== */}
+                    {module.title === "Assessment" && (
+                      <div className="my-5 flex items-center gap-3">
+                        <div className="flex-1 h-px bg-gray-300" />
+                        <span className="text-[11px] font-semibold tracking-widest text-gray-400">
+                          NEXT SECTION
+                        </span>
+                        <div className="flex-1 h-px bg-gray-300" />
+                      </div>
+                    )}
+                  </React.Fragment>
+                );
+              });
+            })()}
+          </ul>
+        </aside>
 
       </div>
 

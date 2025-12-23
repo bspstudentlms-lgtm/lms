@@ -46,7 +46,7 @@ export default function FeatureTabs() {
   return (
     <section className="corporates">
   <h2>BackstagePass for Corporates</h2>
-  <p>Explore our customized corporate solutions for Siva your company!</p>
+  <p>Explore our customized corporate solutions for your company!</p>
   
   <div className="corporate-services">
     <div className="service">

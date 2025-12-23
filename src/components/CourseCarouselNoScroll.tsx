@@ -291,7 +291,7 @@ const mapLevel = (lvl: string): Course["level"] => {
               <p className="mt-1 pl-5 text-xs text-gray-500">
                 {course?.category?.toUpperCase()} • {course?.level?.toUpperCase()}
               </p>
-              <p className="mt-2 pl-5 pb-5 pr-5 text-sm text-gray-600 line-clamp-3">
+              <p className="mt-2 pl-5 pr-5 mb-6 text-sm text-gray-600 line-clamp-3">
                 {course.description}
               </p>
               <div className="pl-5 pr-5 pb-5 flex gap-3 mt-auto">
