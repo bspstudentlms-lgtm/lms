@@ -9,18 +9,30 @@ export const config = {
 };
 
 Font.register({
-  family: "GreatVibes",
+  family: "Montserrat",
   src: path.join(
     process.cwd(),
     "public",
     "fonts",
-    "GreatVibes-Regular.ttf"
+    "Montserrat-Bold.ttf"
   ),
 });
+
+Font.register({
+  family: "Bellarina",
+  src: path.join(
+    process.cwd(),
+    "public",
+    "fonts",
+    "Bellarina.otf"
+  ),
+});
+
 
 const styles = StyleSheet.create({
   page: {
     width: 595,
+    height: 842,
     position: "relative",
   },
 
@@ -29,65 +41,46 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     width: 595,
+    height: 842,
   },
 
-  name: {
+  studentName: {
     position: "absolute",
-    top: 360,
-    left: 0,
-    right: 0,
+    top: 385,
+    left: 40,
     textAlign: "center",
-    fontWeight: "bold",
+    fontFamily: "Bellarina",
+    fontSize: 50,
+    textTransform: "capitalize",
   },
 
-  course: {
+  courseName: {
     position: "absolute",
-    top: 410,
-    left: 0,
-    right: 0,
+    top: 510,
+    left: 40,
     textAlign: "center",
-    fontSize: 27,
-    fontWeight: "bold",
+    fontSize: 32,
+    fontFamily: "Montserrat",
     color: "#e31c25",
   },
 
   certificateId: {
     position: "absolute",
-    bottom: 120,
-    left: 120,
+    bottom: 215,
+    left: 165,
+    fontFamily: "Montserrat",
     fontSize: 17,
   },
 
   date: {
     position: "absolute",
-    bottom: 120,
-    right: 120,
+    bottom: 215,
+    fontFamily: "Montserrat",
+    right: 60,
     fontSize: 17,
   },
-  nameMain: {
-    position: "absolute",
-    bottom: 400,
-    left: -190,
-    fontFamily: "GreatVibes",
-    fontSize: 60,
-    extTransform: "capitalize",
-  },
-  courseMain: {
-    position: "absolute",
-    bottom: 310,
-    left: -75,
-  },
-  certificateIdMain: {
-    position: "absolute",
-    bottom: 223,
-    left: 170,
-  },
-  dateMain: {
-    position: "absolute",
-    bottom: 223,
-    right: 65,
-  },
 });
+
 
 
 
@@ -120,36 +113,39 @@ export default async function handler(
 
     const pdfDocument = (
   <Document>
-    <Page size="A4">
+    <Page size="A4" style={styles.page}>
 
-      {/* BACKGROUND */}
+      {/* Background */}
       <Image
         src="https://backstagepass.co.in/bspLms/certificate-bg.png"
         style={styles.background}
         fixed
       />
 
-      {/* TEXT */}
-      <Text style={styles.nameMain}>
-        <Text style={styles.name}>{studentName}</Text>
+      {/* Student Name */}
+      <Text style={styles.studentName}>
+        {studentName}
       </Text>
-      <Text style={styles.courseMain}>
-        <Text style={styles.course}>{courseName}</Text>
+
+      {/* Course Name */}
+      <Text style={styles.courseName}>
+        {courseName}
       </Text>
-      
-<Text style={styles.certificateIdMain}>
+
+      {/* Certificate ID */}
       <Text style={styles.certificateId}>
-        {user_id}-{course_id}
+        9087678909876545
       </Text>
-</Text>
-<Text style={styles.dateMain}>
+
+      {/* Completion Date */}
       <Text style={styles.date}>
         {completionDate}
       </Text>
-</Text>
+
     </Page>
   </Document>
 );
+
 
 
 
