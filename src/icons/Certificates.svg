@@ -1,0 +1,11 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Certificate body -->
+  <rect x="4" y="3" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.8"></rect>
+
+  <!-- Text lines -->
+  <path d="M8 7H16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+  <path d="M8 11H14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+
+  <!-- Ribbon -->
+  <path d="M10 17V22L12 20.5L14 22V17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
