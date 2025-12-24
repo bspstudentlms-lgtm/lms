@@ -132,14 +132,23 @@ const AppSidebar: React.FC = () => {
   //       },
   //     ]
   //   : []),
-  ...((role === "student" || role === "sos")
+   ...(role === "student" || role === "sos"
     ? [
         {
           icon: <Home />,
           name: "Home",
           path: "/dashboard",
         },
-        
+      ]
+    : []),
+
+  ...(role === "sos"
+    ? [
+        {
+          icon: <Heart />,
+          name: "Favourites",
+          path: "/favourites",
+        },
       ]
     : []),
 
