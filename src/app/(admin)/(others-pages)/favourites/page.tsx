@@ -1,28 +1,33 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, ReactNode } from "react";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightIcon } from "@/icons";
 
 interface Favourite {
-  button_action: ReactNode;
   id: number;
   coursename: string;
   course_short_description: string;
   image?: string;
+  button_action: ReactNode;
 }
 
 export default function FavouritesPage() {
   const [favourites, setFavourites] = useState<Favourite[]>([]);
   const [email, setEmail] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
+  /* ================= FETCH ================= */
   useEffect(() => {
     const storedEmail = localStorage.getItem("email");
+
     if (storedEmail) {
       setEmail(storedEmail);
       fetchFavourites(storedEmail);
+    } else {
+      setLoading(false);
     }
   }, []);
 
@@ -34,11 +39,16 @@ export default function FavouritesPage() {
         )}`
       );
 
-      if (res.data.status === "success") {
-        setFavourites(res.data.favourites);
+      if (res.data?.status === "success") {
+        setFavourites(res.data.favourites ?? []);
+      } else {
+        setFavourites([]);
       }
     } catch (error) {
       console.error("Failed to load favourites", error);
+      setFavourites([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -87,13 +97,21 @@ export default function FavouritesPage() {
     </div>
   );
 
+  /* ================= UI ================= */
   return (
     <div className="min-h-screen bg-white p-6">
-      {/* HEADER */}
       <h2 className="mb-6 text-xl font-semibold">My Favourites</h2>
 
-      {/* EMPTY STATE */}
-      {favourites.length === 0 ? (
+      {/* LOADING STATE */}
+      {loading ? (
+        <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4">
+      <div className="h-14 w-14 animate-spin rounded-full border-4 border-gray-200 border-t-[#E11D2E]" />
+      <p className="text-sm font-medium text-gray-600">
+        Loading favourites...
+      </p>
+    </div>
+      ) : favourites.length === 0 ? (
+        /* EMPTY STATE */
         <div className="flex flex-col items-center justify-center rounded-xl border bg-gray-50 p-10 text-center">
           <p className="text-lg font-semibold text-gray-700">
             No favourites yet ❤️
@@ -103,6 +121,7 @@ export default function FavouritesPage() {
           </p>
         </div>
       ) : (
+        /* LIST */
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {favourites.map((fav) => (
             <FavouriteCard key={fav.id} fav={fav} />
