@@ -18,7 +18,7 @@ export const metadata = {
     siteName: "Backstage Pass LMS",
     images: [
       {
-        url: "https://backstagepass.co.in/newlogo-324ee245.webp",
+        url: "https://lms-bsp.vercel.app/images/logo/bsp_logo_newupdated.png",
         width: 1200,
         height: 630,
         alt: "Backstage Pass LMS",
@@ -32,7 +32,7 @@ export const metadata = {
     title: "Backstage Pass LMS | Online Learning Platform",
     description:
       "Learn with expert mentors through live classes, videos, quizzes, and certifications.",
-    images: ["https://backstagepass.co.in/newlogo-324ee245.webp"],
+    images: ["https://lms-bsp.vercel.app/images/logo/bsp_logo_newupdated.png"],
   },
 };
 
