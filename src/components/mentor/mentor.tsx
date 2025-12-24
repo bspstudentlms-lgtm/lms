@@ -109,12 +109,14 @@ const Calendar: React.FC<CalendarProps> = ({ id }) => {
     <div className="mx-auto max-w-4xl bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
       {/* ---------------- Date Tabs ---------------- */}
       <div className="relative mb-6">
+         {!noDataMessage && (
         <button
           onClick={scrollLeft}
           className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white border p-2 rounded-full hover:bg-gray-100"
         >
           ‹
         </button>
+        )}
 
         <div
           ref={scrollRef}
@@ -138,13 +140,14 @@ const Calendar: React.FC<CalendarProps> = ({ id }) => {
             </button>
           ))}
         </div>
-
+ {!noDataMessage && (
         <button
           onClick={scrollRight}
           className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white border p-2 rounded-full hover:bg-gray-100"
         >
           ›
         </button>
+      )}
       </div>
 
       {/* ---------------- Slots ---------------- */}
