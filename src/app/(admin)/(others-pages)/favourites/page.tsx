@@ -7,6 +7,7 @@ import Link from "next/link";
 import { ArrowRightIcon } from "@/icons";
 
 interface Favourite {
+  path: Url;
   id: number;
   coursename: string;
   course_short_description: string;
@@ -85,12 +86,16 @@ export default function FavouritesPage() {
           {/* ACTION */}
           <div className="mt-4">
             <Link
-              href={`/coursedetails/${fav.id}`}
-              className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:bg-gray-50 transition"
-            >
-              {fav.button_action}
-              <ArrowRightIcon />
-            </Link>
+  href={
+    fav.button_action === "Know More" && fav.path
+      ? fav.path
+      : `/coursedetails/${fav.id}`
+  }
+  className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:bg-gray-50 transition"
+>
+  {fav.button_action}
+  <ArrowRightIcon className="h-4 w-4" />
+</Link>
           </div>
         </div>
       </div>
