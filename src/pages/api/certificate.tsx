@@ -118,6 +118,8 @@ export default async function handler(
     const studentName = data?.student_name ?? "Unknown Student";
     const courseName = data?.course_name ?? "Unknown Course";
     const completionDate = data?.completion_date ?? "Unknown Date";
+    const certificateautoid = data?.certificate_auto_id ?? "Unknown Date";
+    
 
     const pdfDocument = (
   <Document>
@@ -142,7 +144,7 @@ export default async function handler(
 
       {/* Certificate ID */}
       <Text style={styles.certificateId}>
-        9087678909876545
+        {certificateautoid}
       </Text>
 
       {/* Completion Date */}

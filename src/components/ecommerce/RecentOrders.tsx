@@ -49,7 +49,10 @@ export default function DashboardCourses() {
   /* ================= COURSE CARD ================= */
   const CourseCard = ({ course }: { course: Course }) => {
     const isEnrolled = enrolledCourses.includes(course.shortname);
-    const isCompleted = course.is_coursecompleted === 1;
+   
+   const isCompleted = Number(course.is_coursecompleted) === 1;
+  
+    
     //const isStarted = course.last_watched_topic_id !== 0;
      const isStarted = course.last_watched_topic_id > 0;
 
