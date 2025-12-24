@@ -1261,7 +1261,9 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
 
   // Quiz interactions
   const handleAnswerSelect = (questionIndex: number, optionIndex: number) => {
+   
     setQuizAnswers((prev) => ({ ...prev, [questionIndex]: optionIndex }));
+
   };
 
   const goToPrevQuestion = () => {
@@ -1323,15 +1325,25 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
     const assessmentModule = modules[openModule];
     if (!assessmentModule) return;
 
-    const questions = assessmentModule.topics as QuizTopic[];
+    //const questions = assessmentModule.topics as QuizTopic[];
+     const questions = currentQuestions;
     let correctCount = 0;
-    questions.forEach((q, idx) => {
-      const userAns = quizAnswers[idx];
-      const correctIdx = q.options.indexOf((q as any).correct);
-      if (userAns === correctIdx) correctCount++;
-    });
 
-    const score = questions.length ? (correctCount / questions.length) * 100 : 0;
+questions.forEach((q, idx) => {
+    const userAns = quizAnswers[idx];
+    if (userAns === undefined) return;
+
+    const correctIdx = q.options.indexOf(q.correct);
+
+    if (Number(userAns) === correctIdx) {
+      correctCount++;
+    }
+  });
+
+  const score = questions.length
+    ? Math.round((correctCount / questions.length) * 100)
+    : 0;
+   
 
     const moduleId = Number(assessmentModule?.id);
     setQuizAttempts((prev) => {

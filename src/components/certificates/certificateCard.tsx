@@ -65,7 +65,8 @@ useEffect(() => {
 };
   return (
     <>
-    {courses.map((course, index) => (
+    {courses && courses.length > 0 ? (
+  courses.map((course, index) => (
       <div  key={course.course_id ?? index} className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
         <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
           <div className="flex flex-col items-center w-full gap-6 xl:flex-row">
@@ -129,7 +130,14 @@ useEffect(() => {
         </div>
       </div>
 
-      ))}
+      ))
+) : (
+  <div className="p-4 bg-red-50 border border-red-200 text-red-600 rounded-lg">
+    <p className="text-sm text-gray-500 dark:text-gray-400">
+      No certificates found
+    </p>
+  </div>
+)}
       
     </>
   );
