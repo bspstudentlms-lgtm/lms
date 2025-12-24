@@ -226,13 +226,13 @@ const [currents, setCurrents] = useState(0);
       <Practice />
     </main> */}
 
-    <main className="p-6">
+    {/* <main className="p-6">
       <Corporate />
-    </main>
-
-       {/* <main className="p-6">
-      <HeroSection />
     </main> */}
+
+       <main className="p-6">
+      <HeroSection />
+    </main>
 
     {/* <main className="p-6">
       <ResourceBanner />

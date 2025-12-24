@@ -146,21 +146,21 @@ return (
     </main>
 
     <main className="px-4 py-3 sm:p-6">
-      <h1 className="text-xl sm:text-3xl font-bold text-center mb-0 flex items-center mb-5 justify-center">Journey Of Our Learners</h1>
+      
       <SuccessCarousel />
     </main>
 
 
 
-    <main className="px-4 py-3 sm:p-6">
+    {/* <main className="px-4 py-3 sm:p-6">
       <Corporate />
-    </main>
+    </main> */}
 
-       {/* <main className="px-4 py-3 sm:p-6">
+       <main className="px-4 py-3 sm:p-6">
       <HeroSection />
     </main>
 
-    <main className="px-4 py-3 sm:p-6">
+    {/* <main className="px-4 py-3 sm:p-6">
       <ResourceBanner />
     </main> */}
 

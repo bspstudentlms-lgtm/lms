@@ -10,12 +10,16 @@ export const config = {
 
 Font.register({
   family: "Montserrat",
-  src: path.join(
-    process.cwd(),
-    "public",
-    "fonts",
-    "Montserrat-Bold.ttf"
-  ),
+  fonts: [
+    {
+      src: path.join(process.cwd(), "public/fonts/Montserrat-Bold.ttf"),
+      fontWeight: "bold",
+    },
+    {
+      src: path.join(process.cwd(), "public/fonts/Montserrat-SemiBold.ttf"),
+      fontWeight: "semibold",
+    },
+  ],
 });
 
 Font.register({
@@ -27,7 +31,7 @@ Font.register({
     "Bellarina.otf"
   ),
 });
-
+Font.registerHyphenationCallback(word => [word]);
 
 const styles = StyleSheet.create({
   page: {
@@ -56,28 +60,32 @@ const styles = StyleSheet.create({
 
   courseName: {
     position: "absolute",
-    top: 510,
+    top: 500,
     left: 40,
-    textAlign: "center",
-    fontSize: 32,
+    width: 435,     
+    textAlign: "left",
+    fontSize: 30,
+    fontWeight: "bold",
     fontFamily: "Montserrat",
     color: "#e31c25",
   },
 
   certificateId: {
     position: "absolute",
-    bottom: 215,
-    left: 165,
+    bottom: 217,
+    left: 168,
     fontFamily: "Montserrat",
-    fontSize: 17,
+    fontWeight: "semibold",
+    fontSize: 14,
   },
 
   date: {
     position: "absolute",
-    bottom: 215,
+    bottom: 217,
     fontFamily: "Montserrat",
-    right: 60,
-    fontSize: 17,
+    fontWeight: "semibold",
+    right: 70,
+    fontSize: 14,
   },
 });
 
