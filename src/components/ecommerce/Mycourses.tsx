@@ -53,18 +53,36 @@ export default function MyCourses() {
     setEnrolledCourses(enrolled ? enrolled.split(",").map(c => c.trim()) : []);
   }, []);
 
-  useEffect(() => {
-    const userId = localStorage.getItem("userId");
-    axios
-      .get<Course[]>(
-        `https://www.backstagepass.co.in/reactapi/featured_courses_api.php?student_id=${userId}`
-      )
-      .then(res => {
-        setCourses(res.data);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, []);
+  // useEffect(() => {
+  //   const userId = localStorage.getItem("userId");
+  //   axios
+  //     .get<Course[]>(
+  //       `https://www.backstagepass.co.in/reactapi/featured_courses_api.php?student_id=${userId}`
+  //     )
+  //     .then(res => {
+  //       setCourses(res.data);
+  //       setLoading(false);
+  //     })
+  //     .catch(() => setLoading(false));
+  // }, []);
+
+
+
+ useEffect(() => {
+  const userId = localStorage.getItem("userId");
+
+  axios.get("https://www.backstagepass.co.in/reactapi/featured_courses_api.php", {
+    params: {
+      student_id: userId,
+      t: Date.now()
+    }
+  })
+  .then(res => {
+    setCourses(res.data);
+    setLoading(false);
+  })
+  .catch(() => setLoading(false));
+}, []);
 
   if (!role) return null;
 
@@ -265,6 +283,15 @@ export default function MyCourses() {
         {recommendedList.map(course => (
           <CourseCard key={course.id} course={course} enrolled={false} />
         ))}
+      </div>
+      <h3 className="mt-12 mb-4 text-lg font-semibold">Test Courses</h3>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        
+         <Link
+        href={`/coursedetailslatest/23`} >
+       Testcourse
+        </Link>
+        
       </div>
     </div>
   );
