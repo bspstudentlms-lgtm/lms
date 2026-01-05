@@ -27,12 +27,14 @@ export default function CertificateCard() {
    const fetchCompletedCourses = async () => {
   if (!userId) return;
 
-  try {
-    const response = await fetch(
-      `https://backstagepass.co.in/reactapi/completed_courses.php?user_id=${userId}`
-    );
-
-    const data = await response.json();
+ try {
+  const response = await fetch(
+    `https://backstagepass.co.in/reactapi/completed_courses.php?user_id=${userId}`,
+    {
+      cache: "no-store",
+    }
+  );
+     const data = await response.json();
 // console.log('alldata'+data.completed_courses);
     if (data.completed_courses) {
      

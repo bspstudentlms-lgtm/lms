@@ -6,6 +6,9 @@ import Calendar from "@/components/mentor/mentor";
 import Muxvideo from "@/components/MuxVideoplayer";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import QuizPanel from "./components/QuizPanel";
+import AssignmentPanel from "./components/AssignmentPanel";
+import FinalQuizPanel  from  "./components/FinalQuizPanel";
 
 interface CourseClientProps {
   id: string;
@@ -59,10 +62,15 @@ type Topic = VideoTopic | QuizTopic;
 
 type Module = {
   has_quiz: number;
-  resourceslink: boolean;
-  selfassessmentlink: boolean;
+  
+  
+  selfassessmentlink?: string | null;
+resourceslink?: string | null;
+quiz?: any; 
+
   score?: React.ReactNode;
   is_last?: string;
+   final_type?: 1 | 2;
   mandatory_status?: string;
   quiz_score?: React.ReactNode;
   type?: string;
@@ -72,510 +80,13 @@ type Module = {
   completed?: string;
   total_video_duration?: string;
   file?: string;
+  questions_limit?:number;
 };
 
-type AssignmentState = {
-  coursename: ReactNode;
-  marks: null;
-  releaseAt?: string | null;
-  downloaded?: boolean;
-  submittedAt?: string | null;
-  submittedFileName?: string | null;
-  evaluated?: boolean;
-};
-
-/* ---------------- AssignmentPanel ---------------- */
-interface AssignmentPanelProps {
-  courseId: string;
-  studentWindowWeeks?: number;
-  mentorWindowWeeks?: number;
-  assignmentFile?: any;
-}
-function AssignmentPanel({
-  courseId,
-  studentWindowWeeks = 2,
-  mentorWindowWeeks = 1,
-  assignmentFile,
-}: AssignmentPanelProps) {
-  const STORAGE_KEY = `bp_assignment_course_${courseId}`;
-  const [state, setState] = useState<AssignmentState>(() => {
-    try {
-      const raw = typeof window !== "undefined" ? localStorage.getItem(STORAGE_KEY) : null;
-      return raw
-        ? (JSON.parse(raw) as AssignmentState)
-        : {
-          releaseAt: null,
-          downloaded: false,
-          submittedAt: null,
-          submittedFileName: null,
-          evaluated: false,
-        };
-    } catch {
-      return {
-        releaseAt: null,
-        downloaded: false,
-        submittedAt: null,
-        submittedFileName: null,
-        evaluated: false,
-      };
-    }
-  });
 
 
 
-  const [notice, setNotice] = useState<string | null>(null);
-  const isMentor =
-    typeof window !== "undefined" && localStorage.getItem("role") === "mentor";
 
-  useEffect(() => {
-    try {
-      if (typeof window !== "undefined") localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    } catch { }
-  }, [state, STORAGE_KEY]);
-
-  const releaseAtDate = state.releaseAt ? new Date(state.releaseAt) : null;
-  const submissionDate = state.submittedAt ? new Date(state.submittedAt) : null;
-  const mentorDeadline = submissionDate
-    ? new Date(submissionDate.getTime() + mentorWindowWeeks * 7 * 24 * 60 * 60 * 1000)
-    : null;
-
-  const [now, setNow] = useState<number>(() => Date.now());
-  useEffect(() => {
-    const t = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(t);
-  }, []);
-
-  const [sp, setSp] = useState({ d: 0, h: 0, m: 0, s: 0 });
-  const [studentDeadline, setStudentDeadline] = useState<Date | null>(null);
-  const [studentWindowActive, setStudentWindowActive] = useState(false);
-  const [studentWindowExpired, setStudentWindowExpired] = useState(false);
-  const submitted = !!state.submittedAt;
-
-
-
-  useEffect(() => {
-    if (!state.releaseAt) return;
-    const releaseTime = new Date(state.releaseAt);
-    const deadline = new Date(
-      releaseTime.getTime() + studentWindowWeeks * 7 * 24 * 60 * 60 * 1000
-    );
-    setStudentDeadline(deadline);
-    const interval = setInterval(() => {
-      const now = new Date();
-      const diff = deadline.getTime() - now.getTime();
-      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const m = Math.floor((diff / (1000 * 60)) % 60);
-      const s = Math.floor((diff / 1000) % 60);
-      setSp({ d, h, m, s });
-      setStudentWindowActive(now < deadline && !submitted);
-      setStudentWindowExpired(now >= deadline && !submitted);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [state.releaseAt, studentWindowWeeks, state.submittedAt]);
-
-  const handleDownload = async () => {
-    const fileName = localStorage.getItem("assignment_file");
-
-    const assignmentFile = fileName
-      ? `https://backstagepass.co.in/websiteadmin/uploads/assignments/${fileName}`
-      : null; if (!assignmentFile) {
-        setNotice("Assignment file not available.");
-        return;
-      }
-    const nowIso = new Date().toISOString();
-    setState((s) => ({ ...s, releaseAt: nowIso, downloaded: true }));
-    setNotice("Starting download...");
-
-    try {
-      const response = await fetch("https://backstagepass.co.in/reactapi/save_assignment_download.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          courseId,
-          downloadTime: nowIso,
-          userId: typeof window !== "undefined" ? localStorage.getItem("userId") : null,
-        }),
-      });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message || "Failed to save download time");
-      // open file
-      if (typeof window !== "undefined") window.open(assignmentFile, "_blank");
-      setNotice("Assignment downloaded. Submission window started.");
-      setTimeout(() => setNotice(null), 3500);
-    } catch (error) {
-      console.error("Failed to open assignment file or save download time:", error);
-      setNotice("Download started, but failed to record timestamp. (Check console)");
-    }
-  };
-  useEffect(() => {
-    const fetchAssignmentStatus = async () => {
-      try {
-        const userId = localStorage.getItem("userId");
-
-        const res = await fetch(
-          `https://backstagepass.co.in/reactapi/get_assignment_status.php?userId=${userId}&courseId=${courseId}&_t=${Date.now()}`,
-          {
-            cache: "no-store",
-            headers: {
-              "Cache-Control": "no-cache, no-store, must-revalidate",
-              Pragma: "no-cache",
-            },
-          }
-        );
-
-        const data = await res.json();
-        console.log("Assignment status:", data);
-
-        if (data.releaseAt) {
-          setState((s) => ({
-            ...s,
-            releaseAt: data.releaseAt,
-            downloaded: true,
-            submittedAt: data.submittedAt || null,
-            submittedFileName: data.submittedFileName || null,
-            evaluated: data.evaluated || false,
-            marks: data.marks || null,
-            grade: data.grade || null,
-            coursename: data.coursename || null,
-          }));
-        }
-      } catch (err) {
-        console.error("Failed to fetch assignment status:", err);
-      }
-    };
-
-    fetchAssignmentStatus();
-  }, [courseId]);
-
-
-  const handleFileSelect = async (file: File | null) => {
-    if (!file || !studentWindowActive) {
-      setNotice("Submission window closed or no file selected.");
-      return;
-    }
-    const userId = typeof window !== "undefined" ? localStorage.getItem("userId") : null;
-    if (!userId) {
-      setNotice("User not logged in.");
-      return;
-    }
-    const formData = new FormData();
-    formData.append("assignmentFile", file);
-    formData.append("userId", userId);
-    formData.append("courseId", courseId);
-
-    setNotice("Uploading file...");
-    try {
-      const response = await fetch("https://backstagepass.co.in/reactapi/submit_assignment.php", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message || "Submission failed.");
-      setState((s) => ({
-        ...s,
-        submittedAt: new Date().toISOString(),
-        submittedFileName: file.name,
-      }));
-      setNotice("Assignment submitted successfully.");
-      setTimeout(() => setNotice(null), 3500);
-    } catch (err) {
-      console.error(err);
-      setNotice("There was an error submitting your assignment.");
-    }
-  };
-
-  const markEvaluated = () => {
-    setState((s) => ({ ...s, evaluated: true }));
-    setNotice("Marked as evaluated.");
-    setTimeout(() => setNotice(null), 2500);
-  };
-  const resetLocal = () => {
-    if (!confirm("Reset assignment state locally?")) return;
-    setState({ releaseAt: null, downloaded: false, submittedAt: null, submittedFileName: null, evaluated: false });
-    setNotice("Local assignment state reset.");
-    setTimeout(() => setNotice(null), 2000);
-  };
-
-  return (
-    <div className="surface-card p-6 rounded-xl">
-      <div className="flex items-start justify-between">
-        <div className="flex items-center gap-3">
-          <div className="bg-gradient-to-tr from-pink-50 to-yellow-50 p-2 rounded-lg shadow-inner">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden>
-              <path d="M3 7a2 2 0 0 1 2-2h10l4 4v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" stroke="#ef4444" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M7 12h6" stroke="#ef4444" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
-
-          <div>
-            <h3 className="text-lg md:text-xl font-semibold leading-tight">📝 Assignment</h3>
-            <p className="text-xs text-gray-500 mt-0.5">Assignment task & submission window</p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <button onClick={resetLocal} className="text-sm text-gray-500 hover:text-gray-700">Reset (local)</button>
-        </div>
-      </div>
-
-      <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
-        <div className="flex items-center gap-4 md:col-span-2">
-          <div className="relative w-28 h-28">
-            <svg viewBox="0 0 36 36" className="w-28 h-28">
-              <defs>
-                <linearGradient id={`g1-${courseId}`} x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#60a5fa" />
-                  <stop offset="100%" stopColor="#7c3aed" />
-                </linearGradient>
-              </defs>
-
-              <circle cx="18" cy="18" r="15.5" fill="transparent" stroke="#f3f4f6" strokeWidth="3" />
-              <circle
-                cx="18" cy="18" r="15.5" fill="transparent"
-                stroke={`url(#g1-${courseId})`}
-                strokeWidth="3"
-                strokeLinecap="round"
-                className="ring-anim"
-                strokeDasharray={Math.PI * 2 * 15.5}
-                strokeDashoffset={Math.PI * 2 * 15.5 * (1 - 0)}
-                style={{ transition: "stroke-dashoffset 900ms cubic-bezier(.2,.9,.3,1)" }}
-              />
-            </svg>
-
-            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-              {!state.releaseAt ? (
-                <div className="text-center">
-                  <div className="text-sm text-gray-400">Not started</div>
-                </div>
-              ) : submitted ? (
-                <div className="text-center">
-                  <div className="text-sm font-semibold text-green-600">Submitted</div>
-                  <div className="text-xs text-gray-500 mt-0.5">{state.submittedFileName ?? ""}</div>
-                </div>
-              ) : studentWindowActive ? (
-                <div className="text-center">
-                  <div className="text-sm font-semibold text-blue-600">Open</div>
-                  <div className="text-xs text-gray-500">time left</div>
-                </div>
-              ) : studentWindowExpired ? (
-                <div className="text-center">
-                  <div className="text-sm font-semibold text-red-500">Expired</div>
-                </div>
-              ) : null}
-            </div>
-          </div>
-
-          <div className="flex-1">
-            {!state.releaseAt ? (
-              <p className="text-sm text-gray-600">
-                Download assignment to begin the student submission window ({studentWindowWeeks} weeks).
-              </p>
-            ) : submitted ? (
-              <div>
-                <div className="text-sm font-semibold text-green-600">Submitted</div>
-                <div className="text-xs text-gray-500">
-                  You submitted on {new Date(state.submittedAt!).toLocaleString()}
-                </div>
-              </div>
-            ) : studentWindowActive ? (
-              <div>
-                <div className="text-xs text-gray-500">Student submission window</div>
-                <div className="mt-2 text-lg font-mono text-gray-800">
-                  {sp.d}d {sp.h}h {sp.m}m {sp.s}s
-                </div>
-                <div className="mt-2 text-sm text-gray-500">Ends: {studentDeadline?.toLocaleString()}</div>
-              </div>
-            ) : studentWindowExpired ? (
-              <div>
-                <div className="text-sm font-semibold text-red-600">Submission window closed</div>
-                <div className="text-xs text-gray-500">Please contact mentor for next steps.</div>
-              </div>
-            ) : null}
-          </div>
-        </div>
-
-        <div className="md:col-span-2 bg-white rounded-lg p-4 border border-gray-100 shadow-sm">
-          {!state.releaseAt ? (
-            /* ================= BEFORE DOWNLOAD ================= */
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div>
-                <p className="font-medium">Assignment Document</p>
-                <p className="text-sm text-gray-500 mt-1">
-                  Start your submission timer by downloading the assignment.
-                </p>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={handleDownload}
-                  className="px-5 py-2 rounded-md bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold shadow hover:shadow-lg transform transition hover:-translate-y-0.5"
-                >
-                  Download & Start Timer
-                </button>
-              </div>
-            </div>
-          ) : (
-            <>
-              {/* ================= COURSE COMPLETED ================= */}
-
-              {state.marks !== null && state.marks !== "null" ? (
-                <div className="text-center p-6 bg-green-50 rounded-md border border-green-200">
-                  <h3 className="text-lg font-semibold text-green-700">
-                    <img
-                      src="https://cdn4.iconfinder.com/data/icons/game-ui-set-3/96/Medal_bronze-512.png"
-                      alt="Completed"
-                      style={{ width: "100px", margin: "0 auto" }}
-                    />
-                    You Have Successfully Completed {state.coursename} Course.
-                    <br />
-                    You can download Certificate.
-                  </h3>
-                </div>
-              ) : (
-                <>
-                  {/* ================= STATUS HEADER ================= */}
-                  <div className="mb-3 flex items-start justify-between">
-                    <div>
-                      <div className="text-sm text-gray-500">Released on</div>
-                      <div className="font-medium">
-                        {new Date(state.releaseAt!).toLocaleString()}
-                      </div>
-                    </div>
-
-                    <div className="text-right">
-                      {submitted ? (
-                        <div className="text-sm text-green-600 font-semibold">
-                          Submitted
-                        </div>
-                      ) : studentWindowActive ? (
-                        <div className="text-sm text-blue-600 font-semibold">
-                          Open
-                        </div>
-                      ) : studentWindowExpired ? (
-                        <div className="text-sm text-red-600 font-semibold">
-                          Closed
-                        </div>
-                      ) : null}
-                    </div>
-                  </div>
-
-                  {/* ================= UPLOAD BOX ================= */}
-                  <div className="border-dashed border-2 border-gray-100 rounded-lg p-4 hover:border-indigo-200 transition">
-                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-                      <div className="flex-1">
-                        <p className="font-medium">Upload your assignment</p>
-                        <p className="text-xs text-gray-500 mt-1">
-                          You have {studentWindowWeeks} weeks from download to submit.
-                        </p>
-
-                        {studentWindowActive && (
-                          <p className="text-xs text-gray-400 mt-1">
-                            Make sure your file format is PDF / DOCX and under allowed size.
-                          </p>
-                        )}
-                      </div>
-
-                      <div className="flex items-center gap-3">
-                        <label
-                          className={`inline-flex items-center gap-2 px-4 py-2 border rounded-md cursor-pointer ${studentWindowActive
-                              ? "bg-white hover:bg-gray-50"
-                              : "bg-gray-50 opacity-60 cursor-not-allowed"
-                            }`}
-                        >
-                          <input
-                            type="file"
-                            className="hidden"
-                            onChange={(e) => {
-                              const f = e.target.files?.[0] ?? null;
-                              if (f) handleFileSelect(f);
-                            }}
-                            disabled={!studentWindowActive}
-                          />
-                          <span className="text-sm text-indigo-600 font-medium">
-                            {studentWindowActive ? "Choose File" : "Upload Disabled"}
-                          </span>
-                        </label>
-
-                        <button
-                          onClick={() => {
-                            if (!state.submittedAt) {
-                              setNotice(
-                                "Please select a file using 'Choose File' first."
-                              );
-                            }
-                          }}
-                          className="px-4 py-2 rounded-md bg-indigo-600 text-white text-sm hover:bg-indigo-700 transition"
-                          disabled={!studentWindowActive}
-                        >
-                          Submit
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* ================= SUBMITTED INFO ================= */}
-                    {state.submittedAt && (
-                      <div className="mt-3 bg-gray-50 rounded p-3 text-sm">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <div className="text-xs text-gray-500">Submitted</div>
-                            <div className="font-medium">
-                              {state.submittedFileName}
-                            </div>
-                            <div className="text-xs text-gray-400">
-                              {new Date(state.submittedAt).toLocaleString()}
-                            </div>
-                          </div>
-
-                          <span className="inline-block px-2 py-1 rounded bg-green-50 text-green-600 text-xs font-semibold">
-                            Awaiting review
-                          </span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* ================= MENTOR VIEW ================= */}
-                  {isMentor && submitted && (
-                    <div className="mt-4 flex items-center gap-4">
-                      <div className="flex-1">
-                        <div className="text-sm text-gray-500">
-                          Mentor evaluation window
-                        </div>
-                        <div className="mt-2 text-lg font-mono text-gray-800">--</div>
-                        <div className="text-xs text-gray-400 mt-1">
-                          Ends: {mentorDeadline?.toLocaleString()}
-                        </div>
-                      </div>
-
-                      <button
-                        onClick={markEvaluated}
-                        className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
-                      >
-                        Mark Evaluated
-                      </button>
-                    </div>
-                  )}
-
-                  {/* ================= STUDENT VIEW ================= */}
-                  {!isMentor && submitted && (
-                    <div className="mt-4 text-sm text-gray-500">
-                      Mentor will evaluate within {mentorWindowWeeks} week(s).
-                      You will be notified after evaluation.
-                    </div>
-                  )}
-                </>
-              )}
-            </>
-          )}
-        </div>
-
-      </div>
-
-      {notice && <div className="mt-4 px-4 py-2 bg-indigo-50 text-indigo-700 rounded">{notice}</div>}
-    </div>
-  );
-}
 
 /* ---------------- Main Page ---------------- */
 const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
@@ -601,7 +112,13 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
 
   const [loading, setLoading] = useState(true);
   const [modules, setModules] = useState<Module[]>([]);
-  const [courseName, setCourseName] = useState("");
+  
+  const [lastWatchedModuleId, setLastWatchedModuleId] = useState<number | null>(null);
+const [lastWatchedTopicId, setLastWatchedTopicId] = useState<number | null>(null);
+const [assignmentFile, setAssignmentFile] = useState<string | null>(null);
+const [assignmentType, setAssignmentType] = useState<number | null>(null);
+const [courseName, setCourseName] = useState<string | null>(null);
+const [loadingTopics, setLoadingTopics] = useState<Record<number, boolean>>({});
   const [courseOverview, setCourseOverview] = useState("");
   const [courseEnddate, setCourseEnddate] = useState("");
   const [Courseassignmenttype, setCourseassignmenttype] = useState("");
@@ -616,7 +133,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
 
   const [watchedTopicIds, setWatchedTopicIds] = useState<Set<number>>(new Set());
   const [completedModuleIds, setCompletedModuleIds] = useState<number[]>([]);
-  const [completedVideoCount, setCompletedVideoCount] = useState<number>(0);
+  // const [completedVideoCount, setCompletedVideoCount] = useState<number>(0);
   const [isReviewMode, setIsReviewMode] = useState(false);
 
   // existing quiz state
@@ -634,14 +151,16 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
   const [currentQuestions, setCurrentQuestions] = useState<QuizQuestion[]>([]);
 
   const [isModuleLoaded, setIsModuleLoaded] = useState(false);
-  const [openModule, setOpenModule] = useState<number | null>(null);
+  //const [openModule, setOpenModule] = useState<number | null>(null);
+  const [openModule, setOpenModule] = useState<number>(-1);
   const [activeView, setActiveView] = useState<
-    "content" | "quiz" | "assignment"
+    "content" | "quiz" | "assignment" | "final quiz"
   >("content");
+  console.log('activeview'+activeView);
   const currentModule =
     openModule !== null ? modules[openModule] : null;
 
-
+const activeModule = openModule >= 0 ? modules[openModule] : null;
 
   function getRandomQuestions(allQuestions: QuizQuestion[], limit: number): QuizQuestion[] {
     const shuffled = [...allQuestions].sort(() => Math.random() - 0.5);
@@ -662,34 +181,24 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
     }
   }, [currentModule]);
 
-  useEffect(() => {
-    if (
-      modules.length > 0 &&
-      modules[openModule]?.type === "quiz" &&
-      Array.isArray(modules[openModule]?.topics)
-    ) {
-      const fullQuiz = modules[openModule].topics;
-      const questionsLimit = parseInt(modules[openModule].questions_limit || "5");
+//   useEffect(() => {
+//     if (
+//       modules.length > 0 &&
+//       modules[openModule]?.type === "quiz" &&
+//       Array.isArray(modules[openModule]?.topics)
+//     ) {
+//       const fullQuiz = modules[openModule].topics;
+//       const questionsLimit = Number(activeModule?.questions_limit) || 5;
 
-      const randomSubset = getRandomQuestions(fullQuiz, questionsLimit);
-      setCurrentQuestions(randomSubset);
-    }
-  }, [openModule, modules]);
+//       const quizQuestions = (modules[openModule]?.topics ?? []).filter(isQuizQuestion);
 
-  // const totalFinalQuestions = useMemo(() => {
-  //   const m = modules.find((m) => String(m.title).toLowerCase() === "final quiz") ?? modules[openModule];
-  //   return (m?.topics?.length ?? 5);
-  // }, [modules, openModule]);
-  const lastModuleId = (() => {
-    const v = localStorage.getItem("last_watched_module_id");
-    return v ? Number(v) : null;
-  })();
+// const randomSubset = getRandomQuestions(quizQuestions, questionsLimit);
+// setCurrentQuestions(randomSubset);
+//       setCurrentQuestions(randomSubset);
+//     }
+//   }, [openModule, modules]);
 
-  const lastTopicId = (() => {
-    const v = localStorage.getItem("last_watched_topic_id");
-    return v ? Number(v) : null;
-  })();
-  console.log('lasttopic:' + lastTopicId);
+ 
 
 
 
@@ -706,29 +215,28 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
           { cache: "no-store" }
         );
 
-        if (progressRes.ok) {
-          const progress = await progressRes.json();
+       if (progressRes.ok) {
+        const progress = await progressRes.json();
 
-          if (progress?.last_watched_module_id) {
-            localStorage.setItem(
-              "last_watched_module_id",
-              String(progress.last_watched_module_id)
-            );
-          }
-
-          if (progress?.last_watched_topic_id) {
-            localStorage.setItem(
-              "last_watched_topic_id",
-              String(progress.last_watched_topic_id)
-            );
-          }
-          if (progress?.assignment_file) {
-            localStorage.setItem(
-              "assignment_file",
-              progress.assignment_file
-            );
-          }
+        if (progress?.last_watched_module_id) {
+          setLastWatchedModuleId(progress.last_watched_module_id);
         }
+
+        if (progress?.last_watched_topic_id) {
+          setLastWatchedTopicId(progress.last_watched_topic_id);
+        }
+
+        if (progress?.assignment_file) {
+          setAssignmentFile(progress.assignment_file);
+        }
+        if (progress?.assignment_type) {
+          setAssignmentType(progress.assignment_type);
+        }
+
+        if (progress?.coursename) {
+          setCourseName(progress.coursename);
+        }
+      }
 
         /* ===============================
            2️⃣ FETCH MODULES
@@ -758,14 +266,19 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
           selfassessmentfile: m.selfassessmentfile,
           resources: m.resources,
           has_quiz: Number(m.has_quiz),
-          completed: m.completed,
+          completed: Number(m.completed), 
           score: m.score,
           is_last: m.is_last,
           topics: null, // loaded later
 
         }));
+const completedIds = formatted
+  .filter((m) => m.completed === 1)
+  .map((m) => m.id);
 
-        setModules(formatted);
+setModules(formatted);
+setCompletedModuleIds(completedIds);
+        console.log("Completed modules from API:", completedIds);
       } catch (err) {
         console.error("Course init error:", err);
       } finally {
@@ -775,12 +288,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
 
     init();
   }, [id, userId]);
-  // useEffect(() => {
-  //     // reset quiz UI whenever module changes
-  //     setQuizSubmitted(false);
-  //     setUserScore(0);
-  //     setIsQuizActive(false);
-  //   }, [openModule]);
+  
   const didRestoreRef = useRef(false);
 
   useEffect(() => {
@@ -789,8 +297,9 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
 
     didRestoreRef.current = true;
 
-    const lastModuleId = Number(localStorage.getItem("last_watched_module_id"));
-    const lastTopicId = Number(localStorage.getItem("last_watched_topic_id"));
+    
+     const lastModuleId = Number(lastWatchedModuleId);
+    const lastTopicId = Number(lastWatchedTopicId);
 
     const moduleIndex =
       modules.findIndex((m) => Number(m.id) === lastModuleId) >= 0
@@ -799,7 +308,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
 
     setOpenModule(moduleIndex);
 
-    fetchTopics(modules[moduleIndex].id, moduleIndex).then(() => {
+    fetchTopics(Number(modules[moduleIndex].id), moduleIndex).then(() => {
       const topics = modules[moduleIndex]?.topics;
       if (!topics?.length) {
         setCurrentPointIndex(0);
@@ -815,257 +324,108 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
     });
   }, [modules]);
 
-  useEffect(() => {
-    const module = modules[openModule ?? -1];
-    const topic = module?.topics?.[currentPointIndex];
-
-    if (!module || !topic) return;
-
-    localStorage.setItem("last_watched_module_id", String(module.id));
-    localStorage.setItem("last_watched_topic_id", String(topic.id));
-  }, [openModule, currentPointIndex]);
-  // useEffect(() => {
-  //   if (!modules.length) return;
-
-  //   const lastModuleId = Number(localStorage.getItem("last_watched_module_id"));
-  //   const moduleIndex = modules.findIndex(m => Number(m.id) === lastModuleId);
-
-  //   if (moduleIndex >= 0) {
-  //     setOpenModule(moduleIndex);
-  //     fetchTopics(modules[moduleIndex].id, moduleIndex);
-  //   } else {
-  //     setOpenModule(0);
-  //     fetchTopics(modules[0].id, 0);
-  //   }
-  // }, [modules]);
-
-  // useEffect(() => {
-  //   if (!modules.length) return;
-
-  //   let moduleIndex = 0;
-
-  //   // 🔹 Restore module if exists
-  //   if (lastModuleId) {
-  //     const found = modules.findIndex(
-  //       (m) => Number(m.id) === lastModuleId
-  //     );
-  //     if (found !== -1) {
-  //       moduleIndex = found;
-  //     }
-  //   }
-
-  //   setOpenModule(moduleIndex);
-
-  //   // 🔹 Load topics for selected module
-  //   fetchTopics(modules[moduleIndex].id, moduleIndex).then(() => {
-  //     const updatedModule = modules[moduleIndex];
-
-  //     if (!updatedModule?.topics?.length) return;
-
-  //     let topicIndex = 0;
-
-  //     // 🔹 Restore topic if exists
-  //     if (lastTopicId) {
-  //       const foundTopic = updatedModule.topics.findIndex(
-  //         (t: any) => Number(t.id) === lastTopicId
-  //       );
-  //       if (foundTopic !== -1) {
-  //         topicIndex = foundTopic;
-  //       }
-  //     }
-
-  //     setCurrentPointIndex(topicIndex);
-  //   });
-  // }, [modules]);
-
+  
 
 
 
   const fetchTopics = async (moduleId: number, index: number) => {
-    // already loaded → skip
-    if (modules[index]?.topics) return;
+  // already loaded → skip
+  if (modules[index]?.topics) return;
 
-    try {
-      const res = await fetch(
-        `https://backstagepass.co.in/reactapi/api/gettopicapi.php?module_id=${encodeURIComponent(
-          moduleId
-        )}`,
-        {
-          cache: "no-store", // ✅ disable cache
+  try {
+    // 🔄 show loader for this module
+    setLoadingTopics((prev) => ({ ...prev, [index]: true }));
+
+    const res = await fetch(
+      `https://backstagepass.co.in/reactapi/api/gettopicapi.php?module_id=${encodeURIComponent(
+        moduleId
+      )}`,
+      { cache: "no-store" }
+    );
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch topics");
+    }
+
+    const data = await res.json();
+
+    let topics: any[] = [];
+    let selfassessmentlink = "";
+    let resourceslink = "";
+    let quiz: any = null;
+    let totalDuration = 0;
+
+    data.forEach((item: any) => {
+      if (item.type === "video") {
+        topics.push(item);
+
+        if (item.video_duration) {
+          const [h = 0, m = 0, s = 0] = item.video_duration
+            .split(":")
+            .map(Number);
+
+          totalDuration += h * 3600 + m * 60 + s;
         }
-      );
-
-      if (!res.ok) {
-        throw new Error("Failed to fetch topics");
       }
 
-      const data = await res.json();
+      if (item.title === "selfassessment") {
+        selfassessmentlink = item.selfassessmentlink;
+      }
 
-      let topics: any[] = [];
-      let selfassessmentlink = "";
-      let resourceslink = "";
-      let quiz: any = null;
-      let totalDuration = 0;
+      if (item.title === "resources") {
+        resourceslink = item.resourceslink;
+      }
 
-      data.forEach((item: any) => {
-        if (item.type === "video") {
-          topics.push(item);
+      if (item.type === "quiz" && Array.isArray(item.topics)) {
+        quiz = item;
+      }
+    });
 
-          if (item.video_duration) {
-            const [h = 0, m = 0, s = 0] = item.video_duration
-              .split(":")
-              .map(Number);
-
-            totalDuration += h * 3600 + m * 60 + s;
-          }
-        }
-
-        if (item.title === "selfassessment") {
-          selfassessmentlink = item.selfassessmentlink;
-        }
-
-        if (item.title === "resources") {
-          resourceslink = item.resourceslink;
-        }
-
-        // ✅ FIXED QUIZ DETECTION
-        if (item.type === "quiz" && Array.isArray(item.topics)) {
-          quiz = item;
-        }
-      });
-
-      // ✅ functional state update (prevents stale state bugs)
-      setModules((prev) => {
-        const updated = [...prev];
-        updated[index] = {
-          ...updated[index],
-          topics,
-          selfassessmentlink,
-          resourceslink,
-          quiz,
-          total_video_duration: new Date(totalDuration * 1000)
+    setModules((prev) => {
+      const updated = [...prev];
+      updated[index] = {
+        ...updated[index],
+        topics,
+        selfassessmentlink,
+        resourceslink,
+        quiz,
+        total_video_duration: new Date(totalDuration * 1000)
             .toISOString()
             .substring(11, 8),
-        };
-        return updated;
-      });
-    } catch (error) {
-      console.error("Error fetching topics:", error);
-    }
-  };
+        
+      };
+      return updated;
+    });
+  } catch (error) {
+    console.error("Error fetching topics:", error);
+  } finally {
+    // ✅ hide loader
+    setLoadingTopics((prev) => ({ ...prev, [index]: false }));
+  }
+};
+  
+
   useEffect(() => {
-    const module = modules[openModule ?? -1];
-    const topic = module?.topics?.[currentPointIndex];
+    if (openModule === null) return;
 
-    if (!module || !topic) return;
+    const topics = modules[openModule]?.topics;
+    const lastTopicId = Number(lastWatchedTopicId);
+    if (!topics || !topics.length) return;
 
-    try {
-      localStorage.setItem(
-        "last_watched_module_id",
-        String(module.id)
-      );
-      localStorage.setItem(
-        "last_watched_topic_id",
-        String(topic.id)
-      );
-    } catch { }
-  }, [openModule, currentPointIndex]);
+    const topicIndex = topics.findIndex(
+      (t: any) => Number(t.id) === lastTopicId
+    );
 
-  // useEffect(() => {
-  //   if (openModule === null) return;
-
-  //   const topics = modules[openModule]?.topics;
-  //   if (!topics || !topics.length) return;
-
-  //   const topicIndex = topics.findIndex(
-  //     (t: any) => Number(t.id) === lastTopicId
-  //   );
-
-  //   setCurrentPointIndex(topicIndex >= 0 ? topicIndex : 0);
-  // }, [modules, openModule]);
+    setCurrentPointIndex(topicIndex >= 0 ? topicIndex : 0);
+  }, [modules, openModule]);
 
 
 
-  // useEffect(() => {
-  //   if (openModule === null) return;
-
-  //   localStorage.setItem(
-  //     "last_watched_module_id",
-  //     String(modules[openModule]?.id)
-  //   );
-
-  //   localStorage.setItem(
-  //     "last_watched_topic_id",
-  //     String(modules[openModule]?.topics?.[currentPointIndex]?.id)
-  //   );
-  // }, [openModule, currentPointIndex]);
+ 
 
   // ensure final quiz exists / has at least 5 questions
   const [quizLoading, setQuizLoading] = useState<boolean>(false);
-  useEffect(() => {
-    if (!modules || modules.length === 0) return;
-    const fqIndex = modules.findIndex((m) => String(m.title).toLowerCase() === "final quiz");
-    if (fqIndex === -1) return;
-
-    const existingTopics = modules[fqIndex]?.topics ?? [];
-    if ((existingTopics?.length ?? 0) >= 5) return;
-
-    const placeholders: Topic[] = [
-      {
-        id: `finalquiz-topic-${id}-1`,
-        text: "Final Quiz Q1",
-        type: "quiz",
-        question: "What is 2 + 2?",
-        options: ["1", "2", "3", "4"],
-        correct: "4",
-      } as unknown as Topic,
-      {
-        id: `finalquiz-topic-${id}-2`,
-        text: "Final Quiz Q2",
-        type: "quiz",
-        question: "Which is a frontend library?",
-        options: ["Django", "React", "Laravel", "Flask"],
-        correct: "React",
-      } as unknown as Topic,
-      {
-        id: `finalquiz-topic-${id}-3`,
-        text: "Final Quiz Q3",
-        type: "quiz",
-        question: "HTML stands for?",
-        options: [
-          "Hyper Text Markup Language",
-          "Home Tool Markup Language",
-          "High Text Markup Lang",
-          "None",
-        ],
-        correct: "Hyper Text Markup Language",
-      } as unknown as Topic,
-      {
-        id: `finalquiz-topic-${id}-4`,
-        text: "Final Quiz Q4",
-        type: "quiz",
-        question: "CSS is used for?",
-        options: ["Styling", "Database", "Routing", "Authentication"],
-        correct: "Styling",
-      } as unknown as Topic,
-      {
-        id: `finalquiz-topic-${id}-5`,
-        text: "Final Quiz Q5",
-        type: "quiz",
-        question: "Which one is JS package manager?",
-        options: ["npm", "pip", "gem", "composer"],
-        correct: "npm",
-      } as unknown as Topic,
-    ];
-
-    const merged = [...(existingTopics ?? []), ...placeholders.slice(existingTopics?.length ?? 0)].slice(0, 5);
-
-    setModules((prev) => {
-      const next = [...prev];
-      next[fqIndex] = { ...next[fqIndex], topics: merged };
-      return next;
-    });
-  }, [modules, id, setModules]);
+ 
 
   useEffect(() => {
     setCurrentPointIndex(0);
@@ -1085,22 +445,53 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
 
 
 
-  // fetch watched topic ids
-  const fetchWatchedStatus = async (uid?: string | null) => {
-    if (!uid) return;
-    try {
-      const resp = await fetch(
-        `https://backstagepass.co.in/reactapi/fetch_watched.php?user_id=${encodeURIComponent(uid)}&status=watched`
-      );
-      if (!resp.ok) throw new Error("failed");
-      const json = await resp.json();
-      const arr = Array.isArray(json.watched_topic_ids) ? json.watched_topic_ids : [];
-      const parsed = new Set(arr.map((n: any) => Number(n)).filter((n: number) => !Number.isNaN(n)));
-      setWatchedTopicIds(parsed);
-    } catch (err) {
-      console.error("fetchWatchedStatus error:", err);
+
+
+const fetchWatchedStatus = async (uid?: string | null) => {
+  console.log("fetchWatchedStatus ENTERED with uid:", uid);
+
+  if (!uid) return;
+
+  try {
+    const resp = await fetch(
+      `https://backstagepass.co.in/reactapi/fetch_watched.php?user_id=${encodeURIComponent(
+        uid
+      )}&status=watched`,
+      {
+        cache: "no-store",
+      }
+    );
+
+    console.log("response status:", resp.status);
+
+    if (!resp.ok) {
+      throw new Error("Failed to fetch watched status");
     }
-  };
+
+    const json = await resp.json();
+    console.log("response json:", json);
+
+    const arr = Array.isArray(json.watched_topic_ids)
+      ? json.watched_topic_ids
+      : [];
+
+    const parsedSet: Set<number> = new Set(
+  arr.map((n: unknown) => Number(n)).filter((n) => !Number.isNaN(n))
+);
+
+setWatchedTopicIds(parsedSet);
+  } catch (e) {
+    console.error("fetchWatchedStatus error:", e);
+  }
+};
+
+
+useEffect(() => {
+  console.log("useEffect fired, userId:", userId);
+  if (userId) {
+    fetchWatchedStatus(userId);
+  }
+}, [userId]);
 
   // fetch user progress (completed modules)
   useEffect(() => {
@@ -1128,10 +519,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
     return () => { mounted = false; };
   }, [userId]);
 
-  // currentTopic safe getter
-  // const currentTopic: Topic | undefined = useMemo(() => {
-  //   return modules?.[openModule]?.topics?.[currentPointIndex];
-  // }, [modules, openModule, currentPointIndex]);
+
   const currentTopic = useMemo(() => {
     if (openModule === null) return null;
     const mod = modules[openModule];
@@ -1139,15 +527,24 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
     return mod.topics[currentPointIndex] ?? null;
   }, [modules, openModule, currentPointIndex]);
 
-  // progress percent
-  const totalVideoPoints = useMemo(() => {
-    return modules
-      .filter((m) => m.title !== "Assessment" && m.title !== "Assignment")
-      .reduce((acc, m) => acc + (Array.isArray(m.topics) ? m.topics.length : 0), 0);
-  }, [modules]);
+     const completedVideoCount = useMemo(() => {
+      
+  if (!currentModule?.topics) return 0;
 
-  const progressPercentage = totalVideoPoints > 0 ? Math.round((completedVideoCount / totalVideoPoints) * 100) : 0;
+  return currentModule.topics.filter((t) =>
+    watchedTopicIds.has(Number(t.id))
+  ).length;
+}, [currentModule?.topics, watchedTopicIds]);
 
+
+  const totalVideoPoints = currentModule?.topics?.length ?? 0;
+
+  
+
+const progressPercentage =
+  totalVideoPoints > 0
+    ? Math.round((completedVideoCount / totalVideoPoints) * 100)
+    : 0;
   // final quiz helpers
   const handleFinalSelect = (questionIndex: number, optionIndex: number) => {
     setFinalAnswers((prev) => ({ ...prev, [questionIndex]: optionIndex }));
@@ -1185,7 +582,8 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
       next.add(Number(topicId));
       return next;
     });
-    setCompletedVideoCount((prev) => prev + 1);
+    //setCompletedVideoCount((prev) => prev + 1);
+
 
     setCurrentPointIndex((prevPointIndex) => {
       const module = modules[openModule];
@@ -1237,6 +635,8 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
 
   // ---------- Assessment quiz submit (re-using your earlier logic) ----------
   const [userScore, setUserScore] = useState(0);
+  const [usernewScore, setNewUserScore] = useState(0);
+  
 
   const handleAnswerSelect = (questionIndex: number, optionIndex: number) => {
     setQuizAnswers((prev) => ({ ...prev, [questionIndex]: optionIndex }));
@@ -1365,6 +765,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
     const passed = score >= passScore;
 
     setUserScore(score);
+    setNewUserScore(score);
     setHasPassed(passed);
     setQuizSubmitted(true);
   };
@@ -1385,14 +786,14 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
   const isMandatory =
     currentModule?.has_quiz === 1 &&
     Number(currentModule?.mandatory_status) === 1;
-  const isCompleted = currentModule?.completed === "1";
+ const isCompleted = Number(currentModule?.completed) === 1;
   const canContinue =
     // no quiz at all
     !isMandatory ||           // non-mandatory quiz (always allow)
-    (isMandatory && hasPassed); // mandatory + passed
+    (isMandatory && isCompleted); // mandatory + passed
 
-  const questionLimit =
-    modules[openModule]?.questions_limit ?? currentQuestions.length;
+ const questionLimit =
+  currentModule?.questions_limit ?? currentQuestions.length;
 
   const totalQuestions = Math.min(
     questionLimit,
@@ -1403,12 +804,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
 
 
 
-  function handleRetakeQuiz() {
-    setFinalAnswers({});        // Clear all answers
-    setFinalIndex(0);           // Go back to first question
-    setFinalSubmitted(false);   // Mark quiz as not submitted
-    setFinalScore(null);        // Clear score
-  }
+  
   //   const isMandatory = modules[openModule]?.mandatory_status === "1";
   // const isCompleted = modules[openModule]?.completed === "1";
   // const isLastModule = modules[openModule]?.is_last === "yes";
@@ -1488,90 +884,71 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
   };
 
 
-  //   const startQuiz = (moduleIndex: number) => {
-  //   const module = modules[moduleIndex];
-
-  //   if (!module) {
-  //     alert("Module not found");
-  //     return;
-  //   }
-
-  //   if (!module.quiz || !Array.isArray(module.quiz.topics)) {
-  //     alert("Quiz not available for this module");
-  //     return;
-  //   }
-
-  //   setIsQuizActive(true);
-  //   setCurrentQuestions(module.quiz.topics);
-  //   setCurrentPointIndex(0);
-  //   setQuizAnswers({});
-  //   setCheckedAnswers({});
-  //   setQuizSubmitted(false);
-  //   setIsPlaying({});
-  // };
 
 
+ const startQuiz = async (moduleIndex: number) => {
+  const module = modules[moduleIndex];
 
-  const startQuiz = async (moduleIndex: number) => {
-    const module = modules[moduleIndex];
+  if (!module) {
+    alert("Module not found");
+    return;
+  }
 
-    if (!module) {
-      alert("Module not found");
-      return;
+  // ✅ QUIZ ALREADY COMPLETED → OPEN RESULT PANEL ONLY
+  if (isCompleted) {
+    setIsQuizActive(true);
+    setQuizSubmitted(true);
+    setQuizLoading(false);
+
+    // use stored values (from API / state)
+    setUserScore(userScore);
+
+    return; // 
+  }
+
+  try {
+    setIsQuizActive(true);
+    setQuizLoading(true);
+
+    // 🔹 Reset quiz state ONLY for fresh quiz
+    setCurrentQuestions([]);
+    setCurrentPointIndex(0);
+    setQuizAnswers({});
+    setCheckedAnswers({});
+    setQuizSubmitted(false);
+    setIsPlaying({});
+
+    const res = await fetch(
+      `https://backstagepass.co.in/reactapi/api/getquizquestions.php?module_id=${module.id}&limit=${module.questions_limit}`,
+      { cache: "no-store" }
+    );
+
+    if (!res.ok) {
+      throw new Error("Failed to load quiz questions");
     }
 
-    // ✅ IF QUIZ ALREADY COMPLETED → SHOW RESULT ONLY
-    if (isCompleted) {
-      setIsQuizActive(true);
-      setQuizSubmitted(true);
-      setQuizLoading(false);
-      setUserScore(userScore);
-      return;
+    const data = await res.json();
+
+    if (!Array.isArray(data) || !data.length) {
+      throw new Error("No quiz questions found");
     }
 
-    try {
-      setIsQuizActive(true);
-      setQuizLoading(true);
+    const sanitizedQuestions = data.map((q) => ({
+      question: q.question,
+      options: q.options,
+      type: q.type,
+      correct: q.correct,
+    }));
 
-      // 🔹 Reset quiz state (ONLY for fresh quiz)
-      setCurrentQuestions([]);
-      setCurrentPointIndex(0);
-      setQuizAnswers({});
-      setCheckedAnswers({});
-      setQuizSubmitted(false);
-      setIsPlaying({});
-
-      const res = await fetch(
-        `https://backstagepass.co.in/reactapi/api/getquizquestions.php?module_id=${module.id}&limit=${module.questions_limit}`,
-        { cache: "no-store" }
-      );
-
-      if (!res.ok) {
-        throw new Error("Failed to load quiz questions");
-      }
-
-      const data = await res.json();
-
-      if (!Array.isArray(data) || !data.length) {
-        throw new Error("No quiz questions found");
-      }
-
-      const sanitizedQuestions = data.map((q) => ({
-        question: q.question,
-        options: q.options,
-        type: q.type,
-        correct: q.correct,
-      }));
-
-      setCurrentQuestions(sanitizedQuestions);
-    } catch (err) {
-      console.error(err);
-      alert("Unable to start quiz. Please try again.");
-      setIsQuizActive(false);
-    } finally {
-      setQuizLoading(false);
-    }
-  };
+    setCurrentQuestions(sanitizedQuestions);
+  } catch (err) {
+    console.error(err);
+    alert("Unable to start quiz. Please try again.");
+    setIsQuizActive(false);
+  } finally {
+    setQuizLoading(false);
+  }
+};
 
   interface ChecklistItemProps {
     title: string;
@@ -1656,17 +1033,21 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
     );
   };
 
-
+const getPointLabel = (point: any): string => {
+  if ("text" in point && point.text) return point.text;
+  if ("title" in point && point.title) return point.title;
+  if ("question" in point && point.question) return point.question;
+  return "";
+};
 
   return (
     <div className="min-h-screen px-4 md:px-2 py-6 bg-white-50">
       <div className="max-w-9xl mx-auto">
         <div className="flex items-center justify-between mb-6 gap-4">
           <div>
-            <h1 className="text-3xl font-extrabold leading-tight">{courseName}</h1>
+            <h1 className="text-3xl font-extrabold leading-tight">
+              {courseName}</h1>
             <div className="mt-2 flex items-center gap-3">
-
-              <p className="text-sm text-gray-500">Course overview & progress</p>
             </div>
           </div>
 
@@ -1712,349 +1093,60 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
                       );
                     }
 
-                    if (titleLower === "final quiz") {
-                      return (
-                        <div className="absolute inset-0 p-6 overflow-auto bg-white">
-                          <div className="bg-white rounded-lg p-6 shadow-sm border">
-                            <div className="mb-6">
-                              <h3 className="text-xl font-semibold mb-2">🏁 Final Quiz</h3>
-                              <p className="text-sm text-gray-500 mb-3">Answer each question to progress.</p>
-
-                              <div className="final-progress-container">
-                                <div className="final-progress-fill" style={{ width: `${computeFinalProgressPercent()}%` }}>
-                                  <span className="final-progress-label">{computeFinalProgressPercent()}%</span>
-                                </div>
-                              </div>
-                              <p className="text-sm text-blue-700 mt-1">{Object.keys(finalAnswers).length} / {currentModule.topics.length} answered</p>
-                            </div>
-
-                            <div className="space-y-4">
-                              {(() => {
-                                const topics = currentModule.topics ?? [];
-                                const q = topics[finalIndex];
-                                if (!q) return <div>No question found.</div>;
-                                return (
-                                  <div key={finalIndex} className="p-4 border rounded-lg">
-                                    <div className="mb-4 font-medium">Q{finalIndex + 1}. {(q as QuizTopic).question}</div>
-                                    <ul className="space-y-2">
-                                      {(q as QuizTopic).options?.map((opt, optIdx) => {
-                                        const selected = finalAnswers[finalIndex] === optIdx;
-                                        return (
-                                          <li key={optIdx}>
-                                            <label className={`inline-flex items-center gap-2 p-3 rounded w-full cursor-pointer ${selected ? "bg-green-100 border border-green-300" : "hover:bg-gray-50"}`}>
-                                              <input type="radio" name={`final-quiz-q-${finalIndex}`} checked={selected} onChange={() => handleFinalSelect(finalIndex, optIdx)} />
-                                              <span>{opt}</span>
-                                            </label>
-                                          </li>
-                                        );
-                                      })}
-                                    </ul>
-
-                                    <div className="mt-4 flex items-center justify-between">
-                                      <div>
-                                        <button onClick={handleFinalPrev} disabled={finalIndex === 0} className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50">Prev</button>
-                                      </div>
-
-                                      <div className="flex items-center gap-3">
-                                        <div className="text-sm text-gray-600">{finalIndex + 1} / {currentModule.topics.length}</div>
-
-                                        <button
-                                          onClick={() => {
-                                            const questions = currentModule?.topics ?? [];
-                                            if (Object.keys(finalAnswers).length < questions.length) {
-                                              setPageNotice("Please answer all questions before submitting.");
-                                              setTimeout(() => setPageNotice(null), 2200);
-                                              return;
-                                            }
-                                            let correctCount = 0;
-                                            questions.forEach((qq: any, idx: number) => {
-                                              const userAnsIdx = finalAnswers[idx];
-                                              const correctIdx = qq.options?.indexOf(qq.correct);
-                                              if (userAnsIdx !== undefined && userAnsIdx === correctIdx) correctCount++;
-                                            });
-                                            const score = questions.length ? Math.round((correctCount / questions.length) * 100) : 0;
-                                            setFinalSubmitted(true);
-                                            setPageNotice(`✅ Final Quiz completed! Your score: ${score}%`);
-                                            setTimeout(() => setPageNotice(null), 3000);
-                                            console.log("Final Quiz Score (Static):", score);
-                                          }}
-                                          className={`px-4 py-2 rounded font-semibold ${Object.keys(finalAnswers).length === currentModule.topics.length ? "bg-blue-600 text-white" : "bg-gray-300 text-gray-700 cursor-not-allowed"}`}
-                                          disabled={Object.keys(finalAnswers).length !== currentModule.topics.length}
-                                        >
-                                          Submit Final Quiz
-                                        </button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                );
-                              })()}
-
-                              {finalSubmitted && (
-                                <div className="mt-8 p-6 bg-green-50 rounded-lg border border-green-200 text-center">
-                                  <h2 className="text-2xl font-bold text-green-700 mb-2">🎉 Congratulations!</h2>
-                                  <p className="text-lg text-gray-700">You have completed the Final Quiz.</p>
-                                  <p className="text-xl font-semibold text-green-800 mt-3">
-                                    Your Score: {(() => {
-                                      const questions = currentModule.topics ?? [];
-                                      let correctCount = 0;
-                                      questions.forEach((q: any, idx: number) => {
-                                        const userAnsIdx = finalAnswers[idx];
-                                        const correctIdx = q.options?.indexOf(q.correct);
-                                        if (userAnsIdx !== undefined && userAnsIdx === correctIdx) correctCount++;
-                                      });
-                                      return Math.round((correctCount / questions.length) * 100);
-                                    })()}%
-                                  </p>
-                                  <p className="text-sm text-gray-500 mt-2">Well done! You can now return to your dashboard.</p>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    }
+                   if (activeView === "final quiz") {
+                    return (
+                      <FinalQuizPanel
+                        currentModule={currentModule}
+                        finalIndex={finalIndex}
+                        finalAnswers={finalAnswers}
+                        finalSubmitted={finalSubmitted}
+                        computeFinalProgressPercent={computeFinalProgressPercent}
+                        handleFinalSelect={handleFinalSelect}
+                        handleFinalPrev={handleFinalPrev}
+                        setFinalSubmitted={setFinalSubmitted}
+                        setPageNotice={setPageNotice}
+                      />
+                    );
+                  }
 
                     // Default -> video player newone
                     return (
                       <div className="absolute inset-0">
                         {isQuizActive ? (
-                          /* ================= QUIZ UI ================= */
-                          <div className="absolute inset-0 p-6 overflow-auto bg-white">
-                            {isMandatory && isCompleted ? (
-                              <div className="text-center p-8">
-                                <h3 className="text-2xl font-semibold mb-4">Quiz Completed</h3>
-                                <p className="text-lg mt-2 font-medium text-green-700">
-                                  Your Score is: {currentModule?.score}
-                                </p>
-                                <button
-                                  onClick={handleContinue}
-                                  className="mt-4 px-4 py-2 bg-green-600 text-white rounded"
-                                >
-                                  Continue
-                                </button>
-                              </div>
-                            ) : !quizSubmitted ? (
-                              /* ---- Quiz In Progress (your existing quiz JSX) ---- */
-                              <>
-                                <h2 className="text-xl font-semibold mb-4">
-                                  Question {currentPointIndex + 1} of {modules[openModule]?.questions_limit}
-                                </h2>
+    <QuizPanel
+      isQuizActive={isQuizActive}
+      isCompleted={isCompleted}
+      isMandatory={isMandatory}
+      hasPassed={hasPassed}
+      canContinue={canContinue}
+      continueLabel={continueLabel}
+      currentModule={currentModule}
+      currentQuestions={currentQuestions}
+      currentPointIndex={currentPointIndex}
+      quizSubmitted={quizSubmitted}
+      isReviewMode={isReviewMode}
+      quizAnswers={quizAnswers}
+      checkedAnswers={checkedAnswers}
+      newscore={usernewScore}
+      setIsReviewMode={setIsReviewMode}
+      setQuizSubmitted={setQuizSubmitted}
+      setCurrentPointIndex={setCurrentPointIndex}
+      setQuizAnswers={setQuizAnswers}
+      handleAnswerSelect={handleAnswerSelect}
+      handleSubmitQuiz={handleSubmitQuiz}
+      handleContinue={handleContinue}
+    />
 
-
-                                {isMandatory && (
-                                  <p className="bg-red-500 text-white-600 font-medium mt-2" style={{ padding: "10px 20px", marginBottom: "20px", background: "#ff4436", color: "#fff" }}>
-                                    <img src="https://cdn1.iconfinder.com/data/icons/creative-round-ui/212/82-128.png" style={{ width: "30px", marginRight: "10px", display: "inline-block", verticalAlign: "middle" }} />
-                                    You must score at least {modules[openModule].quiz_score}% to proceed.
-                                  </p>
-                                )}
-                                <p className="mb-4 text-lg">{currentQuestions[currentPointIndex]?.question}</p>
-                                <ul className="space-y-3 mb-6">
-                                  {currentQuestions[currentPointIndex]?.options?.map((option, idx) => {
-                                    const selectedIdx = quizAnswers[currentPointIndex];
-                                    const correctAnswer = currentQuestions[currentPointIndex]?.correct;
-                                    const isCorrect = option === correctAnswer;
-                                    const isSelected = selectedIdx === idx;
-                                    const isChecked = checkedAnswers[currentPointIndex];
-
-                                    let optionClasses = "inline-flex items-center space-x-2 p-2 rounded w-full ";
-                                    if (isChecked && !isMandatory) {
-                                      if (isCorrect) {
-                                        optionClasses += "bg-green-200 text-green-900 font-semibold";
-                                      } else if (isSelected && !isCorrect) {
-                                        optionClasses += "bg-red-200 text-red-900 font-semibold";
-                                      } else {
-                                        optionClasses += "bg-gray-100 text-gray-500";
-                                      }
-                                    } else {
-                                      optionClasses += "hover:bg-gray-100";
-                                    }
-
-                                    return (
-                                      <li key={idx}>
-                                        <label className={optionClasses}>
-                                          <input
-                                            type="radio"
-                                            name={`question-${currentPointIndex}`}
-                                            checked={isSelected}
-                                            onChange={() => handleAnswerSelect(currentPointIndex, idx)}
-                                            className="form-radio"
-                                            disabled={isChecked}
-                                          />
-                                          <span>{option}</span>
-                                        </label>
-                                      </li>
-                                    );
-                                  })}
-                                </ul>
-                                {/* Navigation */}
-                                <div className="flex justify-between">
-                                  <button
-                                    onClick={goToPrevQuestion}
-                                    disabled={currentPointIndex === 0}
-                                    className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
-                                  >
-                                    Prev
-                                  </button>
-
-                                  {
-                                    currentPointIndex === currentQuestions.length - 1 ? (
-                                      // Always show Submit on the last question
-                                      <button
-                                        onClick={handleSubmitQuiz}
-                                        className="px-4 py-2 bg-blue-600 text-white rounded"
-                                        disabled={quizAnswers[currentPointIndex] === undefined}
-                                      >
-                                        Submit
-                                      </button>
-                                    ) : isMandatory ? (
-                                      // If it's a mandatory question, show the Next button
-                                      <button
-                                        disabled={quizAnswers[currentPointIndex] === undefined}
-                                        className="px-4 py-2 bg-blue-600 text-white rounded"
-                                        onClick={handleNextOrSubmit}
-                                      >
-                                        {isLastQuestion ? "Submit" : "Next"}
-                                      </button>
-                                    ) : (
-                                      // If it's a non-mandatory question, show the Check button (if answered) and Next button
-                                      quizAnswers[currentPointIndex] !== undefined ? (
-                                        <>
-                                          <button
-                                            onClick={() => handleCheckQuestion(currentPointIndex)}
-                                            className="px-4 py-2 bg-purple-600 text-white rounded"
-                                          >
-                                            Check
-                                          </button>
-                                          <button
-                                            onClick={goToNextQuestion}
-                                            className="px-4 py-2 bg-blue-600 text-white rounded"
-                                            disabled={quizAnswers[currentPointIndex] === undefined}
-                                          >
-                                            Next
-                                          </button>
-                                        </>
-                                      ) : (
-                                        // Show a disabled "Next" button if no answer is selected for non-mandatory questions
-                                        <button
-                                          onClick={goToNextQuestion}
-                                          className="px-4 py-2 bg-blue-600 text-white rounded"
-                                          disabled={true}
-                                        >
-                                          Next
-                                        </button>
-                                      )
-                                    )
-                                  }
-
-
-                                </div>
-                              </>
-                            ) : isReviewMode ? (
-                              /* ---------------- REVIEW MODE ------------------ */
-                              <div className="p-6">
-                                <h3 className="text-2xl font-semibold mb-4">Review Your Answers</h3>
-
-                                {currentQuestions.map((q, qIndex) => {
-                                  const userAnswerIdx = quizAnswers[qIndex];
-                                  const correctAnswer = q.correct;
-
-                                  return (
-                                    <div key={qIndex} className="mb-6 p-4 border rounded">
-                                      <p className="text-lg font-semibold mb-2">
-                                        {qIndex + 1}. {q.question}
-                                      </p>
-
-                                      <ul className="space-y-2">
-                                        {q.options.map((opt, idx) => {
-                                          const isCorrect = opt === correctAnswer;
-                                          const isSelected = idx === userAnswerIdx;
-
-                                          let className = "p-2 rounded border flex items-center gap-2 ";
-                                          if (isSelected && isCorrect)
-                                            className += "bg-green-200 border-green-600 text-green-900";
-                                          else if (isSelected && !isCorrect)
-                                            className += "bg-red-200 border-red-600 text-red-900";
-                                          else if (isCorrect) className += "bg-green-100 border-green-400";
-                                          else className += "bg-gray-100 border-gray-300";
-
-                                          return (
-                                            <li key={idx} className={className}>
-                                              <input type="radio" checked={isSelected} disabled />
-                                              <span>{opt}</span>
-                                            </li>
-                                          );
-                                        })}
-                                      </ul>
-                                    </div>
-                                  );
-                                })}
-
-                                <button
-                                  onClick={() => setIsReviewMode(false)}
-                                  className="px-4 py-2 bg-blue-600 text-white rounded"
-                                >
-                                  Back
-                                </button>
-                              </div>
-                            ) : (
-                              <div className="text-center p-8">
-                                <h3 className="text-2xl font-semibold mb-4">Quiz Submitted!</h3>
-                                <p>You answered {currentModule?.questions_limit} questions.</p>
-                                <p className="text-lg mt-2 font-medium text-green-700">Score: {currentModule?.score} / 100
-
-
-                                </p>
-                                {isMandatory && quizSubmitted && !hasPassed && (
-                                  <p className="text-red-600 mb-2">You did not pass the quiz. Please try again.</p>
-                                )}
-                                {isMandatory && quizSubmitted && hasPassed && (
-                                  <p className="text-green-600 mb-2">
-                                    Congratulations! You passed the quiz.
-                                  </p>
-
-                                )}
-
-                                <div className="mt-6 flex justify-center gap-4">
-                                  <button
-                                    onClick={() => setIsReviewMode(true)}
-                                    className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
-                                  >
-                                    Review Quiz
-                                  </button>
-                                  {/* {isMandatory && hasPassed && (
-  <button
-    onClick={handleContinue}
-    className="mt-4 px-4 py-2 bg-green-600 text-white rounded"
-  >
-    Continue
-  </button>
-)} */}
-                                  {canContinue && (
-                                    <button
-                                      onClick={handleContinue}
-                                      className="px-4 py-2 bg-green-600 text-white rounded"
-                                    >
-                                      {continueLabel}
-                                    </button>
-                                  )}
-
-
-                                  {isMandatory && !hasPassed && (
-                                    <button onClick={() => { setQuizSubmitted(false); setCurrentPointIndex(0); setQuizAnswers({}); }} className="mt-6 px-4 py-2 bg-blue-600 text-white rounded">Retake Quiz</button>
-                                  )}
-                                </div>
-
-                                {/* 
-                              {(currentModule.mandatory_status !== "1" || userScore >= parseInt(String(currentModule.quiz_score || "0"), 10)) && (
-                                <button onClick={() => { for (let i = openModule + 1; i < modules.length; i++) { setOpenModule(i); break; } }} className="mt-4 ml-4 px-4 py-2 bg-green-600 text-white rounded">Continue</button>
-                              )} */}
-                              </div>
-
-                            )}
-                          </div>
                         ) : (
                           /* ================= VIDEO UI ================= */
                           <>
+                          {loadingTopics[openModule] && (
+                          <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/60">
+                            <div className="py-2 px-4 text-center text-blue-600 font-medium bg-white rounded shadow">
+                              Loading topics, please wait...
+                            </div>
+                          </div>
+                        )}
                             {currentTopic?.id && !isPlaying[currentTopic.id] && (
                               <div className="video-thumbnail relative">
                                 <img
@@ -2125,6 +1217,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
               </div>
 
               {/* below the player show title and navigation */}
+              {!isQuizActive && activeView !== "assignment" && (
               <div className="mt-4 flex items-center justify-between">
                 <div>
                   <h3 className="text-xl font-semibold">{currentModule?.title ?? "—"}</h3>
@@ -2133,26 +1226,29 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
 
                 <div className="flex items-center gap-3">
                   <button onClick={() => { if (currentPointIndex > 0) setCurrentPointIndex(currentPointIndex - 1); }} className="px-4 py-2 rounded-md bg-black text-white hover:opacity-95 transition">Previous</button>
-                  <button onClick={() => { const module = modules[openModule]; if (currentPointIndex < (module?.topics?.length ?? 1) - 1) setCurrentPointIndex(currentPointIndex + 1); }} className="px-4 py-2 rounded-md bg-black text-white hover:opacity-95 transition">Next</button>
+                  <button onClick={() => { 
+                  const module = openModule !== null ? modules[openModule] : undefined;
+                    
+                    if (currentPointIndex < (module?.topics?.length ?? 1) - 1) setCurrentPointIndex(currentPointIndex + 1); }} className="px-4 py-2 rounded-md bg-black text-white hover:opacity-95 transition">Next</button>
                 </div>
               </div>
+              )}
             </div>
           </div>
 
           <aside className="p-4 rounded-lg bg-white shadow-sm border border-gray-100 sticky top-6 max-h-[75vh] overflow-y-auto">
             <h2 className="text-lg font-semibold mb-4">📘 Course Material</h2>
-            {/* <div className="mb-3">
-              <div className="w-full bg-gradient-to-r from-blue-400 to-indigo-400 rounded-full h-2 overflow-hidden">
-                <div style={{ width: `${progressPercentage}%` }} className="h-full bg-white/10" />
-              </div>
-              <p className="text-xs text-gray-500 mt-2">{progressPercentage}% complete</p>
-            </div> */}
+           
 
             <ul className="space-y-3">
               {modules.map((module, index) => {
                 const isOpen = openModule === index;
-                const isUnlocked = isModuleUnlocked(index);
-                const isCompletedModule = completedModuleIds.includes(Number(module.id));
+const isCompletedModule = completedModuleIds.includes(Number(module.id));
+
+const isUnlocked =
+  isCompletedModule ||
+  lastWatchedModuleId === Number(module.id) ||
+  isModuleUnlocked(index);
 
                 return (
                   <li key={module.id} className="border rounded-lg">
@@ -2173,7 +1269,14 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
                         setPageNotice(null);
 
                         // 🔥 Load topics lazily
-                        fetchTopics(module.id, index);
+                        if (typeof module.id === "number") {
+                          fetchTopics(module.id, index);
+                        } else {
+                          const id = parseInt(module.id, 10);
+                          if (!Number.isNaN(id)) {
+                            fetchTopics(id, index);
+                          }
+                        }
                       }}
                       aria-expanded={isOpen}
                     >
@@ -2242,23 +1345,19 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
 
                                 {/* TITLE */}
                                 <p
-                                  className={`text-sm leading-snug
-    ${isCurrentPlaying ? "text-blue-700" : "text-gray-800"}
-  `}
-                                  title={point.text || point.title || point.question || ""}
-                                >
-                                  {(() => {
-                                    const label =
-                                      point.text ??
-                                      point.title ??
-                                      point.question ??
-                                      "";
+  className={`text-sm leading-snug ${
+    isCurrentPlaying ? "text-blue-700" : "text-gray-800"
+  }`}
+  title={getPointLabel(point)}
+>
+  {(() => {
+    const label = getPointLabel(point);
 
-                                    return label.length > 35
-                                      ? label.slice(0, 32) + "..."
-                                      : label;
-                                  })()}
-                                </p>
+    return label.length > 35
+      ? label.slice(0, 32) + "..."
+      : label;
+  })()}
+</p>
 
                               </div>
                               <div className="flex items-center gap-1 mt-1 text-xs text-gray-500">
@@ -2266,7 +1365,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
                                   <rect x="3" y="5" width="18" height="14" rx="2" ry="2" fill="none" stroke="currentColor" strokeWidth="1.5" />
                                   <polygon points="10 9 16 12 10 15 10 9" fill="currentColor" />
                                 </svg>
-                                <span>{module.total_video_duration} </span>
+                                <span>{point.video_duration} </span>
                               </div>
                             </li>
                           );
@@ -2456,152 +1555,49 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
 
 
 
-                          {isOpen && isModuleLoaded && module.is_last == 'yes' && (
-                          <li className={`mb-2 flex items-center justify-between p-3 rounded bg-blue-50 text-blue-800 font-medium`} onClick={() => setActiveView("assignment")}>
-                            <div className="flex gap-3 flex-1">
-                              {/* CHECK */}
-                              <span
-                                className={`h-4 w-4 rounded-full border flex items-center justify-center mt-1 bg-green-500 border-green-500`}
-                              >
+                          {isOpen &&
+  isModuleLoaded &&
+  module.is_last === "yes" &&
+  assignmentType && (
+    <li
+      onClick={() =>
+        setActiveView(assignmentType === 2 ? "assignment" : "final quiz")
+      }
+      className="mb-2 flex items-center justify-between p-3 rounded bg-blue-50 text-blue-800 font-medium cursor-pointer"
+    >
+      <div className="flex gap-3 flex-1">
+        {/* CHECK ICON */}
+        <span className="h-4 w-4 rounded-full border flex items-center justify-center mt-1 bg-green-500 border-green-500">
+          <svg width="12" height="12" viewBox="0 0 24 24">
+            <path
+              d="M20 6L9 17l-5-5"
+              stroke="white"
+              strokeWidth="2"
+              fill="none"
+            />
+          </svg>
+        </span>
 
-                                <svg width="12" height="12" viewBox="0 0 24 24">
-                                  <path
-                                    d="M20 6L9 17l-5-5"
-                                    stroke="white"
-                                    strokeWidth="2"
-                                    fill="none"
-                                  />
-                                </svg>
+        {/* TEXT */}
+        <div className="flex-1">
+          <p className="text-sm font-medium text-gray-800">
+            {assignmentType === 2 ? "Assignment" : "Final Quiz"}
+          </p>
+          <p className="text-xs text-gray-500">
+            {assignmentType === 2
+              ? "Test your understanding"
+              : "Complete the final assessment"}
+          </p>
+        </div>
+      </div>
 
-                              </span>
-
-                              {/* TITLE */}
-                              <p
-                                className={`text-sm leading-snug
-     text-blue-700
-  `}
-
-                              >
-                                <div className="flex-1">
-                                  <p className="text-sm font-medium text-gray-800">
-                                    Assignment
-                                  </p>
-                                  <p className="text-xs text-gray-500">
-                                     Test your understanding
-                                  </p>
-                                </div>
-                              </p>
-
-                            </div>
-                            <div className="flex items-center gap-1 mt-1 text-xs text-gray-500">
-                              <div>
-                              <svg
-                                width="14"
-                                height="14"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                              >
-                                <path
-                                  d="M7 3l10 9-4 1 3 6-2 1-3-6-4 3V3z"
-                                  stroke="currentColor"
-                                  strokeWidth="1.5"
-                                  strokeLinejoin="round"
-                                />
-                              </svg>
-
-                              <span>Click </span></div>
-                            </div>
-                          </li>)}
-
-
-                          {/* {isOpen && isModuleLoaded && module.is_last == 'yes' && (
-                      <div className="px-4 pb-3 text-sm">
-                        <button
-                          onClick={() => setActiveView("assignment")}
-                          className="text-blue-600 hover:underline"
-                        >
-                          📝 
-                        </button>
-                      </div>
-                    )} */}
-                      </ul>)}
-
-
-{/*                   
-                    {isOpen && (
-                      <div className="px-3 pb-3 space-y-2">
-
-                     
-                        {module.selfassessmentlink && (
-                          <a
-                            href={module.selfassessmentlink}
-                            target="_blank"
-                            className="flex items-center gap-3 p-3 rounded-lg border bg-white hover:bg-gray-50 transition"
-                          >
-                            <span className="text-blue-600 text-lg">📄</span>
-                            <div className="flex-1">
-                              <p className="text-sm font-medium text-gray-800">
-                                Self Assessment
-                              </p>
-                              <p className="text-xs text-gray-500">
-                                Practice questions for this module
-                              </p>
-                            </div>
-                          </a>
-                        )}
-
-
-
-                       
-                        {module.resourceslink && (
-                          <a
-                            href={module.resourceslink}
-                            target="_blank"
-                            className="flex items-center gap-3 p-3 rounded-lg border bg-white hover:bg-gray-50 transition"
-                          >
-                            <span className="text-green-600 text-lg">📚</span>
-                            <div className="flex-1">
-                              <p className="text-sm font-medium text-gray-800">
-                                Resources
-                              </p>
-                              <p className="text-xs text-gray-500">
-                                Download reference materials
-                              </p>
-                            </div>
-                          </a>
-                        )}
-
-                       
-                        {isModuleLoaded && module.has_quiz == 1 && (
-                          <button
-                            onClick={() => startQuiz(index)}
-                            className="w-full flex items-center gap-3 p-3 rounded-lg border bg-blue-50 hover:bg-blue-100 transition"
-                          >
-                            <span className="text-orange-600 text-lg">📝</span>
-                            <div className="flex-1 text-left">
-                              <p className="text-sm font-medium text-blue-800">
-                                Start Quiz
-                              </p>
-                              <p className="text-xs text-blue-700">
-                                Test your understanding
-                              </p>
-                            </div>
-                          </button>
-                        )}
-                      </div>
-                    )} */}
-
-                    {/* {isOpen && isModuleLoaded && module.is_last == 'yes' && (
-                      <div className="px-4 pb-3 text-sm">
-                        <button
-                          onClick={() => setActiveView("assignment")}
-                          className="text-blue-600 hover:underline"
-                        >
-                          📝 Assignment
-                        </button>
-                      </div>
-                    )} */}
-                  </li>
+      <div className="flex items-center gap-1 mt-1 text-xs text-gray-500">
+        <span>Click</span>
+      </div>
+    </li>
+  )}
+ </ul>)}
+</li>
                 );
               })}
             </ul>
