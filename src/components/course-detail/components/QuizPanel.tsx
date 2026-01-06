@@ -3,6 +3,7 @@
 import React from "react";
 
 type QuizPanelProps = {
+   isQuizActive: boolean; 
   isCompleted: boolean;
   isMandatory: boolean;
   hasPassed: boolean;
@@ -22,7 +23,9 @@ type QuizPanelProps = {
 
   setIsReviewMode: (v: boolean) => void;
   setQuizSubmitted: (v: boolean) => void;
-  setCurrentPointIndex: (v: number) => void;
+  
+  setCurrentPointIndex: React.Dispatch<React.SetStateAction<number>>;
+
   setQuizAnswers: (v: Record<number, number>) => void;
 
   handleAnswerSelect: (qIndex: number, optIndex: number) => void;
@@ -59,10 +62,8 @@ const QuizPanel: React.FC<QuizPanelProps> = ({
 }) => {
   const question = currentQuestions[currentPointIndex];
 
-  /** ✅ Review is allowed ONLY if module is completed AND questions exist */
-  // const hasReviewData =
-  //   isCompleted && currentQuestions && currentQuestions.length > 0;
-  //   console.log(hasReviewData);
+
+
 
 
   return (
@@ -129,7 +130,8 @@ const QuizPanel: React.FC<QuizPanelProps> = ({
             )}
 
             {/* RETAKE */}
-            {isMandatory && !hasPassed && !isCompleted && (
+            {/* {isMandatory && !hasPassed && !isCompleted && ( */}
+              {isMandatory && quizSubmitted && !hasPassed &&   !isCompleted &&(
               <button
                 onClick={() => {
                   setQuizSubmitted(false);

@@ -5,6 +5,7 @@ import React, { useEffect, useState, ReactNode } from "react";
 /* ================= TYPES ================= */
 
 type AssignmentState = {
+  startedAt: any;
   coursename?: ReactNode;
   marks?: number | null;
   grade?: string | null;
@@ -431,7 +432,9 @@ const hasStartedAssignment =
                     <div>
                       <div className="text-sm text-gray-500">Released on</div>
                       <div className="font-medium">
-                        {new Date(hasStartedAssignment!).toLocaleString()}
+                       {state.startedAt
+                        ? new Date(state.startedAt).toLocaleString()
+                        : "--"}
                       </div>
                     </div>
 

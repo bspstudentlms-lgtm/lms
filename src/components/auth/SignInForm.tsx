@@ -19,6 +19,8 @@ export default function SignInForm() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [authView, setAuthView] = useState<"login" | "forgot">("login");
+  const [success, setSuccess] = useState("");
 const { login } = useAuth();
   const handleSignIn = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
@@ -92,6 +94,55 @@ const { login } = useAuth();
       setLoading(false);
     }
   };
+  const handleForgotPassword = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  setError("");
+  setSuccess("");
+
+  if (!email) {
+    setError("Email is required!");
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    const response = await fetch(
+      "https://www.backstagepass.co.in/reactapi/forgotpassword_mail.php",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      }
+    );
+
+    const responseText = await response.text();
+    console.log("Forgot Password Response:", responseText);
+
+    let data: any;
+    try {
+      data = JSON.parse(responseText);
+    } catch {
+      throw new Error("Invalid server response");
+    }
+
+    if (data.status === 200) {
+      setSuccess("Login details have been sent to your email.");
+
+      setTimeout(() => {
+        router.push("/signin"); // Next.js safe redirect
+      }, 2000);
+    } else {
+      setError(data.message || "Failed to send reset link.");
+    }
+  } catch (err) {
+    console.error(err);
+    setError("Something went wrong. Please try again later.");
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div className="flex flex-col flex-1 lg:w-1/2 w-full">
       <div className="w-full max-w-md pt-4 sm:pt-10 mx-auto mb-3 sm:mb-5">
@@ -166,6 +217,7 @@ const { login } = useAuth();
                 </span>
               </div>
             </div>
+            {authView === "login" && (
             <form onSubmit={handleSignIn}>
               <div className="space-y-4 sm:space-y-6">
                 <div>
@@ -200,20 +252,29 @@ const { login } = useAuth();
                   </div>
                 </div>
                  {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
+                 
+
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 
-                  <div className="flex items-center gap-3">
+                  {/* <div className="flex items-center gap-3">
                     <Checkbox checked={isChecked} onChange={setIsChecked} />
                     <span className="block font-normal text-gray-700 text-theme-sm dark:text-gray-400">
                       Keep me logged in
                     </span>
-                  </div>
-                  <Link
-                    href="/reset-password"
-                    className="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400"
-                  >
-                    Forgot password?
-                  </Link>
+                  </div> */}
+                 <button
+          type="button"
+         
+          onClick={() => {
+    setAuthView("forgot");
+    setError("");
+    setSuccess("");
+    setEmail("");
+  }}
+          className="text-sm text-brand-500 hover:text-brand-600"
+        >
+          Forgot password?
+        </button>
                 </div>
                 <div>
                   <Button className="w-full py-3 sm:py-2" size="sm">
@@ -222,6 +283,41 @@ const { login } = useAuth();
                 </div>
               </div>
             </form>
+            )}
+            {authView === "forgot" && (
+  <form onSubmit={handleForgotPassword}>
+    <div className="mt-[10vh] w-full max-w-[420px]">
+      <h3 className="mb-2.5 text-4xl font-bold">Forgot Password</h3>
+      <p className="mb-6 text-gray-600">Enter your email</p>
+
+      <Input
+        label="Email*"
+        placeholder="mail@example.com"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+
+      {error && <div className="text-red-500 text-sm mt-3">{error}</div>}
+      {success && <div className="text-green-600 text-sm">{success}</div>}
+
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full mt-4 rounded-xl bg-brand-500 py-3 text-white"
+      >
+        {loading ? "Sending..." : "Submit"}
+      </button>
+
+      <button
+        type="button"
+        onClick={() => setAuthView("login")}
+        className="mt-4 text-sm text-brand-500 hover:text-brand-600"
+      >
+        Back to Login
+      </button>
+    </div>
+  </form>
+)}
 
             {/* <div className="mt-5">
               <p className="text-sm font-normal text-center text-gray-700 dark:text-gray-400 sm:text-start">

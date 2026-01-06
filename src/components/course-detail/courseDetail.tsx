@@ -13,6 +13,13 @@ import FinalQuizPanel  from  "./components/FinalQuizPanel";
 interface CourseClientProps {
   id: string;
 }
+interface QuizData {
+  id?: number | string;
+  questions: QuizQuestion[];
+  questions_limit?: number;
+  quiz_score?: number;
+  mandatory_status?: number;
+}
 type UIModule = {
   id: number;
   title: string;
@@ -39,6 +46,8 @@ type TopicBase = {
   watched?: boolean;
   video_duration?: string;
   mentor_name?: string;
+  description?: string;
+  thumbnail?: string;
 };
 
 type VideoTopic = TopicBase & {
@@ -85,7 +94,11 @@ quiz?: any;
 
 
 
-
+interface FinalQuizModule {
+  id: number | string;
+  title: string;
+  topics: QuizTopic[];
+}
 
 
 /* ---------------- Main Page ---------------- */
@@ -105,7 +118,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
   const [mentorname, setMentorname] = useState("");
   const [isQuizActive, setIsQuizActive] = useState(false);
   const [activeTab, setActiveTab] =
-    useState<"overview" | "contact" | "outcome">("overview");
+    useState<"overview" | "contact" | "outcome" | "assignment">("overview");
 
   const [resumeTime, setResumeTime] = useState<number>(0);
   const [topics, setTopics] = useState<any[]>([]);
@@ -132,7 +145,7 @@ const [loadingTopics, setLoadingTopics] = useState<Record<number, boolean>>({});
   const [userId, setUserId] = useState<string | null>(null);
 
   const [watchedTopicIds, setWatchedTopicIds] = useState<Set<number>>(new Set());
-  const [completedModuleIds, setCompletedModuleIds] = useState<number[]>([]);
+  const [completedModuleIds, setCompletedModuleIds] = useState<(number | string)[]>([]);
   // const [completedVideoCount, setCompletedVideoCount] = useState<number>(0);
   const [isReviewMode, setIsReviewMode] = useState(false);
 
@@ -154,14 +167,16 @@ const [loadingTopics, setLoadingTopics] = useState<Record<number, boolean>>({});
   //const [openModule, setOpenModule] = useState<number | null>(null);
   const [openModule, setOpenModule] = useState<number>(-1);
   const [activeView, setActiveView] = useState<
-    "content" | "quiz" | "assignment" | "final quiz"
+    "content" | "quiz" | "assignment" | "final quiz" 
   >("content");
   console.log('activeview'+activeView);
   const currentModule =
     openModule !== null ? modules[openModule] : null;
 
 const activeModule = openModule >= 0 ? modules[openModule] : null;
-
+const finalQuizTopics = currentModule?.topics?.filter(
+  (t): t is QuizTopic => t.type === "quiz"
+) ?? [];
   function getRandomQuestions(allQuestions: QuizQuestion[], limit: number): QuizQuestion[] {
     const shuffled = [...allQuestions].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, limit);
@@ -549,7 +564,11 @@ const progressPercentage =
   const handleFinalSelect = (questionIndex: number, optionIndex: number) => {
     setFinalAnswers((prev) => ({ ...prev, [questionIndex]: optionIndex }));
     const module = modules[openModule];
-    const total = module?.topics?.length ?? totalFinalQuestions;
+    const totalFinalQuestions =
+  module?.topics?.length ?? totalQuestions;
+
+const total = totalFinalQuestions;
+    //const total = module?.topics?.length ?? totalFinalQuestions;
     if (questionIndex < total - 1) {
       setTimeout(() => setFinalIndex((i) => Math.min(i + 1, total - 1)), 120);
     }
@@ -557,7 +576,11 @@ const progressPercentage =
   const handleFinalPrev = () => setFinalIndex((i) => Math.max(0, i - 1));
   const computeFinalProgressPercent = () => {
     const module = modules[openModule];
-    const total = module?.topics?.length ?? totalFinalQuestions;
+   // const total = module?.topics?.length ?? totalFinalQuestions;
+   const totalFinalQuestions =
+  module?.topics?.length ?? totalQuestions;
+
+const total = totalFinalQuestions;
     const answered = Object.keys(finalAnswers).length;
     return Math.round((answered / total) * 100);
   };
@@ -805,27 +828,8 @@ const progressPercentage =
 
   const isLastQuestion = currentPointIndex === totalQuestions - 1;
 
-
-
-  
-  //   const isMandatory = modules[openModule]?.mandatory_status === "1";
-  // const isCompleted = modules[openModule]?.completed === "1";
-  // const isLastModule = modules[openModule]?.is_last === "yes";
-  // const requiredScore = parseInt(modules[openModule]?.quiz_score || "0", 10);
-  // alert(modules[openModule]?.quiz_score);
-  // const hasPassed = userScore >= requiredScore;
-
-  // if (modules[openModule]?.type === "quiz" && modules[openModule]?.quiz_score) {
-  //   const requiredScore = parseInt(modules[openModule].quiz_score, 10);
-  //   const hasPassed = userScore >= requiredScore;
-
-  // } else {
-  //   console.warn("This module doesn't have a quiz score");
-  // }
-
-
   const isQuiz = currentModule?.type === "quiz";
-  //const isMandatory = currentModule?.mandatory_status === "1";
+  
 
   const isLastModule = currentModule?.is_last === "yes";
 
@@ -833,12 +837,7 @@ const progressPercentage =
   let requiredScore = 0;
 
 
-  //  if (isQuiz && currentModule?.quiz_score) {
-  //   requiredScore = parseInt(currentModule.quiz_score, 10);
-
-  //   hasPassed = userScore >= requiredScore;
-
-  // }
+  
 
   const continueLabel = isLastModule
     ? Courseassignmenttype === "Assignment"
@@ -846,26 +845,7 @@ const progressPercentage =
       : "Continue"
     : "Continue";
 
-  // const handleRetake = () => {
-  //   setQuizSubmitted(false);
-  //   setCurrentPointIndex(0);
-  //   setQuizAnswers({});
-  //   setCheckedAnswers({});
-  //   setUserScore(0);
-  //   localStorage.removeItem(`quizSubmitted-${openModule}`);
-  //   localStorage.removeItem(`quizScore-${openModule}`);
-
-  //   const fullQuiz = modules[openModule]?.topics || [];
-  //   const questionsLimit = parseInt(modules[openModule]?.questions_limit || "2", 10);
-  //   const newRandomSubset = getRandomQuestions(fullQuiz, questionsLimit);
-  //   setCurrentQuestions(newRandomSubset);
-  // };
-
-  // const handleContinue = () => {
-  //     const nextModuleArg = isLastModule && Courseassignmenttype === "Assignment" ? Assignmentfile : "";
-  //    alert(nextModuleArg);
-  //     goToNextModule(nextModuleArg);
-  //   };
+  
 
   const handleContinue = async () => {
     if (openModule === null) return;
@@ -880,8 +860,8 @@ const progressPercentage =
     setOpenModule(nextIndex);
     setCurrentPointIndex(0);
 
-    await fetchTopics(modules[nextIndex].id, nextIndex);
-
+    
+await fetchTopics(Number(modules[nextIndex].id), nextIndex);
     setQuizSubmitted(false);
     setUserScore(0);
   };
@@ -897,7 +877,7 @@ const progressPercentage =
     return;
   }
 
-  // 🔥 ALWAYS reset UI modes first
+  
   setIsReviewMode(false);
   setQuizSubmitted(false);
   setIsQuizActive(true);
@@ -954,10 +934,7 @@ const progressPercentage =
     setQuizLoading(false);
   }
 };
-const hasReviewData =
-  isCompleted &&
-  currentQuestions.length > 0 &&
-  Object.keys(quizAnswers).length > 0;
+
 
   interface ChecklistItemProps {
     title: string;
@@ -1049,13 +1026,24 @@ const getPointLabel = (point: any): string => {
   return "";
 };
 const handlePointClick = (index: number, point: any) => {
-  
+  // 🚨 EXIT QUIZ MODE COMPLETELY
+  setIsQuizActive(false);
+  setIsReviewMode(false);
+  setQuizSubmitted(false);
+
+  // ✅ SWITCH TO CONTENT VIEW
+  setActiveView("content");
+
+  // ✅ Update topic
   setCurrentPointIndex(index);
 
-  if (videoRef.current && point.startTime != null) {
-    videoRef.current.currentTime = point.startTime;
-    videoRef.current.play();
-  }
+  // ✅ Play video after mount
+  setTimeout(() => {
+    if (videoRef.current && point.startTime != null) {
+      videoRef.current.currentTime = point.startTime;
+      videoRef.current.play();
+    }
+  }, 0);
 };
 
   return (
@@ -1115,7 +1103,7 @@ const handlePointClick = (index: number, point: any) => {
                    if (activeView === "final quiz") {
                     return (
                       <FinalQuizPanel
-                        currentModule={currentModule}
+                        currentModule={{ topics: finalQuizTopics }}
                         finalIndex={finalIndex}
                         finalAnswers={finalAnswers}
                         finalSubmitted={finalSubmitted}
@@ -1154,7 +1142,7 @@ const handlePointClick = (index: number, point: any) => {
       handleAnswerSelect={handleAnswerSelect}
       handleSubmitQuiz={handleSubmitQuiz}
       handleContinue={handleContinue}
-      hasReviewData={hasReviewData}
+     
     />
 
                         ) : (
@@ -1288,7 +1276,7 @@ const isUnlocked =
                         setFinalSubmitted(false);
                         setPageNotice(null);
 
-                        // 🔥 Load topics lazily
+                        
                         if (typeof module.id === "number") {
                           fetchTopics(module.id, index);
                         } else {
