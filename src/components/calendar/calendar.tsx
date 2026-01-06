@@ -66,14 +66,23 @@ interface Event {
 export default function CalendarPage() {
   const [events, setEvents] = useState<Event[]>([]);
 useEffect(() => {
-fetch("https://backstagepass.co.in/reactapi/get_events.php")
-  .then(res => res.text())
-  .then(text => {
-    console.log("Raw response:", text);
-    const json = JSON.parse(text); // Catch HTML disguised as JSON
-    setEvents(json);
+  const url = `https://backstagepass.co.in/reactapi/get_events.php?_=${Date.now()}`;
+
+  fetch(url, {
+    cache: "no-store",
   })
-  .catch(err => console.error("Parsing failed:", err));
+    .then(res => res.text())
+    .then(text => {
+      console.log("Raw response:", text);
+
+      try {
+        const json = JSON.parse(text);
+        setEvents(json);
+      } catch (e) {
+        console.error("Not JSON response:", text);
+      }
+    })
+    .catch(err => console.error("Fetch failed:", err));
 }, []);
   return (
     <div className="p-6 font-sans bg-gray-50 min-h-screen">

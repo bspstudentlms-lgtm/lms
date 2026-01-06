@@ -127,8 +127,9 @@ const AssignmentPanel: React.FC<AssignmentPanelProps> = ({
   /* ================= DOWNLOAD ================= */
 
   const handleDownload = async () => {
-    const fileName = localStorage.getItem("assignment_file");
-
+   // const fileName = localStorage.getItem("assignment_file");
+    assignmentFile
+const fileName =assignmentFile;
     const fileUrl = fileName
       ? `https://backstagepass.co.in/websiteadmin/uploads/assignments/${fileName}`
       : null;
@@ -262,12 +263,13 @@ const resetLocal = () => {
   };
   /* ================= UI ================= */
 const isAssignmentPassed =
-  typeof state.marks === "number" && state.marks > 0;
+  typeof state.marks === "number" && state.marks >=60;
+  const isAssignmentFailed = typeof state.marks === "number" && state.marks > 0 && state.marks  < 60;
+  
 const hasStartedAssignment =
   typeof state.releaseAt === "string" &&
   state.releaseAt.trim() !== "";
-  console.log('hasassignment'+hasStartedAssignment);
-   console.log('staterelease'+state.releaseAt);
+  
   return (
     <div className="surface-card p-6 rounded-xl">
       <div className="flex items-start justify-between">
@@ -293,6 +295,7 @@ const hasStartedAssignment =
       <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
         <div className="flex items-center gap-4 md:col-span-2">
           <div className="relative w-28 h-28">
+            {(!isAssignmentPassed && !isAssignmentFailed) ? (
             <svg viewBox="0 0 36 36" className="w-28 h-28">
               <defs>
                 <linearGradient id={`g1-${courseId}`} x1="0%" y1="0%" x2="100%" y2="0%">
@@ -313,13 +316,16 @@ const hasStartedAssignment =
                 style={{ transition: "stroke-dashoffset 900ms cubic-bezier(.2,.9,.3,1)" }}
               />
             </svg>
+           ) : null}
 
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+              
+              
               {!hasStartedAssignment  ? (
                 <div className="text-center">
                   <div className="text-sm text-gray-400">Not started</div>
                 </div>
-              ) : submitted ? (
+              ) : (isAssignmentPassed || isAssignmentFailed) ? null : submitted ? (
                 <div className="text-center">
                   <div className="text-sm font-semibold text-green-600">Submitted</div>
                   <div className="text-xs text-gray-500 mt-0.5">{state.submittedFileName ?? ""}</div>
@@ -342,7 +348,7 @@ const hasStartedAssignment =
               <p className="text-sm text-gray-600">
                 Download assignment to begin the student submission window ({studentWindowWeeks} weeks).
               </p>
-            ) : submitted ? (
+            ) : (isAssignmentPassed || isAssignmentFailed) ? null : submitted ? (
               <div>
                 <div className="text-sm font-semibold text-green-600">Submitted</div>
                 <div className="text-xs text-gray-500">
@@ -391,18 +397,33 @@ const hasStartedAssignment =
               {/* ================= COURSE COMPLETED ================= */}
 
               {isAssignmentPassed ? (
-                <div className="text-center p-6 bg-green-50 rounded-md border border-green-200">
-                  <h3 className="text-lg font-semibold text-green-700">
-                    <img
-                      src="https://cdn4.iconfinder.com/data/icons/game-ui-set-3/96/Medal_bronze-512.png"
-                      alt="Completed"
-                      style={{ width: "100px", margin: "0 auto" }}
-                    />
-                    You Have Successfully Completed {state.coursename} Course.
-                    <br />
-                    You can download Certificate.
-                  </h3>
-                </div>
+  /* ================= PASS ================= */
+  <div className="text-center p-6 bg-green-50 rounded-md border border-green-200">
+    <h3 className="text-lg font-semibold text-green-700">
+      <img
+        src="https://cdn4.iconfinder.com/data/icons/game-ui-set-3/96/Medal_bronze-512.png"
+        alt="Completed"
+        style={{ width: "100px", margin: "0 auto" }}
+      />
+      You Have Successfully Completed {state.coursename} Course.
+      <br />
+      You can download Certificate.
+    </h3>
+  </div>
+) : isAssignmentFailed ? (
+  /* ================= FAIL ================= */
+  <div className="text-center p-6 bg-red-50 rounded-md border border-red-200">
+    <h3 className="text-lg font-semibold text-red-700">
+      ❌ Assignment Not Passed
+    </h3>
+    <p className="mt-2 text-sm text-red-600">
+      You scored <strong>{state.marks}</strong>%.  
+      Minimum <strong>60%</strong> is required to pass.
+    </p>
+    <p className="mt-3 text-sm text-gray-600">
+      Please rework your assignment and contact your mentor for next steps.
+    </p>
+  </div>
               ) : (
                 <>
                   {/* ================= STATUS HEADER ================= */}
@@ -468,19 +489,21 @@ const hasStartedAssignment =
                           </span>
                         </label>
 
-                        <button
-                          onClick={() => {
-                            if (!state.submittedAt) {
-                              setNotice(
-                                "Please select a file using 'Choose File' first."
-                              );
-                            }
-                          }}
-                          className="px-4 py-2 rounded-md bg-indigo-600 text-white text-sm hover:bg-indigo-700 transition"
-                          disabled={!studentWindowActive}
-                        >
-                          Submit
-                        </button>
+                       {!submitted && (
+                      <button
+                        onClick={() => {
+                          if (!state.submittedAt) {
+                            setNotice(
+                              "Please select a file using 'Choose File' first."
+                            );
+                          }
+                        }}
+                        className="px-4 py-2 rounded-md bg-indigo-600 text-white text-sm hover:bg-indigo-700 transition"
+                        disabled={!studentWindowActive}
+                      >
+                        Submit
+                      </button>
+                    )}
                       </div>
                     </div>
 

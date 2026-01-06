@@ -16,7 +16,7 @@ type Session = {
 };
 
 const MentorDashboard = () => {
-  const { user } = useAuth();
+  const { user,loading  } = useAuth();
   const router = useRouter();
 
   const [upcoming, setUpcoming] = useState<Session[]>([]);
@@ -25,12 +25,24 @@ const MentorDashboard = () => {
 
   const [showAllUpcoming, setShowAllUpcoming] = useState(false);
   const [showAllRequests, setShowAllRequests] = useState(false);
+  //const [mentorId, setMentorId] = useState<string | null>(null);
+//   useEffect(() => {
+//   if (typeof window !== "undefined") {
+//     setMentorId(localStorage.getItem("mentor_id"));
+//   }
+// }, []);
+console.log('mentorid'+user);
+if (loading) return <div>Loading...</div>;
+if (!user || user.role !== "mentor") return null;
+const mentorId = user.mentor_id;
 
-  const mentor_id =
-    typeof window !== "undefined" ? localStorage.getItem("mentor_id") : null;
+
+  // const mentor_id =
+  //   typeof window !== "undefined" ? localStorage.getItem("mentor_id") : null;
 
   /* ================= AUTH ================= */
   useEffect(() => {
+   
     if (user && user.role !== "mentor") {
       router.replace("/");
     }
@@ -38,40 +50,87 @@ const MentorDashboard = () => {
 
   /* ================= API ================= */
   useEffect(() => {
-    if (!mentor_id) return;
+  if (!mentorId) return;
 
-    fetch(
-      `https://backstagepass.co.in/reactapi/get_upcoming_sessions.php?mentorid=${mentor_id}&type=upcoming`
-    )
-      .then((res) => res.json())
-      .then(setUpcoming);
+  const ts = Date.now(); // 🔥 cache buster
 
-    fetch(
-      `https://backstagepass.co.in/reactapi/get_upcoming_sessions.php?mentorid=${mentor_id}&type=total`
-    )
-      .then((res) => res.json())
-      .then((data) => setTotalSessionCount(data.total));
+  fetch(
+    `https://backstagepass.co.in/reactapi/get_upcoming_sessions.php?mentorid=${mentorId}&type=upcoming&_=${ts}`,
+    { cache: "no-store" }
+  )
+    .then(res => res.json())
+    .then(setUpcoming)
+    .catch(console.error);
 
-    fetch(
-      `https://backstagepass.co.in/reactapi/get_sessions.php?mentorid=${mentor_id}`
-    )
-      .then((res) => res.json())
-      .then(setRequests);
-  }, [mentor_id]);
+  fetch(
+    `https://backstagepass.co.in/reactapi/get_upcoming_sessions.php?mentorid=${mentorId}&type=total&_=${ts}`,
+    { cache: "no-store" }
+  )
+    .then(res => res.json())
+    .then(data => setTotalSessionCount(data.total))
+    .catch(console.error);
 
-  const updateStatus = (session_id: number, status: "accepted" | "declined") => {
-    fetch("https://backstagepass.co.in/reactapi/update_session_status.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ session_id, status }),
-    }).then(() => {
-      fetch(
-        `https://backstagepass.co.in/reactapi/get_sessions.php?mentorid=${mentor_id}`
-      )
-        .then((res) => res.json())
-        .then(setRequests);
-    });
-  };
+  fetch(
+    `https://backstagepass.co.in/reactapi/get_sessions.php?mentorid=${mentorId}&_=${ts}`,
+    { cache: "no-store" }
+  )
+    .then(res => res.json())
+    .then(setRequests)
+    .catch(console.error);
+
+}, [mentorId]);
+
+  const updateStatus = async (
+  session_id: number,
+  status: "accepted" | "declined"
+) => {
+  try {
+    const res = await fetch(
+      "https://backstagepass.co.in/reactapi/update_session_status.php",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ session_id, status }),
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error("Status update failed");
+    }
+
+    const result = await res.json();
+
+    if (result?.success !== true) {
+      throw new Error(result?.message || "Update failed");
+    }
+
+    // ✅ Success alert
+    alert(
+      status === "accepted"
+        ? "Session accepted successfully ✅"
+        : "Session declined successfully ❌"
+    );
+
+    // 🔥 Cache-busted GET
+    const listRes = await fetch(
+      `https://backstagepass.co.in/reactapi/get_sessions.php?mentorid=${mentorId}&_=${Date.now()}`,
+      {
+        cache: "no-store",
+      }
+    );
+
+    const data = await listRes.json();
+    setRequests(data);
+  } catch (error) {
+    console.error(error);
+
+    // ❌ Error alert
+    alert("Something went wrong. Please try again.");
+  }
+};
+
 
   if (!user || user.role !== "mentor") return null;
 

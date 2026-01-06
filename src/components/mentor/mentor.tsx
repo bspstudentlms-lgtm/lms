@@ -44,33 +44,43 @@ const Calendar: React.FC<CalendarProps> = ({ id }) => {
   }, []);
 
   useEffect(() => {
-    async function loadDateData() {
-      try {
-        const res = await fetch(
-          `https://backstagepass.co.in/reactapi/get-available-dates.php?courseid=${id}`
-        );
-        const data = await res.json();
-
-        if (!data?.dates?.length) {
-          setNoDataMessage("No availability found");
-          setDates([]);
-          return;
+  async function loadDateData() {
+    try {
+      const res = await fetch(
+        `https://backstagepass.co.in/reactapi/get-available-dates.php?courseid=${id}`,
+        {
+          method: "GET",
+          cache: "no-store",
+          headers: {
+            "Cache-Control": "no-cache",
+            Pragma: "no-cache",
+          },
         }
+      );
 
-        setDates(data.dates);
-        setTimeSlotsMap(data.timeSlotsMap);
-        setMentorid(data.mentorid);
-        setMentorname(data.mentorname);
-        setZoomLink(data.zoomLink);
-        setSelectedDateKey(data.dates[0].key);
-        setNoDataMessage(null);
-      } catch (err) {
-        setNoDataMessage("Failed to load availability");
+      const data = await res.json();
+
+      if (!data?.dates?.length) {
+        setNoDataMessage("No availability found");
+        setDates([]);
+        return;
       }
-    }
 
-    loadDateData();
-  }, [id]);
+      setDates(data.dates);
+      setTimeSlotsMap(data.timeSlotsMap);
+      setMentorid(data.mentorid);
+      setMentorname(data.mentorname);
+      setZoomLink(data.zoomLink);
+      setSelectedDateKey(data.dates[0].key);
+      setNoDataMessage(null);
+    } catch (err) {
+      setNoDataMessage("Failed to load availability");
+    }
+  }
+
+  loadDateData();
+}, [id]);
+
 
   /* ---------------- Handlers ---------------- */
 

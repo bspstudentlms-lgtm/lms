@@ -768,6 +768,9 @@ const progressPercentage =
     setNewUserScore(score);
     setHasPassed(passed);
     setQuizSubmitted(true);
+    setIsQuizActive(true);   // quiz attempt is over
+    setIsReviewMode(false);   // do NOT auto-enter review
+        // quiz is completed (for Review button)
   };
 
   // small render guard
@@ -843,20 +846,20 @@ const progressPercentage =
       : "Continue"
     : "Continue";
 
-  const handleRetake = () => {
-    setQuizSubmitted(false);
-    setCurrentPointIndex(0);
-    setQuizAnswers({});
-    setCheckedAnswers({});
-    setUserScore(0);
-    localStorage.removeItem(`quizSubmitted-${openModule}`);
-    localStorage.removeItem(`quizScore-${openModule}`);
+  // const handleRetake = () => {
+  //   setQuizSubmitted(false);
+  //   setCurrentPointIndex(0);
+  //   setQuizAnswers({});
+  //   setCheckedAnswers({});
+  //   setUserScore(0);
+  //   localStorage.removeItem(`quizSubmitted-${openModule}`);
+  //   localStorage.removeItem(`quizScore-${openModule}`);
 
-    const fullQuiz = modules[openModule]?.topics || [];
-    const questionsLimit = parseInt(modules[openModule]?.questions_limit || "2", 10);
-    const newRandomSubset = getRandomQuestions(fullQuiz, questionsLimit);
-    setCurrentQuestions(newRandomSubset);
-  };
+  //   const fullQuiz = modules[openModule]?.topics || [];
+  //   const questionsLimit = parseInt(modules[openModule]?.questions_limit || "2", 10);
+  //   const newRandomSubset = getRandomQuestions(fullQuiz, questionsLimit);
+  //   setCurrentQuestions(newRandomSubset);
+  // };
 
   // const handleContinue = () => {
   //     const nextModuleArg = isLastModule && Courseassignmenttype === "Assignment" ? Assignmentfile : "";
@@ -894,28 +897,29 @@ const progressPercentage =
     return;
   }
 
-  // ✅ QUIZ ALREADY COMPLETED → OPEN RESULT PANEL ONLY
-  if (isCompleted) {
+  // 🔥 ALWAYS reset UI modes first
+  setIsReviewMode(false);
+  setQuizSubmitted(false);
+  setIsQuizActive(true);
+   setActiveView("quiz");
+
+  // ✅ If quiz already completed → show RESULT screen
+  if (Number(module.completed) === 1) {
+   
     setIsQuizActive(true);
     setQuizSubmitted(true);
     setQuizLoading(false);
-
-    // use stored values (from API / state)
-    setUserScore(userScore);
-
-    return; // 
+    return;
   }
 
   try {
-    setIsQuizActive(true);
     setQuizLoading(true);
 
-    // 🔹 Reset quiz state ONLY for fresh quiz
+    // reset fresh quiz state
     setCurrentQuestions([]);
     setCurrentPointIndex(0);
     setQuizAnswers({});
     setCheckedAnswers({});
-    setQuizSubmitted(false);
     setIsPlaying({});
 
     const res = await fetch(
@@ -923,9 +927,7 @@ const progressPercentage =
       { cache: "no-store" }
     );
 
-    if (!res.ok) {
-      throw new Error("Failed to load quiz questions");
-    }
+    if (!res.ok) throw new Error("Failed to load quiz questions");
 
     const data = await res.json();
 
@@ -933,12 +935,15 @@ const progressPercentage =
       throw new Error("No quiz questions found");
     }
 
-    const sanitizedQuestions = data.map((q) => ({
-      question: q.question,
-      options: q.options,
-      type: q.type,
-      correct: q.correct,
-    }));
+    const sanitizedQuestions: QuizQuestion[] = data.map(
+      (q: any, index: number) => ({
+        id: q.id ?? index,
+        question: q.question,
+        options: q.options,
+        type: q.type,
+        correct: q.correct,
+      })
+    );
 
     setCurrentQuestions(sanitizedQuestions);
   } catch (err) {
@@ -949,6 +954,10 @@ const progressPercentage =
     setQuizLoading(false);
   }
 };
+const hasReviewData =
+  isCompleted &&
+  currentQuestions.length > 0 &&
+  Object.keys(quizAnswers).length > 0;
 
   interface ChecklistItemProps {
     title: string;
@@ -1039,6 +1048,15 @@ const getPointLabel = (point: any): string => {
   if ("question" in point && point.question) return point.question;
   return "";
 };
+const handlePointClick = (index: number, point: any) => {
+  
+  setCurrentPointIndex(index);
+
+  if (videoRef.current && point.startTime != null) {
+    videoRef.current.currentTime = point.startTime;
+    videoRef.current.play();
+  }
+};
 
   return (
     <div className="min-h-screen px-4 md:px-2 py-6 bg-white-50">
@@ -1083,11 +1101,12 @@ const getPointLabel = (point: any): string => {
                     if (activeView === "assignment") {
                       return (
                         <div className="absolute inset-0 p-6 overflow-auto bg-white">
+                          
                           <AssignmentPanel
                             courseId={id}
                             studentWindowWeeks={2}
                             mentorWindowWeeks={1}
-                            assignmentFile={currentModule?.file ?? ""}
+                            assignmentFile={assignmentFile ?? ""}
                           />
                         </div>
                       );
@@ -1135,6 +1154,7 @@ const getPointLabel = (point: any): string => {
       handleAnswerSelect={handleAnswerSelect}
       handleSubmitQuiz={handleSubmitQuiz}
       handleContinue={handleContinue}
+      hasReviewData={hasReviewData}
     />
 
                         ) : (
@@ -1307,8 +1327,9 @@ const isUnlocked =
                     {isOpen && module.topics?.length > 0 && (
                       <ul className="pt-2 pb-2 text-sm text-gray-600">
                         {module.topics.map((point, idx) => {
-                          const isCurrentPlaying =
-                            openModule === index && currentPointIndex === idx;
+                         const isCurrentPlaying =
+    openModule === index && currentPointIndex === idx;
+
 
                           const isCompletedTopic =
                             watchedTopicIds.has(Number(point.id));
@@ -1345,19 +1366,19 @@ const isUnlocked =
 
                                 {/* TITLE */}
                                 <p
-  className={`text-sm leading-snug ${
-    isCurrentPlaying ? "text-blue-700" : "text-gray-800"
-  }`}
-  title={getPointLabel(point)}
->
-  {(() => {
-    const label = getPointLabel(point);
-
-    return label.length > 35
-      ? label.slice(0, 32) + "..."
-      : label;
-  })()}
-</p>
+      key={idx}
+      onClick={() => handlePointClick(idx, point)}
+      className={`text-sm leading-snug cursor-pointer transition-colors
+        ${isCurrentPlaying
+          ? "text-blue-700 font-medium"
+          : "text-gray-800 hover:text-blue-600"}
+      `}
+      title={getPointLabel(point)}
+    >
+      {getPointLabel(point).length > 35
+        ? getPointLabel(point).slice(0, 32) + "..."
+        : getPointLabel(point)}
+    </p>
 
                               </div>
                               <div className="flex items-center gap-1 mt-1 text-xs text-gray-500">

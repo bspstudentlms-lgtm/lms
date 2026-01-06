@@ -7,6 +7,7 @@ import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
 import Link from "next/link";
 import React, { useState } from "react";
 import { signIn } from "next-auth/react";
+import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 
 
@@ -18,7 +19,7 @@ export default function SignInForm() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
+const { login } = useAuth();
   const handleSignIn = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     setError("");
@@ -55,7 +56,11 @@ export default function SignInForm() {
         localStorage.setItem('email', email);
         localStorage.setItem('role', data.role);
         localStorage.setItem('mentor_id', data.mentor_id);
-        
+        login({
+        name: data.username || "BSP LMS Dashboard",
+        role: data.role, // "mentor" | "student"
+        mentor_id: data.role === "mentor" ? data.mentor_id : undefined,
+      });
 
         // ✅ Redirect with trailing slash for GoDaddy
         setTimeout(() => {

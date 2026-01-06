@@ -284,15 +284,7 @@ export default function MyCourses() {
           <CourseCard key={course.id} course={course} enrolled={false} />
         ))}
       </div>
-      <h3 className="mt-12 mb-4 text-lg font-semibold">Test Courses</h3>
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        
-         <Link
-        href={`/coursedetailslatest/23`} >
-       Testcourse
-        </Link>
-        
-      </div>
+    
     </div>
   );
 }
