@@ -54,12 +54,33 @@ export default function Footer() {
           </div>
 
           {/* DOWNLOAD BUTTON */}
-          <div className="flex md:justify-end">
-            <button className="bg-red-600 hover:bg-red-700 transition text-white px-10 py-4 rounded-full font-semibold shadow-lg">
-              Download Brochure
-            </button>
+         
+            <div>
+            <h4 className="text-red-600 font-semibold text-lg mb-4">
+              Community
+            </h4>
+            <ul className="space-y-3 text-sm text-gray-700">
+              <li className="hover:text-red-600 cursor-pointer">
+                Learners
+
+              </li>
+              <li className="hover:text-red-600 cursor-pointer">
+                Partners
+
+              </li>
+              <li className="hover:text-red-600 cursor-pointer">
+                Beta Testers
+              </li>
+              <li className="hover:text-red-600 cursor-pointer">
+Blog
+              </li>
+              <li className="hover:text-red-600 cursor-pointer">
+Tech Blog
+              </li>
+            </ul>
           </div>
-        </div>
+          </div>
+        
 
         {/* SOCIAL ICONS */}
         <div className="flex justify-center gap-6 mt-12">

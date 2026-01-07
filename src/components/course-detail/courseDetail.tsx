@@ -1046,6 +1046,20 @@ const handlePointClick = (index: number, point: any) => {
   }, 0);
 };
 
+const formatDuration = (duration?: string | null): string => {
+  if (!duration) return "";
+
+  const parts = duration.split(":");
+
+  if (parts.length === 3 && parts[0] === "00") {
+    return `${parts[1]}:${parts[2]}`;
+  }
+
+  return duration;
+};
+
+
+
   return (
     <div className="min-h-screen px-4 md:px-2 py-6 bg-white-50">
       <div className="max-w-9xl mx-auto">
@@ -1149,11 +1163,12 @@ const handlePointClick = (index: number, point: any) => {
                           /* ================= VIDEO UI ================= */
                           <>
                           {loadingTopics[openModule] && (
-                          <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/60">
-                            <div className="py-2 px-4 text-center text-blue-600 font-medium bg-white rounded shadow">
-                              Loading topics, please wait...
-                            </div>
-                          </div>
+                          <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4">
+      <div className="h-14 w-14 animate-spin rounded-full border-4 border-gray-200 border-t-[#E11D2E]" />
+      <p className="text-sm font-medium text-gray-600">
+        Loading your course…
+      </p>
+    </div>
                         )}
                             {currentTopic?.id && !isPlaying[currentTopic.id] && (
                               <div className="video-thumbnail relative">
@@ -1331,7 +1346,7 @@ const isUnlocked =
                                   : "hover:bg-gray-50"}
                   `}
                             >
-                              <div className="flex gap-3 flex-1">
+                              <div className="flex gap-2 flex-1">
                                 {/* CHECK */}
                                 <span
                                   className={`h-4 w-4 rounded-full border flex items-center justify-center mt-1
@@ -1374,7 +1389,7 @@ const isUnlocked =
                                   <rect x="3" y="5" width="18" height="14" rx="2" ry="2" fill="none" stroke="currentColor" strokeWidth="1.5" />
                                   <polygon points="10 9 16 12 10 15 10 9" fill="currentColor" />
                                 </svg>
-                                <span>{point.video_duration} </span>
+                                <span>{formatDuration(point.video_duration)} </span>
                               </div>
                             </li>
                           );
@@ -1601,8 +1616,23 @@ const isUnlocked =
       </div>
 
       <div className="flex items-center gap-1 mt-1 text-xs text-gray-500">
-        <span>Click</span>
-      </div>
+                              <div>
+                              <svg
+                                width="14"
+                                height="14"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                              >
+                                <path
+                                  d="M7 3l10 9-4 1 3 6-2 1-3-6-4 3V3z"
+                                  stroke="currentColor"
+                                  strokeWidth="1.5"
+                                  strokeLinejoin="round"
+                                />
+                              </svg>
+
+                              <span>Click </span></div>
+                            </div>
     </li>
   )}
  </ul>)}
@@ -1709,8 +1739,6 @@ const isUnlocked =
         .surface-card {
           background: linear-gradient(180deg, #ffffff, #fbfbfd);
           border-radius: 12px;
-          box-shadow: 0 10px 30px rgba(16,24,40,0.06);
-          border: 1px solid rgba(15,23,42,0.04);
         }
 
         .video-surface {

@@ -480,9 +480,9 @@ const AppSidebar: React.FC = () => {
     <aside
       className={`fixed flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 
         ${isExpanded || isMobileOpen
-          ? "w-[290px]"
+          ? "w-[240px]"
           : isHovered
-            ? "w-[290px]"
+            ? "w-[240px]"
             : "w-[90px]"
         }
         ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
@@ -502,7 +502,7 @@ const AppSidebar: React.FC = () => {
                 className="dark:hidden"
                 src="https://backstagepass.co.in/newlogo-324ee245.webp"
                 alt="Logo"
-                width={250}
+                width={220}
                 height={40}
               />
               <Image

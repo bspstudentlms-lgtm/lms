@@ -293,10 +293,11 @@ const hasStartedAssignment =
         </div>
       </div>
 
-      <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
+      <div className="mt-5 grid grid-cols-1 md:grid-cols-1 gap-4 items-start">
+         {(!isAssignmentPassed && !isAssignmentFailed) ? (
         <div className="flex items-center gap-4 md:col-span-2">
           <div className="relative w-28 h-28">
-            {(!isAssignmentPassed && !isAssignmentFailed) ? (
+           
             <svg viewBox="0 0 36 36" className="w-28 h-28">
               <defs>
                 <linearGradient id={`g1-${courseId}`} x1="0%" y1="0%" x2="100%" y2="0%">
@@ -317,7 +318,7 @@ const hasStartedAssignment =
                 style={{ transition: "stroke-dashoffset 900ms cubic-bezier(.2,.9,.3,1)" }}
               />
             </svg>
-           ) : null}
+           
 
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
               
@@ -371,7 +372,7 @@ const hasStartedAssignment =
               </div>
             ) : null}
           </div>
-        </div>
+        </div>) : null}
 
         <div className="md:col-span-2 bg-white rounded-lg p-4 border border-gray-100 shadow-sm">
           {!hasStartedAssignment ? (
