@@ -310,7 +310,13 @@ const { login } = useAuth();
 
       <button
         type="button"
-        onClick={() => setAuthView("login")}
+       
+          onClick={() => {
+          setAuthView("login");
+          setError("");
+          setSuccess("");
+          setEmail("");
+        }}
         className="mt-4 text-sm text-brand-500 hover:text-brand-600"
       >
         Back to Login
