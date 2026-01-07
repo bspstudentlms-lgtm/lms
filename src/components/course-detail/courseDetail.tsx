@@ -1244,7 +1244,11 @@ const formatDuration = (duration?: string | null): string => {
               <div className="mt-4 flex items-center justify-between">
                 <div>
                   <h3 className="text-xl font-semibold">{currentModule?.title ?? "—"}</h3>
-                  <p className="text-sm text-gray-500">Topic {currentPointIndex + 1} / {(currentModule?.topics?.length ?? 0)}</p>
+                  <p className="text-sm text-gray-500">
+                    {loadingTopics[openModule]
+                      ? "Topic loading"
+                      : `Topic ${currentPointIndex + 1} / ${(currentModule?.topics?.length ?? 0)}`}
+                  </p>
                 </div>
 
                 <div className="flex items-center gap-3">

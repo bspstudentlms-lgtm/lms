@@ -113,11 +113,11 @@ const QuizPanel: React.FC<QuizPanelProps> = ({
           <div className="mt-6 flex justify-center gap-4">
             {/* REVIEW */}
             <button
-    onClick={() => setIsReviewMode(true)}
-    className="px-5 py-2 bg-green-600 text-white rounded"
-  >
-    Review Quiz
-  </button>
+              onClick={() => setIsReviewMode(true)}
+              className="px-5 py-2 bg-green-600 text-white rounded"
+            >
+              Review Quiz
+            </button>
 
             {/* CONTINUE */}
             {(hasPassed || isCompleted) && (
