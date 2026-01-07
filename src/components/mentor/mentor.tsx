@@ -208,41 +208,67 @@ const Calendar: React.FC<CalendarProps> = ({ id }) => {
 
       {/* ---------------- Confirmation Modal ---------------- */}
       {isBooked && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl p-8 max-w-md w-full shadow-xl text-center">
-            <h2 className="text-xl font-bold text-green-600 mb-2">
-              ✅ Booking Confirmed!
-            </h2>
+       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+  <div className="w-[440px] rounded-3xl bg-white p-10 text-center shadow-2xl relative">
 
-            <p className="text-gray-700 mb-4">
-              Session booked with <b>{mentorname}</b>
-            </p>
+    {/* Success Icon */}
+    <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-green-400 to-green-600 shadow-lg">
+      <span className="text-2xl text-white">✓</span>
+    </div>
 
-            <p className="text-sm text-gray-600">
-              <b>Time:</b> {selectedSlot} <br />
-              <b>Date:</b>{" "}
-              {dates.find((d) => d.key === selectedDateKey)?.label}
-            </p>
+    {/* Title */}
+    <h2 className="text-2xl font-bold text-green-600">
+      Booking Confirmed!
+    </h2>
 
-            <a
-              href={zoomLink}
-              target="_blank"
-              className="block mt-4 text-blue-600 underline break-all"
-            >
-              Join Zoom
-            </a>
+    {/* Subtitle */}
+    <p className="mt-2 text-gray-700">
+      Session booked with{" "}
+      <span className="font-semibold text-gray-900">
+        {mentorname}
+      </span>
+    </p>
 
-            <button
-              onClick={() => {
-                setIsBooked(false);
-                router.push("/calendar");
-              }}
-              className="mt-6 bg-gray-800 text-white px-5 py-2 rounded-lg hover:bg-gray-900"
-            >
-              Close
-            </button>
-          </div>
-        </div>
+    {/* Divider */}
+    <div className="my-6 h-px bg-gray-200" />
+
+    {/* Time & Date */}
+    <div className="space-y-2 text-[15px] text-gray-700">
+      <p>
+        <span className="font-semibold text-gray-900">Time:</span>{" "}
+        {selectedSlot}
+      </p>
+      <p>
+        <span className="font-semibold text-gray-900">Date:</span>{" "}
+        {dates.find((d) => d.key === selectedDateKey)?.label}
+      </p>
+    </div>
+
+    {/* Actions */}
+    <div className="mt-8 flex items-center justify-center gap-4">
+      <a
+        href={zoomLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-600 font-medium underline underline-offset-4 hover:text-blue-700 transition"
+      >
+        Join Zoom
+      </a>
+
+      <button
+        onClick={() => {
+          setIsBooked(false);
+          router.push("/calendar");
+        }}
+        className="rounded-xl bg-slate-900 px-8 py-2.5 text-white font-medium shadow hover:bg-slate-800 active:scale-95 transition"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</div>
+
+
       )}
     </div>
   );

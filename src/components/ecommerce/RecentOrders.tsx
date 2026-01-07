@@ -147,7 +147,7 @@ export default function DashboardCourses() {
     <div className="min-h-screen bg-white p-6">
       {/* HEADER */}
       <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-gray-900">All Courses</h2>
+        <h2 className="text-2xl font-bold">All Courses</h2>
         <input
           type="text"
           placeholder="Search courses..."
