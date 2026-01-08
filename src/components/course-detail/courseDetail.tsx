@@ -132,6 +132,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
   const [assignmentType, setAssignmentType] = useState<number | null>(null);
   const [courseName, setCourseName] = useState<string | null>(null);
   const [loadingTopics, setLoadingTopics] = useState<Record<number, boolean>>({});
+  const [lastEndedTopicId, setLastEndedTopicId] = useState<number | null>(null);
   const [courseOverview, setCourseOverview] = useState("");
   const [courseEnddate, setCourseEnddate] = useState("");
   const [Courseassignmenttype, setCourseassignmenttype] = useState("");
@@ -408,8 +409,8 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
           resourceslink,
           quiz,
           total_video_duration: new Date(totalDuration * 1000)
-            .toISOString()
-            .substring(11, 8),
+      .toISOString()
+      .slice(11, 19)
 
         };
         return updated;
@@ -588,56 +589,128 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
     return Math.round((answered / total) * 100);
   };
 
+  const handleModuleClick = (index: number) => {
+  const module = modules[index];
+  if (!module) return;
+
+  const isUnlocked =
+    index === 0 ||
+    completedModuleIds.includes(Number(module.id)) ||
+    completedModuleIds.includes(Number(modules[index - 1]?.id));
+
+ 
+
+  if (!isUnlocked) return;
+
+  setOpenModule(index);
+  setCurrentPointIndex(0);
+  setFinalIndex(0);
+  setFinalAnswers({});
+  setFinalSubmitted(false);
+  setPageNotice(null);
+
+  const moduleId =
+    typeof module.id === "number" ? module.id : parseInt(module.id, 10);
+
+  if (!Number.isNaN(moduleId)) {
+    fetchTopics(moduleId, index);
+  }
+};
+const autoOpenModuleRef = useRef<number | null>(null);
   // video end
-  const handleVideoEnd = async () => {
-    const topic = currentTopic;
-    if (!topic) return;
-    const topicId = topic.id;
-    try {
-      if (userId) {
-        fetch("https://backstagepass.co.in/reactapi/mark_watched.php", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ user_id: userId, topic_id: topicId }),
-        }).catch((e) => console.error("mark_watched failed:", e));
+ const handleVideoEnd = () => {
+  const topic = currentTopic;
+  if (!topic) return;
+
+  const topicId = Number(topic.id);
+  const module = modules[openModule];
+  if (!module?.topics?.length) return;
+
+  // mark watched (API)
+  if (userId) {
+    fetch("https://backstagepass.co.in/reactapi/mark_watched.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user_id: userId, topic_id: topicId }),
+    }).catch(() => {});
+  }
+
+  let shouldOpenNextModule = false;
+
+  setWatchedTopicIds((prev) => {
+    const next = new Set(prev);
+    next.add(topicId);
+
+    const topicIds = module.topics.map((t: any) => Number(t.id));
+    const allWatched = topicIds.every((id) => next.has(id));
+
+    if (allWatched) {
+      shouldOpenNextModule = true;
+    } else {
+      const currentIndex = module.topics.findIndex(
+        (t: any) => Number(t.id) === topicId
+      );
+
+      if (currentIndex < module.topics.length - 1) {
+        setCurrentPointIndex(currentIndex + 1);
       }
-    } catch (e) { console.error(e); }
+    }
 
-    setWatchedTopicIds((prev) => {
-      const next = new Set(prev);
-      next.add(Number(topicId));
-      return next;
-    });
-    //setCompletedVideoCount((prev) => prev + 1);
+    return next;
+  });
+  setLastEndedTopicId(topicId);
 
+  /* ===============================
+     POST-STATE SIDE EFFECTS
+  =============================== */
+  if (shouldOpenNextModule) {
+    const moduleId = Number(module.id);
 
-    setCurrentPointIndex((prevPointIndex) => {
-      const module = modules[openModule];
-      const pointsCount = module?.topics?.length ?? 0;
-      if (prevPointIndex < pointsCount - 1) {
-        return prevPointIndex + 1;
-      } else {
-        const previousModuleId = Number(module?.id);
-        if (!Number.isNaN(previousModuleId)) {
-          setCompletedModuleIds((prev) => {
-            const updated = Array.from(new Set([...prev, previousModuleId]));
-            try { localStorage.setItem("completedModules", JSON.stringify(updated)); } catch { }
-            return updated;
-          });
-        }
-        let nextIdx = openModule + 1;
-        while (nextIdx < modules.length && (modules[nextIdx].topics?.length ?? 0) === 0) nextIdx++;
-        if (nextIdx < modules.length) {
-          setOpenModule(nextIdx);
-          return 0;
-        } else return 0;
-      }
-    });
-  };
+    if (!Number.isNaN(moduleId)) {
+      setCompletedModuleIds((prev) => {
+        const updated = Array.from(new Set([...prev, moduleId]));
+        try {
+          localStorage.setItem(
+            "completedModules",
+            JSON.stringify(updated)
+          );
+        } catch {}
+        return updated;
+      });
+    }
+
+    const nextIdx = openModule + 1;
+    if (nextIdx < modules.length) {
+      autoOpenModuleRef.current = nextIdx;
+    }
+  }
+};
+
+useEffect(() => {
+ 
+  if (autoOpenModuleRef.current === null) return;
+
+  const idx = autoOpenModuleRef.current;
+  autoOpenModuleRef.current = null;
+
+  // 🔥 EXACT SAME AS MANUAL CLICK
+  handleModuleClick(idx);
+}, [completedModuleIds]);
 
   const [checkedAnswers, setCheckedAnswers] = useState<{ [k: number]: boolean }>({});
   const handleCheckQuestion = (questionIndex: number) => setCheckedAnswers((p) => ({ ...p, [questionIndex]: true }));
+const openModuleAndLoadTopics = async (moduleIndex: number) => {
+  const moduleId = Number(modules[moduleIndex]?.id);
+  if (!moduleId) return;
 
+  setOpenModule(moduleIndex);
+
+  await fetchTopics(moduleId, moduleIndex);
+
+  setCurrentPointIndex(0);
+};
+
+  
   const isModuleUnlocked = (index: number) => {
     if (index === 0) return true;
     const current = modules[index];
@@ -1029,26 +1102,34 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
     return "";
   };
   const handlePointClick = (index: number, point: any) => {
-    // 🚨 EXIT QUIZ MODE COMPLETELY
-    setIsQuizActive(false);
-    setIsReviewMode(false);
-    setQuizSubmitted(false);
+  // 🔒 BLOCK if previous topic not watched
+  if (index > 0) {
+    const prevTopic = modules[openModule!]?.topics?.[index - 1];
+    if (!prevTopic || !watchedTopicIds.has(Number(prevTopic.id))) {
+      alert("Please watch the previous video before continuing.");
+      return;
+    }
+  }
 
-    // ✅ SWITCH TO CONTENT VIEW
-    setActiveView("content");
+  // 🚨 EXIT QUIZ MODE COMPLETELY
+  setIsQuizActive(false);
+  setIsReviewMode(false);
+  setQuizSubmitted(false);
 
-    // ✅ Update topic
-    setCurrentPointIndex(index);
+  // ✅ SWITCH TO CONTENT VIEW
+  setActiveView("content");
 
-    // ✅ Play video after mount
-    setTimeout(() => {
-      if (videoRef.current && point.startTime != null) {
-        videoRef.current.currentTime = point.startTime;
-        videoRef.current.play();
-      }
-    }, 0);
-  };
+  // ✅ Update topic
+  setCurrentPointIndex(index);
 
+  // ▶️ Play video
+  setTimeout(() => {
+    if (videoRef.current && point.startTime != null) {
+      videoRef.current.currentTime = point.startTime;
+      videoRef.current.play();
+    }
+  }, 0);
+};
   const formatDuration = (duration?: string | null): string => {
     if (!duration) return "";
 
@@ -1071,7 +1152,8 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
   };
 
   
-
+const isCurrentWatched =
+  currentTopic && lastEndedTopicId === Number(currentTopic.id);
 
 
   return (
@@ -1267,11 +1349,29 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
 
                   <div className="flex items-center gap-3">
                     <button onClick={() => { if (currentPointIndex > 0) setCurrentPointIndex(currentPointIndex - 1); }} className="px-4 py-2 rounded-md bg-black text-white hover:opacity-95 transition">Previous</button>
-                    <button onClick={() => {
-                      const module = openModule !== null ? modules[openModule] : undefined;
+                    <button
+  disabled={!isCurrentWatched}
+  onClick={() => {
+    if (!isCurrentWatched) return;
 
-                      if (currentPointIndex < (module?.topics?.length ?? 1) - 1) setCurrentPointIndex(currentPointIndex + 1);
-                    }} className="px-4 py-2 rounded-md bg-black text-white hover:opacity-95 transition">Next</button>
+    const module = modules[openModule!];
+    if (!module?.topics) return;
+
+    if (currentPointIndex < module.topics.length - 1) {
+      setCurrentPointIndex((prev) => prev + 1);
+      setLastEndedTopicId(null); // 🔒 lock next again
+    }
+  }}
+  className={`px-4 py-2 rounded-md transition
+    ${
+      isCurrentWatched
+        ? "bg-black text-white hover:opacity-95"
+        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+    }
+  `}
+>
+  Next
+</button>
                   </div>
                 </div>
               )}
