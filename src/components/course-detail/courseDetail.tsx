@@ -8,7 +8,7 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import QuizPanel from "./components/QuizPanel";
 import AssignmentPanel from "./components/AssignmentPanel";
-import FinalQuizPanel  from  "./components/FinalQuizPanel";
+import FinalQuizPanel from "./components/FinalQuizPanel";
 
 interface CourseClientProps {
   id: string;
@@ -71,15 +71,15 @@ type Topic = VideoTopic | QuizTopic;
 
 type Module = {
   has_quiz: number;
-  
-  
+
+
   selfassessmentlink?: string | null;
-resourceslink?: string | null;
-quiz?: any; 
+  resourceslink?: string | null;
+  quiz?: any;
 
   score?: React.ReactNode;
   is_last?: string;
-   final_type?: 1 | 2;
+  final_type?: 1 | 2;
   mandatory_status?: string;
   quiz_score?: React.ReactNode;
   type?: string;
@@ -89,7 +89,7 @@ quiz?: any;
   completed?: string;
   total_video_duration?: string;
   file?: string;
-  questions_limit?:number;
+  questions_limit?: number;
 };
 
 
@@ -125,13 +125,13 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
 
   const [loading, setLoading] = useState(true);
   const [modules, setModules] = useState<Module[]>([]);
-  
+
   const [lastWatchedModuleId, setLastWatchedModuleId] = useState<number | null>(null);
-const [lastWatchedTopicId, setLastWatchedTopicId] = useState<number | null>(null);
-const [assignmentFile, setAssignmentFile] = useState<string | null>(null);
-const [assignmentType, setAssignmentType] = useState<number | null>(null);
-const [courseName, setCourseName] = useState<string | null>(null);
-const [loadingTopics, setLoadingTopics] = useState<Record<number, boolean>>({});
+  const [lastWatchedTopicId, setLastWatchedTopicId] = useState<number | null>(null);
+  const [assignmentFile, setAssignmentFile] = useState<string | null>(null);
+  const [assignmentType, setAssignmentType] = useState<number | null>(null);
+  const [courseName, setCourseName] = useState<string | null>(null);
+  const [loadingTopics, setLoadingTopics] = useState<Record<number, boolean>>({});
   const [courseOverview, setCourseOverview] = useState("");
   const [courseEnddate, setCourseEnddate] = useState("");
   const [Courseassignmenttype, setCourseassignmenttype] = useState("");
@@ -145,7 +145,6 @@ const [loadingTopics, setLoadingTopics] = useState<Record<number, boolean>>({});
   const [userId, setUserId] = useState<string | null>(null);
 
   const [watchedTopicIds, setWatchedTopicIds] = useState<Set<number>>(new Set());
-  const [lastEndedTopicId, setLastEndedTopicId] = useState<number | null>(null);
   const [completedModuleIds, setCompletedModuleIds] = useState<(number | string)[]>([]);
   // const [completedVideoCount, setCompletedVideoCount] = useState<number>(0);
   const [isReviewMode, setIsReviewMode] = useState(false);
@@ -164,20 +163,23 @@ const [loadingTopics, setLoadingTopics] = useState<Record<number, boolean>>({});
 
   const [currentQuestions, setCurrentQuestions] = useState<QuizQuestion[]>([]);
 
+    const [isAssessment, setIsAssessment] = useState(false);
+     const [isResources, setIsResources] = useState(false);
+
   const [isModuleLoaded, setIsModuleLoaded] = useState(false);
   //const [openModule, setOpenModule] = useState<number | null>(null);
   const [openModule, setOpenModule] = useState<number>(-1);
   const [activeView, setActiveView] = useState<
-    "content" | "quiz" | "assignment" | "final quiz" 
+    "content" | "quiz" | "assignment" | "final quiz"
   >("content");
-  console.log('activeview'+activeView);
+  console.log('activeview' + activeView);
   const currentModule =
     openModule !== null ? modules[openModule] : null;
 
-const activeModule = openModule >= 0 ? modules[openModule] : null;
-const finalQuizTopics = currentModule?.topics?.filter(
-  (t): t is QuizTopic => t.type === "quiz"
-) ?? [];
+  const activeModule = openModule >= 0 ? modules[openModule] : null;
+  const finalQuizTopics = currentModule?.topics?.filter(
+    (t): t is QuizTopic => t.type === "quiz"
+  ) ?? [];
   function getRandomQuestions(allQuestions: QuizQuestion[], limit: number): QuizQuestion[] {
     const shuffled = [...allQuestions].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, limit);
@@ -197,24 +199,24 @@ const finalQuizTopics = currentModule?.topics?.filter(
     }
   }, [currentModule]);
 
-//   useEffect(() => {
-//     if (
-//       modules.length > 0 &&
-//       modules[openModule]?.type === "quiz" &&
-//       Array.isArray(modules[openModule]?.topics)
-//     ) {
-//       const fullQuiz = modules[openModule].topics;
-//       const questionsLimit = Number(activeModule?.questions_limit) || 5;
+  //   useEffect(() => {
+  //     if (
+  //       modules.length > 0 &&
+  //       modules[openModule]?.type === "quiz" &&
+  //       Array.isArray(modules[openModule]?.topics)
+  //     ) {
+  //       const fullQuiz = modules[openModule].topics;
+  //       const questionsLimit = Number(activeModule?.questions_limit) || 5;
 
-//       const quizQuestions = (modules[openModule]?.topics ?? []).filter(isQuizQuestion);
+  //       const quizQuestions = (modules[openModule]?.topics ?? []).filter(isQuizQuestion);
 
-// const randomSubset = getRandomQuestions(quizQuestions, questionsLimit);
-// setCurrentQuestions(randomSubset);
-//       setCurrentQuestions(randomSubset);
-//     }
-//   }, [openModule, modules]);
+  // const randomSubset = getRandomQuestions(quizQuestions, questionsLimit);
+  // setCurrentQuestions(randomSubset);
+  //       setCurrentQuestions(randomSubset);
+  //     }
+  //   }, [openModule, modules]);
 
- 
+
 
 
 
@@ -231,28 +233,28 @@ const finalQuizTopics = currentModule?.topics?.filter(
           { cache: "no-store" }
         );
 
-       if (progressRes.ok) {
-        const progress = await progressRes.json();
+        if (progressRes.ok) {
+          const progress = await progressRes.json();
 
-        if (progress?.last_watched_module_id) {
-          setLastWatchedModuleId(progress.last_watched_module_id);
-        }
+          if (progress?.last_watched_module_id) {
+            setLastWatchedModuleId(progress.last_watched_module_id);
+          }
 
-        if (progress?.last_watched_topic_id) {
-          setLastWatchedTopicId(progress.last_watched_topic_id);
-        }
+          if (progress?.last_watched_topic_id) {
+            setLastWatchedTopicId(progress.last_watched_topic_id);
+          }
 
-        if (progress?.assignment_file) {
-          setAssignmentFile(progress.assignment_file);
-        }
-        if (progress?.assignment_type) {
-          setAssignmentType(progress.assignment_type);
-        }
+          if (progress?.assignment_file) {
+            setAssignmentFile(progress.assignment_file);
+          }
+          if (progress?.assignment_type) {
+            setAssignmentType(progress.assignment_type);
+          }
 
-        if (progress?.coursename) {
-          setCourseName(progress.coursename);
+          if (progress?.coursename) {
+            setCourseName(progress.coursename);
+          }
         }
-      }
 
         /* ===============================
            2️⃣ FETCH MODULES
@@ -282,18 +284,18 @@ const finalQuizTopics = currentModule?.topics?.filter(
           selfassessmentfile: m.selfassessmentfile,
           resources: m.resources,
           has_quiz: Number(m.has_quiz),
-          completed: Number(m.completed), 
+          completed: Number(m.completed),
           score: m.score,
           is_last: m.is_last,
           topics: null, // loaded later
 
         }));
-const completedIds = formatted
-  .filter((m) => m.completed === 1)
-  .map((m) => m.id);
+        const completedIds = formatted
+          .filter((m) => m.completed === 1)
+          .map((m) => m.id);
 
-setModules(formatted);
-setCompletedModuleIds(completedIds);
+        setModules(formatted);
+        setCompletedModuleIds(completedIds);
         console.log("Completed modules from API:", completedIds);
       } catch (err) {
         console.error("Course init error:", err);
@@ -304,7 +306,7 @@ setCompletedModuleIds(completedIds);
 
     init();
   }, [id, userId]);
-  
+
   const didRestoreRef = useRef(false);
 
   useEffect(() => {
@@ -313,8 +315,8 @@ setCompletedModuleIds(completedIds);
 
     didRestoreRef.current = true;
 
-    
-     const lastModuleId = Number(lastWatchedModuleId);
+
+    const lastModuleId = Number(lastWatchedModuleId);
     const lastTopicId = Number(lastWatchedTopicId);
 
     const moduleIndex =
@@ -340,87 +342,86 @@ setCompletedModuleIds(completedIds);
     });
   }, [modules]);
 
-  
+
 
 
 
   const fetchTopics = async (moduleId: number, index: number) => {
-  // already loaded → skip
-  if (modules[index]?.topics) return;
+    // already loaded → skip
+    if (modules[index]?.topics) return;
 
-  try {
-    // 🔄 show loader for this module
-    setLoadingTopics((prev) => ({ ...prev, [index]: true }));
+    try {
+      // 🔄 show loader for this module
+      setLoadingTopics((prev) => ({ ...prev, [index]: true }));
 
-    const res = await fetch(
-      `https://backstagepass.co.in/reactapi/api/gettopicapi.php?module_id=${encodeURIComponent(
-        moduleId
-      )}`,
-      { cache: "no-store" }
-    );
+      const res = await fetch(
+        `https://backstagepass.co.in/reactapi/api/gettopicapi.php?module_id=${encodeURIComponent(
+          moduleId
+        )}`,
+        { cache: "no-store" }
+      );
 
-    if (!res.ok) {
-      throw new Error("Failed to fetch topics");
-    }
+      if (!res.ok) {
+        throw new Error("Failed to fetch topics");
+      }
 
-    const data = await res.json();
+      const data = await res.json();
 
-    let topics: any[] = [];
-    let selfassessmentlink = "";
-    let resourceslink = "";
-    let quiz: any = null;
-    let totalDuration = 0;
+      let topics: any[] = [];
+      let selfassessmentlink = "";
+      let resourceslink = "";
+      let quiz: any = null;
+      let totalDuration = 0;
 
-    data.forEach((item: any) => {
-      if (item.type === "video") {
-        topics.push(item);
+      data.forEach((item: any) => {
+        if (item.type === "video") {
+          topics.push(item);
 
-        if (item.video_duration) {
-          const [h = 0, m = 0, s = 0] = item.video_duration
-            .split(":")
-            .map(Number);
+          if (item.video_duration) {
+            const [h = 0, m = 0, s = 0] = item.video_duration
+              .split(":")
+              .map(Number);
 
-          totalDuration += h * 3600 + m * 60 + s;
+            totalDuration += h * 3600 + m * 60 + s;
+          }
         }
-      }
 
-      if (item.title === "selfassessment") {
-        selfassessmentlink = item.selfassessmentlink;
-      }
+        if (item.title === "selfassessment") {
+          selfassessmentlink = item.selfassessmentlink;
+        }
 
-      if (item.title === "resources") {
-        resourceslink = item.resourceslink;
-      }
+        if (item.title === "resources") {
+          resourceslink = item.resourceslink;
+        }
 
-      if (item.type === "quiz" && Array.isArray(item.topics)) {
-        quiz = item;
-      }
-    });
+        if (item.type === "quiz" && Array.isArray(item.topics)) {
+          quiz = item;
+        }
+      });
 
-    setModules((prev) => {
-      
-      const updated = [...prev];
-      updated[index] = {
-        ...updated[index],
-        topics,
-        selfassessmentlink,
-        resourceslink,
-        quiz,
-      total_video_duration: new Date(totalDuration * 1000)
-      .toISOString()
-      .slice(11, 19)
-        
-      };
-      return updated;
-    });
-  } catch (error) {
-    console.error("Error fetching topics:", error);
-  } finally {
-    // ✅ hide loader
-    setLoadingTopics((prev) => ({ ...prev, [index]: false }));
-  }
-};
-  
+      setModules((prev) => {
+        const updated = [...prev];
+        updated[index] = {
+          ...updated[index],
+          topics,
+          selfassessmentlink,
+          resourceslink,
+          quiz,
+          total_video_duration: new Date(totalDuration * 1000)
+            .toISOString()
+            .substring(11, 8),
+
+        };
+        return updated;
+      });
+    } catch (error) {
+      console.error("Error fetching topics:", error);
+    } finally {
+      // ✅ hide loader
+      setLoadingTopics((prev) => ({ ...prev, [index]: false }));
+    }
+  };
+
 
   useEffect(() => {
     if (openModule === null) return;
@@ -438,11 +439,11 @@ setCompletedModuleIds(completedIds);
 
 
 
- 
+
 
   // ensure final quiz exists / has at least 5 questions
   const [quizLoading, setQuizLoading] = useState<boolean>(false);
- 
+
 
   useEffect(() => {
     setCurrentPointIndex(0);
@@ -464,51 +465,51 @@ setCompletedModuleIds(completedIds);
 
 
 
-const fetchWatchedStatus = async (uid?: string | null) => {
-  console.log("fetchWatchedStatus ENTERED with uid:", uid);
+  const fetchWatchedStatus = async (uid?: string | null) => {
+    console.log("fetchWatchedStatus ENTERED with uid:", uid);
 
-  if (!uid) return;
+    if (!uid) return;
 
-  try {
-    const resp = await fetch(
-      `https://backstagepass.co.in/reactapi/fetch_watched.php?user_id=${encodeURIComponent(
-        uid
-      )}&status=watched`,
-      {
-        cache: "no-store",
+    try {
+      const resp = await fetch(
+        `https://backstagepass.co.in/reactapi/fetch_watched.php?user_id=${encodeURIComponent(
+          uid
+        )}&status=watched`,
+        {
+          cache: "no-store",
+        }
+      );
+
+      console.log("response status:", resp.status);
+
+      if (!resp.ok) {
+        throw new Error("Failed to fetch watched status");
       }
-    );
 
-    console.log("response status:", resp.status);
+      const json = await resp.json();
+      console.log("response json:", json);
 
-    if (!resp.ok) {
-      throw new Error("Failed to fetch watched status");
+      const arr = Array.isArray(json.watched_topic_ids)
+        ? json.watched_topic_ids
+        : [];
+
+      const parsedSet: Set<number> = new Set(
+        arr.map((n: unknown) => Number(n)).filter((n) => !Number.isNaN(n))
+      );
+
+      setWatchedTopicIds(parsedSet);
+    } catch (e) {
+      console.error("fetchWatchedStatus error:", e);
     }
-
-    const json = await resp.json();
-    console.log("response json:", json);
-
-    const arr = Array.isArray(json.watched_topic_ids)
-      ? json.watched_topic_ids
-      : [];
-
-    const parsedSet: Set<number> = new Set(
-  arr.map((n: unknown) => Number(n)).filter((n) => !Number.isNaN(n))
-);
-
-setWatchedTopicIds(parsedSet);
-  } catch (e) {
-    console.error("fetchWatchedStatus error:", e);
-  }
-};
+  };
 
 
-useEffect(() => {
-  console.log("useEffect fired, userId:", userId);
-  if (userId) {
-    fetchWatchedStatus(userId);
-  }
-}, [userId]);
+  useEffect(() => {
+    console.log("useEffect fired, userId:", userId);
+    if (userId) {
+      fetchWatchedStatus(userId);
+    }
+  }, [userId]);
 
   // fetch user progress (completed modules)
   useEffect(() => {
@@ -537,39 +538,39 @@ useEffect(() => {
   }, [userId]);
 
 
-const currentTopic = useMemo(() => {
-  if (openModule === null) return null;
-  const mod = modules[openModule];
-  if (!mod || !mod.topics || mod.topics.length === 0) return null;
-  return mod.topics[currentPointIndex] ?? null;
-}, [modules, openModule, currentPointIndex]);
+  const currentTopic = useMemo(() => {
+    if (openModule === null) return null;
+    const mod = modules[openModule];
+    if (!mod || !mod.topics || mod.topics.length === 0) return null;
+    return mod.topics[currentPointIndex] ?? null;
+  }, [modules, openModule, currentPointIndex]);
 
-     const completedVideoCount = useMemo(() => {
-      
-  if (!currentModule?.topics) return 0;
+  const completedVideoCount = useMemo(() => {
 
-  return currentModule.topics.filter((t) =>
-    watchedTopicIds.has(Number(t.id))
-  ).length;
-}, [currentModule?.topics, watchedTopicIds]);
+    if (!currentModule?.topics) return 0;
+
+    return currentModule.topics.filter((t) =>
+      watchedTopicIds.has(Number(t.id))
+    ).length;
+  }, [currentModule?.topics, watchedTopicIds]);
 
 
   const totalVideoPoints = currentModule?.topics?.length ?? 0;
 
-  
 
-const progressPercentage =
-  totalVideoPoints > 0
-    ? Math.round((completedVideoCount / totalVideoPoints) * 100)
-    : 0;
+
+  const progressPercentage =
+    totalVideoPoints > 0
+      ? Math.round((completedVideoCount / totalVideoPoints) * 100)
+      : 0;
   // final quiz helpers
   const handleFinalSelect = (questionIndex: number, optionIndex: number) => {
     setFinalAnswers((prev) => ({ ...prev, [questionIndex]: optionIndex }));
     const module = modules[openModule];
     const totalFinalQuestions =
-  module?.topics?.length ?? totalQuestions;
+      module?.topics?.length ?? totalQuestions;
 
-const total = totalFinalQuestions;
+    const total = totalFinalQuestions;
     //const total = module?.topics?.length ?? totalFinalQuestions;
     if (questionIndex < total - 1) {
       setTimeout(() => setFinalIndex((i) => Math.min(i + 1, total - 1)), 120);
@@ -578,139 +579,68 @@ const total = totalFinalQuestions;
   const handleFinalPrev = () => setFinalIndex((i) => Math.max(0, i - 1));
   const computeFinalProgressPercent = () => {
     const module = modules[openModule];
-   // const total = module?.topics?.length ?? totalFinalQuestions;
-   const totalFinalQuestions =
-  module?.topics?.length ?? totalQuestions;
+    // const total = module?.topics?.length ?? totalFinalQuestions;
+    const totalFinalQuestions =
+      module?.topics?.length ?? totalQuestions;
 
-const total = totalFinalQuestions;
+    const total = totalFinalQuestions;
     const answered = Object.keys(finalAnswers).length;
     return Math.round((answered / total) * 100);
   };
-  const handleModuleClick = (index: number) => {
-  const module = modules[index];
-  if (!module) return;
 
-  const isUnlocked =
-    index === 0 ||
-    completedModuleIds.includes(Number(module.id)) ||
-    completedModuleIds.includes(Number(modules[index - 1]?.id));
-
- 
-
-  if (!isUnlocked) return;
-
-  setOpenModule(index);
-  setCurrentPointIndex(0);
-  setFinalIndex(0);
-  setFinalAnswers({});
-  setFinalSubmitted(false);
-  setPageNotice(null);
-
-  const moduleId =
-    typeof module.id === "number" ? module.id : parseInt(module.id, 10);
-
-  if (!Number.isNaN(moduleId)) {
-    fetchTopics(moduleId, index);
-  }
-};
-const autoOpenModuleRef = useRef<number | null>(null);
   // video end
- const handleVideoEnd = () => {
-  const topic = currentTopic;
-  if (!topic) return;
-
-  const topicId = Number(topic.id);
-  const module = modules[openModule];
-  if (!module?.topics?.length) return;
-
-  // mark watched (API)
-  if (userId) {
-    fetch("https://backstagepass.co.in/reactapi/mark_watched.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_id: userId, topic_id: topicId }),
-    }).catch(() => {});
-  }
-
-  let shouldOpenNextModule = false;
-
-  setWatchedTopicIds((prev) => {
-    const next = new Set(prev);
-    next.add(topicId);
-
-    const topicIds = module.topics.map((t: any) => Number(t.id));
-    const allWatched = topicIds.every((id) => next.has(id));
-
-    if (allWatched) {
-      shouldOpenNextModule = true;
-    } else {
-      const currentIndex = module.topics.findIndex(
-        (t: any) => Number(t.id) === topicId
-      );
-
-      if (currentIndex < module.topics.length - 1) {
-        setCurrentPointIndex(currentIndex + 1);
+  const handleVideoEnd = async () => {
+    const topic = currentTopic;
+    if (!topic) return;
+    const topicId = topic.id;
+    try {
+      if (userId) {
+        fetch("https://backstagepass.co.in/reactapi/mark_watched.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ user_id: userId, topic_id: topicId }),
+        }).catch((e) => console.error("mark_watched failed:", e));
       }
-    }
+    } catch (e) { console.error(e); }
 
-    return next;
-  });
-  setLastEndedTopicId(topicId);
+    setWatchedTopicIds((prev) => {
+      const next = new Set(prev);
+      next.add(Number(topicId));
+      return next;
+    });
+    //setCompletedVideoCount((prev) => prev + 1);
 
-  /* ===============================
-     POST-STATE SIDE EFFECTS
-  =============================== */
-  if (shouldOpenNextModule) {
-    const moduleId = Number(module.id);
 
-    if (!Number.isNaN(moduleId)) {
-      setCompletedModuleIds((prev) => {
-        const updated = Array.from(new Set([...prev, moduleId]));
-        try {
-          localStorage.setItem(
-            "completedModules",
-            JSON.stringify(updated)
-          );
-        } catch {}
-        return updated;
-      });
-    }
-
-    const nextIdx = openModule + 1;
-    if (nextIdx < modules.length) {
-      autoOpenModuleRef.current = nextIdx;
-    }
-  }
-};
-
-useEffect(() => {
- 
-  if (autoOpenModuleRef.current === null) return;
-
-  const idx = autoOpenModuleRef.current;
-  autoOpenModuleRef.current = null;
-
-  // 🔥 EXACT SAME AS MANUAL CLICK
-  handleModuleClick(idx);
-}, [completedModuleIds]);
+    setCurrentPointIndex((prevPointIndex) => {
+      const module = modules[openModule];
+      const pointsCount = module?.topics?.length ?? 0;
+      if (prevPointIndex < pointsCount - 1) {
+        return prevPointIndex + 1;
+      } else {
+        const previousModuleId = Number(module?.id);
+        if (!Number.isNaN(previousModuleId)) {
+          setCompletedModuleIds((prev) => {
+            const updated = Array.from(new Set([...prev, previousModuleId]));
+            try { localStorage.setItem("completedModules", JSON.stringify(updated)); } catch { }
+            return updated;
+          });
+        }
+        let nextIdx = openModule + 1;
+        while (nextIdx < modules.length && (modules[nextIdx].topics?.length ?? 0) === 0) nextIdx++;
+        if (nextIdx < modules.length) {
+          setOpenModule(nextIdx);
+          return 0;
+        } else return 0;
+      }
+    });
+  };
 
   const [checkedAnswers, setCheckedAnswers] = useState<{ [k: number]: boolean }>({});
   const handleCheckQuestion = (questionIndex: number) => setCheckedAnswers((p) => ({ ...p, [questionIndex]: true }));
-const openModuleAndLoadTopics = async (moduleIndex: number) => {
-  const moduleId = Number(modules[moduleIndex]?.id);
-  if (!moduleId) return;
 
-  setOpenModule(moduleIndex);
-
-  await fetchTopics(moduleId, moduleIndex);
-
-  setCurrentPointIndex(0);
-};
   const isModuleUnlocked = (index: number) => {
-    
     if (index === 0) return true;
     const current = modules[index];
-   
     if (!current) return false;
     if (current.title === "Assessment") {
       const previousVideoModule = [...modules].slice(0, index).reverse().find((m) => m.type === "video");
@@ -732,7 +662,7 @@ const openModuleAndLoadTopics = async (moduleIndex: number) => {
   // ---------- Assessment quiz submit (re-using your earlier logic) ----------
   const [userScore, setUserScore] = useState(0);
   const [usernewScore, setNewUserScore] = useState(0);
-  
+
 
   const handleAnswerSelect = (questionIndex: number, optionIndex: number) => {
     setQuizAnswers((prev) => ({ ...prev, [questionIndex]: optionIndex }));
@@ -866,7 +796,7 @@ const openModuleAndLoadTopics = async (moduleIndex: number) => {
     setQuizSubmitted(true);
     setIsQuizActive(true);   // quiz attempt is over
     setIsReviewMode(false);   // do NOT auto-enter review
-        // quiz is completed (for Review button)
+    // quiz is completed (for Review button)
   };
 
   // small render guard
@@ -885,14 +815,14 @@ const openModuleAndLoadTopics = async (moduleIndex: number) => {
   const isMandatory =
     currentModule?.has_quiz === 1 &&
     Number(currentModule?.mandatory_status) === 1;
- const isCompleted = Number(currentModule?.completed) === 1;
+  const isCompleted = Number(currentModule?.completed) === 1;
   const canContinue =
     // no quiz at all
     !isMandatory ||           // non-mandatory quiz (always allow)
     (isMandatory && isCompleted); // mandatory + passed
 
- const questionLimit =
-  currentModule?.questions_limit ?? currentQuestions.length;
+  const questionLimit =
+    currentModule?.questions_limit ?? currentQuestions.length;
 
   const totalQuestions = Math.min(
     questionLimit,
@@ -902,7 +832,7 @@ const openModuleAndLoadTopics = async (moduleIndex: number) => {
   const isLastQuestion = currentPointIndex === totalQuestions - 1;
 
   const isQuiz = currentModule?.type === "quiz";
-  
+
 
   const isLastModule = currentModule?.is_last === "yes";
 
@@ -910,7 +840,7 @@ const openModuleAndLoadTopics = async (moduleIndex: number) => {
   let requiredScore = 0;
 
 
-  
+
 
   const continueLabel = isLastModule
     ? Courseassignmenttype === "Assignment"
@@ -918,7 +848,7 @@ const openModuleAndLoadTopics = async (moduleIndex: number) => {
       : "Continue"
     : "Continue";
 
-  
+
 
   const handleContinue = async () => {
     if (openModule === null) return;
@@ -933,8 +863,8 @@ const openModuleAndLoadTopics = async (moduleIndex: number) => {
     setOpenModule(nextIndex);
     setCurrentPointIndex(0);
 
-    
-await fetchTopics(Number(modules[nextIndex].id), nextIndex);
+
+    await fetchTopics(Number(modules[nextIndex].id), nextIndex);
     setQuizSubmitted(false);
     setUserScore(0);
   };
@@ -942,71 +872,71 @@ await fetchTopics(Number(modules[nextIndex].id), nextIndex);
 
 
 
- const startQuiz = async (moduleIndex: number) => {
-  const module = modules[moduleIndex];
+  const startQuiz = async (moduleIndex: number) => {
+    const module = modules[moduleIndex];
 
-  if (!module) {
-    alert("Module not found");
-    return;
-  }
-
-  
-  setIsReviewMode(false);
-  setQuizSubmitted(false);
-  setIsQuizActive(true);
-   setActiveView("quiz");
-
-  // ✅ If quiz already completed → show RESULT screen
-  if (Number(module.completed) === 1) {
-   
-    setIsQuizActive(true);
-    setQuizSubmitted(true);
-    setQuizLoading(false);
-    return;
-  }
-
-  try {
-    setQuizLoading(true);
-
-    // reset fresh quiz state
-    setCurrentQuestions([]);
-    setCurrentPointIndex(0);
-    setQuizAnswers({});
-    setCheckedAnswers({});
-    setIsPlaying({});
-
-    const res = await fetch(
-      `https://backstagepass.co.in/reactapi/api/getquizquestions.php?module_id=${module.id}&limit=${module.questions_limit}`,
-      { cache: "no-store" }
-    );
-
-    if (!res.ok) throw new Error("Failed to load quiz questions");
-
-    const data = await res.json();
-
-    if (!Array.isArray(data) || !data.length) {
-      throw new Error("No quiz questions found");
+    if (!module) {
+      alert("Module not found");
+      return;
     }
 
-    const sanitizedQuestions: QuizQuestion[] = data.map(
-      (q: any, index: number) => ({
-        id: q.id ?? index,
-        question: q.question,
-        options: q.options,
-        type: q.type,
-        correct: q.correct,
-      })
-    );
 
-    setCurrentQuestions(sanitizedQuestions);
-  } catch (err) {
-    console.error(err);
-    alert("Unable to start quiz. Please try again.");
-    setIsQuizActive(false);
-  } finally {
-    setQuizLoading(false);
-  }
-};
+    setIsReviewMode(false);
+    setQuizSubmitted(false);
+    setIsQuizActive(true);
+    setActiveView("quiz");
+
+    // ✅ If quiz already completed → show RESULT screen
+    if (Number(module.completed) === 1) {
+
+      setIsQuizActive(true);
+      setQuizSubmitted(true);
+      setQuizLoading(false);
+      return;
+    }
+
+    try {
+      setQuizLoading(true);
+
+      // reset fresh quiz state
+      setCurrentQuestions([]);
+      setCurrentPointIndex(0);
+      setQuizAnswers({});
+      setCheckedAnswers({});
+      setIsPlaying({});
+
+      const res = await fetch(
+        `https://backstagepass.co.in/reactapi/api/getquizquestions.php?module_id=${module.id}&limit=${module.questions_limit}`,
+        { cache: "no-store" }
+      );
+
+      if (!res.ok) throw new Error("Failed to load quiz questions");
+
+      const data = await res.json();
+
+      if (!Array.isArray(data) || !data.length) {
+        throw new Error("No quiz questions found");
+      }
+
+      const sanitizedQuestions: QuizQuestion[] = data.map(
+        (q: any, index: number) => ({
+          id: q.id ?? index,
+          question: q.question,
+          options: q.options,
+          type: q.type,
+          correct: q.correct,
+        })
+      );
+
+      setCurrentQuestions(sanitizedQuestions);
+    } catch (err) {
+      console.error(err);
+      alert("Unable to start quiz. Please try again.");
+      setIsQuizActive(false);
+    } finally {
+      setQuizLoading(false);
+    }
+  };
 
 
   interface ChecklistItemProps {
@@ -1092,58 +1022,57 @@ await fetchTopics(Number(modules[nextIndex].id), nextIndex);
     );
   };
 
-const getPointLabel = (point: any): string => {
-  if ("text" in point && point.text) return point.text;
-  if ("title" in point && point.title) return point.title;
-  if ("question" in point && point.question) return point.question;
-  return "";
-};
-const handlePointClick = (index: number, point: any) => {
-  // 🔒 BLOCK if previous topic not watched
-  if (index > 0) {
-    const prevTopic = modules[openModule!]?.topics?.[index - 1];
-    if (!prevTopic || !watchedTopicIds.has(Number(prevTopic.id))) {
-      alert("Please watch the previous video before continuing.");
-      return;
+  const getPointLabel = (point: any): string => {
+    if ("text" in point && point.text) return point.text;
+    if ("title" in point && point.title) return point.title;
+    if ("question" in point && point.question) return point.question;
+    return "";
+  };
+  const handlePointClick = (index: number, point: any) => {
+    // 🚨 EXIT QUIZ MODE COMPLETELY
+    setIsQuizActive(false);
+    setIsReviewMode(false);
+    setQuizSubmitted(false);
+
+    // ✅ SWITCH TO CONTENT VIEW
+    setActiveView("content");
+
+    // ✅ Update topic
+    setCurrentPointIndex(index);
+
+    // ✅ Play video after mount
+    setTimeout(() => {
+      if (videoRef.current && point.startTime != null) {
+        videoRef.current.currentTime = point.startTime;
+        videoRef.current.play();
+      }
+    }, 0);
+  };
+
+  const formatDuration = (duration?: string | null): string => {
+    if (!duration) return "";
+
+    const parts = duration.split(":");
+
+    if (parts.length === 3 && parts[0] === "00") {
+      return `${parts[1]}:${parts[2]}`;
     }
-  }
 
-  // 🚨 EXIT QUIZ MODE COMPLETELY
-  setIsQuizActive(false);
-  setIsReviewMode(false);
-  setQuizSubmitted(false);
+    return duration;
+  };
 
-  // ✅ SWITCH TO CONTENT VIEW
-  setActiveView("content");
 
-  // ✅ Update topic
-  setCurrentPointIndex(index);
 
-  // ▶️ Play video
-  setTimeout(() => {
-    if (videoRef.current && point.startTime != null) {
-      videoRef.current.currentTime = point.startTime;
-      videoRef.current.play();
-    }
-  }, 0);
-};
+  const handleClick = () => {
+    setIsAssessment(true);
+  };
+  const handleClick1 = () => {
+    setIsResources(true);
+  };
 
-const formatDuration = (duration?: string | null): string => {
-  if (!duration) return "";
+  
 
-  const parts = duration.split(":");
 
-  if (parts.length === 3 && parts[0] === "00") {
-    return `${parts[1]}:${parts[2]}`;
-  }
-
-  return duration;
-};
-
-const module = openModule !== null ? modules[openModule] : undefined;
-
-const isCurrentWatched =
-  currentTopic && lastEndedTopicId === Number(currentTopic.id);
 
   return (
     <div className="min-h-screen px-4 md:px-2 py-6 bg-white-50">
@@ -1188,7 +1117,7 @@ const isCurrentWatched =
                     if (activeView === "assignment") {
                       return (
                         <div className="absolute inset-0 p-6 overflow-auto bg-white">
-                          
+
                           <AssignmentPanel
                             courseId={id}
                             studentWindowWeeks={2}
@@ -1199,62 +1128,62 @@ const isCurrentWatched =
                       );
                     }
 
-                   if (activeView === "final quiz") {
-                    return (
-                      <FinalQuizPanel
-                        currentModule={{ topics: finalQuizTopics }}
-                        finalIndex={finalIndex}
-                        finalAnswers={finalAnswers}
-                        finalSubmitted={finalSubmitted}
-                        computeFinalProgressPercent={computeFinalProgressPercent}
-                        handleFinalSelect={handleFinalSelect}
-                        handleFinalPrev={handleFinalPrev}
-                        setFinalSubmitted={setFinalSubmitted}
-                        setPageNotice={setPageNotice}
-                      />
-                    );
-                  }
+                    if (activeView === "final quiz") {
+                      return (
+                        <FinalQuizPanel
+                          currentModule={{ topics: finalQuizTopics }}
+                          finalIndex={finalIndex}
+                          finalAnswers={finalAnswers}
+                          finalSubmitted={finalSubmitted}
+                          computeFinalProgressPercent={computeFinalProgressPercent}
+                          handleFinalSelect={handleFinalSelect}
+                          handleFinalPrev={handleFinalPrev}
+                          setFinalSubmitted={setFinalSubmitted}
+                          setPageNotice={setPageNotice}
+                        />
+                      );
+                    }
 
                     // Default -> video player newone
                     return (
                       <div className="absolute inset-0">
                         {isQuizActive ? (
-    <QuizPanel
-      isQuizActive={isQuizActive}
-      isCompleted={isCompleted}
-      isMandatory={isMandatory}
-      hasPassed={hasPassed}
-      canContinue={canContinue}
-      continueLabel={continueLabel}
-      currentModule={currentModule}
-      currentQuestions={currentQuestions}
-      currentPointIndex={currentPointIndex}
-      quizSubmitted={quizSubmitted}
-      isReviewMode={isReviewMode}
-      quizAnswers={quizAnswers}
-      checkedAnswers={checkedAnswers}
-      newscore={usernewScore}
-      setIsReviewMode={setIsReviewMode}
-      setQuizSubmitted={setQuizSubmitted}
-      setCurrentPointIndex={setCurrentPointIndex}
-      setQuizAnswers={setQuizAnswers}
-      handleAnswerSelect={handleAnswerSelect}
-      handleSubmitQuiz={handleSubmitQuiz}
-      handleContinue={handleContinue}
-     
-    />
+                          <QuizPanel
+                            isQuizActive={isQuizActive}
+                            isCompleted={isCompleted}
+                            isMandatory={isMandatory}
+                            hasPassed={hasPassed}
+                            canContinue={canContinue}
+                            continueLabel={continueLabel}
+                            currentModule={currentModule}
+                            currentQuestions={currentQuestions}
+                            currentPointIndex={currentPointIndex}
+                            quizSubmitted={quizSubmitted}
+                            isReviewMode={isReviewMode}
+                            quizAnswers={quizAnswers}
+                            checkedAnswers={checkedAnswers}
+                            newscore={usernewScore}
+                            setIsReviewMode={setIsReviewMode}
+                            setQuizSubmitted={setQuizSubmitted}
+                            setCurrentPointIndex={setCurrentPointIndex}
+                            setQuizAnswers={setQuizAnswers}
+                            handleAnswerSelect={handleAnswerSelect}
+                            handleSubmitQuiz={handleSubmitQuiz}
+                            handleContinue={handleContinue}
+
+                          />
 
                         ) : (
                           /* ================= VIDEO UI ================= */
                           <>
-                          {loadingTopics[openModule] && (
-                          <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4">
-      <div className="h-14 w-14 animate-spin rounded-full border-4 border-gray-200 border-t-[#E11D2E]" />
-      <p className="text-sm font-medium text-gray-600">
-        Loading your course…
-      </p>
-    </div>
-                        )}
+                            {loadingTopics[openModule] && (
+                              <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4">
+                                <div className="h-14 w-14 animate-spin rounded-full border-4 border-gray-200 border-t-[#E11D2E]" />
+                                <p className="text-sm font-medium text-gray-600">
+                                  Loading your course…
+                                </p>
+                              </div>
+                            )}
                             {currentTopic?.id && !isPlaying[currentTopic.id] && (
                               <div className="video-thumbnail relative">
                                 <img
@@ -1264,36 +1193,36 @@ const isCurrentWatched =
                                 />
                                 <div
                                   onClick={() => handleThumbnailClick(String(currentTopic.id))}
-                                 style={{
-                              position: 'absolute',
-                              top: '50%',
-                              left: '50%',
-                              transform: 'translate(-50%, -50%)',
-                              backgroundColor: 'rgba(255, 0, 0, 0.85)',
-                              padding: '15px',
-                              borderRadius: '50%',
-                              cursor: 'pointer',
-                              boxShadow: '0 0 12px rgba(255,0,0,0.6)',
-                            }}
+                                  style={{
+                                    position: 'absolute',
+                                    top: '50%',
+                                    left: '50%',
+                                    transform: 'translate(-50%, -50%)',
+                                    backgroundColor: 'rgba(255, 0, 0, 0.85)',
+                                    padding: '15px',
+                                    borderRadius: '50%',
+                                    cursor: 'pointer',
+                                    boxShadow: '0 0 12px rgba(255,0,0,0.6)',
+                                  }}
                                 >
                                   <button
-                              style={{
-                                backgroundColor: 'transparent',
-                                border: 'none',
-                                color: 'white',
-                                fontSize: '25px',
-                                fontWeight: 'bold',
-                                cursor: 'pointer',
-                                padding: 0,
-                                width: '40px',
-                                height: '40px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center'
-                              }}
-                            >
-                              ▶
-                            </button>
+                                    style={{
+                                      backgroundColor: 'transparent',
+                                      border: 'none',
+                                      color: 'white',
+                                      fontSize: '25px',
+                                      fontWeight: 'bold',
+                                      cursor: 'pointer',
+                                      padding: 0,
+                                      width: '40px',
+                                      height: '40px',
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center'
+                                    }}
+                                  >
+                                    ▶
+                                  </button>
                                 </div>
                               </div>
                             )}
@@ -1326,61 +1255,42 @@ const isCurrentWatched =
 
               {/* below the player show title and navigation */}
               {!isQuizActive && activeView !== "assignment" && (
-              <div className="mt-4 flex items-center justify-between">
-                <div>
-                  <h3 className="text-xl font-semibold">{currentModule?.title ?? "—"}</h3>
-                  <p className="text-sm text-gray-500">
-                    {loadingTopics[openModule]
-                      ? "Topic loading"
-                      : `Topic ${currentPointIndex + 1} / ${(currentModule?.topics?.length ?? 0)}`}
-                  </p>
+                <div className="mt-4 flex items-center justify-between">
+                  <div>
+                    <h3 className="text-xl font-semibold">{currentModule?.title ?? "—"}</h3>
+                    <p className="text-sm text-gray-500">
+                      {loadingTopics[openModule]
+                        ? "Topic loading"
+                        : `Topic ${currentPointIndex + 1} / ${(currentModule?.topics?.length ?? 0)}`}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <button onClick={() => { if (currentPointIndex > 0) setCurrentPointIndex(currentPointIndex - 1); }} className="px-4 py-2 rounded-md bg-black text-white hover:opacity-95 transition">Previous</button>
+                    <button onClick={() => {
+                      const module = openModule !== null ? modules[openModule] : undefined;
+
+                      if (currentPointIndex < (module?.topics?.length ?? 1) - 1) setCurrentPointIndex(currentPointIndex + 1);
+                    }} className="px-4 py-2 rounded-md bg-black text-white hover:opacity-95 transition">Next</button>
+                  </div>
                 </div>
-
-                <div className="flex items-center gap-3">
-                  <button onClick={() => { if (currentPointIndex > 0) setCurrentPointIndex(currentPointIndex - 1); }} className="px-4 py-2 rounded-md bg-black text-white hover:opacity-95 transition">Previous</button>
-                  <button
-  disabled={!isCurrentWatched}
-  onClick={() => {
-    if (!isCurrentWatched) return;
-
-    const module = modules[openModule!];
-    if (!module?.topics) return;
-
-    if (currentPointIndex < module.topics.length - 1) {
-      setCurrentPointIndex((prev) => prev + 1);
-      setLastEndedTopicId(null); // 🔒 lock next again
-    }
-  }}
-  className={`px-4 py-2 rounded-md transition
-    ${
-      isCurrentWatched
-        ? "bg-black text-white hover:opacity-95"
-        : "bg-gray-300 text-gray-500 cursor-not-allowed"
-    }
-  `}
->
-  Next
-</button>
-                </div>
-              </div>
               )}
             </div>
           </div>
 
           <aside className="p-4 rounded-lg bg-white shadow-sm border border-gray-100 sticky top-6 max-h-[75vh] overflow-y-auto">
             <h2 className="text-lg font-semibold mb-4">📘 Course Material</h2>
-           
+
 
             <ul className="space-y-3">
               {modules.map((module, index) => {
                 const isOpen = openModule === index;
-const isCompletedModule = completedModuleIds.includes(Number(module.id));
+                const isCompletedModule = completedModuleIds.includes(Number(module.id));
 
-const isUnlocked =
-  isCompletedModule ||
-  lastWatchedModuleId === Number(module.id) ||
-  isModuleUnlocked(index);
-  
+                const isUnlocked =
+                  isCompletedModule ||
+                  lastWatchedModuleId === Number(module.id) ||
+                  isModuleUnlocked(index);
 
                 return (
                   <li key={module.id} className="border rounded-lg">
@@ -1400,7 +1310,7 @@ const isUnlocked =
                         setFinalSubmitted(false);
                         setPageNotice(null);
 
-                        
+
                         if (typeof module.id === "number") {
                           fetchTopics(module.id, index);
                         } else {
@@ -1437,10 +1347,10 @@ const isUnlocked =
 
                     {/* VIDEO TOPICS */}
                     {isOpen && module.topics?.length > 0 && (
-                      <ul className="pt-2 pb-2 text-sm text-gray-600">
+                      <ul className="pt-2 pb-0 text-sm text-gray-600">
                         {module.topics.map((point, idx) => {
-                         const isCurrentPlaying =
-    openModule === index && currentPointIndex === idx;
+                          const isCurrentPlaying =
+                            openModule === index && currentPointIndex === idx;
 
 
                           const isCompletedTopic =
@@ -1478,19 +1388,19 @@ const isUnlocked =
 
                                 {/* TITLE */}
                                 <p
-      key={idx}
-      onClick={() => handlePointClick(idx, point)}
-      className={`text-sm leading-snug cursor-pointer transition-colors
+                                  key={idx}
+                                  onClick={() => handlePointClick(idx, point)}
+                                  className={`text-sm leading-snug cursor-pointer transition-colors
         ${isCurrentPlaying
-          ? "text-blue-700 font-medium"
-          : "text-gray-800 hover:text-blue-600"}
+                                      ? "text-blue-700 font-medium"
+                                      : "text-gray-800 hover:text-blue-600"}
       `}
-      title={getPointLabel(point)}
-    >
-      {getPointLabel(point).length > 35
-        ? getPointLabel(point).slice(0, 32) + "..."
-        : getPointLabel(point)}
-    </p>
+                                  title={getPointLabel(point)}
+                                >
+                                  {getPointLabel(point).length > 35
+                                    ? getPointLabel(point).slice(0, 32) + "..."
+                                    : getPointLabel(point)}
+                                </p>
 
                               </div>
                               <div className="flex items-center gap-1 mt-1 text-xs text-gray-500">
@@ -1508,29 +1418,29 @@ const isUnlocked =
                     {isOpen && (
                       <ul className="pt-0 pb-2 text-sm text-gray-600">
                         {module.selfassessmentlink && (
-                          <li className={`mb-2 flex items-center justify-between p-3 rounded bg-blue-50 text-blue-800 font-medium`}>
+                          <li className={`mb-1 flex items-center justify-between p-3 rounded text-blue-800 font-medium`}>
                             <div className="flex gap-3 flex-1">
                               {/* CHECK */}
                               <span
-                                className={`h-4 w-4 rounded-full border flex items-center justify-center mt-1 bg-green-500 border-green-500`}
+                                className={`h-4 w-4 rounded-full border flex items-center justify-center mt-1 ${isAssessment ? "bg-green-500 border-green-500" : "border-gray-400"}`}
                               >
 
-                                <svg width="12" height="12" viewBox="0 0 24 24">
-                                  <path
-                                    d="M20 6L9 17l-5-5"
-                                    stroke="white"
-                                    strokeWidth="2"
-                                    fill="none"
-                                  />
-                                </svg>
+                                {isAssessment && (
+                <svg width="12" height="12" viewBox="0 0 24 24">
+                  <path
+                    d="M20 6L9 17l-5-5"
+                    stroke="white"
+                    strokeWidth="2"
+                    fill="none"
+                  />
+                </svg>
+              )}
 
                               </span>
 
                               {/* TITLE */}
                               <p
-                                className={`text-sm leading-snug
-     text-blue-700
-  `}
+                                className={`text-sm leading-snug text-blue-700`}
 
                               >
                                 <div className="flex-1">
@@ -1547,49 +1457,52 @@ const isUnlocked =
                             <div className="flex items-center gap-1 mt-1 text-xs text-gray-500"><a
                               href={module.selfassessmentlink}
                               target="_blank"
+                              onClick={handleClick}
                             >
-                              <svg
-                                width="14"
-                                height="14"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                              >
-                                <path
-                                  d="M7 3l10 9-4 1 3 6-2 1-3-6-4 3V3z"
-                                  stroke="currentColor"
-                                  strokeWidth="1.5"
-                                  strokeLinejoin="round"
-                                />
-                              </svg>
+                             <svg
+  width="14"
+  height="14"
+  viewBox="0 0 24 24"
+  fill="none"
+>
+  <path
+    d="M12 3v12m0 0l4-4m-4 4l-4-4M4 21h16"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  />
+</svg>
+
 
                               <span>Click </span></a>
                             </div>
                           </li>)}
 
-                          {module.resourceslink && (
-                          <li className={`mb-2 flex items-center justify-between p-3 rounded bg-blue-50 text-blue-800 font-medium`}>
+                        {module.resourceslink && (
+                          <li className={`mb-1 flex items-center justify-between p-3 rounded font-medium`}>
                             <div className="flex gap-3 flex-1">
                               {/* CHECK */}
                               <span
-                                className={`h-4 w-4 rounded-full border flex items-center justify-center mt-1 bg-green-500 border-green-500`}
+                                className={`h-4 w-4 rounded-full border flex items-center justify-center mt-1 ${isResources ? "bg-green-500 border-green-500" : "border-gray-400"}`}
                               >
 
-                                <svg width="12" height="12" viewBox="0 0 24 24">
-                                  <path
-                                    d="M20 6L9 17l-5-5"
-                                    stroke="white"
-                                    strokeWidth="2"
-                                    fill="none"
-                                  />
-                                </svg>
+                                {isResources && (
+                <svg width="12" height="12" viewBox="0 0 24 24">
+                  <path
+                    d="M20 6L9 17l-5-5"
+                    stroke="white"
+                    strokeWidth="2"
+                    fill="none"
+                  />
+                </svg>
+              )}
 
                               </span>
 
                               {/* TITLE */}
                               <p
-                                className={`text-sm leading-snug
-     text-blue-700
-  `}
+                                className={`text-sm leading-snug text-blue-700`}
 
                               >
                                 <div className="flex-1">
@@ -1597,7 +1510,7 @@ const isUnlocked =
                                     Resources
                                   </p>
                                   <p className="text-xs text-gray-500">
-                                     Download reference materials
+                                    Download reference materials
                                   </p>
                                 </div>
                               </p>
@@ -1606,50 +1519,52 @@ const isUnlocked =
                             <div className="flex items-center gap-1 mt-1 text-xs text-gray-500"><a
                               href={module.resourceslink}
                               target="_blank"
+                              onClick={handleClick1}
                             >
-                              <svg
-                                width="14"
-                                height="14"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                              >
-                                <path
-                                  d="M7 3l10 9-4 1 3 6-2 1-3-6-4 3V3z"
-                                  stroke="currentColor"
-                                  strokeWidth="1.5"
-                                  strokeLinejoin="round"
-                                />
-                              </svg>
+                               <svg
+  width="14"
+  height="14"
+  viewBox="0 0 24 24"
+  fill="none"
+>
+  <path
+    d="M12 3v12m0 0l4-4m-4 4l-4-4M4 21h16"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  />
+</svg>
 
                               <span>Click </span></a>
                             </div>
                           </li>)}
 
 
-                           {isModuleLoaded && module.has_quiz == 1 && (
-                          <li className={`mb-2 flex items-center justify-between p-3 rounded bg-blue-50 text-blue-800 font-medium`} onClick={() => startQuiz(index)}>
+                        {isModuleLoaded && module.has_quiz == 1 && (
+                          <li className={`mb-1 flex items-center justify-between p-3 rounded font-medium`} onClick={() => startQuiz(index)}>
                             <div className="flex gap-3 flex-1">
                               {/* CHECK */}
                               <span
-                                className={`h-4 w-4 rounded-full border flex items-center justify-center mt-1 bg-green-500 border-green-500`}
+                                className={`h-4 w-4 rounded-full border flex items-center justify-center mt-1 ${isQuizActive ? "bg-green-500 border-green-500" : "border-gray-400"}`}
                               >
-
-                                <svg width="12" height="12" viewBox="0 0 24 24">
-                                  <path
-                                    d="M20 6L9 17l-5-5"
-                                    stroke="white"
-                                    strokeWidth="2"
-                                    fill="none"
-                                  />
-                                </svg>
+                                
+                               {isQuizActive && (
+                <svg width="12" height="12" viewBox="0 0 24 24">
+                  <path
+                    d="M20 6L9 17l-5-5"
+                    stroke="white"
+                    strokeWidth="2"
+                    fill="none"
+                  />
+                </svg>
+              )}
 
                               </span>
 
                               {/* TITLE */}
                               <p
-                                className={`text-sm leading-snug
-     text-blue-700
-  `}
+                                className={`text-sm leading-snug text-blue-700`}
 
                               >
                                 <div className="flex-1">
@@ -1657,7 +1572,7 @@ const isUnlocked =
                                     Start Quiz
                                   </p>
                                   <p className="text-xs text-gray-500">
-                                     Test your understanding
+                                    Test your understanding
                                   </p>
                                 </div>
                               </p>
@@ -1665,87 +1580,82 @@ const isUnlocked =
                             </div>
                             <div className="flex items-center gap-1 mt-1 text-xs text-gray-500">
                               <div>
-                              <svg
-                                width="14"
-                                height="14"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                              >
-                                <path
-                                  d="M7 3l10 9-4 1 3 6-2 1-3-6-4 3V3z"
-                                  stroke="currentColor"
-                                  strokeWidth="1.5"
-                                  strokeLinejoin="round"
-                                />
-                              </svg>
+                                <svg
+                                  width="14"
+                                  height="14"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                >
+                                  <path
+                                    d="M7 3l10 9-4 1 3 6-2 1-3-6-4 3V3z"
+                                    stroke="currentColor"
+                                    strokeWidth="1.5"
+                                    strokeLinejoin="round"
+                                  />
+                                </svg>
 
-                              <span>Click </span></div>
+                                <span>Click </span></div>
                             </div>
                           </li>)}
 
+                        {isOpen &&
+                          isModuleLoaded &&
+                          module.is_last === "yes" &&
+                          assignmentType && (
+                            <li
+                              onClick={() =>
+                                setActiveView(assignmentType === 2 ? "assignment" : "final quiz")
+                              }
+                              className="mb-2 flex items-center justify-between p-3 rounded bg-blue-50 text-blue-800 font-medium cursor-pointer"
+                            >
+                              <div className="flex gap-3 flex-1">
+                                {/* CHECK ICON */}
+                                <span className="h-4 w-4 rounded-full border flex items-center justify-center mt-1 bg-green-500 border-green-500">
+                                  <svg width="12" height="12" viewBox="0 0 24 24">
+                                    <path
+                                      d="M20 6L9 17l-5-5"
+                                      stroke="white"
+                                      strokeWidth="2"
+                                      fill="none"
+                                    />
+                                  </svg>
+                                </span>
 
+                                {/* TEXT */}
+                                <div className="flex-1">
+                                  <p className="text-sm font-medium text-gray-800">
+                                    {assignmentType === 2 ? "Assignment" : "Final Quiz"}
+                                  </p>
+                                  <p className="text-xs text-gray-500">
+                                    {assignmentType === 2
+                                      ? "Test your understanding"
+                                      : "Complete the final assessment"}
+                                  </p>
+                                </div>
+                              </div>
 
+                              <div className="flex items-center gap-1 mt-1 text-xs text-gray-500">
+                                <div>
+                                  <svg
+                                    width="14"
+                                    height="14"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                  >
+                                    <path
+                                      d="M7 3l10 9-4 1 3 6-2 1-3-6-4 3V3z"
+                                      stroke="currentColor"
+                                      strokeWidth="1.5"
+                                      strokeLinejoin="round"
+                                    />
+                                  </svg>
 
-
-
-                          {isOpen &&
-  isModuleLoaded &&
-  module.is_last === "yes" &&
-  assignmentType && (
-    <li
-      onClick={() =>
-        setActiveView(assignmentType === 2 ? "assignment" : "final quiz")
-      }
-      className="mb-2 flex items-center justify-between p-3 rounded bg-blue-50 text-blue-800 font-medium cursor-pointer"
-    >
-      <div className="flex gap-3 flex-1">
-        {/* CHECK ICON */}
-        <span className="h-4 w-4 rounded-full border flex items-center justify-center mt-1 bg-green-500 border-green-500">
-          <svg width="12" height="12" viewBox="0 0 24 24">
-            <path
-              d="M20 6L9 17l-5-5"
-              stroke="white"
-              strokeWidth="2"
-              fill="none"
-            />
-          </svg>
-        </span>
-
-        {/* TEXT */}
-        <div className="flex-1">
-          <p className="text-sm font-medium text-gray-800">
-            {assignmentType === 2 ? "Assignment" : "Final Quiz"}
-          </p>
-          <p className="text-xs text-gray-500">
-            {assignmentType === 2
-              ? "Test your understanding"
-              : "Complete the final assessment"}
-          </p>
-        </div>
-      </div>
-
-      <div className="flex items-center gap-1 mt-1 text-xs text-gray-500">
-                              <div>
-                              <svg
-                                width="14"
-                                height="14"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                              >
-                                <path
-                                  d="M7 3l10 9-4 1 3 6-2 1-3-6-4 3V3z"
-                                  stroke="currentColor"
-                                  strokeWidth="1.5"
-                                  strokeLinejoin="round"
-                                />
-                              </svg>
-
-                              <span>Click </span></div>
-                            </div>
-    </li>
-  )}
- </ul>)}
-</li>
+                                  <span>Click </span></div>
+                              </div>
+                            </li>
+                          )}
+                      </ul>)}
+                  </li>
                 );
               })}
             </ul>
