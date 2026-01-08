@@ -113,7 +113,7 @@ export default function FavouritesPage() {
   /* ================= UI ================= */
   return (
     <div className="min-h-screen bg-white p-6">
-      <h2 className="mb-6 text-xl font-semibold">My Favourites</h2>
+      <h2 className="mb-6 text-2xl font-bold">My Favourites</h2>
 
       {/* LOADING STATE */}
       {loading ? (

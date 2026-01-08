@@ -85,11 +85,10 @@ useEffect(() => {
     .catch(err => console.error("Fetch failed:", err));
 }, []);
   return (
-    <div className="p-6 font-sans bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800 flex items-center gap-2">
-        <CalendarDays className="w-7 h-7 text-blue-500" />
+    <div className="p-3 font-sans min-h-screen">
+      <h2 className="mb-6 text-2xl font-bold flex items-center gap-2">
         Calendar
-      </h1>
+      </h2>
 
       <div className="overflow-x-auto">
         <div className="grid grid-cols-6 border-t border-l text-center text-sm font-medium min-w-[900px]">
