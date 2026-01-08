@@ -8,7 +8,14 @@ import { usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
 import { useAuth } from "@/context/AuthContext";
 
+type MenuSource =
+  | "home"
+  | "mycourses"
+  | "favourites"
+  | "startcourse"
+  | null;
 
+const COURSE_SOURCE_KEY = "courseSourceMenu";
 import {
   BoxCubeIcon,
   CalenderIcon,
@@ -77,7 +84,13 @@ const AppSidebar: React.FC = () => {
    const [role, setRole] = useState<string | null>(null);
   const { isExpanded, isMobileOpen, isHovered, setIsHovered, setIsExpanded, setIsMobileOpen } = useSidebar();
   const pathname = usePathname();
+   const [activeSource, setActiveSource] = useState<MenuSource>(null);
   const [enrolledCourses, setEnrolledCourses] = useState<string[]>([]);
+  
+  useEffect(() => {
+  const source = localStorage.getItem(COURSE_SOURCE_KEY) as MenuSource;
+  setActiveSource(source);
+}, [pathname]);
     useEffect(() => {
     const storedRole = localStorage.getItem("role");
     setRole(storedRole);
@@ -93,7 +106,25 @@ const AppSidebar: React.FC = () => {
 
 //const { data: session, status } = useSession();
 
+ const isCourseDetails = pathname?.startsWith("/coursedetails") ?? false;
+useEffect(() => {
+  if (!pathname?.startsWith("/coursedetails")) {
+    localStorage.removeItem("courseSourceMenu");
+    setActiveSource(null);
+  }
+}, [pathname]);
 
+useEffect(() => {
+  if (!pathname) return;
+
+  if (pathname.startsWith("/coursedetails")) {
+    const source = localStorage.getItem(COURSE_SOURCE_KEY) as MenuSource;
+    setActiveSource(source);
+  } else {
+    localStorage.removeItem(COURSE_SOURCE_KEY);
+    setActiveSource(null);
+  }
+}, [pathname]);
 
   const { user } = useAuth();
 
@@ -328,6 +359,17 @@ const AppSidebar: React.FC = () => {
     if (isMobileOpen) {
       setIsMobileOpen(false);
     }
+
+    // ✅ Store source for course details
+    if (nav.name === "Home") {
+      localStorage.setItem(COURSE_SOURCE_KEY, "home");
+    }
+    if (nav.name === "My Courses") {
+      localStorage.setItem(COURSE_SOURCE_KEY, "mycourses");
+    }
+    if (nav.name === "Favourites") {
+      localStorage.setItem(COURSE_SOURCE_KEY, "favourites");
+    }
   }}
   className={`menu-item group ${
     isActive(nav.path) ? "menu-item-active" : "menu-item-inactive"
@@ -422,7 +464,23 @@ const AppSidebar: React.FC = () => {
   const subMenuRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   // const isActive = (path: string) => path === pathname;
-  const isActive = useCallback((path: string) => path === pathname, [pathname]);
+  //const isActive = useCallback((path: string) => path === pathname, [pathname]);
+  const isActive = useCallback(
+  (path: string) => {
+    // normal route match
+    if (path === pathname) return true;
+
+    // 🔥 course details logic
+    if (isCourseDetails) {
+      if (path === "/dashboard" && activeSource === "home") return true;
+      if (path === "/mycourses" && activeSource === "mycourses") return true;
+      if (path === "/favourites" && activeSource === "favourites") return true;
+    }
+
+    return false;
+  },
+  [pathname, isCourseDetails, activeSource]
+);
 
   useEffect(() => {
     // Check if the current path matches any submenu item

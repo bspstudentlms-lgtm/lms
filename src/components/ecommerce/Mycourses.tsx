@@ -183,13 +183,26 @@ export default function MyCourses() {
     course.is_coursecompleted == 1 ? (
       <span className="inline-flex items-center rounded-full bg-green-100 px-4 py-2 text-sm font-semibold text-green-700">
         <Link
-        href={`/coursedetails/${course.id}`} >
+        href={`/coursedetails/${course.id}`}
+             onClick={() => {
+    // ✅ set source ONLY when going to course details
+    
+      localStorage.setItem("courseSourceMenu", "mycourses");
+    
+  }}
+        >
         Completed ✓
         </Link>
       </span>
     ) : course.last_watched_topic_id == 0 ? (
       <Link
         href={`/coursedetails/${course.id}`}
+         onClick={() => {
+    // ✅ set source ONLY when going to course details
+    
+      localStorage.setItem("courseSourceMenu", "mycourses");
+    
+  }}
         className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
       >
         Start Course
@@ -198,6 +211,12 @@ export default function MyCourses() {
     ) : (
       <Link
         href={`/coursedetails/${course.id}`}
+             onClick={() => {
+    // ✅ set source ONLY when going to course details
+    
+      localStorage.setItem("courseSourceMenu", "mycourses");
+    
+  }}
         className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
       >
         Continue Watching
@@ -226,6 +245,12 @@ export default function MyCourses() {
           <div className="fixed bottom-0 left-0 right-0 z-40 border-t bg-white p-4 sm:hidden">
             <Link
               href={`/coursedetails/${course.id}`}
+                   onClick={() => {
+    // ✅ set source ONLY when going to course details
+    
+      localStorage.setItem("courseSourceMenu", "mycourses");
+    
+  }}
               className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#E11D2E] py-3 text-base font-semibold text-white"
             >
               Continue Watching

@@ -99,6 +99,12 @@ export default function FavouritesPage() {
       ? fav.path
       : `/coursedetails/${fav.id}`
   }
+  onClick={() => {
+    // ✅ set source ONLY when going to course details
+    if (fav.button_action !== "Know More") {
+      localStorage.setItem("courseSourceMenu", "favourites");
+    }
+  }}
   className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-800 hover:bg-gray-50 transition"
 >
   {fav.button_action}

@@ -122,13 +122,20 @@ export default function DashboardCourses() {
               ) : isCompleted ? (
                 <span className="inline-flex items-center rounded-full bg-green-100 px-4 py-2 text-sm font-semibold text-green-700">
                 <Link
-                  href={`/coursedetails/${course.id}`}  >
+                  href={`/coursedetails/${course.id}`}
+                  onClick={() => {
+                  localStorage.setItem("courseSourceMenu", "home");
+                  }}
+                  >
                   Completed ✓
                   </Link>
                 </span>
               ) : (
                 <Link
                   href={`/coursedetails/${course.id}`}
+                  onClick={() => {
+                   localStorage.setItem("courseSourceMenu", "home");
+       }}
                   className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#B91C1C]"
                 >
                   {isStarted ? "Continue Watching" : "Start Course"}
