@@ -169,7 +169,8 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
 
   const [isModuleLoaded, setIsModuleLoaded] = useState(false);
   //const [openModule, setOpenModule] = useState<number | null>(null);
-  const [openModule, setOpenModule] = useState<number>(-1);
+  //const [openModule, setOpenModule] = useState<number>(-1);
+  const [openModule, setOpenModule] = useState<number | null>(null);
   const [activeView, setActiveView] = useState<
     "content" | "quiz" | "assignment" | "final quiz"
   >("content");
@@ -177,7 +178,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
   const currentModule =
     openModule !== null ? modules[openModule] : null;
 
-  const activeModule = openModule >= 0 ? modules[openModule] : null;
+  //const activeModule = openModule >= 0 ? modules[openModule] : null;
   const finalQuizTopics = currentModule?.topics?.filter(
     (t): t is QuizTopic => t.type === "quiz"
   ) ?? [];
@@ -598,11 +599,10 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
     completedModuleIds.includes(Number(module.id)) ||
     completedModuleIds.includes(Number(modules[index - 1]?.id));
 
- 
-
   if (!isUnlocked) return;
 
-  setOpenModule(index);
+  setOpenModule(prev => (prev === index ? null : index));
+
   setCurrentPointIndex(0);
   setFinalIndex(0);
   setFinalAnswers({});
@@ -616,6 +616,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
     fetchTopics(moduleId, index);
   }
 };
+
 const autoOpenModuleRef = useRef<number | null>(null);
   // video end
  const handleVideoEnd = () => {
@@ -626,7 +627,7 @@ const autoOpenModuleRef = useRef<number | null>(null);
   const module = modules[openModule];
   if (!module?.topics?.length) return;
 
-  // mark watched (API)
+  // mark watched
   if (userId) {
     fetch("https://backstagepass.co.in/reactapi/mark_watched.php", {
       method: "POST",
@@ -635,67 +636,53 @@ const autoOpenModuleRef = useRef<number | null>(null);
     }).catch(() => {});
   }
 
-  let shouldOpenNextModule = false;
-
-  setWatchedTopicIds((prev) => {
+  setWatchedTopicIds(prev => {
     const next = new Set(prev);
     next.add(topicId);
-
-    const topicIds = module.topics.map((t: any) => Number(t.id));
-    const allWatched = topicIds.every((id) => next.has(id));
-
-    if (allWatched) {
-      shouldOpenNextModule = true;
-    } else {
-      const currentIndex = module.topics.findIndex(
-        (t: any) => Number(t.id) === topicId
-      );
-
-      if (currentIndex < module.topics.length - 1) {
-        setCurrentPointIndex(currentIndex + 1);
-      }
-    }
-
     return next;
   });
-  setLastEndedTopicId(topicId);
 
-  /* ===============================
-     POST-STATE SIDE EFFECTS
-  =============================== */
-  if (shouldOpenNextModule) {
-    const moduleId = Number(module.id);
+  const topicIds = module.topics.map((t: any) => Number(t.id));
+  const allWatched = topicIds.every(id => watchedTopicIds.has(id) || id === topicId);
 
-    if (!Number.isNaN(moduleId)) {
-      setCompletedModuleIds((prev) => {
-        const updated = Array.from(new Set([...prev, moduleId]));
-        try {
-          localStorage.setItem(
-            "completedModules",
-            JSON.stringify(updated)
-          );
-        } catch {}
-        return updated;
-      });
+  if (!allWatched) {
+    const currentIndex = module.topics.findIndex(
+      (t: any) => Number(t.id) === topicId
+    );
+    if (currentIndex < module.topics.length - 1) {
+      setCurrentPointIndex(currentIndex + 1);
     }
+    return;
+  }
 
-    const nextIdx = openModule + 1;
-    if (nextIdx < modules.length) {
-      autoOpenModuleRef.current = nextIdx;
-    }
+  // ✅ MODULE COMPLETED (SYNC & SAFE)
+  const moduleId = Number(module.id);
+
+  setCompletedModuleIds(prev => {
+    const updated = Array.from(new Set([...prev, moduleId]));
+    localStorage.setItem("completedModules", JSON.stringify(updated));
+    return updated;
+  });
+
+  const nextIdx = openModule + 1;
+  if (nextIdx < modules.length) {
+    autoOpenModuleRef.current = nextIdx;
   }
 };
 
-useEffect(() => {
- 
-  if (autoOpenModuleRef.current === null) return;
 
+useEffect(() => {
   const idx = autoOpenModuleRef.current;
+  if (idx === null) return;
+
   autoOpenModuleRef.current = null;
 
-  // 🔥 EXACT SAME AS MANUAL CLICK
-  handleModuleClick(idx);
-}, [completedModuleIds]);
+  
+  requestAnimationFrame(() => {
+    handleModuleClick(idx);
+  });
+}, [completedModuleIds, modules]);
+
 
   const [checkedAnswers, setCheckedAnswers] = useState<{ [k: number]: boolean }>({});
   const handleCheckQuestion = (questionIndex: number) => setCheckedAnswers((p) => ({ ...p, [questionIndex]: true }));
@@ -1403,7 +1390,8 @@ const isCurrentWatched =
                       onClick={() => {
                         if (!isUnlocked) return;
 
-                        setOpenModule(index);
+                        //setOpenModule(index);
+                        setOpenModule(prev => (prev === index ? null : index));
                         setCurrentPointIndex(0);
                         setFinalIndex(0);
                         setFinalAnswers({});
