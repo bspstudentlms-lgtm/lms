@@ -145,6 +145,7 @@ const [loadingTopics, setLoadingTopics] = useState<Record<number, boolean>>({});
   const [userId, setUserId] = useState<string | null>(null);
 
   const [watchedTopicIds, setWatchedTopicIds] = useState<Set<number>>(new Set());
+  const [lastEndedTopicId, setLastEndedTopicId] = useState<number | null>(null);
   const [completedModuleIds, setCompletedModuleIds] = useState<(number | string)[]>([]);
   // const [completedVideoCount, setCompletedVideoCount] = useState<number>(0);
   const [isReviewMode, setIsReviewMode] = useState(false);
@@ -397,6 +398,7 @@ setCompletedModuleIds(completedIds);
     });
 
     setModules((prev) => {
+      
       const updated = [...prev];
       updated[index] = {
         ...updated[index],
@@ -404,9 +406,9 @@ setCompletedModuleIds(completedIds);
         selfassessmentlink,
         resourceslink,
         quiz,
-        total_video_duration: new Date(totalDuration * 1000)
-            .toISOString()
-            .substring(11, 8),
+      total_video_duration: new Date(totalDuration * 1000)
+      .toISOString()
+      .slice(11, 19)
         
       };
       return updated;
@@ -535,12 +537,12 @@ useEffect(() => {
   }, [userId]);
 
 
-  const currentTopic = useMemo(() => {
-    if (openModule === null) return null;
-    const mod = modules[openModule];
-    if (!mod || !mod.topics || mod.topics.length === 0) return null;
-    return mod.topics[currentPointIndex] ?? null;
-  }, [modules, openModule, currentPointIndex]);
+const currentTopic = useMemo(() => {
+  if (openModule === null) return null;
+  const mod = modules[openModule];
+  if (!mod || !mod.topics || mod.topics.length === 0) return null;
+  return mod.topics[currentPointIndex] ?? null;
+}, [modules, openModule, currentPointIndex]);
 
      const completedVideoCount = useMemo(() => {
       
@@ -584,60 +586,131 @@ const total = totalFinalQuestions;
     const answered = Object.keys(finalAnswers).length;
     return Math.round((answered / total) * 100);
   };
+  const handleModuleClick = (index: number) => {
+  const module = modules[index];
+  if (!module) return;
 
+  const isUnlocked =
+    index === 0 ||
+    completedModuleIds.includes(Number(module.id)) ||
+    completedModuleIds.includes(Number(modules[index - 1]?.id));
+
+ 
+
+  if (!isUnlocked) return;
+
+  setOpenModule(index);
+  setCurrentPointIndex(0);
+  setFinalIndex(0);
+  setFinalAnswers({});
+  setFinalSubmitted(false);
+  setPageNotice(null);
+
+  const moduleId =
+    typeof module.id === "number" ? module.id : parseInt(module.id, 10);
+
+  if (!Number.isNaN(moduleId)) {
+    fetchTopics(moduleId, index);
+  }
+};
+const autoOpenModuleRef = useRef<number | null>(null);
   // video end
-  const handleVideoEnd = async () => {
-    const topic = currentTopic;
-    if (!topic) return;
-    const topicId = topic.id;
-    try {
-      if (userId) {
-        fetch("https://backstagepass.co.in/reactapi/mark_watched.php", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ user_id: userId, topic_id: topicId }),
-        }).catch((e) => console.error("mark_watched failed:", e));
+ const handleVideoEnd = () => {
+  const topic = currentTopic;
+  if (!topic) return;
+
+  const topicId = Number(topic.id);
+  const module = modules[openModule];
+  if (!module?.topics?.length) return;
+
+  // mark watched (API)
+  if (userId) {
+    fetch("https://backstagepass.co.in/reactapi/mark_watched.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user_id: userId, topic_id: topicId }),
+    }).catch(() => {});
+  }
+
+  let shouldOpenNextModule = false;
+
+  setWatchedTopicIds((prev) => {
+    const next = new Set(prev);
+    next.add(topicId);
+
+    const topicIds = module.topics.map((t: any) => Number(t.id));
+    const allWatched = topicIds.every((id) => next.has(id));
+
+    if (allWatched) {
+      shouldOpenNextModule = true;
+    } else {
+      const currentIndex = module.topics.findIndex(
+        (t: any) => Number(t.id) === topicId
+      );
+
+      if (currentIndex < module.topics.length - 1) {
+        setCurrentPointIndex(currentIndex + 1);
       }
-    } catch (e) { console.error(e); }
+    }
 
-    setWatchedTopicIds((prev) => {
-      const next = new Set(prev);
-      next.add(Number(topicId));
-      return next;
-    });
-    //setCompletedVideoCount((prev) => prev + 1);
+    return next;
+  });
+  setLastEndedTopicId(topicId);
 
+  /* ===============================
+     POST-STATE SIDE EFFECTS
+  =============================== */
+  if (shouldOpenNextModule) {
+    const moduleId = Number(module.id);
 
-    setCurrentPointIndex((prevPointIndex) => {
-      const module = modules[openModule];
-      const pointsCount = module?.topics?.length ?? 0;
-      if (prevPointIndex < pointsCount - 1) {
-        return prevPointIndex + 1;
-      } else {
-        const previousModuleId = Number(module?.id);
-        if (!Number.isNaN(previousModuleId)) {
-          setCompletedModuleIds((prev) => {
-            const updated = Array.from(new Set([...prev, previousModuleId]));
-            try { localStorage.setItem("completedModules", JSON.stringify(updated)); } catch { }
-            return updated;
-          });
-        }
-        let nextIdx = openModule + 1;
-        while (nextIdx < modules.length && (modules[nextIdx].topics?.length ?? 0) === 0) nextIdx++;
-        if (nextIdx < modules.length) {
-          setOpenModule(nextIdx);
-          return 0;
-        } else return 0;
-      }
-    });
-  };
+    if (!Number.isNaN(moduleId)) {
+      setCompletedModuleIds((prev) => {
+        const updated = Array.from(new Set([...prev, moduleId]));
+        try {
+          localStorage.setItem(
+            "completedModules",
+            JSON.stringify(updated)
+          );
+        } catch {}
+        return updated;
+      });
+    }
+
+    const nextIdx = openModule + 1;
+    if (nextIdx < modules.length) {
+      autoOpenModuleRef.current = nextIdx;
+    }
+  }
+};
+
+useEffect(() => {
+ 
+  if (autoOpenModuleRef.current === null) return;
+
+  const idx = autoOpenModuleRef.current;
+  autoOpenModuleRef.current = null;
+
+  // 🔥 EXACT SAME AS MANUAL CLICK
+  handleModuleClick(idx);
+}, [completedModuleIds]);
 
   const [checkedAnswers, setCheckedAnswers] = useState<{ [k: number]: boolean }>({});
   const handleCheckQuestion = (questionIndex: number) => setCheckedAnswers((p) => ({ ...p, [questionIndex]: true }));
+const openModuleAndLoadTopics = async (moduleIndex: number) => {
+  const moduleId = Number(modules[moduleIndex]?.id);
+  if (!moduleId) return;
 
+  setOpenModule(moduleIndex);
+
+  await fetchTopics(moduleId, moduleIndex);
+
+  setCurrentPointIndex(0);
+};
   const isModuleUnlocked = (index: number) => {
+    
     if (index === 0) return true;
     const current = modules[index];
+   
     if (!current) return false;
     if (current.title === "Assessment") {
       const previousVideoModule = [...modules].slice(0, index).reverse().find((m) => m.type === "video");
@@ -1026,6 +1099,15 @@ const getPointLabel = (point: any): string => {
   return "";
 };
 const handlePointClick = (index: number, point: any) => {
+  // 🔒 BLOCK if previous topic not watched
+  if (index > 0) {
+    const prevTopic = modules[openModule!]?.topics?.[index - 1];
+    if (!prevTopic || !watchedTopicIds.has(Number(prevTopic.id))) {
+      alert("Please watch the previous video before continuing.");
+      return;
+    }
+  }
+
   // 🚨 EXIT QUIZ MODE COMPLETELY
   setIsQuizActive(false);
   setIsReviewMode(false);
@@ -1037,7 +1119,7 @@ const handlePointClick = (index: number, point: any) => {
   // ✅ Update topic
   setCurrentPointIndex(index);
 
-  // ✅ Play video after mount
+  // ▶️ Play video
   setTimeout(() => {
     if (videoRef.current && point.startTime != null) {
       videoRef.current.currentTime = point.startTime;
@@ -1058,7 +1140,10 @@ const formatDuration = (duration?: string | null): string => {
   return duration;
 };
 
+const module = openModule !== null ? modules[openModule] : undefined;
 
+const isCurrentWatched =
+  currentTopic && lastEndedTopicId === Number(currentTopic.id);
 
   return (
     <div className="min-h-screen px-4 md:px-2 py-6 bg-white-50">
@@ -1253,10 +1338,29 @@ const formatDuration = (duration?: string | null): string => {
 
                 <div className="flex items-center gap-3">
                   <button onClick={() => { if (currentPointIndex > 0) setCurrentPointIndex(currentPointIndex - 1); }} className="px-4 py-2 rounded-md bg-black text-white hover:opacity-95 transition">Previous</button>
-                  <button onClick={() => { 
-                  const module = openModule !== null ? modules[openModule] : undefined;
-                    
-                    if (currentPointIndex < (module?.topics?.length ?? 1) - 1) setCurrentPointIndex(currentPointIndex + 1); }} className="px-4 py-2 rounded-md bg-black text-white hover:opacity-95 transition">Next</button>
+                  <button
+  disabled={!isCurrentWatched}
+  onClick={() => {
+    if (!isCurrentWatched) return;
+
+    const module = modules[openModule!];
+    if (!module?.topics) return;
+
+    if (currentPointIndex < module.topics.length - 1) {
+      setCurrentPointIndex((prev) => prev + 1);
+      setLastEndedTopicId(null); // 🔒 lock next again
+    }
+  }}
+  className={`px-4 py-2 rounded-md transition
+    ${
+      isCurrentWatched
+        ? "bg-black text-white hover:opacity-95"
+        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+    }
+  `}
+>
+  Next
+</button>
                 </div>
               </div>
               )}
@@ -1276,6 +1380,7 @@ const isUnlocked =
   isCompletedModule ||
   lastWatchedModuleId === Number(module.id) ||
   isModuleUnlocked(index);
+  
 
                 return (
                   <li key={module.id} className="border rounded-lg">

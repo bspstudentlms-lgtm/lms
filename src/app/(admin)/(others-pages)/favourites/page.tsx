@@ -33,25 +33,33 @@ export default function FavouritesPage() {
   }, []);
 
   const fetchFavourites = async (userEmail: string) => {
-    try {
-      const res = await axios.get(
-        `https://backstagepass.co.in/reactapi/get_favourite_course.php?email=${encodeURIComponent(
-          userEmail
-        )}`
-      );
-
-      if (res.data?.status === "success") {
-        setFavourites(res.data.favourites ?? []);
-      } else {
-        setFavourites([]);
+  try {
+    const res = await axios.get(
+      `https://backstagepass.co.in/reactapi/get_favourite_course.php`,
+      {
+        params: {
+          email: userEmail,
+          _t: Date.now(), // 🔥 cache buster
+        },
+        headers: {
+          "Cache-Control": "no-cache",
+          Pragma: "no-cache",
+        },
       }
-    } catch (error) {
-      console.error("Failed to load favourites", error);
+    );
+
+    if (res.data?.status === "success") {
+      setFavourites(res.data.favourites ?? []);
+    } else {
       setFavourites([]);
-    } finally {
-      setLoading(false);
     }
-  };
+  } catch (error) {
+    console.error("Failed to load favourites", error);
+    setFavourites([]);
+  } finally {
+    setLoading(false);
+  }
+};
 
   /* ================= CARD ================= */
   const FavouriteCard = ({ fav }: { fav: Favourite }) => (
