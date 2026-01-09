@@ -41,12 +41,14 @@ const mentorId = user.mentor_id;
   //   typeof window !== "undefined" ? localStorage.getItem("mentor_id") : null;
 
   /* ================= AUTH ================= */
-  useEffect(() => {
-   
-    if (user && user.role !== "mentor") {
-      router.replace("/");
-    }
-  }, [user, router]);
+ useEffect(() => {
+  if (loading) return;
+
+  if (user && user.role !== "mentor") {
+    router.replace("/");
+  }
+}, [user, loading, router]);
+
 
   /* ================= API ================= */
   useEffect(() => {

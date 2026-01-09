@@ -132,7 +132,7 @@ const { login } = useAuth();
       setSuccess("Login details have been sent to your email.");
 
       setTimeout(() => {
-        router.push("/signin"); // Next.js safe redirect
+        router.push("/signin");
       }, 2000);
     } else {
       setError(data.message || "Failed to send reset link.");
