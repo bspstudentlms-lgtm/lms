@@ -655,6 +655,10 @@ const autoOpenModuleRef = useRef<number | null>(null);
     return;
   }
 
+  if (isModuleLoaded && module.has_quiz == 1 && !quizSubmitted) {
+  return;
+}
+
   // ✅ MODULE COMPLETED (SYNC & SAFE)
   const moduleId = Number(module.id);
 
@@ -1335,7 +1339,7 @@ const isCurrentWatched =
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <button onClick={() => { if (currentPointIndex > 0) setCurrentPointIndex(currentPointIndex - 1); }} className="px-4 py-2 rounded-md bg-black text-white hover:opacity-95 transition">Previous</button>
+                    {/* <button onClick={() => { if (currentPointIndex > 0) setCurrentPointIndex(currentPointIndex - 1); }} className="px-4 py-2 rounded-md bg-black text-white hover:opacity-95 transition">Previous</button>
                     <button
   disabled={!isCurrentWatched}
   onClick={() => {
@@ -1358,7 +1362,7 @@ const isCurrentWatched =
   `}
 >
   Next
-</button>
+</button> */}
                   </div>
                 </div>
               )}
@@ -1378,6 +1382,7 @@ const isCurrentWatched =
                   isCompletedModule ||
                   lastWatchedModuleId === Number(module.id) ||
                   isModuleUnlocked(index);
+                  
 
                 return (
                   <li key={module.id} className="border rounded-lg">
