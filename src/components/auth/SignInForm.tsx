@@ -22,78 +22,79 @@ export default function SignInForm() {
   const [authView, setAuthView] = useState<"login" | "forgot">("login");
   const [success, setSuccess] = useState("");
 const { login } = useAuth();
-  const handleSignIn = async (e: { preventDefault: () => void; }) => {
-    e.preventDefault();
-    setError("");
+ const handleSignIn = async (e: { preventDefault: () => void }) => {
+  e.preventDefault();
 
-    if (!email || !password) {
-      setError("Email and password are required!");
-      return;
+  if (loading) return; // 🔒 prevent double click
+  setError("");
+
+  if (!email || !password) {
+    setError("Email and password are required!");
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    const response = await fetch(
+  "https://www.backstagepass.co.in/reactapi/student_login.php",
+  {
+    method: "POST",
+    cache: "no-store",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email,
+      password,
+      _ts: Date.now(), // cache buster
+    }),
+  }
+);
+
+    if (!response.ok) {
+      throw new Error("Failed to log in. Please try again.");
     }
 
-    setLoading(true);
+    const data = await response.json();
+    console.log("Login response:", data);
 
-    try {
-      const response = await fetch("https://www.backstagepass.co.in/reactapi/student_login.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+    if (data.status === 200) {
+      // ✅ Clear old session (important)
+      localStorage.clear();
 
-      if (!response.ok) {
-        throw new Error("Failed to log in. Please try again.");
-      }
+      // ✅ Store fresh data
+      localStorage.setItem("userId", data.userid);
+      localStorage.setItem("username", data.username);
+      localStorage.setItem("enrolledcourses", data.enrolled);
+      localStorage.setItem("email", email);
+      localStorage.setItem("role", data.role);
+      localStorage.setItem("mentor_id", data.mentor_id || "");
+      localStorage.setItem("loginType", "manual");
 
-      const data = await response.json();
-      console.log('Response Data:', data);
-
-      if (data.status === 200) {
-        // Save to localStorage
-        localStorage.setItem('userId', data.userid);
-        localStorage.setItem('username', data.username);
-        localStorage.setItem('enrolledcourses', data.enrolled);
-        localStorage.setItem('password', password);
-        localStorage.setItem('email', email);
-        localStorage.setItem('role', data.role);
-        localStorage.setItem('mentor_id', data.mentor_id);
-        login({
+      login({
         name: data.username || "BSP LMS Dashboard",
-        role: data.role, // "mentor" | "student"
+        role: data.role,
         mentor_id: data.role === "mentor" ? data.mentor_id : undefined,
       });
 
-        // ✅ Redirect with trailing slash for GoDaddy
-        setTimeout(() => {
-          const userId = localStorage.getItem('userId');
-          const username = localStorage.getItem('username');
-
-          if (userId && username) {
-            if (data.role === 'mentor') {
-           // window.location.href = '/mentor-dashboard';
-           router.push("/mentor-dashboard");
-          } else {
-            // Use trailing slash!
-            localStorage.setItem("loginType", "manual");
-            //window.location.href = '/dashboard';
-            router.push("/mycourses");
-          }
-          } else {
-            setError("Something went wrong. Please try again.");
-          }
-        }, 100);
+      // ✅ Redirect (no timeout needed)
+      if (data.role === "mentor") {
+        router.replace("/mentor-dashboard");
       } else {
-        setError(data.message || "Invalid credentials");
+        router.replace("/mycourses");
       }
-
-    } catch (err) {
-      console.error('Login error:', err);
-      setError("An error occurred while trying to sign in.");
-    } finally {
-      setLoading(false);
+    } else {
+      setError(data.message || "Invalid credentials");
     }
-  };
+  } catch (err) {
+    console.error("Login error:", err);
+    setError("An error occurred while trying to sign in.");
+  } finally {
+    setLoading(false);
+  }
+};
+
   const handleForgotPassword = async (e: React.FormEvent) => {
   e.preventDefault();
 
