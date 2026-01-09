@@ -1163,7 +1163,7 @@ const isCurrentWatched =
               />
             </div>
             <div className="text-right">
-              <h3 className="text-sm font-semibold">📊 Topic Video Progress</h3>
+              <h3 className="text-sm font-semibold">📊 Module Video Progress</h3>
               <p className="text-xs text-gray-500">{completedVideoCount} of {totalVideoPoints} videos completed</p>
             </div>
           </div>
