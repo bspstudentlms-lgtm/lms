@@ -47,6 +47,8 @@ const Muxvideo: React.FC<MuxVideoplayerProps> = ({
     // }
   }, [currentIndex, videos]);
 
+  
+
   useEffect(() => {
     lastSentTime.current = 0;
   }, [currentIndex]);
@@ -70,6 +72,8 @@ const Muxvideo: React.FC<MuxVideoplayerProps> = ({
   //     onFinish?.();
   //   }
   // };
+
+  
 const handleEnded = () => {
  
   console.log("Fetch is being called!");
@@ -138,24 +142,64 @@ const handleEnded = () => {
   console.log("currentIndex", currentIndex);
   console.log("currentVideoIndex", currentVideoIndex);
   console.log("video", video);
+  const handleLoadedMetadata = () => {
+  const videoEl = playerRef.current?.media;
+  if (!videoEl) return;
+
+  // 🔊 Set volume to 50%
+  videoEl.volume = 0.5;
+
+  // 📝 Disable subtitles
+  const tracks = videoEl.textTracks;
+  for (let i = 0; i < tracks.length; i++) {
+    tracks[i].mode = "disabled";
+  }
+};
+
+const handlePlay = () => {
+  const videoEl = playerRef.current?.media;
+  if (!videoEl) return;
+
+  // 🔈 Unmute AFTER play starts (autoplay-safe)
+  videoEl.muted = false;
+};
+
 
   return (
+    // <MuxPlayer
+    //   ref={playerRef}
+    //   playbackId={video.playback_id}
+    //   currentTime={resumeTime}
+    //   onTimeUpdate={handleTimeUpdate}
+    //   onEnded={handleEnded}
+    //   autoplay={autoplay}
+      
+    //   controls
+    //   metadata={{
+    //     video_id: video.playback_id,
+    //     video_title: `Video ${currentIndex + 1}`,
+    //     viewer_user_id: userId,
+    //   }}
+    //   style={{ width: '100%', aspectRatio: '16/9' }}
+    // />
     <MuxPlayer
-      ref={playerRef}
-      playbackId={video.playback_id}
-      currentTime={resumeTime}
-      onTimeUpdate={handleTimeUpdate}
-      onEnded={handleEnded}
-      autoplay={autoplay}
-      muted
-      controls
-      metadata={{
-        video_id: video.playback_id,
-        video_title: `Video ${currentIndex + 1}`,
-        viewer_user_id: userId,
-      }}
-      style={{ width: '100%', aspectRatio: '16/9' }}
-    />
+  ref={playerRef}
+  playbackId={video.playback_id}
+  currentTime={resumeTime}
+  onTimeUpdate={handleTimeUpdate}
+  onEnded={handleEnded}
+  onLoadedMetadata={handleLoadedMetadata}
+  onPlay={handlePlay}
+  autoplay={autoplay}
+  muted={autoplay} // 🔑 REQUIRED for autoplay to work
+  controls
+  metadata={{
+    video_id: video.playback_id,
+    video_title: `Video ${currentIndex + 1}`,
+    viewer_user_id: userId,
+  }}
+  style={{ width: "100%", aspectRatio: "16/9" }}
+/>
   );
 };
 export default Muxvideo;
