@@ -71,6 +71,7 @@ const { login } = useAuth();
       localStorage.setItem("role", data.role);
       localStorage.setItem("mentor_id", data.mentor_id || "");
       localStorage.setItem("loginType", "manual");
+       localStorage.setItem("phone", data.phone);
 
       login({
         name: data.username || "BSP LMS Dashboard",

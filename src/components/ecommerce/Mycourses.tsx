@@ -46,7 +46,8 @@ export default function MyCourses() {
   const [enrolledCourses, setEnrolledCourses] = useState<string[]>([]);
   const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-   const [open1, setOpen1] = useState(false);
+  const [open1, setOpen1] = useState(false);
+  const [selectedCourseId, setSelectedCourseId] = useState<number>(0);
 
   /* ================= INIT ================= */
   useEffect(() => {
@@ -227,12 +228,15 @@ export default function MyCourses() {
     )
   ) : (
     <button
-      // onClick={() =>
-      //   course.urlpath
-      //     ? window.open(course.urlpath, "_blank")
-      //     : alert("URL not available")
-      // }
-       onClick={() => setOpen1(true)}
+      onClick={() =>
+        course.urlpath
+          ? window.open(course.urlpath, "_blank")
+          : alert("URL not available")
+      }
+      // onClick={() => {
+      // setSelectedCourseId(course.id); // ✅ store course id
+      // setOpen1(true);                 // ✅ open modal
+  //}}
       className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-6 py-2.5 text-sm font-semibold text-gray-800 hover:bg-gray-100 transition"
     >
       View More
@@ -313,7 +317,11 @@ export default function MyCourses() {
         ))}
       </div>
 
-          <EnrollModal open={open1} onClose={() => setOpen1(false)} />
+          <EnrollModal
+  open={open1}
+  onClose={() => setOpen1(false)}
+  courseId={selectedCourseId}
+/>
     
     </div>
   );

@@ -339,7 +339,7 @@ const mapLevel = (lvl: string): Course["level"] => {
     <button
       onClick={() => {
         if (course.urlpath) {
-          window.open(course.urlpath, "_blank");
+          window.open('/basics-of-maya-for-beginners', "_blank");
         } else {
           alert("URL not available");
         }

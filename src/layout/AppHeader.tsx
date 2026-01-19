@@ -94,6 +94,7 @@ useEffect(() => {
           localStorage.setItem("email", data.email);
           localStorage.setItem("role", data.role);
           localStorage.setItem("mentor_id", data.mentor_id);
+          localStorage.setItem("phone", data.phone);
 
           if (window.location.pathname !== "/mycourses") {
             window.location.replace("/mycourses");
@@ -103,6 +104,7 @@ useEffect(() => {
         localStorage.setItem("username", session?.user?.name ?? "");
 localStorage.setItem("email", session?.user?.email ?? "");
 localStorage.setItem("image", session?.user?.image ?? "");
+// localStorage.setItem("phone", session?.user?.phone ?? "");
 
           
           localStorage.setItem("role", "sos");
