@@ -1173,7 +1173,7 @@ const isCurrentWatched =
           <div className="md:col-span-2">
             <div className="video-surface p-4 rounded-lg">
               {/* provide a stable aspect ratio */}
-              <div className="relative w-full pb-[56.25%] rounded-lg overflow-hidden bg-black">
+              <div className="relative w-full rounded-lg overflow-hidden bg-black" style={{height: "590px"}}>
                 {/* If currentModule is a video, render Muxvideo, otherwise render module UI */}
                 {currentModule ? (
                   (() => {
@@ -1365,7 +1365,7 @@ const isCurrentWatched =
             </div>
           </div>
 
-          <aside className="p-4 rounded-lg bg-white shadow-sm border border-gray-100 sticky top-6 max-h-[75vh] overflow-y-auto">
+          <aside className="p-4 rounded-lg bg-white shadow-sm border border-gray-100 sticky top-6 max-h-[100vh] overflow-y-auto">
             <h2 className="text-lg font-semibold mb-4">📘 Course Material</h2>
 
 
