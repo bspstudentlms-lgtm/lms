@@ -242,17 +242,46 @@ console.log('phoneno'+storedPhone);
             <p className="text-red-500 text-sm">{couponRemarks}</p>
           )}
 
-          {paymentDetails.originalPayment > 0 && (
-            <div className="text-sm">
-              <p>Payment: ₹{paymentDetails.originalPayment}</p>
-              {paymentDetails.discountValue > 0 && (
-                <p>Discount: -₹{paymentDetails.discountValue}</p>
-              )}
-              <p className="font-semibold">
-                Total: ₹{paymentDetails.finalAmount}
-              </p>
-            </div>
-          )}
+         {paymentDetails.originalPayment > 0 && (
+  <div className="mt-5 rounded-xl border border-gray-200 bg-gradient-to-br from-gray-50 to-white p-4">
+
+    {/* Course Price */}
+    <div className="flex justify-between text-sm text-gray-600">
+      <span>Course Price</span>
+      <span className="font-medium">
+        ₹{paymentDetails.originalPayment}
+      </span>
+    </div>
+
+    {/* Discount */}
+    {paymentDetails.discountValue > 0 && (
+      <div className="flex justify-between text-sm text-green-600 mt-2">
+        <span>Discount</span>
+        <span className="font-semibold">
+          − ₹{paymentDetails.discountValue}
+        </span>
+      </div>
+    )}
+
+    {/* Divider */}
+    <div className="border-t border-dashed my-3"></div>
+
+    {/* Total */}
+    <div className="flex justify-between items-center">
+      <span className="text-base font-semibold text-gray-900">
+        Total Payable
+      </span>
+      <span className="text-xl font-bold text-red-600">
+        ₹{paymentDetails.finalAmount}
+      </span>
+    </div>
+
+    {/* Trust note */}
+    <p className="mt-3 text-xs text-gray-500 flex items-center gap-1">
+      🔒 Secure payment
+    </p>
+  </div>
+)}
 
           <button
             type="submit"
