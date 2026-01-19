@@ -6,6 +6,7 @@ import { Heart } from 'lucide-react';
 import axios from "axios";
 
 type Course = {
+  coursetype: ReactNode;
   urlpath: any;
   course_id: number;
   title: string;
@@ -55,6 +56,7 @@ useEffect(() => {
         category: item.category, 
         level: item.level, 
         urlpath: item.urlpath,
+        coursetype: item.coursetype,
              
         tags: [item.category, item.level, item.shortname],
       }));
@@ -264,7 +266,7 @@ const mapLevel = (lvl: string): Course["level"] => {
             <div
               key={course.course_id}
               className="bg-white shadow-lg flex flex-col h-full"
-            >
+            >{course.coursetype}
               <div className="relative w-full h-52">
                 <Image
                   src={course.image}

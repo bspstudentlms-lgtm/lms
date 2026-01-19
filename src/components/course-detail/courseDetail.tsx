@@ -118,7 +118,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
   const [mentorname, setMentorname] = useState("");
   const [isQuizActive, setIsQuizActive] = useState(false);
   const [activeTab, setActiveTab] =
-    useState<"overview" | "contact" | "outcome" | "assignment">("overview");
+    useState<"overview" | "contact" | "outcome" | "resources" | "assignment">("overview");
 
   const [resumeTime, setResumeTime] = useState<number>(0);
   const [topics, setTopics] = useState<any[]>([]);
@@ -179,6 +179,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
     openModule !== null ? modules[openModule] : null;
 
   //const activeModule = openModule >= 0 ? modules[openModule] : null;
+  const activeModule = openModule !== null ? modules[openModule] : null;
   const finalQuizTopics = currentModule?.topics?.filter(
     (t): t is QuizTopic => t.type === "quiz"
   ) ?? [];
@@ -256,6 +257,11 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
           if (progress?.coursename) {
             setCourseName(progress.coursename);
           }
+          if (progress?.course_outcome) {
+            setCourseOutcome(progress.course_outcome);
+            
+          }
+          
         }
 
         /* ===============================
@@ -654,6 +660,10 @@ const autoOpenModuleRef = useRef<number | null>(null);
     }
     return;
   }
+
+  if (isModuleLoaded && module.has_quiz == 1 && !quizSubmitted) {
+  return;
+}
 
   // ✅ MODULE COMPLETED (SYNC & SAFE)
   const moduleId = Number(module.id);
@@ -1335,7 +1345,7 @@ const isCurrentWatched =
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <button onClick={() => { if (currentPointIndex > 0) setCurrentPointIndex(currentPointIndex - 1); }} className="px-4 py-2 rounded-md bg-black text-white hover:opacity-95 transition">Previous</button>
+                    {/* <button onClick={() => { if (currentPointIndex > 0) setCurrentPointIndex(currentPointIndex - 1); }} className="px-4 py-2 rounded-md bg-black text-white hover:opacity-95 transition">Previous</button>
                     <button
   disabled={!isCurrentWatched}
   onClick={() => {
@@ -1358,7 +1368,7 @@ const isCurrentWatched =
   `}
 >
   Next
-</button>
+</button> */}
                   </div>
                 </div>
               )}
@@ -1378,6 +1388,7 @@ const isCurrentWatched =
                   isCompletedModule ||
                   lastWatchedModuleId === Number(module.id) ||
                   isModuleUnlocked(index);
+                  
 
                 return (
                   <li key={module.id} className="border rounded-lg">
@@ -1567,66 +1578,7 @@ const isCurrentWatched =
                             </div>
                           </li>)}
 
-                        {module.resourceslink && (
-                          <li className={`mb-1 flex items-center justify-between p-3 rounded font-medium`}>
-                            <div className="flex gap-3 flex-1">
-                              {/* CHECK */}
-                              <span
-                                className={`h-4 w-4 rounded-full border flex items-center justify-center mt-1 ${isResources ? "bg-green-500 border-green-500" : "border-gray-400"}`}
-                              >
-
-                                {isResources && (
-                <svg width="12" height="12" viewBox="0 0 24 24">
-                  <path
-                    d="M20 6L9 17l-5-5"
-                    stroke="white"
-                    strokeWidth="2"
-                    fill="none"
-                  />
-                </svg>
-              )}
-
-                              </span>
-
-                              {/* TITLE */}
-                              <p
-                                className={`text-sm leading-snug text-blue-700`}
-
-                              >
-                                <div className="flex-1">
-                                  <p className="text-sm font-medium text-gray-800">
-                                    Resources
-                                  </p>
-                                  <p className="text-xs text-gray-500">
-                                    Download reference materials
-                                  </p>
-                                </div>
-                              </p>
-
-                            </div>
-                            <div className="flex items-center gap-1 mt-1 text-xs text-gray-500"><a
-                              href={module.resourceslink}
-                              target="_blank"
-                              onClick={handleClick1}
-                            >
-                               <svg
-  width="14"
-  height="14"
-  viewBox="0 0 24 24"
-  fill="none"
->
-  <path
-    d="M12 3v12m0 0l4-4m-4 4l-4-4M4 21h16"
-    stroke="currentColor"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  />
-</svg>
-
-                              <span>Click </span></a>
-                            </div>
-                          </li>)}
+                        
 
 
                         {isModuleLoaded && module.has_quiz == 1 && (
@@ -1750,7 +1702,7 @@ const isCurrentWatched =
 
           </aside>
         </div>
-
+{!isQuizActive && activeView !== "assignment" && (
         <div className="max-w-5xl pl-5 pt-5 bg-white overflow-hidden grid">
           {/* TAB HEADER */}
           <div className="border-b border-gray-200">
@@ -1795,6 +1747,15 @@ const isCurrentWatched =
               >
                 Outcome
               </button>
+              <button
+                onClick={() => setActiveTab("resources")}
+                className={`pb-2 text-sm font-medium border-b-2 ${activeTab === "resources"
+                  ? "border-blue-600 text-blue-600"
+                  : "border-transparent text-gray-600 hover:text-blue-600"
+                  }`}
+              >
+                Resources
+              </button>
             </nav>
           </div>
 
@@ -1835,8 +1796,30 @@ const isCurrentWatched =
                 </p>
               </div>
             )}
+
+            {activeTab === "resources" && (
+              <div className="mt-4">
+                <h3 className="text-lg font-semibold mb-2">Resources</h3>
+
+                {activeModule?.resourceslink ? (
+                  <a
+                    href={activeModule.resourceslink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline break-all"
+                  >
+                    Download Resources 
+                  </a>
+                ) : (
+                  <p className="text-sm text-gray-500">
+                    No resources available for this module
+                  </p>
+                )}
+              </div>
+            )}
           </div>
         </div>
+)}
 
         {pageNotice && <div className="mt-4 px-4 py-2 bg-yellow-50 text-yellow-700 rounded">{pageNotice}</div>}
       </div>
