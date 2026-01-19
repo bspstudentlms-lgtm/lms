@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import {
   CheckCircle,
@@ -11,6 +11,7 @@ import {
   Phone,
   MessageCircle,
 } from "lucide-react";
+import EnrollModal from "@/components/EnrollModal";
 
 
 
@@ -92,9 +93,28 @@ const topics = [
 export default function BasicsOfMayaPage() {
    const [activeIndex, setActiveIndex] = useState<number | null>(0);
    const [open, setOpen] = useState<number | null>(null);
+    const [open1, setOpen1] = useState(false);
+    const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const section = document.getElementById("page-enroll-cta");
+
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setVisible(!entry.isIntersecting);
+      },
+      { threshold: 0.4 }
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  if (!visible) return null;
   return (
-    <>
-    <main className="text-gray-800">
+    <main className="text-gray-800 pb-20">
 <header className="fixed top-0 left-0 w-full z-50 bg-white border-b shadow-sm">
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
 
@@ -554,21 +574,26 @@ export default function BasicsOfMayaPage() {
         })}
       </div>
     </section>
-    
       {/* BOTTOM CTA */}
-      <section className="bg-[#6d1c1c] text-white text-center py-16">
+      <section className="bg-[#6d1c1c] text-white text-center py-16" id="page-enroll-cta">
         <h2 className="text-3xl font-bold mb-6">
           Enroll in the Basics of Maya Course
         </h2>
-        <button className="bg-red-600 px-12 py-4 rounded-full text-lg">
+        <button onClick={() => setOpen1(true)} className="bg-red-600 px-12 py-4 rounded-full text-lg">
           Enroll @ ₹799
         </button>
       </section>
-      
-    </main>
+            <EnrollModal open={open1} onClose={() => setOpen1(false)} />
 
-   
-    </>
+<div className="fixed bottom-0 left-0 w-full z-[9999]">
+      <div className="bg-[#1f1f1f] h-20 flex items-center justify-center relative">
+        <span className="absolute top-0 left-0 w-full h-[2px] bg-red-600" />
+        <button onClick={() => setOpen1(true)} className="px-20 py-4 rounded-full bg-red-600 text-white">
+          ENROLL NOW
+        </button>
+      </div>
+    </div>
+    </main>
   );
 }
 
