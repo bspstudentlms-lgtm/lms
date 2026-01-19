@@ -6,7 +6,7 @@ import { Heart } from 'lucide-react';
 import axios from "axios";
 
 type Course = {
-  coursetype: ReactNode;
+  coursetype: number;
   urlpath: any;
   course_id: number;
   title: string;
@@ -49,17 +49,17 @@ useEffect(() => {
     .get("https://www.backstagepass.co.in/reactapi/featured_courses_api.php")
     .then((response) => {
       const formatted: Course[] = response.data.map((item: any) => ({
-        course_id: Number(item.id),
-        title: item.title,
-        description: item.description || item.shortname || "No description available",
-        image: item.image,
-        category: item.category, 
-        level: item.level, 
-        urlpath: item.urlpath,
-        coursetype: item.coursetype,
-             
-        tags: [item.category, item.level, item.shortname],
-      }));
+      course_id: Number(item.id),
+      title: item.title,
+      description: item.description || item.shortname || "No description available",
+      image: item.image,
+      category: item.category,
+      level: item.level,
+      urlpath: item.urlpath,
+      coursetype: Number(item.coursetype), // 🔥 THIS FIX
+      tags: [item.category, item.level, item.shortname],
+    }));
+
 
       setCourses(formatted);
       setLoading(false);
@@ -113,6 +113,8 @@ const mapLevel = (lvl: string): Course["level"] => {
 }, [courses, categoryFilter, levelFilter, keywords]);
 
 
+
+
   // ---------- FAVOURITE LOGIC ----------
   const handleFavouriteClick = (course: Course) => {
     setSelectedCourse(course);
@@ -159,6 +161,8 @@ const mapLevel = (lvl: string): Course["level"] => {
     }
   };
 
+
+  
   return (
     <div className="w-full bg-gray-50 py-10">
       <div className="max-w-8xl mx-auto px-4">
@@ -265,8 +269,14 @@ const mapLevel = (lvl: string): Course["level"] => {
           {filteredCourses.map((course) => (
             <div
               key={course.course_id}
-              className="bg-white shadow-lg flex flex-col h-full"
-            >{course.coursetype}
+              className={`bg-white shadow-lg flex flex-col h-full relative
+    ${
+      course.coursetype === 3
+        ? "border-2 border-green-500 ring-2 ring-green-200"
+        : "border border-gray-100"
+    }
+  `}
+            >
               <div className="relative w-full h-52">
                 <Image
                   src={course.image}
@@ -274,6 +284,17 @@ const mapLevel = (lvl: string): Course["level"] => {
                   fill
                   className="object-cover"
                 />
+{course.coursetype === 3 && (
+  <span className="absolute top-3 left-3 bg-green-600 text-white text-[11px] font-semibold px-4 py-1 rounded-full shadow-md tracking-wide">
+    🔴 LIVE WEBINAR
+  </span>
+)}
+
+{course.coursetype === 2 && (
+  <span className="absolute top-3 left-3 bg-blue-600 text-white text-[11px] font-semibold px-4 py-1 rounded-full shadow-md tracking-wide">
+    📘 COURSE
+  </span>
+)}
 
                 <button
                   onClick={() => handleFavouriteClick(course)}
@@ -290,32 +311,54 @@ const mapLevel = (lvl: string): Course["level"] => {
               <h3 className="mt-4 pl-5 text-lg font-semibold text-gray-800">
                 {course.title}
               </h3>
-              <p className="mt-1 pl-5 text-xs text-gray-500">
-                {course?.category?.toUpperCase()} • {course?.level?.toUpperCase()}
-              </p>
+             <p className="mt-1 pl-5 text-xs text-gray-500">
+  {course?.category?.toUpperCase()} • {course?.level?.toUpperCase()}
+</p>
+
+{course.coursetype === 3 && (
+  <div className="mx-5 mt-2 bg-green-50 border border-green-200 rounded-md px-3 py-1 text-xs font-semibold text-green-700 flex items-center gap-2">
+    🟢 Live Session
+    <span className="text-green-500">•</span>
+    Limited Seats
+  </div>
+)}
+
+{course.coursetype === 2 && (
+  <div className="mx-5 mt-2 bg-blue-50 border border-blue-200 rounded-md px-3 py-1 text-xs font-semibold text-blue-700 flex items-center gap-2">
+    📘 Self-Paced
+    <span className="text-blue-400">•</span>
+    Learn Anytime
+  </div>
+)}
+
               <p className="mt-2 pl-5 pr-5 mb-6 text-sm text-gray-600 line-clamp-3">
                 {course.description}
               </p>
-              <div className="pl-5 pr-5 pb-5 flex gap-3 mt-auto">
-                
-                <button
-    onClick={() => {
-      if (course.urlpath) {
-        window.open('/basics-of-maya-for-beginners', "_blank"); // opens in a new tab
-      } else {
-        alert("URL not available");
-      }
-    }}
-    className={`px-6 py-2 rounded-md text-sm w-full ${
-      course.urlpath
-        ? "bg-red-600 text-white hover:bg-red-700"
-        : "bg-gray-400 text-white cursor-not-allowed"
-    }`}
-    disabled={!course.urlpath}
-  >
-    Know More
-  </button>
-              </div>
+             <div className="pl-5 pr-5 pb-5 flex gap-3 mt-auto">
+  {(course.coursetype === 2 || course.coursetype === 3) && (
+    <button
+      onClick={() => {
+        if (course.urlpath) {
+          window.open(course.urlpath, "_blank");
+        } else {
+          alert("URL not available");
+        }
+      }}
+      disabled={!course.urlpath}
+      className={`px-6 py-3 rounded-md text-sm font-semibold w-full transition-all duration-200
+  ${
+    course.urlpath
+      ? course.coursetype === 3
+        ? "bg-green-600 text-white hover:bg-green-700 hover:scale-[1.02]"
+        : "bg-red-600 text-white hover:bg-red-700 hover:scale-[1.02]"
+      : "bg-gray-400 text-white cursor-not-allowed"
+  }
+`}
+    >
+      {course.coursetype === 3 ? "Register Now" : "Know More"}
+    </button>
+  )}
+</div>
             </div>
           ))}
 
