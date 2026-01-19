@@ -5,6 +5,7 @@ import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightIcon } from "@/icons";
+import EnrollModal from "@/components/EnrollModal";
 
 /* ================= TYPES ================= */
 interface Course {
@@ -45,6 +46,7 @@ export default function MyCourses() {
   const [enrolledCourses, setEnrolledCourses] = useState<string[]>([]);
   const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+   const [open1, setOpen1] = useState(false);
 
   /* ================= INIT ================= */
   useEffect(() => {
@@ -225,11 +227,12 @@ export default function MyCourses() {
     )
   ) : (
     <button
-      onClick={() =>
-        course.urlpath
-          ? window.open(course.urlpath, "_blank")
-          : alert("URL not available")
-      }
+      // onClick={() =>
+      //   course.urlpath
+      //     ? window.open(course.urlpath, "_blank")
+      //     : alert("URL not available")
+      // }
+       onClick={() => setOpen1(true)}
       className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-6 py-2.5 text-sm font-semibold text-gray-800 hover:bg-gray-100 transition"
     >
       View More
@@ -309,6 +312,8 @@ export default function MyCourses() {
           <CourseCard key={course.id} course={course} enrolled={false} />
         ))}
       </div>
+
+          <EnrollModal open={open1} onClose={() => setOpen1(false)} />
     
     </div>
   );
