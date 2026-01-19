@@ -206,7 +206,7 @@ console.log('phoneno'+storedPhone);
             onChange={handleInputChange}
           />
             <input type="hidden" name="url" value={formData.url} />
-            <input type="text" name="course" value={formData.course} />
+            <input type="hidden" name="course" value={formData.course} />
 
           <Input
             label="Email Address"
