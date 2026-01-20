@@ -150,6 +150,19 @@ const mentorId = user.mentor_id;
     request: visibleRequests[index],
   }));
 
+  function isSessionExpired(displayDate: string, slot: string) {
+  // Example:
+  // displayDate = "January 20"
+  // slot = "11:00 AM"
+
+  const year = new Date().getFullYear(); // current year
+  const sessionDateTime = new Date(`${displayDate} ${year} ${slot}`);
+  const now = new Date();
+
+  return now > sessionDateTime;
+}
+
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-6xl mx-auto px-6 py-6">
@@ -206,22 +219,35 @@ const mentorId = user.mentor_id;
                       </p>
                     </div>
                     {row.upcoming.zoom_link ? (
-                      <a
-                        href={row.upcoming.zoom_link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm font-medium text-red-600 hover:underline"
-                      >
-                        Join Zoom →
-                      </a>
-                    ) : (
-                      <span className="text-sm text-gray-400">
-                        No Zoom link
-                      </span>
-                    )}
+      isSessionExpired(row.upcoming.display_date, row.upcoming.slot) ? (
+        <span className="text-sm  font-medium text-red-300 cursor-not-allowed">
+  Session Expired
+</span>
+      ) : (
+        <a
+          href={row.upcoming.zoom_link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sm font-medium text-red-600 hover:underline"
+        >
+          Join Zoom →
+        </a>
+      )
+    ) : (
+      <span className="text-sm text-gray-400">
+        No Zoom link
+      </span>
+    )}
                   </div>
                 ) : (
-                  <div />
+                  <div className="flex flex-col items-left justify-left bg-gray-50 border border-dashed rounded-xl p-8 text-left">
+      <p className="text-gray-400 font-medium">
+        No Upcoming Sessions
+      </p>
+      <p className="text-sm text-gray-400 mt-1">
+        New Upcoming Sessions will appear here once students book sessions.
+      </p>
+    </div>
                 )}
 
                 {/* RIGHT CARD */}
@@ -250,7 +276,14 @@ const mentorId = user.mentor_id;
                     </div>
                   </div>
                 ) : (
-                  <div />
+                  <div className="flex flex-col items-left justify-left bg-gray-50 border border-dashed rounded-xl p-8 text-left">
+      <p className="text-gray-400 font-medium">
+        No recent booking requests
+      </p>
+      <p className="text-sm text-gray-400 mt-1">
+        New requests will appear here once students book sessions.
+      </p>
+    </div>
                 )}
               </div>
             ))}

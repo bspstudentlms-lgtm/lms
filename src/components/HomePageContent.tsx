@@ -141,7 +141,7 @@ return (
 
 
 <main className="px-4 py-3 sm:p-6">
-      <h1 className="text-xl sm:text-3xl font-bold text-center mb-0 flex items-center justify-center">Our Courses</h1>
+      {/* <h1 className="text-xl sm:text-3xl font-bold text-center mb-0 flex items-center justify-center">Our Courses</h1> */}
       <CourseCarouselNoScroll />
     </main>
 
