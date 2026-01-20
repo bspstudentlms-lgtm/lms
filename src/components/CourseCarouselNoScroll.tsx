@@ -26,6 +26,10 @@ type TypeFilter = "all" | "course" | "recorded" | "live";
 
 /* ================= COMPONENT ================= */
 export default function CourseGrid() {
+  const [favourites, setFavourites] = useState<{ [key: number]: boolean }>({});
+   const [showModal, setShowModal] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+  const [email, setEmail] = useState("");
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -80,6 +84,51 @@ const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
       return true;
     });
   }, [courses, search, typeFilter, categoryFilter, levelFilter]);
+
+   const handleFavouriteClick = (course: Course) => {
+    setSelectedCourse(course);
+    setShowModal(true);
+  };
+
+  const handleSubmit = async () => {
+    if (!email || !selectedCourse) return;
+
+    try {
+      const response = await fetch(
+        "https://backstagepass.co.in/reactapi/save_favourite_course.php",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            courseid: selectedCourse.course_id,
+          }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (result.status === "success") {
+        alert("Thanks! You will be notified when the course is live.");
+        setFavourites((prev) => ({
+          ...prev,
+          [selectedCourse.course_id]: true,
+        }));
+        setShowModal(false);
+        setEmail("");
+      } else if (result.status === "exists") {
+        alert("You have already favourited this course.");
+        setShowModal(false);
+      } else {
+        alert(result.message || "Something went wrong");
+      }
+    } catch (error) {
+      alert("Network error. Try again later.");
+      console.error(error);
+    }
+  };
 
 
   const handleWatchNow = (course: Course) => {
@@ -194,6 +243,16 @@ const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
     <span className="absolute top-4 left-4 bg-blue-600 text-white text-xs px-4 py-1 rounded-full">
       COURSE
     </span>
+    <button
+                  onClick={() => handleFavouriteClick(course)}
+                  className="absolute top-2 right-2 bg-white bg-opacity-70 p-2 rounded-full shadow-md hover:bg-opacity-100 transition"
+                >
+                  {favourites[course.course_id] ? (
+                    <Heart />
+                  ) : (
+                    <Heart />
+                  )}
+                </button>
   </div>
 
   {/* CONTENT */}
@@ -228,6 +287,8 @@ const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
 
                 );
 
+               
+
               /* ============ RECORDED WEBINAR ============ */
               if (course.coursetype === 2)
                 return (
@@ -249,6 +310,17 @@ const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
     <span className="absolute top-4 left-4 bg-purple-600 text-white text-xs px-4 py-1 rounded-full">
       🎥 RECORDED WEBINAR
     </span>
+
+     <button
+                  onClick={() => handleFavouriteClick(course)}
+                  className="absolute top-2 right-2 bg-white bg-opacity-70 p-2 rounded-full shadow-md hover:bg-opacity-100 transition"
+                >
+                  {favourites[course.course_id] ? (
+                    <Heart />
+                  ) : (
+                    <Heart />
+                  )}
+                </button>
 
     {/* Play Button (subtle) */}
     {/* <div className="absolute inset-0 flex items-center justify-center">
@@ -314,6 +386,16 @@ const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
       <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
       LIVE WEBINAR
     </span>
+     <button
+                  onClick={() => handleFavouriteClick(course)}
+                  className="absolute top-2 right-2 bg-white bg-opacity-70 p-2 rounded-full shadow-md hover:bg-opacity-100 transition"
+                >
+                  {favourites[course.course_id] ? (
+                    <Heart />
+                  ) : (
+                    <Heart />
+                  )}
+                </button>
   </div>
 
   {/* CONTENT */}
@@ -359,6 +441,47 @@ const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
             })}
           </div>
         )}
+
+
+ {showModal && selectedCourse && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-lg relative">
+            <button
+              onClick={() => setShowModal(false)}
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+            >
+              ✕
+            </button>
+
+            <h2 className="text-xl font-bold mb-4">Add to Favourites</h2>
+
+            <div className="mb-4">
+              <p className="text-gray-700 font-medium">Course:</p>
+              <p className="text-gray-900">{selectedCourse.title}</p>
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-gray-700 font-medium mb-1">
+                Your Email
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+                placeholder="you@example.com"
+              />
+            </div>
+
+            <button
+              onClick={handleSubmit}
+              className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700"
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+      )}
 
         {/* ================= ACCESS MODAL ================= */}
 {showAccessModal && lockedCourse && (
