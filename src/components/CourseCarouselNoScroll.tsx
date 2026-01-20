@@ -34,10 +34,11 @@ const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
   const isCourse = (course: Course) => course.coursetype === 1;
 
 const isLiveWebinar = (course: Course) =>
-  course.coursetype === 3 && course.duration === 1;
+  course.coursetype === 3 ;
+
 
 const isRecordedWebinar = (course: Course) =>
-  course.coursetype === 3 && course.duration > 1;
+  course.coursetype === 2 ;
 
 const handleWatchNow = (course: Course) => {
   const hasAccess = course.is_coursecompleted === null;
@@ -359,14 +360,17 @@ const staticRecordedWebinars: Course[] = [
 
         {/* ---------- GRID ---------- */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {filteredCourses
+          {/* {filteredCourses
   .filter((course) => isCourse(course) || isLiveWebinar(course))
+  .map((course) => ( */}
+   {filteredCourses
+  .filter((course) => isCourse(course) || isLiveWebinar(course) || isRecordedWebinar(course))
   .map((course) => (
 
             <div
               key={course.course_id}
               className={`bg-white shadow-lg flex flex-col h-full relative
-    ${course.coursetype === 4
+    ${course.coursetype === 3
                   ? "border-2 border-green-500 ring-2 ring-green-200"
                   : "border border-gray-100"
                 }
@@ -385,9 +389,14 @@ const staticRecordedWebinars: Course[] = [
                   </span>
                 )}
 
-                {course.coursetype === 2 && (
+                {course.coursetype === 1 && (
                   <span className="absolute top-3 left-3 bg-blue-600 text-white text-[11px] font-semibold px-4 py-1 rounded-full shadow-md tracking-wide">
                     📘 COURSE
+                  </span>
+                )}
+                 {course.coursetype === 2 && (
+                  <span className="absolute top-3 left-3 bg-blue-600 text-white text-[11px] font-semibold px-4 py-1 rounded-full shadow-md tracking-wide">
+                    📘 RECORDED WEBINARS
                   </span>
                 )}
 
@@ -430,7 +439,7 @@ const staticRecordedWebinars: Course[] = [
                 {course.description}
               </p>
               <div className="pl-5 pr-5 pb-5 flex gap-3 mt-auto">
-                {(course.coursetype === 1 || course.coursetype === 3) && (
+                {/* {(course.coursetype === 1 || course.coursetype === 3) && ( */}
                   <button
                     onClick={() => {
                       if (course.urlpath) {
@@ -451,7 +460,7 @@ const staticRecordedWebinars: Course[] = [
                   >
                     {course.coursetype === 3 ? "Register Now" : "Know More"}
                   </button>
-                )}
+                {/* )} */}
               </div>
             </div>
           ))}
