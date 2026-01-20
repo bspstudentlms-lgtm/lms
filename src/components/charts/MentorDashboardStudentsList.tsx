@@ -560,7 +560,7 @@ const getProgressColor = (pct: number) => {
       <Table>
         <TableHeader className="border-gray-200 border-y bg-gray-50">
           <TableRow>
-            <TableCell isHeader className="py-4 px-4">
+            {/* <TableCell isHeader className="py-4 px-4">
   <button
     type="button"
     className="flex items-center gap-1 font-semibold text-gray-700"
@@ -571,20 +571,100 @@ const getProgressColor = (pct: number) => {
   >
     Name {sortKey === "name" && (sortOrder === "asc" ? "↑" : "↓")}
   </button>
-</TableCell>
+</TableCell> */}
 
-            <TableCell isHeader className="py-4 px-4">
+ <TableCell isHeader className="py-4 px-4">
   <button
     type="button"
-    className="flex items-center gap-1 font-semibold text-gray-700"
-    onClick={() => handleSort("completion")}
+    onClick={() => handleSort("name")}
+    className={`
+      group flex items-center gap-1 font-semibold text-gray-700
+      hover:text-blue-600 focus:outline-none
+      cursor-pointer
+    `}
+    aria-sort={
+      sortKey === "name"
+        ? sortOrder === "asc"
+          ? "ascending"
+          : "descending"
+        : "none"
+    }
   >
-     completion (%)
-    {sortKey === "completion" && (sortOrder === "asc" ? " ↑" : " ↓")}
+    Name
+
+    {/* Sort icon */}
+    <span className="text-xs text-gray-400 group-hover:text-blue-500">
+      {sortKey === "name"
+        ? sortOrder === "asc"
+          ? "▼"
+          : " ▲"
+        : " ↕"}
+    </span>
   </button>
 </TableCell>
 
-            <TableCell isHeader className="py-4 px-4">
+    <TableCell isHeader className="py-4 px-4">
+  <button
+    type="button"
+    onClick={() => handleSort("completion")}
+    className={`
+      group flex items-center gap-1 font-semibold text-gray-700
+      hover:text-blue-600 focus:outline-none
+      cursor-pointer
+    `}
+    aria-sort={
+      sortKey === "completion"
+        ? sortOrder === "asc"
+          ? "ascending"
+          : "descending"
+        : "none"
+    }
+  >
+    completion (%)
+
+    {/* Sort icon */}
+    <span className="text-xs text-gray-400 group-hover:text-blue-500">
+      {sortKey === "completion"
+        ? sortOrder === "asc"
+          ? "▼"
+          : " ▲"
+        : " ↕"}
+    </span>
+  </button>
+</TableCell>
+
+<TableCell isHeader className="py-4 px-4">
+  <button
+    type="button"
+    onClick={() => handleSort("closingdate")}
+    className={`
+      group flex items-center gap-1 font-semibold text-gray-700
+      hover:text-blue-600 focus:outline-none
+      cursor-pointer
+    `}
+    aria-sort={
+      sortKey === "closingdate"
+        ? sortOrder === "asc"
+          ? "ascending"
+          : "descending"
+        : "none"
+    }
+  >
+    Closing date
+
+    {/* Sort icon */}
+    <span className="text-xs text-gray-400 group-hover:text-blue-500">
+      {sortKey === "closingdate"
+        ? sortOrder === "asc"
+          ? "▼"
+          : " ▲"
+        : " ↕"}
+    </span>
+  </button>
+</TableCell>
+
+
+            {/* <TableCell isHeader className="py-4 px-4">
   <button
     type="button"
     className="flex items-center gap-1 font-semibold text-gray-700"
@@ -596,7 +676,7 @@ const getProgressColor = (pct: number) => {
      Closing date
     {sortKey === "closingdate" && (sortOrder === "asc" ? " ↑" : " ↓")}
   </button>
-</TableCell>
+</TableCell> */}
 
             <TableCell isHeader className="py-4 px-4 font-semibold text-gray-700 text-left">Schedule</TableCell>
             <TableCell isHeader className="py-4 px-4 font-semibold text-gray-700 text-left">Assignment</TableCell>
