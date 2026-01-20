@@ -44,7 +44,7 @@ const CourseSkeleton = () => (
 
 const COURSE_TYPE_STYLES = {
   1: {
-    label: "COURSE",
+    label: "📘 Course",
     badge: "bg-blue-600 text-white text-[10px]",
     border: "border-l-blue-500",
     bg: "bg-blue-50/40",
@@ -52,7 +52,7 @@ const COURSE_TYPE_STYLES = {
     dn: "displayNone"
   },
   2: {
-    label: "RECORDED WEBINAR",
+    label: "  🎥 RECORDED WEBINAR",
     badge: "bg-purple-600 text-white text-[10px]",
     border: "border-l-purple-500",
     bg: "bg-purple-50/40",
@@ -60,11 +60,11 @@ const COURSE_TYPE_STYLES = {
     dn: "displayNone"
   },
   3: {
-    label: "LIVE WEBINAR",
-    badge: "bg-green-600 text-white text-[10px]",
+    label: "  🔴 LIVE WEBINAR",
+    badge: "bg-green-600 text-white text-[10px] animate-glow",
     border: "border-l-green-500",
     bg: "bg-green-50/40",
-    cta: "border-green-600 text-green-600 hover:bg-green-600 hover:text-white",
+    cta: "border-green-600 text-green-600 hover:bg-green-600 hover:text-white ",
     dn: "displayBlock"
   },
 };
