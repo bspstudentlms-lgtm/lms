@@ -397,7 +397,7 @@ const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
 
         {/* ACTIONS */}
         <div className="flex gap-3">
-          <button
+          {/* <button
             onClick={() => {
               window.open(`/basics-of-maya-for-beginners`, "_blank");
             }}
@@ -405,7 +405,7 @@ const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
           >
             <ShoppingCart className="w-4 h-4" />
             Buy Course
-          </button>
+          </button> */}
 
           <button
             onClick={() => setShowAccessModal(false)}
