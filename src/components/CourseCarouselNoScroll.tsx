@@ -31,7 +31,7 @@ export default function CourseGrid() {
 const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
 
 
-  const isCourse = (course: Course) => course.coursetype === 2;
+  const isCourse = (course: Course) => course.coursetype === 1;
 
 const isLiveWebinar = (course: Course) =>
   course.coursetype === 3 && course.duration === 1;
@@ -366,7 +366,7 @@ const staticRecordedWebinars: Course[] = [
             <div
               key={course.course_id}
               className={`bg-white shadow-lg flex flex-col h-full relative
-    ${course.coursetype === 3
+    ${course.coursetype === 4
                   ? "border-2 border-green-500 ring-2 ring-green-200"
                   : "border border-gray-100"
                 }
@@ -418,7 +418,7 @@ const staticRecordedWebinars: Course[] = [
                 </div>
               )}
 
-              {course.coursetype === 2 && (
+              {course.coursetype === 1 && (
                 <div className="mx-5 mt-2 bg-blue-50 border border-blue-200 rounded-md px-3 py-1 text-xs font-semibold text-blue-700 flex items-center gap-2">
                   📘 Self-Paced
                   <span className="text-blue-400">•</span>
@@ -430,7 +430,7 @@ const staticRecordedWebinars: Course[] = [
                 {course.description}
               </p>
               <div className="pl-5 pr-5 pb-5 flex gap-3 mt-auto">
-                {(course.coursetype === 2 || course.coursetype === 3) && (
+                {(course.coursetype === 1 || course.coursetype === 3) && (
                   <button
                     onClick={() => {
                       if (course.urlpath) {
