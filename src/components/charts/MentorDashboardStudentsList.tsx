@@ -32,6 +32,14 @@ interface Student {
   [key: string]: any;
 }
 
+interface TableCellProps {
+  isHeader?: boolean;
+  className?: string;
+  children: React.ReactNode;
+  onClick?: React.MouseEventHandler<HTMLTableCellElement>;
+}
+
+
 interface RecentOrdersProps {
   courseId?: string | number | null; // prop from parent
   defaultCourseId?: number; // fallback
@@ -160,6 +168,15 @@ function AnimatedTimer({
 export default function RecentOrders({ courseId, defaultCourseId = 1 }: RecentOrdersProps) {
   const finalCourseId = courseId ?? defaultCourseId;
 
+  const [searchText, setSearchText] = useState("");
+const [scheduleFilter, setScheduleFilter] = useState<"all" | "yes" | "no">("all");
+const [assignmentFilter, setAssignmentFilter] = useState<"all" | "uploaded" | "not_uploaded">("all");
+const [resultFilter, setResultFilter] = useState<"all" | "Pass" | "Fail" | "Pending">("all");
+
+const [sortKey, setSortKey] = useState<"name" | "completion" | "closingdate" | null>(null);
+const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+
+
   const [students, setStudents] = useState<Student[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -173,6 +190,85 @@ export default function RecentOrders({ courseId, defaultCourseId = 1 }: RecentOr
   const [downloadingFor, setDownloadingFor] = useState<string | number | null>(null);
 
   const marksInputRef = useRef<HTMLInputElement | null>(null);
+
+  const filteredAndSortedStudents = React.useMemo(() => {
+  let list = [...students];
+
+  // 🔍 Name search
+  if (searchText.trim()) {
+    const q = searchText.toLowerCase();
+    list = list.filter(s =>
+      `${s.first_name ?? ""} ${s.last_name ?? ""}`.toLowerCase().includes(q)
+    );
+  }
+
+  // 📅 Schedule filter
+  if (scheduleFilter !== "all") {
+    list = list.filter(s =>
+      scheduleFilter === "yes"
+        ? s.status === "booked"
+        : s.status !== "booked"
+    );
+  }
+
+  // 📎 Assignment filter
+  if (assignmentFilter !== "all") {
+    list = list.filter(s =>
+      assignmentFilter === "uploaded"
+        ? !!s.uploaded_file
+        : !s.uploaded_file
+    );
+  }
+
+  // ✅ Result filter
+  if (resultFilter !== "all") {
+    list = list.filter(s => {
+      if (resultFilter === "Pending") return !s.result;
+      return s.result === resultFilter;
+    });
+  }
+
+  // ↕️ Sorting
+  if (sortKey) {
+    list.sort((a, b) => {
+      let aVal: any;
+      let bVal: any;
+
+      switch (sortKey) {
+        case "name":
+          aVal = `${a.first_name ?? ""} ${a.last_name ?? ""}`.toLowerCase();
+          bVal = `${b.first_name ?? ""} ${b.last_name ?? ""}`.toLowerCase();
+          break;
+
+        case "completion":
+          aVal = Number(a.course_per_completed ?? 0);
+          bVal = Number(b.course_per_completed ?? 0);
+          break;
+
+
+        case "closingdate":
+          aVal = a.closingdate ? new Date(a.closingdate).getTime() : 0;
+          bVal = b.closingdate ? new Date(b.closingdate).getTime() : 0;
+          break;
+      }
+
+      if (aVal < bVal) return sortOrder === "asc" ? -1 : 1;
+      if (aVal > bVal) return sortOrder === "asc" ? 1 : -1;
+      return 0;
+    });
+  }
+
+  return list;
+}, [
+  students,
+  searchText,
+  scheduleFilter,
+  assignmentFilter,
+  resultFilter,
+  sortKey,
+  sortOrder,
+]);
+
 
   /* ---------- load mentor id ---------- */
   useEffect(() => {
@@ -394,17 +490,114 @@ export default function RecentOrders({ courseId, defaultCourseId = 1 }: RecentOr
 
   const overlayRef = useRef<HTMLDivElement | null>(null);
 
+ const handleSort = (
+  key: "name" | "completion" | "closingdate"
+) => {
+  if (sortKey === key) {
+    setSortOrder(prev => (prev === "asc" ? "desc" : "asc"));
+  } else {
+    setSortKey(key);
+    setSortOrder("asc"); // 👈 reset order when column changes
+  }
+};
+
+const getProgressColor = (pct: number) => {
+  if (pct === 0) return "#9ca3af";      // gray
+  if (pct < 30) return "#ef4444";       // red
+  if (pct < 70) return "#f59e0b";       // amber
+  return "#22c55e";                     // green
+};
+
+
+
   /* ---------- Render ---------- */
   return (
     <div className="overflow-hidden rounded-2xl mt-8 border border-gray-200 bg-white px-4 pb-3 pt-4">
       <h3 className="text-lg font-semibold text-gray-800 mb-4">Students List</h3>
 
+      <div className="flex flex-wrap gap-3 mb-4">
+  <input
+    type="text"
+    placeholder="Search student name"
+    value={searchText}
+    onChange={(e) => setSearchText(e.target.value)}
+    className="border rounded-md px-3 py-2 text-sm"
+  />
+
+  <select
+    value={scheduleFilter}
+    onChange={(e) => setScheduleFilter(e.target.value as any)}
+    className="border rounded-md px-2 py-2 text-sm"
+  >
+    <option value="all">All Schedule</option>
+    <option value="yes">Scheduled</option>
+    <option value="no">Not Scheduled</option>
+  </select>
+
+  <select
+    value={assignmentFilter}
+    onChange={(e) => setAssignmentFilter(e.target.value as any)}
+    className="border rounded-md px-2 py-2 text-sm"
+  >
+    <option value="all">All Assignments</option>
+    <option value="uploaded">Uploaded</option>
+    <option value="not_uploaded">Not Uploaded</option>
+  </select>
+
+  <select
+    value={resultFilter}
+    onChange={(e) => setResultFilter(e.target.value as any)}
+    className="border rounded-md px-2 py-2 text-sm"
+  >
+    <option value="all">All Results</option>
+    <option value="Pass">Pass</option>
+    <option value="Fail">Fail</option>
+    <option value="Pending">Pending</option>
+  </select>
+</div>
+
+
       <Table>
         <TableHeader className="border-gray-200 border-y bg-gray-50">
           <TableRow>
-            <TableCell isHeader className="py-4 px-4 font-semibold text-gray-700 text-left">Name</TableCell>
-            <TableCell isHeader className="py-4 px-4 font-semibold text-gray-700 text-left">Course completion (%)</TableCell>
-            <TableCell isHeader className="py-4 px-4 font-semibold text-gray-700 text-left">Course Closing date</TableCell>
+            <TableCell isHeader className="py-4 px-4">
+  <button
+    type="button"
+    className="flex items-center gap-1 font-semibold text-gray-700"
+    onClick={() => {
+      setSortKey("name");
+      setSortOrder(prev => (prev === "asc" ? "desc" : "asc"));
+    }}
+  >
+    Name {sortKey === "name" && (sortOrder === "asc" ? "↑" : "↓")}
+  </button>
+</TableCell>
+
+            <TableCell isHeader className="py-4 px-4">
+  <button
+    type="button"
+    className="flex items-center gap-1 font-semibold text-gray-700"
+    onClick={() => handleSort("completion")}
+  >
+     completion (%)
+    {sortKey === "completion" && (sortOrder === "asc" ? " ↑" : " ↓")}
+  </button>
+</TableCell>
+
+            <TableCell isHeader className="py-4 px-4">
+  <button
+    type="button"
+    className="flex items-center gap-1 font-semibold text-gray-700"
+    onClick={() => {
+      setSortKey("closingdate");
+      setSortOrder(prev => (prev === "asc" ? "desc" : "asc"));
+    }}
+  >
+     Closing date
+    {sortKey === "closingdate" && (sortOrder === "asc" ? " ↑" : " ↓")}
+  </button>
+</TableCell>
+
             <TableCell isHeader className="py-4 px-4 font-semibold text-gray-700 text-left">Schedule</TableCell>
             <TableCell isHeader className="py-4 px-4 font-semibold text-gray-700 text-left">Assignment</TableCell>
             <TableCell isHeader className="py-4 px-4 font-semibold text-gray-700 text-left">Assignment Closing date</TableCell>
@@ -421,13 +614,14 @@ export default function RecentOrders({ courseId, defaultCourseId = 1 }: RecentOr
             <TableRow>
               <td colSpan={7} className="text-center text-red-500 py-6">{error}</td>
             </TableRow>
-          ) : students.length === 0 ? (
+          ) : filteredAndSortedStudents.length === 0 ? (
             <TableRow>
               <td colSpan={7} className="text-center text-gray-500 py-6">No students found.</td>
             </TableRow>
           ) : (
-            students.map((student, index) => {
-              const pct = clampPct(student.course_per_completed ?? 0);
+            filteredAndSortedStudents.map((student, index) => {
+              const pct = Number(student.course_per_completed ?? 0);
+              const progressColor = getProgressColor(pct);
               const key = student.id ?? `${student.first_name}-${student.last_name ?? ""}-${index}`;
               const assignmentUrl = resolveAssignmentUrl(student);
               const isDownloading = downloadingFor === key;
@@ -440,22 +634,31 @@ export default function RecentOrders({ courseId, defaultCourseId = 1 }: RecentOr
                     </TableCell>
 
                     <TableCell className="py-4 px-4 text-gray-800 w-48">
-                      <div className="w-full bg-gray-200 rounded-full h-6 overflow-hidden">
-                        <div
-                          role="progressbar"
-                          aria-valuenow={pct}
-                          aria-valuemin={0}
-                          aria-valuemax={100}
-                          className="text-xs font-medium text-center p-0.5 leading-none rounded-full h-6 flex items-center justify-center"
-                          style={{
-                            width: `${pct}%`,
-                            backgroundColor: "rgb(37 99 235)",
-                            color: "white",
-                          }}
-                        >
-                          {pct}%
-                        </div>
-                      </div>
+                     
+                <div
+  className="relative w-10 h-10 rounded-full"
+  style={{
+    background: pct === 0
+      ? "#e5e7eb"
+      : `conic-gradient(${progressColor} ${pct}%, #e5e7eb ${pct}% 100%)`,
+  }}
+  role="progressbar"
+  aria-valuenow={pct}
+  aria-valuemin={0}
+  aria-valuemax={100}
+>
+  <div className="absolute inset-1 bg-white rounded-full flex items-center justify-center">
+    <span
+      className="text-[10px] font-semibold"
+      style={{ color: progressColor }}
+    >
+      {pct}%
+    </span>
+  </div>
+</div>
+
+
+                     
                     </TableCell>
 
                     <TableCell className="py-4 px-4 text-gray-800">{formatDate(student.closingdate)}</TableCell>
