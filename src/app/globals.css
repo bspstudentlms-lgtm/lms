@@ -1120,3 +1120,7 @@ strong, b {
     flex: 0 0 25%;
   }
 }
+
+.displayNone{
+  display: none;
+}

@@ -9,6 +9,8 @@ import EnrollModal from "@/components/EnrollModal";
 
 /* ================= TYPES ================= */
 interface Course {
+  course_id: number;
+  coursetype: number;
   id: number;
   title: string;
   image: string;
@@ -40,6 +42,38 @@ const CourseSkeleton = () => (
   </div>
 );
 
+const COURSE_TYPE_STYLES = {
+  1: {
+    label: "COURSE",
+    badge: "bg-blue-600 text-white text-[10px]",
+    border: "border-l-blue-500",
+    bg: "bg-blue-50/40",
+    cta: "border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white",
+    dn: "displayNone"
+  },
+  2: {
+    label: "RECORDED WEBINAR",
+    badge: "bg-purple-600 text-white text-[10px]",
+    border: "border-l-purple-500",
+    bg: "bg-purple-50/40",
+    cta: "border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white",
+    dn: "displayNone"
+  },
+  3: {
+    label: "LIVE WEBINAR",
+    badge: "bg-green-600 text-white text-[10px]",
+    border: "border-l-green-500",
+    bg: "bg-green-50/40",
+    cta: "border-green-600 text-green-600 hover:bg-green-600 hover:text-white",
+    dn: "displayBlock"
+  },
+};
+
+const badgeBase =
+  "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-semibold tracking-wide";
+
+
+
 export default function MyCourses() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -56,6 +90,7 @@ export default function MyCourses() {
     setEnrolledCourses(enrolled ? enrolled.split(",").map(c => c.trim()) : []);
   }, []);
 
+  
   // useEffect(() => {
   //   const userId = localStorage.getItem("userId");
   //   axios
@@ -109,6 +144,11 @@ export default function MyCourses() {
 
           let progress = 0;
 
+          const style =
+  COURSE_TYPE_STYLES[(course as any).coursetype] ??
+  COURSE_TYPE_STYLES[1];
+
+
   if (course.is_coursecompleted === 1) {
     progress = 100;
   } else if (course.course_per_completed > 0) {
@@ -117,9 +157,33 @@ export default function MyCourses() {
     progress = 0;
   }
 
+  const getLiveCountdown = (dateStr?: string) => {
+  if (!dateStr) return null;
+
+  const end = new Date(dateStr).getTime();
+  const now = Date.now();
+  const diff = end - now;
+
+  if (diff <= 0) return "Session Expired";
+
+  const h = Math.floor(diff / (1000 * 60 * 60));
+  const m = Math.floor((diff / (1000 * 60)) % 60);
+
+  return `${h}h ${m}m left`;
+};
+
+const isLive = (course as any).coursetype === 3;
+const liveCountdown = getLiveCountdown((course as any).live_end_time);
+
+
     return (
-      <div className="relative rounded-2xl border bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+      <div
+  className={`relative rounded-2xl border-l-4 p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg
+  ${style.border} ${style.bg}`}
+>
         <div className="flex gap-5">
+
+        
           {/* IMAGE */}
           <div className="relative h-28 w-28 shrink-0 overflow-hidden rounded-xl bg-gray-100">
             <Image
@@ -128,6 +192,7 @@ export default function MyCourses() {
               fill
               className="object-cover"
             />
+
 
             {/* COMPLETED RIBBON */}
             {isCompleted && (
@@ -140,28 +205,53 @@ export default function MyCourses() {
           {/* CONTENT */}
           <div className="flex flex-1 flex-col justify-between">
             <div>
-              <h4 className="text-lg font-semibold text-gray-900 leading-snug">
+              <h4 className="text-lg font-semibold text-gray-900 leading-snug min-h-[54px]">
                 {course.title}
               </h4>
 
+              <span style={{marginRight: "10px"}}
+  className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${style.badge}`}
+>
+  {style.label} 
+</span>
+ {enrolled ? (
+                  <span className="rounded-full bg-green-100 px-4 py-1.5 text-[10px] font-semibold text-green-700">
+                    Enrolled
+                  </span>
+                ) : (
+                  <span className="rounded-full bg-orange-100 px-4 py-1.5 text-[10px] font-semibold text-orange-600">
+                    Not Enrolled
+                  </span>
+                )}
+
+{isLive && (
+  <span className="mt-3 inline-flex items-center gap-2 rounded-lg bg-green-100 px-3 py-1 text-sm font-semibold text-green-700">
+    ⏰ {liveCountdown}
+  </span>
+)}
+
+
               <div className="mt-3 flex flex-wrap items-center gap-4">
-                <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                {/* <div className="flex items-center gap-2 text-sm font-medium text-gray-700">
                   <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-100">
                     ⏱
                   </span>
                   {course.duration} Hours
-                </div>
+                </div> */}
 
-                {enrolled ? (
-                  <span className="rounded-full bg-green-100 px-4 py-1.5 text-sm font-semibold text-green-700">
-                    Enrolled
-                  </span>
-                ) : (
-                  <span className="rounded-full bg-orange-100 px-4 py-1.5 text-sm font-semibold text-orange-600">
-                    Not Enrolled
-                  </span>
-                )}
+               
               </div>
+              {/* {course.coursetype} */}
+
+              <div className="flex gap-4 text-xs mb-4 text-green-700 mt-3">
+               
+      <span className={`flex items-center gap-1 ${style.dn}`}>
+        📅 {course.date ?? "Coming soon"}
+      </span>
+      <span className="flex items-center gap-1">
+        ⏰ {course.duration + " Hours" ?? "To be announced"}
+      </span>
+    </div>
 
               {/* PROGRESS */}
               {enrolled && (
@@ -180,8 +270,10 @@ export default function MyCourses() {
               )}
             </div>
 
+            
+
             {/* ACTION */}
-            <div className="mt-5">
+            <div className="mt-3">
   {enrolled ? (
     course.is_coursecompleted == 1 ? (
       <span className="inline-flex items-center rounded-full bg-green-100 px-4 py-2 text-sm font-semibold text-green-700">
@@ -228,20 +320,18 @@ export default function MyCourses() {
     )
   ) : (
     <button
-      onClick={() =>
-        course.urlpath
-          ? window.open(course.urlpath, "_blank")
-          : alert("URL not available")
-      }
-      // onClick={() => {
-      // setSelectedCourseId(course.id); // ✅ store course id
-      // setOpen1(true);                 // ✅ open modal
-  //}}
-      className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-6 py-2.5 text-sm font-semibold text-gray-800 hover:bg-gray-100 transition"
-    >
-      View More
-      <ArrowRightIcon />
-    </button>
+  onClick={() =>
+    course.urlpath
+      ? window.open(course.urlpath, "_blank")
+      : alert("URL not available")
+  }
+  className={`inline-flex items-center gap-2 rounded-lg border px-6 py-2.5 text-sm font-semibold transition
+    ${style.cta}`}
+>
+  View More
+  <ArrowRightIcon />
+</button>
+
   )}
 </div>
           </div>
