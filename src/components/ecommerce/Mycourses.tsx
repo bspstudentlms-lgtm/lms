@@ -189,8 +189,10 @@ export default function MyCourses() {
 };
 
 const isLive = (course as any).coursetype === 3;
+
 const liveCountdown = getLiveCountdown((course as any).live_end_time);
 const cta = CTA_CONFIG[course.coursetype];
+const hasAnyEnrollment = enrolledCourses.length > 0;
 
 
     return (
@@ -230,16 +232,18 @@ const cta = CTA_CONFIG[course.coursetype];
   className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${style.badge}`}
 >
   {style.label} 
-</span>
- {enrolled ? (
+</span> 
+{Number(course.coursetype) !== 2 && (
+  enrolled ? (
                   <span className="rounded-full bg-green-100 px-4 py-1.5 text-[10px] font-semibold text-green-700">
-                    Enrolled
+                    Enrolled 
                   </span>
                 ) : (
                   <span className="rounded-full bg-orange-100 px-4 py-1.5 text-[10px] font-semibold text-orange-600">
-                    Not Enrolled
+                    Not Enrolled 
                   </span>
-                )}
+                )
+)}
 
 {isLive && (
   <span className="mt-3 inline-flex items-center gap-2 rounded-lg bg-green-100 px-3 py-1 text-sm font-semibold text-green-700">
@@ -291,7 +295,7 @@ const cta = CTA_CONFIG[course.coursetype];
 
             {/* ACTION */}
             <div className="mt-3">
-  {enrolled ? (
+ {enrolled ? (
     course.is_coursecompleted == 1 ? (
       <span className="inline-flex items-center rounded-full bg-green-100 px-4 py-2 text-sm font-semibold text-green-700">
         <Link
@@ -335,19 +339,38 @@ const cta = CTA_CONFIG[course.coursetype];
         <ArrowRightIcon />
       </Link>
     )
+  
+  ) : (hasAnyEnrollment) ? (
+    
+    <Link
+      href={`/coursedetails/${course.id}`}
+      onClick={() =>
+        localStorage.setItem("courseSourceMenu", "mycourses")
+      }
+      className={`inline-flex items-center justify-center gap-2 w-[50%] rounded-lg px-6 py-2.5 text-sm font-semibold transition border ${cta.className}`}
+    >
+      <span> {
+         course.is_coursecompleted
+          ? "Completed ✓"
+          : course.last_watched_topic_id > 0 
+          ?   "Continue Watching"
+          : cta.text
+        } </span>
+      <ArrowRightIcon />
+    </Link>
   ) : (
+    
     <button
-  onClick={() =>
-    course.urlpath
-      ? window.open(course.urlpath, "_blank")
-      : alert("URL not available")
-  }
-  className={`inline-flex items-center justify-center gap-2 w-full rounded-lg px-6 py-2.5 text-sm font-semibold transition border ${cta.className}`} style={{width: "50%"}}
->
-  <span className="whitespace-nowrap">{cta.text}</span>
-  <ArrowRightIcon className="shrink-0" />
-</button>
-
+      onClick={() =>
+        alert(
+          "Please purchase at least one course to watch these webinar add-ons."
+        )
+      }
+      className={`inline-flex items-center justify-center gap-2 w-[50%] rounded-lg px-6 py-2.5 text-sm font-semibold transition border ${cta.className}`}
+    >
+      <span>{cta.text} </span>
+      <ArrowRightIcon />
+    </button>
   )}
 </div>
           </div>
