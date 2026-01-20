@@ -29,6 +29,30 @@ export default function MentorCalendar() {
       .catch(console.error);
   }, []);
 
+function isSessionExpired(dayDate: number, timeStr: string) {
+  // Example: "11 AM" or "2 PM"
+  const [time, meridiem] = timeStr.split(" ");
+  let hours = parseInt(time, 10);
+
+  if (meridiem === "PM" && hours !== 12) hours += 12;
+  if (meridiem === "AM" && hours === 12) hours = 0;
+
+  const sessionDateTime = new Date(
+    2026,          // year
+    0,             // January (0-based)
+    dayDate,       // date (20)
+    hours,         // hour
+    0,             // minute
+    0
+  );
+
+  return Date.now() > sessionDateTime.getTime();
+}
+
+
+
+
+
   const dayEvents = events.filter(e => e.dayIndex === activeDay);
 
   return (
@@ -76,32 +100,53 @@ export default function MentorCalendar() {
         </div>
       ) : (
         <div className="space-y-4">
-          {dayEvents.map((event, idx) => (
-            <div
-              key={idx}
-              className="flex items-center justify-between bg-green-50 border border-green-300 rounded-xl p-4"
-            >
-              <div>
-                <p className="font-semibold flex items-center gap-2">
-                  <Video className="w-4 h-4 text-green-600" />
-                  {event.title}
-                </p>
-                <p className="text-sm text-gray-600 mt-1">
-                  ⏰ {event.time}
-                </p>
-              </div>
+          {dayEvents.map((event, idx) => {
+  const expired = isSessionExpired(
+  days[activeDay].date,
+  event.time
+);
 
-              {event.zoom && (
-                <a
-                  href={event.zoom}
-                  target="_blank"
-                  className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg text-sm font-semibold"
-                >
-                  Join Zoom
-                </a>
-              )}
-            </div>
-          ))}
+
+  return (
+    <div
+      key={idx}
+      className={`flex items-center justify-between rounded-xl p-4 border
+        ${expired
+          ? "bg-gray-50 border-gray-200"
+          : "bg-green-50 border-green-300"}
+      `}
+    >
+      <div>
+        <p className="font-semibold flex items-center gap-2">
+          <Video className="w-4 h-4 text-green-600" />
+          {event.title}
+        </p>
+        <p className="text-sm text-gray-600 mt-1">
+          ⏰ {event.time}
+        </p>
+      </div>
+
+      {expired ? (
+  <span className="text-sm font-semibold text-red-500">
+    Session Expired
+  </span>
+) : event.zoom ? (
+  <a
+    href={event.zoom}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg text-sm font-semibold"
+  >
+    Join Zoom
+  </a>
+) : (
+  <span className="text-sm text-gray-400">No Zoom link</span>
+)}
+
+    </div>
+  );
+})}
+
         </div>
       )}
     </div>

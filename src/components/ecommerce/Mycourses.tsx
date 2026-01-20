@@ -69,8 +69,24 @@ const COURSE_TYPE_STYLES = {
   },
 };
 
-const badgeBase =
-  "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 font-semibold tracking-wide";
+const CTA_CONFIG = {
+  1: {
+    text: "Know More",
+    className:
+      "border-red-600 text-red-600 hover:bg-red-600 hover:text-white",
+  },
+  2: {
+    text: "Watch Now",
+    className:
+      "border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white",
+  },
+  3: {
+    text: "Register Now",
+    className:
+      "border-green-600 text-green-600 hover:bg-green-600 hover:text-white",
+  },
+};
+
 
 
 
@@ -174,6 +190,7 @@ export default function MyCourses() {
 
 const isLive = (course as any).coursetype === 3;
 const liveCountdown = getLiveCountdown((course as any).live_end_time);
+const cta = CTA_CONFIG[course.coursetype];
 
 
     return (
@@ -325,11 +342,10 @@ const liveCountdown = getLiveCountdown((course as any).live_end_time);
       ? window.open(course.urlpath, "_blank")
       : alert("URL not available")
   }
-  className={`inline-flex items-center gap-2 rounded-lg border px-6 py-2.5 text-sm font-semibold transition
-    ${style.cta}`}
+  className={`inline-flex items-center justify-center gap-2 w-full rounded-lg px-6 py-2.5 text-sm font-semibold transition border ${cta.className}`} style={{width: "50%"}}
 >
-  View More
-  <ArrowRightIcon />
+  <span className="whitespace-nowrap">{cta.text}</span>
+  <ArrowRightIcon className="shrink-0" />
 </button>
 
   )}
