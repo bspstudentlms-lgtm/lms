@@ -26,6 +26,7 @@ const [username, setUsername] = useState<string | null>(null);
   const [userid, setUserId] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const [phone, setPhone] = useState<string>("");
+   const [alreadyEnrolled, setAlreadyEnrolled] = useState(false);
   // The empty array ensures this runs only once after component mounts
 
   const [formData, setFormData] = useState({
@@ -90,55 +91,113 @@ console.log('phoneno'+storedPhone);
       .catch(console.error);
   }, [courseId]);
 
+
   /* -------------------- INPUT HANDLER -------------------- */
-  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    if (name === "coupon") {
-      if (value.length < 4) {
-        setCouponRemarks("");
-        return;
-      }
-
-      if (!formData.course) {
-        alert("Please select a course first");
-        return;
-      }
-
-      try {
-        const res = await fetch(
-          "https://www.backstagepass.co.in/reactapi/getpaymentapi.php",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              course: formData.course,
-              coupon: value,
-            }),
-          }
-        );
-
-        const data = await res.json();
-
-        if (data?.length) {
-          setPaymentDetails({
-            originalPayment: data[0].orignialpayment,
-            discountValue: data[0].discountvalue,
-            finalAmount: data[0].finalamount,
-          });
-
-          setCouponRemarks(data[0].remarkscoupon || "");
-        }
-      } catch {
-        setCouponRemarks("Invalid coupon");
-      }
+  const checkAlreadyEnrolled = async (email: string, course: string) => {
+  const res = await fetch(
+    "https://www.backstagepass.co.in/reactapi/check_enrollment.php",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "no-cache",
+      },
+      cache: "no-store",
+      body: JSON.stringify({ email, course }),
     }
-  };
+  );
+
+  return res.json();
+};
+const isValidEmail = (email: string) =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+const handleEmailBlur = async () => {
+ 
+  if (!formData.email || !isValidEmail(formData.email)) return;
+  if (!formData.course) return;
+
+  const enrollment = await checkAlreadyEnrolled(
+    formData.email,
+    formData.course
+  );
+
+ if (enrollment.alreadyEnrolled) {
+  setAlreadyEnrolled(true);
+  setCouponRemarks("You are already enrolled in this course");
+} else {
+  setAlreadyEnrolled(false);
+  setCouponRemarks("");
+}
+};
+  const handleInputChange = async (
+  e: React.ChangeEvent<HTMLInputElement>
+) => {
+  const { name, value } = e.target;
+
+  setFormData((prev) => ({
+    ...prev,
+    [name]: value,
+  }));
+ const email = formData.email; 
+  const course = formData.course;
+
+  if (!course) {
+    alert("Please select a course first");
+    return;
+  }
+
+  // if (!email) {
+  //   alert("Please enter email first");
+  //   return;
+  // }
+//        const enrollment = await checkAlreadyEnrolled(email, course);
+// console.log('enrolled',enrollment?.alreadyEnrolled);
+//   if (enrollment?.alreadyEnrolled) {
+//     setCouponRemarks("You are already enrolled in this course");
+//     return;
+//   }
+  // COUPON CHECK
+  if (name === "coupon") {
+    if (value.length < 4) {
+      setCouponRemarks("");
+      return;
+    }
+
+  
+
+    //  CHECK DUPLICATE ENROLLMENT
+
+    // CONTINUE COUPON FLOW
+    try {
+      const res = await fetch(
+        "https://www.backstagepass.co.in/reactapi/getpaymentapi.php",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            course: formData.course,
+            coupon: value,
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (data?.length) {
+        setPaymentDetails({
+          originalPayment: data[0].orignialpayment,
+          discountValue: data[0].discountvalue,
+          finalAmount: data[0].finalamount,
+        });
+
+        setCouponRemarks(data[0].remarkscoupon || "");
+      }
+    } catch {
+      setCouponRemarks("Invalid coupon");
+    }
+  }
+};
+
 
   /* -------------------- COURSE CHANGE -------------------- */
   const handleCourseChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -188,14 +247,16 @@ console.log('phoneno'+storedPhone);
         {/* FORM */}
         <form
           className="space-y-4"
-          action="https://www.backstagepass.co.in/payment_process.php"
-          method="POST"
+  action="https://www.backstagepass.co.in/payment_process.php"
+  method="POST"
+        
         >
           <Input
             label="Full Name"
             name="fullname"
             value={formData.fullname}
             onChange={handleInputChange}
+             required={!alreadyEnrolled}
           />
 
           <Input
@@ -204,6 +265,7 @@ console.log('phoneno'+storedPhone);
             type="tel"
             value={formData.PhoneNumber}
             onChange={handleInputChange}
+             required={!alreadyEnrolled}
           />
             <input type="hidden" name="url" value={formData.url} />
             <input type="hidden" name="course" value={formData.course} />
@@ -214,6 +276,8 @@ console.log('phoneno'+storedPhone);
             type="email"
             value={formData.email}
             onChange={handleInputChange}
+            onBlur={handleEmailBlur}
+             required={!alreadyEnrolled}
           />
 
           {/* <select
@@ -283,12 +347,25 @@ console.log('phoneno'+storedPhone);
   </div>
 )}
 
-          <button
+          {/* <button
             type="submit"
             className="w-full py-3 bg-red-600 text-white rounded-full"
           >
             Submit & Enroll
-          </button>
+          </button> */}
+          <button
+  type="submit"
+  disabled={alreadyEnrolled}
+  className={`w-full py-3 rounded-xl font-semibold transition
+    ${
+      alreadyEnrolled
+        ? "bg-gray-400 cursor-not-allowed"
+        : "bg-black text-white hover:bg-gray-800"
+    }
+  `}
+>
+  {alreadyEnrolled ? "Already Enrolled" : "Proceed to Payment"}
+</button>
         </form>
       </div>
 

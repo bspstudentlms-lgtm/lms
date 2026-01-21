@@ -9,6 +9,8 @@ import EnrollModal from "@/components/EnrollModal";
 
 /* ================= TYPES ================= */
 interface Course {
+  date: string;
+  watched_topics: number;
   course_id: number;
   coursetype: number;
   id: number;
@@ -191,7 +193,8 @@ export default function MyCourses() {
 const isLive = (course as any).coursetype === 3;
 
 const liveCountdown = getLiveCountdown((course as any).live_end_time);
-const cta = CTA_CONFIG[course.coursetype];
+
+const cta = CTA_CONFIG[course.coursetype as keyof typeof CTA_CONFIG];
 const hasAnyEnrollment = enrolledCourses.length > 0;
 
 
@@ -270,7 +273,7 @@ const hasAnyEnrollment = enrolledCourses.length > 0;
         📅 {course.date ?? "Coming soon"}
       </span>
       <span className="flex items-center gap-1">
-        ⏰ {course.duration + " Hours" ?? "To be announced"}
+        ⏰ {course.duration ? `${course.duration} Hours` : "To be announced"}
       </span>
     </div>
 
@@ -352,7 +355,7 @@ const hasAnyEnrollment = enrolledCourses.length > 0;
       <span> {
          course.is_coursecompleted
           ? "Completed ✓"
-          : course.last_watched_topic_id > 0 
+          : course.watched_topics > 0 
           ?   "Continue Watching"
           : cta.text
         } </span>
