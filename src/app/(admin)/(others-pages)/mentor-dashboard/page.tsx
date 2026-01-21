@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import MentorDashboards from "@/components/charts/MentorDashboard";
 
 type Session = {
+  expired_message: string;
+  session_status: string;
   id: number;
   first_name: string;
   last_name: string;
@@ -31,23 +33,16 @@ const MentorDashboard = () => {
 //     setMentorId(localStorage.getItem("mentor_id"));
 //   }
 // }, []);
-console.log('mentorid'+user);
-if (loading) return <div>Loading...</div>;
-if (!user || user.role !== "mentor") return null;
-const mentorId = user.mentor_id;
+  useEffect(() => {
+    if (loading) return;
 
+    if (!user || user.role !== "mentor") {
+      router.replace("/login");
+    }
+  }, [loading, user, router]);
 
-  // const mentor_id =
-  //   typeof window !== "undefined" ? localStorage.getItem("mentor_id") : null;
-
-  /* ================= AUTH ================= */
- useEffect(() => {
-  if (loading) return;
-
-  if (user && user.role !== "mentor") {
-    router.replace("/");
-  }
-}, [user, loading, router]);
+  /* ================= API ================= */
+  const mentorId = user?.mentor_id;
 
 
   /* ================= API ================= */
@@ -257,23 +252,29 @@ const mentorId = user.mentor_id;
                       {row.request.summary}
                     </p>
                     <div className="flex gap-3 mt-4">
-                      <button
-                        onClick={() =>
-                          updateStatus(row.request.id, "accepted")
-                        }
-                        className="px-4 py-2 text-sm rounded-md bg-green-600 hover:bg-green-700 text-white"
-                      >
-                        Accept
-                      </button>
-                      <button
-                        onClick={() =>
-                          updateStatus(row.request.id, "declined")
-                        }
-                        className="px-4 py-2 text-sm rounded-md bg-red-600 hover:bg-red-700 text-white"
-                      >
-                        Decline
-                      </button>
-                    </div>
+  {row.request.session_status === "expired" ? (
+    <span className="text-sm font-semibold text-red-500">
+      {row.request.expired_message}
+    </span>
+  ) : (
+    <>
+      <button
+        onClick={() => updateStatus(row.request.id, "accepted")}
+        className="px-4 py-2 text-sm rounded-md bg-green-600 hover:bg-green-700 text-white"
+      >
+        Accept
+      </button>
+
+      <button
+        onClick={() => updateStatus(row.request.id, "declined")}
+        className="px-4 py-2 text-sm rounded-md bg-red-600 hover:bg-red-700 text-white"
+      >
+        Decline
+      </button>
+    </>
+  )}
+</div>
+
                   </div>
                 ) : (
                   <div className="flex flex-col items-left justify-left bg-gray-50 border border-dashed rounded-xl p-8 text-left">
