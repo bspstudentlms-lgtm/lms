@@ -40,16 +40,21 @@ interface Student {
 
 export default function RecentOrders() {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedCourse, setSelectedCourse] =  useState<Course | null>(null);
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+  const [sortConfig, setSortConfig] = useState({
+  key: null,        // "title" | "duration"
+  direction: "asc", // "asc" | "desc"
+});
+
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [enrolledCourses, setEnrolledCourses] = useState<string[]>([]);
-// Define the table data using the interface
- const [userId, setUserId] = useState<string | null>(null);
+  // Define the table data using the interface
+  const [userId, setUserId] = useState<string | null>(null);
   useEffect(() => {
     // This runs only on client side after first render
-    const storedUserId  = localStorage.getItem('userId');
+    const storedUserId = localStorage.getItem('userId');
     setUserId(storedUserId);
   }, []);
   useEffect(() => {
@@ -57,6 +62,27 @@ export default function RecentOrders() {
     const parsed = enrolled ? enrolled.split(",").map((c) => c.trim()) : [];
     setEnrolledCourses(parsed);
   }, []);
+
+  const handleSort = (key) => {
+  setSortConfig((prev) => ({
+    key,
+    direction:
+      prev.key === key && prev.direction === "asc" ? "desc" : "asc",
+  }));
+};
+
+const SortArrow = ({ column }) => {
+  if (sortConfig.key !== column) return <span className="ml-1">↕</span>;
+  return (
+    <span className="ml-1">
+      {sortConfig.direction === "asc" ? "↑" : "↓"}
+    </span>
+  );
+};
+
+
+
+
 
   useEffect(() => {
     axios
@@ -72,9 +98,9 @@ export default function RecentOrders() {
   }, []);
 
   const openModal = (course: Course) => {
-  setSelectedCourse(course);
-  setIsOpen(true);
-};
+    setSelectedCourse(course);
+    setIsOpen(true);
+  };
 
   const closeModal = () => {
     setIsOpen(false);
@@ -96,34 +122,52 @@ export default function RecentOrders() {
   const filteredCourses = courses.filter((course) =>
     course.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
-const [students, setStudents] = useState<Student[]>([]);
 
-useEffect(() => {
-  if (selectedCourse) {
-    fetch(`https://backstagepass.co.in/reactapi/get_students_by_course_and_mentor.php?course_id=${selectedCourse.id}&mentor_id=${userId}`)
-      .then(res => res.json())
-      .then(data => {
-        setStudents(data);
-      })
-      .catch(err => console.error(err));
+  const sortedCourses = [...filteredCourses].sort((a, b) => {
+  if (!sortConfig.key) return 0;
+
+  if (sortConfig.key === "title") {
+    return sortConfig.direction === "asc"
+      ? a.title.localeCompare(b.title)
+      : b.title.localeCompare(a.title);
   }
-}, [selectedCourse,userId]);
+
+  if (sortConfig.key === "duration") {
+    return sortConfig.direction === "asc"
+      ? a.duration - b.duration
+      : b.duration - a.duration;
+  }
+
+  return 0;
+});
+  const [students, setStudents] = useState<Student[]>([]);
+
+  useEffect(() => {
+    if (selectedCourse) {
+      fetch(`https://backstagepass.co.in/reactapi/get_students_by_course_and_mentor.php?course_id=${selectedCourse.id}&mentor_id=${userId}`)
+        .then(res => res.json())
+        .then(data => {
+          setStudents(data);
+        })
+        .catch(err => console.error(err));
+    }
+  }, [selectedCourse, userId]);
   return (
-    <div className="overflow-hidden rounded-2xl mt-8 border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6">
+    <div className="mt-4 rounded-xl ">
       <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-          Courses List
+            Courses List
           </h3>
         </div>
 
-       
+
 
         <div className="flex items-center gap-3">
-        <div className="hidden lg:block">
+          <div className="hidden lg:block">
             <form onSubmit={(e) => {
-                e.preventDefault(); // prevent page refresh on enter
-              }}>
+              e.preventDefault(); // prevent page refresh on enter
+            }}>
               <div className="relative">
                 <span className="absolute -translate-y-1/2 left-4 top-1/2 pointer-events-none">
                   <svg
@@ -143,7 +187,7 @@ useEffect(() => {
                   </svg>
                 </span>
                 <input
-                 // ref={inputRef}
+                  // ref={inputRef}
                   type="text"
                   placeholder="Search or type command..."
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -166,238 +210,242 @@ useEffect(() => {
             <TableRow>
               <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
-                Courses
+                
+                 <button className="flex items-center gap-1 text-xs font-semibold uppercase tracking-wide
+               text-gray-500 hover:text-gray-800 dark:hover:text-white" onClick={() => handleSort("title")}>Courses <SortArrow column="title" /></button>
               </TableCell>
               <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
-                Duration
+                <button className="flex items-center gap-1 text-xs font-semibold uppercase tracking-wide
+               text-gray-500 hover:text-gray-800 dark:hover:text-white" onClick={() => handleSort("duration")}>Duration <SortArrow column="duration" /></button>
+                
               </TableCell>
+
+              <TableCell
+                isHeader
+              >
+                
+                <button className="flex items-center gap-1 text-xs font-semibold uppercase tracking-wide
+               text-gray-500 hover:text-gray-800 dark:hover:text-white">Students List</button>
+              </TableCell>
+
 
               <TableCell
                 isHeader
                 className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
-                Students List
+                <button className="flex items-center gap-1 text-xs font-semibold uppercase tracking-wide
+               text-gray-500 hover:text-gray-800 dark:hover:text-white">Action</button>
               </TableCell>
-             
-              
-              <TableCell
-                isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                Action
-              </TableCell>
-              
+
             </TableRow>
           </TableHeader>
 
           {/* Table Body */}
 
           <TableBody className="divide-y divide-gray-100 dark:divide-gray-800">
-  {filteredCourses.length > 0 ? (
-    filteredCourses.map((course, index) => {
-      const isEnrolled = enrolledCourses.includes(course.shortname);
-      return (
-        <TableRow key={index} className="">
-          <TableCell className="py-3">
-            <div className="flex items-center gap-3">
-              <div className="h-[100px] w-[100px] overflow-hidden rounded-md">
-                <Image
-                  width={100}
-                  height={100}
-                  src={course.image}
-                  className="h-[100px] w-[100px]"
-                  alt={course.title}
-                />
-              </div>
-              <div>
-                <p className="font-medium text-gray-800 text-theme-lg dark:text-white/90">
-                  {course.title}
-                </p>
-                <span className="text-gray-500 text-theme-xs dark:text-gray-400">
-
-                
-                  
-                </span>
-              </div>
-            </div>
-          </TableCell>
-          <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-            {course.duration} {"Hours"}
-          </TableCell>
-          
-          <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-            
-
-  <Badge variant="light" color="primary">
-  <a
-    href={`mentor-studentsList/${course.id}`}
-    style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}
-  >
-    View list
-  </a>
-</Badge>
-              
-           
+            {sortedCourses.length > 0 ? (
+              sortedCourses.map((course, index) => {
+                const isEnrolled = enrolledCourses.includes(course.shortname);
+                return (
+                  <TableRow key={index} className="transition-all hover:bg-gray-50 dark:hover:bg-white/[0.04]">
+                    <TableCell className="py-3">
+                      <div className="flex items-center gap-4">
+                        <div className="h-14 w-14 overflow-hidden rounded-lg border">
+                          <Image
+                            width={56}
+                            height={56}
+                            src={course.image}
+                            className="h-full w-full object-cover"
+                            alt={course.title}
+                          />
+                        </div>
+                        <div className="max-w-[360px]">
+                          <p className="font-normal text-gray-600 dark:text-white/90 line-clamp-2">
+                            {course.title}
+                          </p>
+                          <span className="text-gray-500 text-theme-xs dark:text-gray-400">
 
 
-          </TableCell>
 
-          {selectedCourse && (
-        <Modal
-          isOpen={isOpen}
-          onClose={closeModal}
-          className="max-w-[1000px] p-5 lg:p-10"
-        >
-          <h4 className="font-semibold text-gray-800 mb-7 text-title-sm dark:text-white/90">
-           Students List for {selectedCourse.title}
-          </h4>
-          <Table>
-          {/* Table Header */}
-          <TableHeader className="border-gray-100 dark:border-gray-800 border-y">
-            <TableRow>
-              <TableCell
-                isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                Name
-              </TableCell>
-              <TableCell
-                isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-               Course completion (%)
-              </TableCell>
+                          </span>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                      {course.duration} {"Hours"}
+                    </TableCell>
 
-              <TableCell
-                isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-               Closing date
-              </TableCell>
-             
-              
-              <TableCell
-                isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                sechudle
-              </TableCell>
-              
-            </TableRow>
-          </TableHeader>
-
-          {/* Table Body */}
-
-          <TableBody className="divide-y divide-gray-100 dark:divide-gray-800">
-   {students.map((student, index) => (
-        <TableRow key={index} className="">
-          <TableCell className="py-3">
-            <div className="flex items-center gap-3">
-              
-              <div>
-                <p className="font-medium text-gray-800 text-theme-lg dark:text-white/90">
-                  {student.first_name} {student.last_name || ""}
-                </p>
-                <span className="text-gray-500 text-theme-xs dark:text-gray-400">
-
-                
-                  
-                </span>
-              </div>
-            </div>
-          </TableCell>
-          <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400 pr-3">
-            
-  <div className="w-full bg-gray-200 rounded-full dark:bg-gray-700">
-  <div
-    className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
-    style={{ width: `${student.course_per_completed}%` }}
-  >
-    {student.course_per_completed}%
-  </div>
-</div>
-
-          </TableCell>
-          
-          <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-            
-
- 
-      <span style={{ cursor: 'pointer' }}>
-         {new Date(student.closingdate).toLocaleDateString()}
-      </span>
-   
+                    <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
 
 
-              
-           
+                      <Badge variant="light" color="primary">
+                        <a
+                          href={`mentor-studentsList/${course.id}`}
+                          style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}
+                        >
+                          View list
+                        </a>
+                      </Badge>
 
 
-          </TableCell>
-
-          
-        
 
 
-          <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-            
+                    </TableCell>
 
-  <Badge variant="light" color="primary">
-    {student.status === 'booked' ? 'Yes' : 'No'}
-  </Badge>
+                    {selectedCourse && (
+                      <Modal
+                        isOpen={isOpen}
+                        onClose={closeModal}
+                        className="max-w-[1000px] p-5 lg:p-10"
+                      >
+                        <h4 className="font-semibold text-gray-800 mb-7 text-title-sm dark:text-white/90">
+                          Students List for {selectedCourse.title}
+                        </h4>
+                        <Table>
+                          {/* Table Header */}
+                          <TableHeader className="border-gray-100 dark:border-gray-800 border-y">
+                            <TableRow>
+                              <TableCell
+                                isHeader
+                                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                              >
+                                Name
+                              </TableCell>
+                              <TableCell
+                                isHeader
+                                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                              >
+                                Course completion (%)
+                              </TableCell>
 
-              
-           
-
-
-          </TableCell>
-        </TableRow>
-        ))}
-</TableBody>
-
-        </Table>
-          <div className="flex items-center justify-end w-full gap-3 mt-8">
-            <Button size="sm" variant="outline" onClick={closeModal}>
-              Close
-            </Button>
-            
-          </div>
-        </Modal>
-        )}
-
-
-          <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-            
-
-  <Badge variant="light" color="primary" endIcon={<ArrowRightIcon />}>
-    <Link href={`/mentor-calendar/${course.id}`}>
-      <span style={{ cursor: 'pointer' }}>
-        Manage Availability
-      </span>
-    </Link>
-  </Badge>
-
-              
-           
+                              <TableCell
+                                isHeader
+                                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                              >
+                                Closing date
+                              </TableCell>
 
 
-          </TableCell>
-        </TableRow>
-      );
-    })
-  ) : (
-    <TableRow>
-      <td colSpan={4} className="text-center text-gray-500">
-        No courses available.
-      </td>
-    </TableRow>
-  )}
-</TableBody>
+                              <TableCell
+                                isHeader
+                                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                              >
+                                sechudle
+                              </TableCell>
+
+                            </TableRow>
+                          </TableHeader>
+
+                          {/* Table Body */}
+
+                          <TableBody className="divide-y divide-gray-100 dark:divide-gray-800">
+                            {students.map((student, index) => (
+                              <TableRow key={index} className="">
+                                <TableCell className="py-3">
+                                  <div className="flex items-center gap-3">
+
+                                    <div>
+                                      <p className="font-medium text-gray-800 text-theme-lg dark:text-white/90">
+                                        {student.first_name} {student.last_name || ""}
+                                      </p>
+                                      <span className="text-gray-500 text-theme-xs dark:text-gray-400">
+
+
+
+                                      </span>
+                                    </div>
+                                  </div>
+                                </TableCell>
+                                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400 pr-3">
+
+                                  <div className="w-full bg-gray-200 rounded-full dark:bg-gray-700">
+                                    <div
+                                      className="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
+                                      style={{ width: `${student.course_per_completed}%` }}
+                                    >
+                                      {student.course_per_completed}%
+                                    </div>
+                                  </div>
+
+                                </TableCell>
+
+                                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+
+
+
+                                  <span style={{ cursor: 'pointer' }}>
+                                    {new Date(student.closingdate).toLocaleDateString()}
+                                  </span>
+
+
+
+
+
+
+
+                                </TableCell>
+
+
+
+
+
+                                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+
+
+                                  <Badge variant="light" color="primary">
+                                    {student.status === 'booked' ? 'Yes' : 'No'}
+                                  </Badge>
+
+
+
+
+
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+
+                        </Table>
+                        <div className="flex items-center justify-end w-full gap-3 mt-8">
+                          <Button size="sm" variant="outline" onClick={closeModal}>
+                            Close
+                          </Button>
+
+                        </div>
+                      </Modal>
+                    )}
+
+
+                    <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+
+
+                      <Badge variant="light" color="primary" endIcon={<ArrowRightIcon />}>
+                        <Link href={`/mentor-calendar/${course.id}`}>
+                          <span style={{ cursor: 'pointer' }}>
+                            Manage Availability
+                          </span>
+                        </Link>
+                      </Badge>
+
+
+
+
+
+                    </TableCell>
+                  </TableRow>
+                );
+              })
+            ) : (
+              <TableRow>
+                <td colSpan={4} className="text-center text-gray-500">
+                  No courses available.
+                </td>
+              </TableRow>
+            )}
+          </TableBody>
 
         </Table>
       </div>

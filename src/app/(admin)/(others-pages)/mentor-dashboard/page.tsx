@@ -180,9 +180,9 @@ const MentorDashboard = () => {
 
         {/* ================= CHART ================= */}
         <div className="mt-10 bg-white rounded-xl border shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
+          {/* <h3 className="text-lg font-semibold text-gray-800 mb-4">
             Session Analytics
-          </h3>
+          </h3> */}
           <MentorDashboards />
         </div>
 
