@@ -51,6 +51,7 @@ function isSessionExpired(dateObj: Date, timeStr: string) {
 /* ================= COMPONENT ================= */
 export default function MentorCalendar() {
   const [events, setEvents] = useState<Event[]>([]);
+   
 
   const weekDays = getCurrentWeek();
 
@@ -67,12 +68,22 @@ export default function MentorCalendar() {
     { month: "long", year: "numeric" }
   );
 
+   
+
   useEffect(() => {
-    fetch("https://backstagepass.co.in/reactapi/get_events.php?_=" + Date.now())
-      .then(res => res.json())
-      .then(setEvents)
-      .catch(console.error);
-  }, []);
+  const userId = localStorage.getItem("userId");
+  const role = localStorage.getItem("role");
+
+  if (!userId || !role) return;
+
+  fetch(
+    `https://backstagepass.co.in/reactapi/get_events.php?userId=${userId}&role=${role}&_=${Date.now()}`
+  )
+    .then((res) => res.json())
+    .then(setEvents)
+    .catch(console.error);
+}, []);
+
 
   const dayEvents = events.filter(e => e.dayIndex === activeDay);
 
