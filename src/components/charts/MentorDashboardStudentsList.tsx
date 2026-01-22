@@ -9,6 +9,8 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import { Modal } from "../ui/modal";
+
 import Badge from "../ui/badge/Badge";
 import Button from "../ui/button/Button";
 
@@ -39,6 +41,12 @@ interface TableCellProps {
   onClick?: React.MouseEventHandler<HTMLTableCellElement>;
 }
 
+interface Quiz {
+  title: string;
+  score: number | null;
+  total: number;
+  attempted: boolean;
+}
 
 interface RecentOrdersProps {
   courseId?: string | number | null; // prop from parent
@@ -181,6 +189,31 @@ const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  const [isQuizOpen, setIsQuizOpen] = useState(false);
+const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
+const [quizList, setQuizList] = useState<Quiz[]>([]);
+
+
+const openQuizModal = async (student: Student) => {
+  console.log("Opening quiz modal for:", student);
+
+  setSelectedStudent(student);
+  setIsQuizOpen(true);
+
+  console.log("quizList before API:", quizList);
+
+  // TEMP: mock data
+  setQuizList([
+    { title: "Quiz 1", score: 6, total: 10, attempted: true },
+    { title: "Quiz 2", score: 7, total: 10, attempted: true },
+    { title: "Quiz 3", score: 6, total: 10, attempted: true },
+    { title: "Quiz 4", score: 8, total: 10, attempted: true },
+    { title: "Quiz 5", score: 9, total: 10, attempted: true },
+  ]);
+};
+
+
 
   // Modal state for result form
   const [modalOpenFor, setModalOpenFor] = useState<string | number | null>(null);
@@ -679,6 +712,7 @@ const getProgressColor = (pct: number) => {
 </TableCell> */}
 
             <TableCell isHeader className="py-4 px-4 font-semibold text-gray-700 text-left">Schedule</TableCell>
+            <TableCell isHeader className="py-4 px-4 font-semibold text-gray-700 text-left">Quiz Marks</TableCell>
             <TableCell isHeader className="py-4 px-4 font-semibold text-gray-700 text-left">Assignment</TableCell>
             <TableCell isHeader className="py-4 px-4 font-semibold text-gray-700 text-left">Assignment Closing date</TableCell>
             <TableCell isHeader className="py-4 px-4 font-semibold text-gray-700 text-left">Result</TableCell>
@@ -713,7 +747,7 @@ const getProgressColor = (pct: number) => {
                       {student.first_name ?? "-"} {student.last_name ?? ""}
                     </TableCell>
 
-                    <TableCell className="py-4 px-4 text-gray-800 w-48">
+                    <TableCell className="py-4 px-4 text-gray-800">
                      
                 <div
   className="relative w-10 h-10 rounded-full"
@@ -745,6 +779,21 @@ const getProgressColor = (pct: number) => {
 
                     <TableCell className="py-4 px-4 text-gray-800">
                       <Badge variant="light" color="primary">{student.status === "booked" ? "Yes" : "No"}</Badge>
+                    </TableCell>
+                    <TableCell className="py-4 px-4 text-gray-800">
+                     <div className="flex items-center gap-2">
+  <span className="text-xs font-semibold text-purple-600">
+    18 / 50
+  </span>
+
+  <button
+    className="text-xs text-blue-600 hover:underline"
+    onClick={() => openQuizModal(student)}
+  >
+    View
+  </button>
+</div>
+
                     </TableCell>
 
                     <TableCell className="py-4 px-4 text-left">
@@ -814,6 +863,78 @@ const getProgressColor = (pct: number) => {
           )}
         </TableBody>
       </Table>
+
+      {isQuizOpen && selectedStudent && (
+  <Modal
+    isOpen={isQuizOpen}
+    onClose={() => setIsQuizOpen(false)}
+    className="max-w-[700px] p-6"
+  >
+   {/* Total Score – HERO */}
+<div className="mb-6 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-500 p-5 text-white text-center shadow">
+  <p className="text-sm opacity-80">Total Quiz Score (50% Min Trade)</p>
+  <p className="text-3xl font-bold mt-1">
+    {quizList.reduce((s, q) => s + (q.score || 0), 0)} /{" "}
+    {quizList.reduce((s, q) => s + q.total, 0)}
+  </p>
+</div>
+
+{/* Quiz Cards */}
+<div className="space-y-4">
+  {quizList.map((quiz, i) => {
+    const percent = quiz.score
+      ? Math.round((quiz.score / quiz.total) * 100)
+      : 0;
+
+    return (
+      <div
+        key={i}
+        className="rounded-xl border bg-white p-4 shadow-sm
+                   hover:shadow-md transition"
+      >
+        <div className="flex items-center justify-between mb-2">
+          <h4 className="font-semibold text-gray-800">{quiz.title}</h4>
+
+          <span
+            className={`rounded-full px-3 py-1 text-xs font-semibold
+              ${
+                quiz.attempted
+                  ? "bg-green-100 text-green-700"
+                  : "bg-gray-100 text-gray-500"
+              }
+            `}
+          >
+            {quiz.attempted ? "Completed" : "Not Attempted"}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-4">
+          {/* Score */}
+          <span className="text-sm font-semibold text-gray-700">
+            {quiz.score ?? "—"} / {quiz.total}
+          </span>
+
+          {/* Progress Bar */}
+          <div className="h-2 flex-1 rounded-full bg-gray-200 overflow-hidden">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-purple-500 to-indigo-500"
+              style={{ width: `${percent}%` }}
+            />
+          </div>
+
+          {/* Percent */}
+          <span className="text-xs font-semibold text-gray-500">
+            {quiz.attempted ? `${percent}%` : "--"}
+          </span>
+        </div>
+      </div>
+    );
+  })}
+</div>
+
+  </Modal>
+)}
+
 
       {/* ---------- Modal (renders when modalOpenFor is set) ---------- */}
       {modalOpenFor != null && (
