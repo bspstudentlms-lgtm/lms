@@ -228,12 +228,12 @@ const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
                  <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition overflow-hidden flex flex-col">
 
   {/* IMAGE */}
-  <div className="relative h-52">
+  <div className="relative h-70">
     <Image
       src={course.image}
       alt={course.title}
       fill
-      className="object-cover"
+      className="object-contain"
     />
 
     {/* Soft bottom gradient */}
@@ -241,7 +241,7 @@ const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
 
     {/* Badge */}
     <span className="absolute top-4 left-4 bg-blue-600 text-white text-xs px-4 py-1 rounded-full">
-      COURSE
+     📘 COURSE
     </span>
     <button
                   onClick={() => handleFavouriteClick(course)}
@@ -265,7 +265,7 @@ const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
       {course.category} • {course.level}
     </p>
 
-    <p className="text-sm text-gray-600 mt-3 line-clamp-2 min-h-[40px]">
+    <p className="text-sm text-gray-600 mt-3 line-clamp-3 min-h-[65px]">
       {course.description}
     </p>
 
@@ -295,12 +295,12 @@ const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
                  <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition overflow-hidden flex flex-col">
 
   {/* IMAGE */}
-  <div className="relative h-52">
+  <div className="relative h-70">
     <Image
       src={course.image}
       alt={course.title}
       fill
-      className="object-cover"
+      className="object-contain"
     />
 
     {/* Soft dark overlay */}
@@ -340,7 +340,7 @@ const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
       {course.category} • {course.level}
     </p>
 
-    <p className="text-sm text-gray-600 mt-3 line-clamp-2 min-h-[40px]">
+    <p className="text-sm text-gray-600 mt-3 line-clamp-3 min-h-[65px]">
       {course.description}
     </p>
 
@@ -370,12 +370,12 @@ const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
   <div className="absolute inset-x-0 top-0 h-1 bg-green-600" />
 
   {/* IMAGE */}
-  <div className="relative h-52">
+  <div className="relative h-70">
     <Image
       src={course.image}
       alt={course.title}
       fill
-      className="object-cover"
+      className="object-contain"
     />
 
     {/* SOFT DARK GRADIENT */}
@@ -408,7 +408,7 @@ const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
       {course.category} • {course.level}
     </p>
 
-    <p className="text-sm text-gray-600 mt-3 line-clamp-2 min-h-[40px]">
+    <p className="text-sm text-gray-600 mt-3 line-clamp-3 min-h-[65px]">
       {course.description}
     </p>
 

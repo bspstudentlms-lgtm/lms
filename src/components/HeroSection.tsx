@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import Siva from "../../public/images/courses-to-learn-online.jpeg"
 
 export default function HeroSection() {
   return (
@@ -10,7 +11,7 @@ export default function HeroSection() {
         <div className="absolute w-72 h-72 bg-green-100 rounded-2xl rotate-12"></div>
         
         <Image
-          src="https://www.guvi.in/assets/DUN3iNaq-women-with-notebook-latest.webp" // place your image in public/student.png
+          src={Siva} // place your image in public/student.png
           alt="Student"
           width={400}
           height={400}
