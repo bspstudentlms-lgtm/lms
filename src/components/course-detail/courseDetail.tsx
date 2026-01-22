@@ -1426,9 +1426,7 @@ const isCurrentWatched =
                           className="font-medium text-sm"
                           title={module.title}
                         >
-                          {module.title.length > 20
-                            ? module.title.slice(0, 17) + "..."
-                            : module.title}
+                          {module.title}
                         </span>
 
                         {module.total_video_duration && (

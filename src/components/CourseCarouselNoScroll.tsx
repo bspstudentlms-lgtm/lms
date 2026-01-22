@@ -237,7 +237,7 @@ const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
     />
 
     {/* Soft bottom gradient */}
-    <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/40 to-transparent" />
+    <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t to-transparent" />
 
     {/* Badge */}
     <span className="absolute top-4 left-4 bg-blue-600 text-white text-xs px-4 py-1 rounded-full">
@@ -304,7 +304,7 @@ const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
     />
 
     {/* Soft dark overlay */}
-    <div className="absolute inset-0 bg-black/25" />
+    <div className="absolute inset-0" />
 
     {/* Badge */}
     <span className="absolute top-4 left-4 bg-purple-600 text-white text-xs px-4 py-1 rounded-full">
@@ -379,7 +379,7 @@ const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
     />
 
     {/* SOFT DARK GRADIENT */}
-    <div className="absolute inset-0 bg-black/25" />
+    <div className="absolute inset-0" />
 
     {/* LIVE BADGE */}
     <span className="absolute top-4 left-4 bg-green-600 text-white text-xs px-4 py-1 rounded-full flex items-center gap-1">
