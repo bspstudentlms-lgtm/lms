@@ -195,23 +195,51 @@ const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
 const [quizList, setQuizList] = useState<Quiz[]>([]);
 
 
-const openQuizModal = async (student: Student) => {
-  console.log("Opening quiz modal for:", student);
+// const openQuizModal = async (student: Student) => {
+//   console.log("Opening quiz modal for:", student);
 
+//   setSelectedStudent(student);
+//   setIsQuizOpen(true);
+
+//   console.log("quizList before API:", quizList);
+
+//   // TEMP: mock data
+//   setQuizList([
+//     { title: "Quiz 1", score: 6, total: 10, attempted: true },
+//     { title: "Quiz 2", score: 7, total: 10, attempted: true },
+//     { title: "Quiz 3", score: 6, total: 10, attempted: true },
+//     { title: "Quiz 4", score: 8, total: 10, attempted: true },
+//     { title: "Quiz 5", score: 9, total: 10, attempted: true },
+//   ]);
+// };
+
+const openQuizModal = async (student: Student) => {
   setSelectedStudent(student);
   setIsQuizOpen(true);
+  setQuizList([]);
 
-  console.log("quizList before API:", quizList);
+  try {
+    const res = await fetch(
+      `https://backstagepass.co.in/reactapi/module_quiz-results.php?user_id=${student.id}&course_id=${finalCourseId}&_=${Date.now()}`
+    );
 
-  // TEMP: mock data
-  setQuizList([
-    { title: "Quiz 1", score: 6, total: 10, attempted: true },
-    { title: "Quiz 2", score: 7, total: 10, attempted: true },
-    { title: "Quiz 3", score: 6, total: 10, attempted: true },
-    { title: "Quiz 4", score: 8, total: 10, attempted: true },
-    { title: "Quiz 5", score: 9, total: 10, attempted: true },
-  ]);
+    const data = await res.json();
+    console.log("query result:", data);
+
+    const formattedQuizzes = data.map((item: any) => ({
+      title: item.module_name,
+      score: Number(item.score) || 0,
+      total: 100, // or fetch from modules table later
+      attempted: !!item.submitted_at,
+    }));
+
+    setQuizList(formattedQuizzes);
+  } catch (error) {
+    console.error("Failed to load quiz results:", error);
+  }
 };
+
+
 
 
 
@@ -315,32 +343,47 @@ const openQuizModal = async (student: Student) => {
 
   /* ---------- fetch students ---------- */
   useEffect(() => {
-    if (!userId) return;
-    const controller = new AbortController();
+  if (!userId) return;
 
-    async function loadStudents() {
-      setLoading(true);
-      setError(null);
-      try {
-        const url = `https://backstagepass.co.in/reactapi/get_students_by_course_and_mentor.php?course_id=${encodeURIComponent(
-          String(finalCourseId)
-        )}&mentor_id=${encodeURIComponent(String(userId))}`;
+  const controller = new AbortController();
 
-        const res = await fetch(url, { signal: controller.signal });
-        if (!res.ok) throw new Error(`Server error ${res.status}`);
-        const data = await res.json();
-        const list = Array.isArray(data) ? data : (Array.isArray(data?.students) ? data.students : []);
-        setStudents(list);
-      } catch (err: any) {
-        if (err.name !== "AbortError") setError(err.message || "Failed to load students");
-      } finally {
-        setLoading(false);
+  async function loadStudents() {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const url = `https://backstagepass.co.in/reactapi/get_students_by_course_and_mentor.php?course_id=${encodeURIComponent(
+        String(finalCourseId)
+      )}&mentor_id=${encodeURIComponent(String(userId))}`;
+
+      const res = await fetch(url, {
+        signal: controller.signal,
+        cache: "no-store", 
+      });
+
+      if (!res.ok) throw new Error(`Server error ${res.status}`);
+
+      const data = await res.json();
+      const list = Array.isArray(data)
+        ? data
+        : Array.isArray(data?.students)
+        ? data.students
+        : [];
+
+      setStudents(list);
+    } catch (err: any) {
+      if (err.name !== "AbortError") {
+        setError(err.message || "Failed to load students");
       }
+    } finally {
+      setLoading(false);
     }
+  }
 
-    loadStudents();
-    return () => controller.abort();
-  }, [userId, finalCourseId]);
+  loadStudents();
+  return () => controller.abort();
+}, [userId, finalCourseId]);
+
 
   /* ---------- helpers ---------- */
   function formatDate(dateString?: string | null) {
@@ -782,9 +825,9 @@ const getProgressColor = (pct: number) => {
                     </TableCell>
                     <TableCell className="py-4 px-4 text-gray-800">
                      <div className="flex items-center gap-2">
-  <span className="text-xs font-semibold text-purple-600">
+  {/* <span className="text-xs font-semibold text-purple-600">
     18 / 50
-  </span>
+  </span> */}
 
   <button
     className="text-xs text-blue-600 hover:underline"
@@ -881,7 +924,12 @@ const getProgressColor = (pct: number) => {
 
 {/* Quiz Cards */}
 <div className="space-y-4">
-  {quizList.map((quiz, i) => {
+    {quizList.length === 0 ? (
+    <div className="rounded-xl border bg-gray-50 p-6 text-center text-sm text-gray-500">
+      No quiz results available yet 📭
+    </div>
+  ) : (
+  quizList.map((quiz, i) => {
     const percent = quiz.score
       ? Math.round((quiz.score / quiz.total) * 100)
       : 0;
@@ -929,7 +977,8 @@ const getProgressColor = (pct: number) => {
         </div>
       </div>
     );
-  })}
+    })
+  )}
 </div>
 
   </Modal>

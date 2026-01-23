@@ -812,6 +812,7 @@ const openModuleAndLoadTopics = async (moduleIndex: number) => {
         body: JSON.stringify({
           user_id: userId,
           module_id: moduleId,
+          course_id:id,
           score,
         }),
       });

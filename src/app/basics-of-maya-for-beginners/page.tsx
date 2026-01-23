@@ -12,6 +12,7 @@ import {
   MessageCircle,
 } from "lucide-react";
 import EnrollModal from "@/components/EnrollModal";
+import { signIn } from "next-auth/react";
 
 
 
@@ -95,6 +96,27 @@ export default function BasicsOfMayaPage() {
    const [open, setOpen] = useState<number | null>(null);
     const [open1, setOpen1] = useState(false);
     const [visible, setVisible] = useState(true);
+
+     const [username, setUsername] = useState<string | null>(null);
+      const [userid, setUserId] = useState<string | null>(null);
+      const [email, setEmail] = useState<string | null>(null);
+      useEffect(() => {
+        // Only runs on the client-side
+        const storedusername = localStorage.getItem('username');
+        const storedUserId = localStorage.getItem('userId');
+        const storedEmail = localStorage.getItem('email');
+    
+      if (storedEmail) {
+    
+    setOpen1(true); // ✅ auto-open modal
+    
+  }
+        setUsername(storedusername);
+        setUserId(storedUserId);
+        setEmail(storedEmail);
+      }, []);  // The empty array ensures this runs only once after component mounts
+
+
 
   useEffect(() => {
     const section = document.getElementById("page-enroll-cta");
@@ -588,7 +610,21 @@ export default function BasicsOfMayaPage() {
 <div className="fixed bottom-0 left-0 w-full z-[9999]">
       <div className="bg-[#1f1f1f] h-20 flex items-center justify-center relative">
         <span className="absolute top-0 left-0 w-full h-[2px] bg-red-600" />
-        <button onClick={() => setOpen1(true)} className="px-20 py-4 rounded-full bg-red-600 text-white">
+        <button  onClick={() => {
+   if (!email) {
+  const path = window.location.pathname;
+
+  if (path !== "/") {
+    localStorage.setItem("postLoginRedirect", path);
+  }
+
+  signIn("google", {
+    callbackUrl: window.location.href,
+  });
+} else {
+      setOpen1(true);
+    }
+  }} className="px-20 py-4 rounded-full bg-red-600 text-white">
           ENROLL NOW
         </button>
       </div>
