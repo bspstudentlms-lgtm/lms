@@ -74,7 +74,7 @@ useEffect(() => {
         const res = await fetch(
           `https://www.backstagepass.co.in/reactapi/check-student.php?email=${email}`,
           {
-            cache: "no-store",
+            cache: "no-store", // ✅ CACHE FIX
             headers: {
               "Cache-Control": "no-cache, no-store, must-revalidate",
               Pragma: "no-cache",
@@ -86,36 +86,26 @@ useEffect(() => {
         const data = await res.json();
 
         if (data.status === 200) {
-          // ✅ STUDENT
+          // ✅ Student
           localStorage.setItem("userId", data.userid);
           localStorage.setItem("username", data.username);
+          localStorage.setItem("enrolledcourses", data.enrolled);
           localStorage.setItem("email", data.email);
           localStorage.setItem("role", data.role);
           localStorage.setItem("mentor_id", data.mentor_id);
           localStorage.setItem("phone", data.phone);
 
-          const enrolled = Number(data.enrolled);
-          localStorage.setItem("enrolledcourses", String(enrolled));
-
-          if (enrolled > 0) {
-            if (window.location.pathname !== "/mycourses") {
-              window.location.replace("/mycourses");
-            }
-          } else {
-            if (
-              window.location.pathname !==
-              "/basics-of-maya-for-beginners"
-            ) {
-              window.location.replace(
-                "/basics-of-maya-for-beginners"
-              );
-            }
+          if (window.location.pathname !== "/mycourses") {
+            window.location.replace("/mycourses");
           }
         } else {
-          // ✅ MENTOR / SOS
-          localStorage.setItem("username", session?.user?.name ?? "");
-          localStorage.setItem("email", session?.user?.email ?? "");
-          localStorage.setItem("image", session?.user?.image ?? "");
+          // ✅ Mentor / SOS
+        localStorage.setItem("username", session?.user?.name ?? "");
+localStorage.setItem("email", session?.user?.email ?? "");
+localStorage.setItem("image", session?.user?.image ?? "");
+// localStorage.setItem("phone", session?.user?.phone ?? "");
+
+          
           localStorage.setItem("role", "sos");
 
           if (window.location.pathname !== "/dashboard") {
@@ -130,6 +120,7 @@ useEffect(() => {
     checkStudent();
   }
 }, [status, session]);
+  
 
   
 

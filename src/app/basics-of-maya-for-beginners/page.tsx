@@ -604,11 +604,11 @@ export default function BasicsOfMayaPage() {
       <div className="bg-[#1f1f1f] h-20 flex items-center justify-center relative">
         <span className="absolute top-0 left-0 w-full h-[2px] bg-red-600" />
         <button onClick={() => {
-    if (!email) {
-      signIn("google"); // or SSO redirect
-    } else {
+    // if (!email) {
+    //   signIn("google"); // or SSO redirect
+    // } else {
       setOpen1(true);
-    }
+    //}
   }} className="px-20 py-4 rounded-full bg-red-600 text-white">
           ENROLL NOW
         </button>
