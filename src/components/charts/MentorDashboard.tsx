@@ -10,6 +10,7 @@ import {
 import Badge from "../ui/badge/Badge";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import { enablePush } from "@/utils/enablePush";
 import axios from "axios";
 import { ArrowRightIcon } from "@/icons";
 import Link from 'next/link';
@@ -152,6 +153,34 @@ const SortArrow = ({ column }) => {
         .catch(err => console.error(err));
     }
   }, [selectedCourse, userId]);
+
+ const sendSessionNotification = async () => {
+    console.log("Clicked");
+
+    if (!("Notification" in window)) {
+      alert("Notifications not supported");
+      return;
+    }
+
+    if (Notification.permission !== "granted") {
+      alert("Permission not granted");
+      return;
+    }
+
+    const session = {
+      student: "Gayathri",
+      date: "Jan 23",
+      time: "3:00 PM",
+    };
+
+    // Foreground notification (Chrome safe)
+    new Notification("🎓 Session Starting Now", {
+      body: `${session.student} • ${session.date} • ${session.time}`,
+      icon: "https://learning.backstagepass.co.in/images/logo/bsp_logo_newupdated.png",
+    });
+  };
+
+
   return (
     <div className="mt-4 rounded-xl ">
       <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between">
@@ -164,6 +193,43 @@ const SortArrow = ({ column }) => {
 
 
         <div className="flex items-center gap-3">
+   {/* <button
+  onClick={() => {
+    if (Notification.permission !== "granted") {
+      alert("Please enable notifications first");
+      return;
+    }
+
+    new Notification("🔔 Session Starting Soon", {
+      body: "Gayathri • January 23 • 3:00 PM",
+      icon: "/favicon.ico",
+    });
+  }}
+  className="px-4 py-2 bg-blue-600 text-white rounded"
+>
+  🔔 Send Session Notification
+</button>
+
+<button
+  onClick={async () => {
+    const permission = await Notification.requestPermission();
+    alert("Permission = " + permission);
+  }}
+  className="px-4 py-2 bg-green-600 text-white rounded"
+>
+  🔔 Enable Notifications
+</button>
+
+
+
+<button
+  onClick={sendSessionNotification}
+  className="bg-blue-600 text-white px-4 py-2 rounded"
+>
+  🔔 Send Session Notification
+</button> */}
+
+
           <div className="hidden lg:block">
             <form onSubmit={(e) => {
               e.preventDefault(); // prevent page refresh on enter

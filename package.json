@@ -34,6 +34,8 @@
     "axios": "^1.9.0",
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
+    "firebase": "^12.8.0",
+    "firebase-admin": "^13.6.0",
     "flatpickr": "^4.6.13",
     "framer-motion": "^12.23.21",
     "hls.js": "^1.6.7",
