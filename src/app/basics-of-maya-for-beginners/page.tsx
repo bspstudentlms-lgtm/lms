@@ -106,10 +106,17 @@ export default function BasicsOfMayaPage() {
         const storedUserId = localStorage.getItem('userId');
         const storedEmail = localStorage.getItem('email');
     
+      if (storedEmail) {
+    
+    setOpen1(true); // ✅ auto-open modal
+    
+  }
         setUsername(storedusername);
         setUserId(storedUserId);
         setEmail(storedEmail);
       }, []);  // The empty array ensures this runs only once after component mounts
+
+
 
   useEffect(() => {
     const section = document.getElementById("page-enroll-cta");
@@ -603,12 +610,20 @@ export default function BasicsOfMayaPage() {
 <div className="fixed bottom-0 left-0 w-full z-[9999]">
       <div className="bg-[#1f1f1f] h-20 flex items-center justify-center relative">
         <span className="absolute top-0 left-0 w-full h-[2px] bg-red-600" />
-        <button onClick={() => {
-    // if (!email) {
-    //   signIn("google"); // or SSO redirect
-    // } else {
+        <button  onClick={() => {
+   if (!email) {
+  const path = window.location.pathname;
+
+  if (path !== "/") {
+    localStorage.setItem("postLoginRedirect", path);
+  }
+
+  signIn("google", {
+    callbackUrl: window.location.href,
+  });
+} else {
       setOpen1(true);
-    //}
+    }
   }} className="px-20 py-4 rounded-full bg-red-600 text-white">
           ENROLL NOW
         </button>

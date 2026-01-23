@@ -42,6 +42,7 @@ export default function CourseGrid() {
   const [showAccessModal, setShowAccessModal] = useState(false);
 const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
 
+
   /* ---------- FETCH ---------- */
   useEffect(() => {
     axios
@@ -134,14 +135,14 @@ const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
   const handleWatchNow = (course: Course) => {
   const hasAccess = course.is_coursecompleted === null;
 
-  if (hasAccess) {
+  //if (hasAccess) {
     // user purchased → go inside course
-    window.open(`/course/${course.urlpath}`, "_blank");
-  } else {
+    window.open(`/${course.urlpath}`);
+  //} else {
     // user NOT purchased → show popup
-    setLockedCourse(course);
-    setShowAccessModal(true);
-  }
+    //setLockedCourse(course);
+   // setShowAccessModal(true);
+  //}
 };
 
   /* ================= RENDER ================= */
@@ -275,8 +276,13 @@ const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
     </div> */}
 
     {/* CTA */}
-    <Link className="mt-auto" href="/basics-of-maya-for-beginners" target="_blank">
+    <Link className="mt-auto" href="/basics-of-maya-for-beginners" >
     <button
+    onClick={() => {
+      
+      localStorage.clear();
+      sessionStorage.clear();
+    }}
       className=" w-full py-2.5 rounded-lg border border-red-600 text-red-600 font-semibold
                  hover:bg-red-600 hover:text-white transition"
     >
@@ -350,7 +356,12 @@ const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
     </div> */}
 
     {/* CTA */}
-    <button onClick={() => handleWatchNow(course)}
+    <button onClick={() => {
+  localStorage.removeItem("postLoginRedirect");
+  localStorage.removeItem("openEnrollModal");
+  sessionStorage.clear();
+  handleWatchNow(course);
+}}
       className="mt-auto w-full py-2.5 rounded-lg border border-purple-600 text-purple-600 font-semibold
                  hover:bg-purple-600 hover:text-white transition"
     >
