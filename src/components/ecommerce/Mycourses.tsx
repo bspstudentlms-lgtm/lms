@@ -9,6 +9,7 @@ import EnrollModal from "@/components/EnrollModal";
 
 /* ================= TYPES ================= */
 interface Course {
+  webinarstatus: ReactNode;
   date: string;
   watched_topics: number;
   course_id: number;
@@ -83,7 +84,7 @@ const CTA_CONFIG = {
       "border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white",
   },
   3: {
-    text: "Register Now",
+    text: "Pay Now",
     className:
       "border-green-600 text-green-600 hover:bg-green-600 hover:text-white",
   },
@@ -250,8 +251,10 @@ const hasAnyEnrollment = enrolledCourses.length > 0;
 
 {isLive && (
   <span className="mt-3 inline-flex items-center gap-2 rounded-lg bg-green-100 px-3 py-1 text-sm font-semibold text-green-700">
-    ⏰ {liveCountdown}
+    ⏰ {liveCountdown} 
   </span>
+ 
+  
 )}
 
 
@@ -268,9 +271,9 @@ const hasAnyEnrollment = enrolledCourses.length > 0;
               {/* {course.coursetype} */}
 
               <div className="flex gap-4 text-xs mb-4 text-green-700 mt-3">
-               
+               <span className="flex items-center gap-1">{course.webinarstatus}</span>
       <span className={`flex items-center gap-1 ${style.dn}`}>
-        📅 {course.date ?? "Coming soon"}
+        📅 {course.date ?? "Coming soon"} 
       </span>
       <span className="flex items-center gap-1">
         ⏰ {course.duration ? `${course.duration} Hours` : "To be announced"}
@@ -343,7 +346,7 @@ const hasAnyEnrollment = enrolledCourses.length > 0;
       </Link>
     )
   
-  ) : (hasAnyEnrollment) ? (
+  ) : (hasAnyEnrollment && Number(course.coursetype) === 2) ? (
     
     <Link
       href={`/coursedetails/${course.id}`}
@@ -361,17 +364,26 @@ const hasAnyEnrollment = enrolledCourses.length > 0;
         } </span>
       <ArrowRightIcon />
     </Link>
-  ) : (
-    
-    <button
+  ) : Number(course.coursetype) === 3 ? (
+     <button
       onClick={() =>
         alert(
-          "Please purchase at least one course to watch these webinar add-ons."
+          "Please purchase this live webinar to attend"
         )
       }
       className={`inline-flex items-center justify-center gap-2 w-[50%] rounded-lg px-6 py-2.5 text-sm font-semibold transition border ${cta.className}`}
     >
       <span>{cta.text} </span>
+      <ArrowRightIcon />
+    </button>
+ ) : (
+    <button
+      onClick={() =>
+        alert("Please purchase at least one course to watch these webinar add-ons.")
+      }
+      className={`inline-flex items-center justify-center gap-2 w-[50%] rounded-lg px-6 py-2.5 text-sm font-semibold transition border ${cta.className}`}
+    >
+      <span>{cta.text}</span>
       <ArrowRightIcon />
     </button>
   )}
