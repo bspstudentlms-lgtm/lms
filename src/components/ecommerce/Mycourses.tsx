@@ -9,6 +9,8 @@ import EnrollModal from "@/components/EnrollModal";
 
 /* ================= TYPES ================= */
 interface Course {
+  zoom_link: Url;
+  webinar_status: number;
   webinarstatus: ReactNode;
   date: string;
   watched_topics: number;
@@ -84,7 +86,7 @@ const CTA_CONFIG = {
       "border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white",
   },
   3: {
-    text: "Pay Now",
+    text: "Join Webinar",
     className:
       "border-green-600 text-green-600 hover:bg-green-600 hover:text-white",
   },
@@ -281,7 +283,7 @@ const hasAnyEnrollment = enrolledCourses.length > 0;
     </div>
 
               {/* PROGRESS */}
-              {enrolled && (
+              {enrolled && Number(course.coursetype) === 1 && (
                 <div className="mt-4">
                   <div className="mb-1 flex justify-between text-xs font-medium text-gray-500">
                     <span>Progress</span>
@@ -301,7 +303,7 @@ const hasAnyEnrollment = enrolledCourses.length > 0;
 
             {/* ACTION */}
             <div className="mt-3">
- {enrolled ? (
+ {enrolled &&  Number(course.coursetype) === 1 ? (
     course.is_coursecompleted == 1 ? (
       <span className="inline-flex items-center rounded-full bg-green-100 px-4 py-2 text-sm font-semibold text-green-700">
         <Link
@@ -346,6 +348,15 @@ const hasAnyEnrollment = enrolledCourses.length > 0;
       </Link>
     )
   
+  ) : enrolled &&  Number(course.coursetype) === 3  && course.webinar_status==2 ?  (
+    <Link
+        href={course.zoom_link}
+             
+        className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
+      >
+        Join Webinar
+        
+      </Link>
   ) : (hasAnyEnrollment && Number(course.coursetype) === 2) ? (
     
     <Link
