@@ -9,9 +9,9 @@ import EnrollModal from "@/components/EnrollModal";
 
 /* ================= TYPES ================= */
 interface Course {
-  zoom_link: Url;
+  zoom_link: string;
   webinar_status: number;
-  webinarstatus: ReactNode;
+  webinarstatus: string;
   date: string;
   watched_topics: number;
   course_id: number;
