@@ -40,11 +40,11 @@ const MentorDashboard = () => {
   //   }
   // }, []);
 
-  useEffect(() => {
-  if (user?.mentor_id) {
-    saveFcmToken(user.mentor_id, "mentor");
-  }
-}, [user]);
+//   useEffect(() => {
+//   if (user?.mentor_id) {
+//     saveFcmToken(user.mentor_id, "mentor");
+//   }
+// }, [user]);
 
 
   useEffect(() => {
