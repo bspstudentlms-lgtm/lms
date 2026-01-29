@@ -8,6 +8,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useSession } from "next-auth/react";
+ import mixpanel from "mixpanel-browser";
+
 
 const AppHeader: React.FC = () => {
   const router = useRouter();
@@ -50,9 +52,15 @@ const AppHeader: React.FC = () => {
     };
   }, []);
 
-  const handleSigninClick = () => {
-    router.push("/signin");
-  };
+ 
+const handleSigninClick = () => {
+  mixpanel.track("Login Button Clicked", {
+    location: "Header",
+  });
+
+  router.push("/signin");
+};
+
 
   const { data: session, status } = useSession();
   

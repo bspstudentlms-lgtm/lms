@@ -2,6 +2,8 @@ import { Outfit } from "next/font/google";
 import "./globals.css";
 import ClientProviders from "@/components/ClientProviders";
 import ConditionalHeader from "../layout/ConditionalHeader"; 
+import AnalyticsInit from "@/components/analytics/AnalyticsInit";
+
 
 const outfit = Outfit({ subsets: ["latin"] });
 
@@ -44,6 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={`${outfit.className} dark:bg-gray-900`}>
+        <AnalyticsInit /> {/* ✅ analytics loaded once */}
         <ClientProviders>
           <ConditionalHeader />
           {children}
