@@ -64,7 +64,7 @@ const HomePageContent = () => {
  
  const [currents, setCurrents] = useState(0);
  
- useEffect(() => {
+useEffect(() => {
   const links = [
     "/assets/bootstrap/css/bootstrap.min.css",
     "/assets/fonts/font-awesome.min.css",
@@ -77,15 +77,26 @@ const HomePageContent = () => {
     "/assets/css/style.css",
   ];
 
+  const addedLinks: HTMLLinkElement[] = [];
+
   links.forEach((href) => {
     if (!document.querySelector(`link[href="${href}"]`)) {
       const link = document.createElement("link");
       link.rel = "stylesheet";
       link.href = href;
       document.head.appendChild(link);
+      addedLinks.push(link);
     }
   });
+
+  // ✅ CLEANUP (VERY IMPORTANT)
+  return () => {
+    addedLinks.forEach((link) => {
+      document.head.removeChild(link);
+    });
+  };
 }, []);
+
 
 useEffect(() => {
   const initScripts = () => {
