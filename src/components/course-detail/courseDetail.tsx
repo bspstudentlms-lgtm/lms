@@ -1184,7 +1184,7 @@ const isCurrentWatched =
           <div className="md:col-span-2">
             <div className="video-surface p-4 rounded-lg">
               {/* provide a stable aspect ratio */}
-              <div className="relative w-full rounded-lg overflow-hidden bg-black" style={{height: "590px"}}>
+              <div className="relative w-full rounded-lg overflow-hidden" style={{height: "590px"}}>
                 {/* If currentModule is a video, render Muxvideo, otherwise render module UI */}
                 {currentModule ? (
                   (() => {

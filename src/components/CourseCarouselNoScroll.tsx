@@ -257,10 +257,10 @@ const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
   </div>
 
   {/* CONTENT */}
-  <div className="p-5 flex flex-col flex-1">
-    <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 min-h-[48px]">
+  <div className="p-4 flex flex-col flex-1">
+    <h4 className="text-lg font-semibold text-gray-900 line-clamp-2 min-h-[48px]">
       {course.title}
-    </h3>
+    </h4>
 
     <p className="text-xs text-gray-500 mt-1">
       {course.category} • {course.level}
@@ -337,10 +337,10 @@ const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
   </div>
 
   {/* CONTENT */}
-  <div className="p-5 flex flex-col flex-1">
-    <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 min-h-[48px]">
+  <div className="p-4 flex flex-col flex-1">
+    <h4 className="text-lg font-semibold text-gray-900 line-clamp-2 min-h-[48px]">
       {course.title}
-    </h3>
+    </h4>
 
     <p className="text-xs text-gray-500 mt-1">
       {course.category} • {course.level}
@@ -410,10 +410,10 @@ const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
   </div>
 
   {/* CONTENT */}
-  <div className="p-5 flex flex-col flex-1">
-    <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 min-h-[48px]">
+  <div className="p-4 flex flex-col flex-1">
+    <h4 className="text-lg font-semibold text-gray-900 line-clamp-2 min-h-[48px]">
       {course.title}
-    </h3>
+    </h4>
 
     <p className="text-xs text-gray-500 mt-1">
       {course.category} • {course.level}
