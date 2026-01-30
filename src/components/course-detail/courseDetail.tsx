@@ -112,6 +112,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
       [topicId]: true, // Set video to play for this specific topic
     }));
   };
+  
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const [courseOutcome, setCourseOutcome] = useState("");
@@ -187,6 +188,20 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
     const shuffled = [...allQuestions].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, limit);
   }
+
+  const canStartQuiz = useMemo(() => {
+  if (!currentModule?.topics) return false;
+
+  const videoTopics = currentModule.topics.filter(
+    (t) => t.type === "video"
+  );
+
+  if (videoTopics.length === 0) return true; // no videos → allow quiz
+
+  return videoTopics.every((t) =>
+    watchedTopicIds.has(Number(t.id))
+  );
+}, [currentModule?.topics, watchedTopicIds]);
 
   useEffect(() => {
     // reset quiz UI whenever module changes
@@ -943,9 +958,13 @@ const openModuleAndLoadTopics = async (moduleIndex: number) => {
 
 
 
+
   const startQuiz = async (moduleIndex: number) => {
     const module = modules[moduleIndex];
-
+ if (!canStartQuiz) {
+    alert("Please watch all videos before starting the quiz.");
+    return;
+  }
     if (!module) {
       alert("Module not found");
       return;
@@ -1581,7 +1600,13 @@ const isCurrentWatched =
 
 
                         {isModuleLoaded && module.has_quiz == 1 && (
-                          <li className={`mb-1 flex items-center justify-between p-3 rounded font-medium`} onClick={() => startQuiz(index)}>
+                          <li className={`mb-1 flex items-center justify-between p-3 rounded font-medium
+    ${!canStartQuiz ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
+  `}
+  onClick={() => {
+    if (!canStartQuiz) return;
+    startQuiz(index);
+  }}>
                             <div className="flex gap-3 flex-1">
                               {/* CHECK */}
                               <span
@@ -1608,7 +1633,7 @@ const isCurrentWatched =
                               >
                                 <div className="flex-1">
                                   <p className="text-sm font-medium text-gray-800">
-                                    Start Quiz
+                                    Start Quiz {isCompleted}
                                   </p>
                                   <p className="text-xs text-gray-500">
                                     Test your understanding
