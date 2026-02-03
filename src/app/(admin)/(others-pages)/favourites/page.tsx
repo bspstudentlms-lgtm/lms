@@ -70,7 +70,7 @@ export default function FavouritesPage() {
           <Image
             src={
               fav.image
-                ? `https://backstagepass.co.in/websiteadmin/uploads/featuredcourses/${fav.image}`
+                ? `https://backstagepass.co.in/studentlms/uploads/featuredcourses/${fav.image}`
                 : "https://source.unsplash.com/300x300/?education,course"
             }
             alt={fav.coursename}

@@ -127,12 +127,23 @@ const AssignmentPanel: React.FC<AssignmentPanelProps> = ({
 
   /* ================= DOWNLOAD ================= */
 
-  const handleDownload = async () => {
+
+const redownload = async () => {
    // const fileName = localStorage.getItem("assignment_file");
     assignmentFile
 const fileName =assignmentFile;
     const fileUrl = fileName
-      ? `https://backstagepass.co.in/websiteadmin/uploads/assignments/${fileName}`
+      ? `https://backstagepass.co.in/studentlms/uploads/assignments/${fileName}`
+      : null;
+window.open(fileUrl, "_blank");
+    
+  };
+   const handleDownload = async () => {
+   // const fileName = localStorage.getItem("assignment_file");
+    assignmentFile
+const fileName =assignmentFile;
+    const fileUrl = fileName
+      ? `https://backstagepass.co.in/studentlms/uploads/assignments/${fileName}`
       : null;
 
     if (!fileUrl) {
@@ -165,6 +176,8 @@ const fileName =assignmentFile;
       setNotice("Download started, but failed to record timestamp.");
     }
   };
+
+
 
   /* ================= FETCH STATUS ================= */
 
@@ -220,53 +233,55 @@ const fileName =assignmentFile;
   /* ================= UPLOAD ================= */
 
   const handleFileSelect = async (file: File | null) => {
-    if (!file || !studentWindowActive) return;
+  if (!file || !studentWindowActive) return;
 
-    const userId = localStorage.getItem("userId");
-    if (!userId) return;
+  const userId = localStorage.getItem("userId");
+  if (!userId) return;
 
-    const formData = new FormData();
-    formData.append("assignmentFile", file);
-    formData.append("userId", userId);
-    formData.append("courseId", courseId);
+  const formData = new FormData();
+  formData.append("assignmentFile", file);
+  formData.append("userId", userId);
+  formData.append("courseId", courseId);
 
-    try {
-      await fetch(
-        "https://backstagepass.co.in/reactapi/submit_assignment.php",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+  try {
+    await fetch(
+      "https://backstagepass.co.in/reactapi/submit_assignment.php",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
 
-      setState((s) => ({
-        ...s,
-        submittedAt: new Date().toISOString(),
-        submittedFileName: file.name,
-      }));
+    setState((s) => ({
+      ...s,
+      submittedAt: new Date().toISOString(),
+      submittedFileName: file.name,
+    }));
 
-      setNotice("Assignment submitted successfully.");
-    } catch (err) {
-      console.error(err);
-      setNotice("Error submitting assignment.");
-    }
-  };
+    setNotice("Assignment submitted successfully.");
+    setSelectedFile(null); // optional reset
+  } catch (err) {
+    console.error(err);
+    setNotice("Error submitting assignment.");
+  }
+};
+
   const markEvaluated = () => {
     setState((s) => ({ ...s, evaluated: true }));
     setNotice("Marked as evaluated.");
     setTimeout(() => setNotice(null), 2500);
   };
-const resetLocal = () => {
-    if (!confirm("Reset assignment state locally?")) return;
-    setState({ releaseAt: null, downloaded: false, submittedAt: null, submittedFileName: null, evaluated: false });
-    setNotice("Local assignment state reset.");
-    setTimeout(() => setNotice(null), 2000);
-  };
+// const resetLocal = () => {
+//     if (!confirm("Reset assignment state locally?")) return;
+//     setState({ releaseAt: null, downloaded: false, submittedAt: null, submittedFileName: null, evaluated: false });
+//     setNotice("Local assignment state reset.");
+//     setTimeout(() => setNotice(null), 2000);
+//   };
   /* ================= UI ================= */
 const isAssignmentPassed =
   typeof state.marks === "number" && state.marks >=60;
   const isAssignmentFailed = typeof state.marks === "number" && state.marks > 0 && state.marks  < 60;
-  
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 const hasStartedAssignment =
   typeof state.releaseAt === "string" &&
   state.releaseAt.trim() !== "";
@@ -288,9 +303,14 @@ const hasStartedAssignment =
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        {/* <div className="flex items-center gap-3">
           <button onClick={resetLocal} className="text-sm text-gray-500 hover:text-gray-700">Reset (local)</button>
+        </div> */}
+         { hasStartedAssignment  && !submitted && (
+        <div className="flex items-center gap-3">
+          <button onClick={redownload} className="text-sm text-gray-500 hover:text-gray-700">Re Download Assignment</button>
         </div>
+         )}
       </div>
 
       <div className="mt-5 grid grid-cols-1 md:grid-cols-1 gap-4 items-start">
@@ -386,6 +406,7 @@ const hasStartedAssignment =
               </div>
 
               <div className="flex items-center gap-3">
+<div className="flex items-center gap-3">
                 <button
                   onClick={handleDownload}
                   className="px-5 py-2 rounded-md bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold shadow hover:shadow-lg transform transition hover:-translate-y-0.5"
@@ -393,6 +414,8 @@ const hasStartedAssignment =
                   Download & Start Timer
                 </button>
               </div>
+</div>
+
             </div>
           ) : (
             <>
@@ -480,33 +503,47 @@ const hasStartedAssignment =
                             }`}
                         >
                           <input
-                            type="file"
-                            className="hidden"
-                            onChange={(e) => {
-                              const f = e.target.files?.[0] ?? null;
-                              if (f) handleFileSelect(f);
-                            }}
-                            disabled={!studentWindowActive}
-                          />
-                          <span className="text-sm text-indigo-600 font-medium">
-                            {studentWindowActive ? "Choose File" : "Upload Disabled"}
-                          </span>
+                          type="file"
+                          className="hidden"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0] ?? null;
+                            setSelectedFile(file);
+                            setNotice(""); // clear previous notice
+                          }}
+                          disabled={!studentWindowActive}
+                        />
+
+                        <span className="text-sm text-indigo-600 font-medium cursor-pointer">
+                          {studentWindowActive
+                            ? selectedFile
+                              ? selectedFile.name
+                              : "Choose File"
+                            : "Upload Disabled"}
+                        </span>
                         </label>
 
                        {!submitted && (
                       <button
-                        onClick={() => {
-                          if (!state.submittedAt) {
-                            setNotice(
-                              "Please select a file using 'Choose File' first."
-                            );
-                          }
-                        }}
-                        className="px-4 py-2 rounded-md bg-indigo-600 text-white text-sm hover:bg-indigo-700 transition"
-                        disabled={!studentWindowActive}
-                      >
-                        Submit
-                      </button>
+                onClick={() => {
+                  if (!selectedFile) {
+                    setNotice("Please select a file using 'Choose File' first.");
+                    return;
+                  }
+
+                  const confirmed = window.confirm(
+                    "⚠️ You can submit this assignment only once.\n\nAfter submission, you will NOT be able to re-upload or change the file.\n\nDo you want to continue?"
+                  );
+
+                  if (!confirmed) return;
+
+                  handleFileSelect(selectedFile);
+                }}
+                className="px-4 py-2 rounded-md bg-indigo-600 text-white text-sm hover:bg-indigo-700 transition"
+                disabled={!studentWindowActive}
+              >
+                Submit
+              </button>
+
                     )}
                       </div>
                     </div>
