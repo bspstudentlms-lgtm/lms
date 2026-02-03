@@ -178,6 +178,8 @@ export default function MyCourses() {
     progress = 0;
   }
 
+   
+
   const getLiveCountdown = (dateStr?: string) => {
   if (!dateStr) return null;
 
@@ -285,17 +287,25 @@ const hasAnyEnrollment = enrolledCourses.length > 0;
               {/* PROGRESS */}
               {enrolled && Number(course.coursetype) === 1 && (
                 <div className="mt-4">
-                  <div className="mb-1 flex justify-between text-xs font-medium text-gray-500">
-                    <span>Progress</span>
-                    <span>{progress}%</span>
-                  </div>
-                  <div className="h-2 w-full rounded-full bg-gray-200">
-                    <div
-                      className="h-2 rounded-full bg-[#E11D2E] transition-all"
-                      style={{ width: `${progress}%` }}
-                    />
-                  </div>
-                </div>
+  <div className="mb-1 flex justify-between text-xs font-medium text-gray-500">
+    <span>Progress</span>
+    <span>
+      {Number(course.is_coursecompleted) === 1 ? 100 : progress}%
+      
+    </span>
+  </div>
+
+  <div className="h-2 w-full rounded-full bg-gray-200">
+    <div
+      className="h-2 rounded-full bg-[#E11D2E] transition-all"
+      style={{
+        width: `${
+           Number(course.is_coursecompleted) === 1 ? 100 : progress
+        }%`,
+      }}
+    />
+  </div>
+</div>
               )}
             </div>
 
