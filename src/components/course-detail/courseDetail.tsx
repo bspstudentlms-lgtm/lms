@@ -1771,6 +1771,7 @@ const isCurrentWatched =
               >
                 Outcome
               </button>
+                {activeModule?.resourceslink && (
               <button
                 onClick={() => setActiveTab("resources")}
                 className={`pb-2 text-sm font-medium border-b-2 ${activeTab === "resources"
@@ -1780,6 +1781,7 @@ const isCurrentWatched =
               >
                 Resources
               </button>
+                )}
             </nav>
           </div>
 
