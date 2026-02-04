@@ -1174,7 +1174,7 @@ const isCurrentWatched =
 
 
   return (
-    <div className="h-screen px-4 md:px-2 py-6 overflow-hidden bg-white-50">
+    <div className="min-h-screen px-4 md:px-2 py-6 bg-white-50">
       <div className="max-w-9xl mx-auto">
         <div className="flex items-center justify-between mb-6 gap-4">
           <div>
@@ -1200,11 +1200,10 @@ const isCurrentWatched =
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="md:col-span-2 flex flex-col h-full">
-            <div className="video-surface p-4 rounded-lg flex flex-col flex-1">
+          <div className="md:col-span-2">
+            <div className="video-surface p-4 rounded-lg">
               {/* provide a stable aspect ratio */}
-             <div className="relative w-full rounded-lg overflow-y-auto flex-1">
-
+              <div className="relative w-full rounded-lg overflow-hidden" style={{height: "590px"}}>
                 {/* If currentModule is a video, render Muxvideo, otherwise render module UI */}
                 {currentModule ? (
                   (() => {
