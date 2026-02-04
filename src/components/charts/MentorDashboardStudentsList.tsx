@@ -777,12 +777,15 @@ const getProgressColor = (pct: number) => {
             </TableRow>
           ) : (
             filteredAndSortedStudents.map((student, index) => {
-              const pct = Number(student.course_per_completed ?? 0);
-              const progressColor = getProgressColor(pct);
+               const pct = Number(student.course_per_completed ?? 0);
+               const displayPct =
+  Number(student.is_coursecompleted) === 1 ? 100 : pct;
+
+              const progressColor = getProgressColor(displayPct);
               const key = student.id ?? `${student.first_name}-${student.last_name ?? ""}-${index}`;
               const assignmentUrl = resolveAssignmentUrl(student);
               const isDownloading = downloadingFor === key;
-
+             
               return (
                 <React.Fragment key={key}>
                   <TableRow className="hover:bg-gray-50 transition-colors">
@@ -795,22 +798,22 @@ const getProgressColor = (pct: number) => {
                 <div
   className="relative w-10 h-10 rounded-full"
   style={{
-    background: pct === 0
+    background: displayPct === 0
       ? "#e5e7eb"
-      : `conic-gradient(${progressColor} ${pct}%, #e5e7eb ${pct}% 100%)`,
+      : `conic-gradient(${progressColor} ${displayPct}%, #e5e7eb ${displayPct}% 100%)`,
   }}
   role="progressbar"
-  aria-valuenow={pct}
+  aria-valuenow={displayPct}
   aria-valuemin={0}
   aria-valuemax={100}
 >
   <div className="absolute inset-1 bg-white rounded-full flex items-center justify-center">
     <span
-      className="text-[10px] font-semibold"
-      style={{ color: progressColor }}
-    >
-      {pct}%
-    </span>
+  className="text-[10px] font-semibold"
+  style={{ color: progressColor }}
+>
+ {displayPct}%
+</span>
   </div>
 </div>
 
