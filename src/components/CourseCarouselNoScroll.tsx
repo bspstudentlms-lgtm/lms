@@ -9,6 +9,9 @@ import { Heart, Lock, PlayCircle, ShoppingCart } from "lucide-react";
 
 /* ================= TYPES ================= */
 type Course = {
+  time: string;
+  date: string;
+ 
   course_id: number;
   coursetype: number; // 1 = Course, 2 = Recorded, 3 = Live
   title: string;
@@ -54,6 +57,7 @@ const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
           description: item.description || "No description",
           image: item.image,
           category: item.category,
+          shortname:item.shortname,
           level: item.level,
           urlpath: item.urlpath,
           coursetype: Number(item.coursetype),
@@ -289,6 +293,8 @@ const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
       Know More
     </button></Link>
   </div>
+
+  
 </div>
 
                 );
