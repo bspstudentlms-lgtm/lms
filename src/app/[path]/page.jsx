@@ -86,6 +86,13 @@ import { signIn } from "next-auth/react";
   if (!visible) return null;
  if (!course) return <p>Loading...</p>;
 
+ const isSectionActive = (type) =>
+  course.sections?.some(
+    (section) =>
+      section.section_type === type &&
+      section.is_active === "1"
+  );
+
   return (
     <main className="text-gray-800 pb-20">
       <header className="fixed top-0 left-0 w-full z-50 bg-white border-b shadow-sm">
@@ -200,16 +207,19 @@ import { signIn } from "next-auth/react";
   />
         
       </section>
+{isSectionActive("key_features") && course.key_features?.length > 0 && (
+  <section className="max-w-7xl mx-auto px-6 py-20">
+    <h2 className="text-3xl font-medium text-[#2d2d2d] mb-10">
+      Key Features
+    </h2>
 
-      {/* KEY FEATURES */}
-      <section className="max-w-7xl mx-auto px-6 py-20">
-        <h2 className="text-3xl font-medium text-[#2d2d2d] mb-10">Key Features</h2>
-        <div className="grid md:grid-cols-2 gap-6">
-         {course.key_features?.map((feature, index) => (
-      <Feature key={index} text={feature} />
-    ))}
-        </div>
-      </section>
+    <div className="grid md:grid-cols-2 gap-6">
+      {course.key_features.map((feature, index) => (
+        <Feature key={index} text={feature} />
+      ))}
+    </div>
+  </section>
+)}
 
       {/* AWARDS */}
       <section className="max-w-7xl mx-auto px-6 py-20">
@@ -235,6 +245,7 @@ import { signIn } from "next-auth/react";
       </section>
 
       {/* COURSE TOPICS */}
+      {isSectionActive("topics") && course.topics?.length > 0 && (
       <section className="max-w-6xl mx-auto px-6 py-20">
         <h2 className="text-3xl font-semibold mb-10">Course Topics You will Learn</h2>
         <div className="space-y-6">
@@ -269,6 +280,7 @@ import { signIn } from "next-auth/react";
           })}
         </div>
       </section>
+      )}
 
       {/* CERTIFICATE */}
       <section className="max-w-7xl mx-auto px-6 py-16 grid lg:grid-cols-2 gap-10">
@@ -288,6 +300,7 @@ import { signIn } from "next-auth/react";
       </section>
 
       {/* AFTER COURSE */}
+      {isSectionActive("outcomes") && course.outcomes?.length > 0 && (
       <section className="bg-gray-100 py-16">
         <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-10">
           <div>
@@ -301,6 +314,7 @@ import { signIn } from "next-auth/react";
         <img src={`https://backstagepass.co.in/studentlms/uploads/course_outcomes/${course.outcomes_image}`}/>
          </div>
       </section>
+      )}
 
       {/* COMPANIES */}
       <section className="max-w-7xl mx-auto px-6 py-20">
@@ -319,6 +333,7 @@ import { signIn } from "next-auth/react";
       </section>
 
       {/* SYSTEM REQUIREMENTS */}
+      {isSectionActive("system") && course.requirement?.length > 0 && (
       <section className="max-w-7xl mx-auto px-6 py-24">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="flex justify-center">
@@ -344,8 +359,10 @@ import { signIn } from "next-auth/react";
           </div>
         </div>
       </section>
+      )}
 
       {/* This is the one for you */}
+      {isSectionActive("audience") && course.card?.length > 0 && (
        <section className="max-w-7xl mx-auto px-6 py-20">
       {/* Heading */}
       <h2 className="text-3xl font-medium text-[#2d2d2d] mb-12">
@@ -359,6 +376,8 @@ import { signIn } from "next-auth/react";
         ))}
       </div>
     </section>
+      )}
+      {isSectionActive("career") && course.career?.length > 0 && (
     <section className="max-w-7xl mx-auto px-6 py-20">
 
       {/* HEADING */}
@@ -410,8 +429,10 @@ import { signIn } from "next-auth/react";
       </div>
 
     </section>
+      )}
 
        {/* FAQ */}
+       {isSectionActive("faqs") && course.faqs?.length > 0 && (
        <section className="max-w-7xl mx-auto px-6 py-20">
       {/* Heading */}
       <h2 className="text-3xl font-medium text-[#2d2d2d] mb-10">
@@ -452,7 +473,7 @@ import { signIn } from "next-auth/react";
           );
         })}
       </div>
-    </section>
+    </section> )}
      {/* BOTTOM CTA */}
           <section className="bg-[#6d1c1c] text-white text-center py-16" id="page-enroll-cta">
             <h2 className="text-3xl font-bold mb-6">
