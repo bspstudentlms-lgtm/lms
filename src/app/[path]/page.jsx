@@ -267,15 +267,20 @@ import { signIn } from "next-auth/react";
                 </button>
 
                 
-                <div
+                 <div
                 className={`px-8 transition-all duration-300 ease-in-out ${
-                    isOpen ? "max-h-[600px] pb-6" : "max-h-0"
-                } overflow-hidden text-gray-700
-                    [&_ul]:list-disc [&_ul]:pl-5 [&_li]:mb-2`}
-                dangerouslySetInnerHTML={{ __html: topic.points[0] }}
-                />
-                
+                  isOpen ? "max-h-[600px] pb-6" : "max-h-0"
+                } overflow-hidden`}
+              >
+                <ul className="list-disc pl-5 space-y-2 text-gray-700">
+                  {topic.points.map(point => (
+                    <li key={point}>{point}</li>
+                  ))}
+                </ul>
               </div>
+            </div>
+                
+              
             );
           })}
         </div>
