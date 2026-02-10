@@ -278,10 +278,7 @@
 .dark .custom-scrollbar::-webkit-scrollbar-thumb {
   background-color: #344054;
 }
-ul {
-  list-style: disc;
-  padding-left: 1.25rem;
-}
+
 
 
 @layer utilities {
