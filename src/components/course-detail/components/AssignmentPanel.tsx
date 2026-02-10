@@ -34,32 +34,40 @@ const AssignmentPanel: React.FC<AssignmentPanelProps> = ({
   const STORAGE_KEY = `bp_assignment_course_${courseId}`;
 
   const [state, setState] = useState<AssignmentState>(() => {
-    try {
-      const raw =
-        typeof window !== "undefined"
-          ? localStorage.getItem(STORAGE_KEY)
-          : null;
-      return raw
-        ? (JSON.parse(raw) as AssignmentState)
-        : {
-            releaseAt: null,
-            downloaded: false,
-            submittedAt: null,
-            submittedFileName: null,
-            evaluated: false,
-            marks: null,
-          };
-    } catch {
-      return {
-        releaseAt: null,
-        downloaded: false,
-        submittedAt: null,
-        submittedFileName: null,
-        evaluated: false,
-        marks: null,
-      };
-    }
-  });
+  try {
+    const raw =
+      typeof window !== "undefined"
+        ? localStorage.getItem(STORAGE_KEY)
+        : null;
+
+    return raw
+      ? (JSON.parse(raw) as AssignmentState)
+      : {
+          startedAt: null,
+          releaseAt: null,
+          downloaded: false,
+          submittedAt: null,
+          submittedFileName: null,
+          evaluated: false,
+          marks: null,
+          grade: null,
+          coursename: null,
+        };
+  } catch {
+    return {
+      startedAt: null,
+      releaseAt: null,
+      downloaded: false,
+      submittedAt: null,
+      submittedFileName: null,
+      evaluated: false,
+      marks: null,
+      grade: null,
+      coursename: null,
+    };
+  }
+});
+
 
   const [notice, setNotice] = useState<string | null>(null);
 
@@ -128,16 +136,23 @@ const AssignmentPanel: React.FC<AssignmentPanelProps> = ({
   /* ================= DOWNLOAD ================= */
 
 
-const redownload = async () => {
-   // const fileName = localStorage.getItem("assignment_file");
-    assignmentFile
-const fileName =assignmentFile;
-    const fileUrl = fileName
-      ? `https://backstagepass.co.in/studentlms/uploads/assignments/${fileName}`
-      : null;
-window.open(fileUrl, "_blank");
+// const redownload = async () => {
+//    // const fileName = localStorage.getItem("assignment_file");
+//     assignmentFile
+// const fileName =assignmentFile;
+//     const fileUrl = fileName
+//       ? `https://backstagepass.co.in/studentlms/uploads/assignments/${fileName}`
+//       : null;
+// window.open(fileUrl, "_blank");
     
-  };
+//   };
+const redownload = () => {
+  assignmentFile &&
+    window.open(
+      `https://backstagepass.co.in/studentlms/uploads/assignments/${assignmentFile}`,
+      "_blank"
+    );
+};
    const handleDownload = async () => {
    // const fileName = localStorage.getItem("assignment_file");
     assignmentFile
@@ -196,15 +211,16 @@ const fileName =assignmentFile;
         if (!data.releaseAt) {
   localStorage.removeItem(STORAGE_KEY);
   setState({
-    releaseAt: null,
-    downloaded: false,
-    submittedAt: null,
-    submittedFileName: null,
-    evaluated: false,
-    marks: null,
-    grade: null,
-    coursename: null,
-  });
+  startedAt: null,
+  releaseAt: null,
+  downloaded: false,
+  submittedAt: null,
+  submittedFileName: null,
+  evaluated: false,
+  marks: null,
+  grade: null,
+  coursename: null,
+});
   return;
 }
 
