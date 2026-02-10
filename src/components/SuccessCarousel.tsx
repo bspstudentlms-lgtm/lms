@@ -81,73 +81,93 @@ export default function CourseCarousel() {
   const [activeStudent, setActiveStudent] = useState<Student | null>(null);
 
   return (
-    <section className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 flex flex-col lg:flex-row gap-12">
+    <div className="row">								
+            <div className="col-lg-12">
+              <div id="testimonial-slider" className="owl-carousel">
+        {students.map((s) => (
 
-        {/* LEFT TITLE */}
-        <div className="lg:w-1/4 flex items-center">
-          <h2 className="text-5xl font-bold text-red-600">
-            Testimonials
-          </h2>
-        </div>
-
-        {/* RIGHT CAROUSEL */}
-        <div className="lg:w-3/4">
-          <div className="overflow-hidden" ref={emblaRef}>
-            <div className="flex gap-6">
-              {students.map((s) => (
-                <div
-                  key={s.id}
-                  className="flex-[0_0_100%] md:flex-[0_0_48%] lg:flex-[0_0_32%]"
-                >
-                  <div className="bg-white rounded-2xl shadow-md p-6 h-full relative">
-
-                    {/* Quote icon */}
-                    <span className="absolute top-4 right-4 text-yellow-400 text-2xl font-bold">
-                      ”
-                    </span>
-
-                    {/* Text */}
-                    <p className="text-gray-700 text-sm leading-relaxed mb-3">
-                      {truncate(s.testimonial)}
-                    </p>
-
-                    {/* Show More */}
-                    <button
-                      onClick={() => setActiveStudent(s)}
-                      className="text-red-500 text-sm font-medium mb-6"
-                    >
-                      Show More
-                    </button>
-
-                    {/* Footer */}
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
-                        <Image
-                          src={s.photo}
-                          alt={s.name}
-                          width={48}
-                          height={48}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div>
-                        <p className="text-red-600 font-semibold text-sm">
-                          {s.name}
-                        </p>
-                        <p className="text-gray-500 text-xs">
-                          {s.course}
-                        </p>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-              ))}
+          <div className="testimonial"  key={s.id}>
+            <div className="testimonial_content">
+              <i className="fa fa-star"></i>
+              <i className="fa fa-star"></i>
+              <i className="fa fa-star"></i>
+              <i className="fa fa-star"></i>
+              <i className="fa fa-star"></i>
+              <p>{truncate(s.testimonial)}</p>
+               <button
+                onClick={() => setActiveStudent(s)}
+                className="text-red-500 text-sm font-medium mb-6"
+              >
+                Show More
+              </button>
+            </div>
+            <div className="testi_pic_title tpt_one">
+              <div className="pic">
+                {/* <img src="assets/images/all-img/t1.png" alt="" /> */}
+                 <Image
+                    src={s.photo}
+                    alt={s.name}
+                    width={48}
+                    height={48}
+                    className="w-full h-full object-cover"
+                  />
+              </div>
+              <h4>{s.name}</h4>
+              <small className="post">- {s.course}</small>
             </div>
           </div>
-        </div>
+
+          // <div
+          //   key={s.id}
+          //   className="flex-[0_0_100%] md:flex-[0_0_48%] lg:flex-[0_0_32%]"
+          // >
+          //   <div className="bg-white rounded-2xl shadow-md p-6 h-full relative">
+
+          //     {/* Quote icon */}
+          //     <span className="absolute top-4 right-4 text-yellow-400 text-2xl font-bold">
+          //       ”
+          //     </span>
+
+          //     {/* Text */}
+          //     <p className="text-gray-700 text-sm leading-relaxed mb-3">
+          //       {truncate(s.testimonial)}
+          //     </p>
+
+          //     {/* Show More */}
+          //     <button
+          //       onClick={() => setActiveStudent(s)}
+          //       className="text-red-500 text-sm font-medium mb-6"
+          //     >
+          //       Show More
+          //     </button>
+
+          //     {/* Footer */}
+          //     <div className="flex items-center gap-3">
+          //       <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+          //         <Image
+          //           src={s.photo}
+          //           alt={s.name}
+          //           width={48}
+          //           height={48}
+          //           className="w-full h-full object-cover"
+          //         />
+          //       </div>
+          //       <div>
+          //         <p className="text-red-600 font-semibold text-sm">
+          //           {s.name}
+          //         </p>
+          //         <p className="text-gray-500 text-xs">
+          //           {s.course}
+          //         </p>
+          //       </div>
+          //     </div>
+
+          //   </div>
+          // </div>
+        ))}
       </div>
+       </div>
+       
 
       {/* ------------------ MODAL ------------------ */}
       {activeStudent && (
@@ -164,36 +184,36 @@ export default function CourseCarousel() {
 
             {/* Header */}
             <div className="flex items-center gap-4 mb-4">
-  {/* IMAGE */}
-  <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
-    <Image
-      src={activeStudent.photo}
-      alt={activeStudent.name}
-      width={64}
-      height={64}
-      className="w-full h-full object-cover"
-    />
-  </div>
+              {/* IMAGE */}
+              <div className="w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
+                <Image
+                  src={activeStudent.photo}
+                  alt={activeStudent.name}
+                  width={64}
+                  height={64}
+                  className="w-full h-full object-cover"
+                />
+              </div>
 
-  {/* TEXT */}
-  <div>
-    <p className="text-red-600 font-semibold">
-      {activeStudent.name}
-    </p>
-    <p className="text-gray-500 text-sm">
-      {activeStudent.course}
-    </p>
-  </div>
-</div>
+              {/* TEXT */}
+              <div>
+                <p className="text-red-600 font-semibold">
+                  {activeStudent.name}
+                </p>
+                <p className="text-gray-500 text-sm">
+                  {activeStudent.course}
+                </p>
+              </div>
+            </div>
 
 
             {/* Full testimonial */}
-            <p className="text-gray-700 text-sm leading-relaxed">
+            <p className="text-gray-700 text-md leading-relaxed">
               “{activeStudent.testimonial}”
             </p>
           </div>
         </div>
       )}
-    </section>
+    </div>
   );
 }

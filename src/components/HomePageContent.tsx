@@ -97,6 +97,82 @@ useEffect(() => {
   };
 }, []);
 
+useEffect(() => {
+  const initOwl = () => {
+    if (
+      typeof window !== "undefined" &&
+      (window as any).$ &&
+      (window as any).$.fn.owlCarousel
+    ) {
+      const $ = (window as any).$;
+
+      // Destroy if already initialized (important for Next.js HMR)
+      if ($("#testimonial-slider").hasClass("owl-loaded")) {
+        $("#testimonial-slider").trigger("destroy.owl.carousel");
+        $("#testimonial-slider").removeClass("owl-loaded");
+        $("#testimonial-slider").find(".owl-stage-outer").children().unwrap();
+      }
+
+      $("#testimonial-slider").owlCarousel({
+        items: 3,
+        loop: true,
+        margin: 30,
+        nav: true,          // ✅ arrows enabled
+        dots: false,
+        autoplay: true,
+        autoplayTimeout: 4000,
+        navText: [
+          "<span class='owl-prev-icon'>&larr;</span>",
+          "<span class='owl-next-icon'>&rarr;</span>"
+        ],
+        responsive: {
+          0: { items: 1 },
+          768: { items: 2 },
+          1024: { items: 3 }
+        }
+      });
+    } else {
+      setTimeout(initOwl, 200); // wait for scripts
+    }
+  };
+
+  initOwl();
+}, []);
+
+useEffect(() => {
+  const initLogoCarousel = () => {
+    if (
+      typeof window !== "undefined" &&
+      (window as any).$ &&
+      (window as any).$.fn.owlCarousel
+    ) {
+      const $ = (window as any).$;
+
+      $("#logo-carousel").owlCarousel({
+        loop: true,
+        margin: 60,
+        autoplay: true,
+        autoplayTimeout: 0,      // 👈 continuous
+        autoplaySpeed: 5000,
+        smartSpeed: 5000,
+        slideTransition: "linear",
+        dots: false,
+        nav: false,
+        autoplayHoverPause: false,
+        responsive: {
+          0: { items: 2 },
+          600: { items: 3 },
+          1000: { items: 5 }
+        }
+      });
+    } else {
+      setTimeout(initLogoCarousel, 200);
+    }
+  };
+
+  initLogoCarousel();
+}, []);
+
 
 useEffect(() => {
   const initScripts = () => {
@@ -165,7 +241,7 @@ return (
 
     
 	
-    {/* <div id="loader-wrapper">
+    <div id="loader-wrapper">
         <div id="loader"></div>
         <div className="loader-section section-left"></div>
         <div className="loader-section section-right"></div>
@@ -175,81 +251,25 @@ return (
 	  
 	<div id="navigation" className="fixed-top navbar-light bg-faded site-navigation">
 		<div className="container">
-			<div className="row">
-				<div className="col-lg-2 col-md-3 col-sm-4">
+			<div className="row dfm">
+				<div className="col-lg-3 col-md-3 col-sm-4 dfa">
 					<div className="site-logo">
-						<a href="index.html"><img src="assets/images/all-img/logo.png" alt="" /></a>          			        				
+						<a href="index.html"><img src="https://backstagepass.co.in/newlogo-324ee245.webp" alt="" /></a>          			        				
 					</div>
 				</div>
 				
-				<div className="col-lg-6 col-md-9 col-sm-8 ">
-					<div className="header_right ">
-						<nav id="main-menu" className="ms-auto">
-							<ul>
-							  <li><a className="nav-link" href="index.html">Home <span className="ti-angle-down"></span></a>
-								<ul>
-									<li><a className="nav-link" href="index.html">Home 01</a></li>
-									<li><a className="nav-link" href="index_2.html">Home 02</a></li>
-									<li><a className="nav-link" href="index_3.html">Home 03</a></li>
-								</ul>
-							   </li>
-							    <li><a className="nav-link" href="#">Pages <span className="ti-angle-down"></span></a>
-									<ul>
-										<li><a className="nav-link" href="about.html">About Us</a></li>										
-										<li><a className="nav-link" href="team.html">Instructor</a></li>
-										<li><a className="nav-link" href="team-details.html">Instructor Details</a></li>
-										<li><a className="nav-link" href="faq.html">FAQ's</a></li>
-										<li><a className="nav-link" href="event.html">Event</a></li>
-										<li><a className="nav-link" href="event_single.html">Event Single</a></li>
-										<li><a className="nav-link" href="error.html">404 Page</a></li>										
-										<li><a className="nav-link" href="login.html">Login</a></li>
-										<li><a className="nav-link" href="register.html">Register</a></li>
-									</ul>
-								</li>
-								<li><a className="nav-link" href="course.html">Courses <span className="ti-angle-down"></span></a>
-									<ul>
-										<li><a className="nav-link" href="course.html">Courses 01</a></li>
-										<li><a className="nav-link" href="course2.html">Courses 02</a></li>
-										<li><a className="nav-link" href="course3.html">Courses 03</a></li>
-										<li><a className="nav-link" href="course-sidebar.html">Course Sidebar</a></li>
-										<li><a className="nav-link" href="single_course.html">Course details</a></li>
-									</ul>
-								</li>
-								<li><a className="nav-link" href="shop.html">Shop <span className="ti-angle-down"></span></a>
-									<ul>
-										<li><a className="nav-link" href="shop.html">Shop</a></li>
-										<li><a className="nav-link" href="single_shop.html">Single Shop</a></li>
-										<li><a className="nav-link" href="cart.html">Cart Page</a></li>
-										<li><a className="nav-link" href="checkout.html">Checkout page</a></li>
-									</ul>
-								</li>
-								<li><a className="nav-link" href="blog.html">Blog <span className="ti-angle-down"></span></a>
-									<ul>
-										<li><a className="nav-link" href="blog.html">Blog List</a></li>
-										<li><a className="nav-link" href="blog_single.html">Single Blog</a></li>
-									</ul>
-								</li>
-							    <li><a className="nav-link" href="contact.html">Contact</a></li>
-							</ul>
-						</nav>
-						<div id="mobile_menu"></div>
-					</div>
-				</div>
 				<div className="col-lg-4 col-md-3 col-sm-8">
+          <div className="dfe"> 
 					<div className="home_lc">
 						<a href="#" className="hlc">
 						  <i className="ti-heart"></i>
 						  <span className="gactive">0</span>
 					   </a>
-						<a href="#" className="hlc">
-						  <i className="ti-shopping-cart-full"></i>
-						  <span className="gactive">2</span>
-					   </a>
 					</div>
 					<div className="call_to_action">
 						<a className="btn_one" href="login.html">Login</a>
-						<a className="btn_two" href="register.html">Sign Up</a>
-					</div>					
+					</div>
+          </div>				
 				</div>
 			</div>
 		</div>
@@ -271,7 +291,7 @@ return (
 			<div className="row">
 				<div className="col-lg-6 col-sm-6 col-xs-12">	
 					<div className="home_content">
-						<h1>Better <span>Learning Future</span> Starts With Penn</h1>
+						<h1>Better <span>Learning Future</span> Starts With Bsp</h1>
 						<p>It is a long established fact that reader will be distracted readable content of a page when.</p>						
 					</div>
 					<div className="home_btn">
@@ -392,7 +412,7 @@ return (
             <div className="count-box">
               <i className="ti-face-smile"></i>
               <div>
-                <span data-purecounter-start="0" data-purecounter-end="8232" data-purecounter-duration="1" className="purecounter"></span>
+                <span data-purecounter-start="0" className="purecounter">8232</span>
                 <p>Enrolled Students</p>
               </div>
             </div>
@@ -401,7 +421,7 @@ return (
             <div className="count-box">
               <i className="ti-files" style={{ color: "#ee6c20" }}></i>
               <div>
-                <span data-purecounter-start="0" data-purecounter-end="521" data-purecounter-duration="1" className="purecounter"></span>
+                <span data-purecounter-start="0" className="purecounter">521</span>
                 <p>Academic Programs</p>
               </div>
             </div>
@@ -410,7 +430,7 @@ return (
             <div className="count-box">
               <i className="ti-headphone-alt" style={{ color: "#15be56" }}></i>
               <div>
-                <span data-purecounter-start="0" data-purecounter-end="163" data-purecounter-duration="1" className="purecounter"></span>
+                <span data-purecounter-start="0" className="purecounter">163</span>
                 <p>Winning Award</p>
               </div>
             </div>
@@ -419,7 +439,7 @@ return (
             <div className="count-box">
               <i className="ti-user" style={{ color: "#bb0852" }}></i>
               <div>
-                <span data-purecounter-start="0" data-purecounter-end="93" data-purecounter-duration="1" className="purecounter"></span>
+                <span data-purecounter-start="0" className="purecounter">93</span>
                 <p>Certified Students</p>
               </div>
             </div>
@@ -437,13 +457,12 @@ return (
 					<div className="partner_title">
 						<h3>Trusted Company Arround The World! </h3>
 					</div>
-					<div className="partner">
-						<a href="#"><img src="assets/images/all-img/clients/1.png" alt="image" /></a>
-						<a href="#"><img src="assets/images/all-img/clients/2.png" alt="image" /></a>
-						<a href="#"><img src="assets/images/all-img/clients/3.png" alt="image" /></a>
-						<a href="#"><img src="assets/images/all-img/clients/4.png" alt="image" /></a>
-						<a href="#"><img src="assets/images/all-img/clients/5.png" alt="image" /></a>
-						<a href="#"><img src="assets/images/all-img/clients/2.png" alt="image" /></a>
+					<div className="partner owl-carousel" id="logo-carousel">
+						<a href="#"><img src="https://backstagepass.co.in/r2-a450dbe9.webp" alt="image" /></a>
+						<a href="#"><img src="https://backstagepass.co.in/Qualcomm-02b58aca.webp" alt="image" /></a>
+						<a href="#"><img src="https://backstagepass.co.in/r4-31e22ac4.webp" alt="image" /></a>
+						<a href="#"><img src="https://backstagepass.co.in/GSNgames-d9a1517e.webp" alt="image" /></a>
+						<a href="#"><img src="https://backstagepass.co.in/r5-2e345bac.webp" alt="image" /></a>
 						<a href="#"><img src="assets/images/all-img/clients/1.png" alt="image" /></a>
 						<a href="#"><img src="assets/images/all-img/clients/3.png" alt="image" /></a>
 						<a href="#"><img src="assets/images/all-img/clients/4.png" alt="image" /></a>
@@ -456,8 +475,8 @@ return (
 	<section className="marketing_content_area section-padding">
 	   <div className="container">
 			<div className="section-title">
-				<h2>Why Choose Penn</h2>
-				<p>Find the <span><u>best features</u></span> of Penn.</p>
+				<h2>Why Choose Bsp</h2>
+				<p>Find the <span><u>best features</u></span> of Bsp.</p>
 			</div>		
 			<div className="row">									
 				<div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
@@ -521,128 +540,26 @@ return (
 	
 	
 	<div className="best-cpurse section-padding">
-		<div className="container">
-			<div className="section-title">
-			  <h2>Popular Courses</h2>
-			  <p>Choose Our <span><u>Top Courses</u></span></p>
-			</div>				
-			<div className="row">					
-				<div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
-					<div className="course-slide">
-						<div className="course-img">
-							<img src="assets/images/all-img/c1.png" alt="" />
-							<div className="course-date">
-								<span className="month">$49</span>
-							</div>
-						</div>
-						<div className="course-content"><a className="c_btn" href="single_course.html">Arts & Design</a>
-							<h3><a href="single_course.html">Basic Fundamentals of Interior & Graphics Design</a></h3>
-							<span><i className="fa fa-calendar"></i>3 Lessons</span>
-							<span><i className="fa fa-clock-o"></i>3h 45m</span>
-							<span><i className="fa fa-star"></i>4.9</span>
-							<span><i className="fa fa-table"></i><strong>30 Seats Available</strong></span>
-							
-						</div>
-					</div>	
-				</div>			
-				<div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
-					<div className="course-slide">
-						<div className="course-img">
-							<img src="assets/images/all-img/c2.png" alt="" />
-							<div className="course-date">
-								<span className="month">$39</span>
-							</div>
-						</div>
-						<div className="course-content"><a className="c_btn" href="single_course.html">Social</a>
-							<h3><a href="single_course.html">Increasing Engagement with Instagram & Facebook</a></h3>
-							<span><i className="fa fa-calendar"></i>5 Lessons</span>
-							<span><i className="fa fa-clock-o"></i>4h 15m</span>
-							<span><i className="fa fa-star"></i>4.7</span>
-							<span><i className="fa fa-table"></i><strong>21 Seats Available</strong></span>
-							
-						</div>
-					</div>	
-				</div>			
-				<div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
-					<div className="course-slide">
-						<div className="course-img">
-							<img src="assets/images/all-img/c3.png" alt="" />
-							<div className="course-date">
-								<span className="month">$29</span>
-							</div>
-						</div>
-						<div className="course-content"><a className="c_btn" href="single_course.html">Design</a>
-							<h3><a href="single_course.html">Introduction to Color Theory & Basic UI/UX</a></h3>
-							<span><i className="fa fa-calendar"></i>4 Lessons</span>
-							<span><i className="fa fa-clock-o"></i>6h 25m</span>
-							<span><i className="fa fa-star"></i>4.8</span>
-							<span><i className="fa fa-table"></i><strong>33 Seats Available</strong></span>
-							
-						</div>
-					</div>	
-				</div>			
-				<div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
-					<div className="course-slide">
-						<div className="course-img">
-							<img src="assets/images/all-img/c4.png" alt="" />
-							<div className="course-date">
-								<span className="month">$59</span>
-							</div>
-						</div>
-						<div className="course-content"><a className="c_btn" href="single_course.html">Technology</a>
-							<h3><a href="single_course.html">Financial Security Thinking and Principles Theory</a></h3>
-							<span><i className="fa fa-calendar"></i>7 Lessons</span>
-							<span><i className="fa fa-clock-o"></i>7h 45m</span>
-							<span><i className="fa fa-star"></i>4.7</span>
-							<span><i className="fa fa-table"></i><strong>11 Seats Available</strong></span>
-							
-						</div>
-					</div>	
-				</div>			
-				<div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
-					<div className="course-slide">
-						<div className="course-img">
-							<img src="assets/images/all-img/c5.png" alt="" />
-							<div className="course-date">
-								<span className="month">$69</span>
-							</div>
-						</div>
-						<div className="course-content"><a className="c_btn" href="single_course.html">Data Science</a>
-							<h3><a href="single_course.html">Logo Design: From Concept to Presentation</a></h3>
-							<span><i className="fa fa-calendar"></i>5 Lessons</span>
-							<span><i className="fa fa-clock-o"></i>4h 55m</span>
-							<span><i className="fa fa-star"></i>4.9</span>
-							<span><i className="fa fa-table"></i><strong>41 Seats Available</strong></span>
-							
-						</div>
-					</div>	
-				</div>			
-				<div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
-					<div className="course-slide">
-						<div className="course-img">
-							<img src="assets/images/all-img/c6.png" alt="" />
-							<div className="course-date">
-								<span className="month">$99</span>
-							</div>
-						</div>
-						<div className="course-content"><a className="c_btn" href="single_course.html">Development</a>
-							<h3><a href="single_course.html">Professional Ceramic Moulding for Beginners</a></h3>
-							<span><i className="fa fa-calendar"></i>3 Lessons</span>
-							<span><i className="fa fa-clock-o"></i>3h 10m</span>
-							<span><i className="fa fa-star"></i>4.9</span>
-							<span><i className="fa fa-table"></i><strong>37 Seats Available</strong></span>
-							
-						</div>
-					</div>	
-				</div>
-				<div className="col-lg-12 text-center">
-					<div className="cc_btn">
-						<a className="btn_one" href="course.html">View All Course</a>
-					</div>
-				</div>				
-			</div>		
-		</div>
-	</div>
+          <div className="container">
+            <div className="section-title">
+              <h2>Popular Courses</h2>
+              <p>Choose Our <span><u>Top Courses</u></span></p>
+            </div>
+            
+              
+              
+              <CourseCarouselNoScroll />
+              
+              
+              
+              
+           
+          </div>
+        </div>
+
+ 
+      
+
 	
 	
 	
@@ -681,7 +598,7 @@ return (
 		
 	
 	
-	<section className="newsletter_area section-padding">
+	{/* <section className="newsletter_area section-padding">
 		<div className="container">
 			<div className="row text-center">			
 				<div className="col-lg-6 offset-lg-3 col-sm-12 col-xs-12">
@@ -696,7 +613,7 @@ return (
 				</div>
 			</div>	
 		</div>	
-	</section>
+	</section> */}
 	
 	<section className="topic_content_area section-padding">
 	   <div className="container">
@@ -751,7 +668,7 @@ return (
 		</div>
 	</section>
 	
-	<section className="our-event section-padding">
+	{/* <section className="our-event section-padding">
 		<div className="container">
 			<div className="section-title">
 				<h2>Upcoming Events</h2>
@@ -820,7 +737,7 @@ return (
 				</div>	
 			</div>
 		</div>			
-	</section>
+	</section> */}
 		
 	
 	
@@ -830,101 +747,18 @@ return (
 				<h2>Testimonial</h2>
 				<p>What Says <span><u>Our Students</u></span></p>
 			</div>		
-			<div className="row">								
-				<div className="col-lg-12">
-					<div id="testimonial-slider" className="owl-carousel">
-						<div className="testimonial">
-							<div className="testimonial_content">													
-								<i className="fa fa-star"></i>
-								<i className="fa fa-star"></i>
-								<i className="fa fa-star"></i>
-								<i className="fa fa-star"></i>
-								<i className="fa fa-star"></i>
-								<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr sed diam nonumy eirmod tempor.</p>
-							</div>
-							<div className="testi_pic_title tpt_one">
-								<div className="pic">
-									<img src="assets/images/all-img/t1.png" alt="" />
-								</div>
-								<h4>James Clayton</h4>
-								<small className="post">- Design Expert</small>	
-							</div>
-						</div>
-						<div className="testimonial">
-							<div className="testimonial_content">													
-								<i className="fa fa-star"></i>
-								<i className="fa fa-star"></i>
-								<i className="fa fa-star"></i>
-								<i className="fa fa-star"></i>
-								<i className="fa fa-star"></i>
-								<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr sed diam nonumy eirmod tempor.</p>
-							</div>
-							<div className="testi_pic_title tpt_two">
-								<div className="pic">
-									<img src="assets/images/all-img/t2.png" alt="" />
-								</div>
-								<h4>James Simmons</h4>
-								<small className="post">- Marketing Expert</small>	
-							</div>
-						</div>
-						<div className="testimonial">
-							<div className="testimonial_content">													
-								<i className="fa fa-star"></i>
-								<i className="fa fa-star"></i>
-								<i className="fa fa-star"></i>
-								<i className="fa fa-star"></i>
-								<i className="fa fa-star"></i>
-								<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr sed diam nonumy eirmod tempor.</p>
-							</div>
-							<div className="testi_pic_title tpt_three">
-								<div className="pic">
-									<img src="assets/images/all-img/t3.png" alt="" />
-								</div>
-								<h4>Alex feroundo</h4>
-								<small className="post">- Founder</small>	
-							</div>
-						</div>
-						<div className="testimonial">
-							<div className="testimonial_content">													
-								<i className="fa fa-star"></i>
-								<i className="fa fa-star"></i>
-								<i className="fa fa-star"></i>
-								<i className="fa fa-star"></i>
-								<i className="fa fa-star"></i>
-								<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr sed diam nonumy eirmod tempor.</p>
-							</div>
-							<div className="testi_pic_title tpt_one">
-								<div className="pic">
-									<img src="assets/images/all-img/t4.png" alt="" />
-								</div>
-								<h4>Kallu Mastan</h4>
-								<small className="post">- Mastan group</small>	
-							</div>
-						</div>
-						<div className="testimonial">
-							<div className="testimonial_content">													
-								<i className="fa fa-star"></i>
-								<i className="fa fa-star"></i>
-								<i className="fa fa-star"></i>
-								<i className="fa fa-star"></i>
-								<i className="fa fa-star"></i>
-								<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr sed diam nonumy eirmod tempor.</p>
-							</div>
-							<div className="testi_pic_title tpt_two">
-								<div className="pic">
-									<img src="assets/images/all-img/t1.png" alt="" />
-								</div>
-								<h4>Devid max</h4>
-								<small className="post">- Max iNC</small>	
-							</div>
-						</div>
-					</div>
-				</div>																							
-			</div>
+			
+            <SuccessCarousel />
+						
+						
+					
+					
+					
+					
 		</div>
 	</section>
 	
-	<section className="team_home_area section-padding">
+	{/* <section className="team_home_area section-padding">
 	   <div className="container">
 			<div className="section-title">
 				<h2>Team Member</h2>
@@ -937,10 +771,7 @@ return (
 						<div className="team-content-home">
 							<h3>Marina Mojo</h3>
 							<p>Developer</p>
-							<div className="sth_det">
-								<span className="ti-file"> <u>5 Course</u></span>
-								<span className="ti-user"> <u>12 Student</u></span>
-							</div>
+							
 							<ul className="social-home">
 								<li><a href="#" className="facebook-home"><i className="fa fa-facebook"></i></a></li>
 								<li><a href="#" className="twitter-home"><i className="fa fa-twitter"></i></a></li>
@@ -955,10 +786,6 @@ return (
 						<div className="team-content-home">
 							<h3>Ayoub Fennouni</h3>
 							<p>Logo Expert</p>
-							<div className="sth_det">
-								<span className="ti-file"> <u>5 Course</u></span>
-								<span className="ti-user"> <u>7 Student</u></span>
-							</div>
 							<ul className="social-home">
 								<li><a href="#" className="facebook-home"><i className="fa fa-facebook"></i></a></li>
 								<li><a href="#" className="twitter-home"><i className="fa fa-twitter"></i></a></li>
@@ -973,10 +800,6 @@ return (
 						<div className="team-content-home">
 							<h3>Mark Linomi</h3>
 							<p>Marketer</p>
-							<div className="sth_det">
-								<span className="ti-file"> <u>9 Course</u></span>
-								<span className="ti-user"> <u>17 Student</u></span>
-							</div>
 							<ul className="social-home">
 								<li><a href="#" className="facebook-home"><i className="fa fa-facebook"></i></a></li>
 								<li><a href="#" className="twitter-home"><i className="fa fa-twitter"></i></a></li>
@@ -991,10 +814,6 @@ return (
 						<div className="team-content-home">
 							<h3>Amira Yerden</h3>
 							<p>UI/UX Designer</p>
-							<div className="sth_det">
-								<span className="ti-file"> <u>15 Course</u></span>
-								<span className="ti-user"> <u>31 Student</u></span>
-							</div>
 							<ul className="social-home">
 								<li><a href="#" className="facebook-home"><i className="fa fa-facebook"></i></a></li>
 								<li><a href="#" className="twitter-home"><i className="fa fa-twitter"></i></a></li>
@@ -1005,91 +824,16 @@ return (
 				</div>																								
 			</div>
 		</div>
-	</section>
-	
-	<section id="blog" className="blog_area section-padding">
-		<div className="container">
-			<div className="section-title">
-				<h2>News</h2>
-				<p>Our Latest <span><u>Blogs</u></span></p>
-			</div>	
-			<div className="row">		
-				<div className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
-					<div className="single_blog">
-						<div className="content_box">
-							<span>August 25, 2023 | <a href="blog_single.html">Design</a></span>
-							<h2><a href="blog_single.html">Professional Mobile Painting and Sculpting</a></h2>
-							<a href="#" className="cta"><span>READ MORE</span>
-							  <svg width="13px" height="10px" viewBox="0 0 13 10">
-								<path d="M1,5 L11,5"></path>
-								<polyline points="8 1 12 5 8 9"></polyline>
-							  </svg>
-							</a>							
-						</div>
-					</div>
-					<div className="single_blog">
-						<div className="content_box">
-							<span>August 25, 2023 | <a href="blog_single.html">Design</a></span>
-							<h2><a href="blog_single.html">Professional Mobile Painting and Sculpting</a></h2>
-							<a href="#" className="cta"><span>READ MORE</span>
-							  <svg width="13px" height="10px" viewBox="0 0 13 10">
-								<path d="M1,5 L11,5"></path>
-								<polyline points="8 1 12 5 8 9"></polyline>
-							  </svg>
-							</a>							
-						</div>
-					</div>
-				</div>
-				<div className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
-					<div className="single_blog">
-						<img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
-						<div className="content_box">
-							<span>August 26, 2023 | <a href="blog_single.html">Education</a></span>
-							<h2><a href="blog_single.html">Professional Ceramic Moulding for Beginner</a></h2>
-							<a href="#" className="cta"><span>READ MORE</span>
-							  <svg width="13px" height="10px" viewBox="0 0 13 10">
-								<path d="M1,5 L11,5"></path>
-								<polyline points="8 1 12 5 8 9"></polyline>
-							  </svg>
-							</a>							
-						</div>
-					</div>
-				</div>
-				<div className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.3s" data-wow-offset="0">
-					<div className="single_blog">
-						<img src="assets/images/blog/3.png" className="img-fluid" alt="image" />
-						<div className="content_box">
-							<span>August 28, 2023 | <a href="blog_single.html">Programing</a></span>
-							<h2><a href="blog_single.html">Education Is About Create Leaders For Tomorrow </a></h2>
-							<a href="#" className="cta"><span>READ MORE</span>
-							  <svg width="13px" height="10px" viewBox="0 0 13 10">
-								<path d="M1,5 L11,5"></path>
-								<polyline points="8 1 12 5 8 9"></polyline>
-							  </svg>
-							</a>
-						</div>
-					</div>
-				</div>						
-			</div>
-		</div>
-	</section>	
+	</section> */}
 	
 	<div className="footer section-padding">
 		<div className="container">				
 			<div className="row">						
 				<div className="col-lg-3 col-sm-6 col-xs-12">
 					<div className="single_footer">
-						<a href="index.html"><img src="assets/images/all-img/logo2.png" alt="" /></a>         
+						<a href="index.html"><img src="https://backstagepass.co.in/newlogo-324ee245.webp" alt="" /></a>         
 						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae risus nec dui venenatis dignissim.</p>
-					</div>
-					<div className="foot_social">
-						<ul>
-							<li><a href="#">TW</a></li>
-							<li><a href="#">FB</a></li>
-							<li><a href="#">INS</a></li>
-							<li><a href="#">YT</a></li>
-						</ul>						
-					</div>				
+					</div>		
 				</div>						
 				<div className="col-lg-3 col-sm-6 col-xs-12">
 					<div className="single_footer">
@@ -1123,17 +867,17 @@ return (
 						<div className="sf_contact">
 							<span className="ti-mobile"></span>
 							<h3>Phone number</h3>
-							<p>+88 457 845 695</p>
+							<p>+91-8008002794</p>
 						</div>
 						<div className="sf_contact">
 							<span className="ti-email"></span>
 							<h3>Email Address</h3>
-							<p>example#yourmail.com</p>
+							<p>info@backstagepass.co.in</p>
 						</div>
 						<div className="sf_contact">
 							<span className="ti-map"></span>
 							<h3>Office Address</h3>
-							<p>California, USA</p>
+							<p>Plot No. 72, Jubilee Enclave, HITEC City, Hyderabad, Telangana 500081</p>
 						</div>
 					</div>
 				</div>	
@@ -1141,7 +885,7 @@ return (
 			<div className="row fc">
 				<div className="col-lg-6 col-sm-6 col-xs-12">
 					<div className="footer_copyright">
-						<p>&copy; 2023. All Rights Reserved.</p>
+						<p>&copy; 2026. All Rights Reserved.</p>
 					</div>
 				</div>
 				<div className="col-lg-6 col-sm-6 col-xs-12">
@@ -1155,12 +899,12 @@ return (
 				</div>
 			</div>				
 		</div>
-	</div> */}
+	</div>
 	
     <div>
 
-   <div className="relative w-full mx-auto">
-      {/* Slides wrapper */}
+   {/* <div className="relative w-full mx-auto">
+     
       <div className="relative overflow-hidden shadow-lg h-[150px] sm:h-[350px]">
         {slides.map((slide, index) => (
           <div
@@ -1180,7 +924,7 @@ return (
         ))}
       </div>
 
-      {/* Controls */}
+      
       <button
         onClick={prevSlide}
         className="hidden sm:flex absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-gray-800/50 text-white p-2 hover:bg-gray-900"
@@ -1195,37 +939,30 @@ return (
       </button>
 
      
-    </div>
+    </div> */}
    
 
 
-<main className="px-4 py-3 sm:p-6">
-      {/* <h1 className="text-xl sm:text-3xl font-bold text-center mb-0 flex items-center justify-center">Our Courses</h1> */}
-      <CourseCarouselNoScroll />
-    </main>
 
-    <main className="px-4 py-3 sm:p-6">
-      
-      <SuccessCarousel />
-    </main>
+
 
 
 
     {/* <main className="px-4 py-3 sm:p-6">
       <Corporate />
     </main> */}
-
+{/* 
        <main className="px-4 py-3 sm:p-6">
       <HeroSection />
-    </main>
+    </main> */}
 
     {/* <main className="px-4 py-3 sm:p-6">
       <ResourceBanner />
     </main> */}
 
-      <main>
+      {/* <main>
       <Footer />
-    </main>
+    </main> */}
     
 
     
@@ -1237,9 +974,9 @@ return (
     <>
   {/* jQuery FIRST */}
   <Script
-    src="/assets/js/jquery-1.12.4.min.js"
-    strategy="beforeInteractive"
-  />
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  strategy="beforeInteractive"
+/>
 
   {/* Bootstrap */}
   <Script
@@ -1253,9 +990,41 @@ return (
     strategy="afterInteractive"
   />
   <Script
-    src="/assets/owlcarousel/js/owl.carousel.min.js"
-    strategy="afterInteractive"
-  />
+  src="/assets/owlcarousel/js/owl.carousel.min.js"
+  strategy="afterInteractive"
+/>
+
+<Script
+  id="testimonial-carousel-init"
+  strategy="afterInteractive"
+>
+{`
+  if (window.$ && $.fn.owlCarousel) {
+    $("#testimonial-slider").owlCarousel({
+      items: 3,
+      loop: true,
+      margin: 30,
+      dots: false,
+      nav: true,
+      autoplay: true,
+      autoplayTimeout: 4000,
+      navText: [
+        "<span class='owl-prev-icon'>&larr;</span>",
+        "<span class='owl-next-icon'>&rarr;</span>"
+      ],
+      responsive: {
+        0: { items: 1 },
+        768: { items: 2 },
+        1024: { items: 3 }
+      }
+    });
+  } else {
+    console.error("OwlCarousel not loaded");
+  }
+`}
+</Script>
+
+
   <Script
     src="/assets/js/purecounter_vanilla.js"
     strategy="afterInteractive"

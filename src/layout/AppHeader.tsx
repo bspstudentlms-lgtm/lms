@@ -265,7 +265,7 @@ useEffect(() => {
             <ThemeToggleButton />
           </div> */}
 
-          {/* Show UserDropdown if not on root "/" else show Login button */}
+         
           {pathname !== "/" ? (
             <>
             {isMobileOpen ? ( <div>WELCOME</div> ) : null }
@@ -282,6 +282,7 @@ useEffect(() => {
         </div>
       </div>
     </header>
+    
   );
 };
 

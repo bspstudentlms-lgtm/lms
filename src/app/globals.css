@@ -1136,3 +1136,12 @@ strong, b {
 .animate-glow {
   animation: glow 1.5s infinite ease-in-out;
 }
+.course-desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  line-height: 1.6;
+  max-height: calc(1.6em * 4);
+}
