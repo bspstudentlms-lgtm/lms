@@ -9,6 +9,10 @@ import EnrollModal from "@/components/EnrollModal";
 
 /* ================= TYPES ================= */
 interface Course {
+  islivesession_missed(islivesession_missed: any): unknown;
+
+  recording_available(recording_available: any): unknown;
+  livewebinar_enddate: boolean;
   zoom_link: string;
   webinar_status: number;
   webinarstatus: string;
@@ -202,7 +206,13 @@ const liveCountdown = getLiveCountdown((course as any).live_end_time);
 const cta = CTA_CONFIG[course.coursetype as keyof typeof CTA_CONFIG];
 const hasAnyEnrollment = enrolledCourses.length > 0;
 
+const isPurchased = enrolled;
+const isLivestatus = Number(course.webinar_status) === 2;
+const isWebinarCourse = Number(course.coursetype) === 3;
 
+const isEnded = Number(course.islivesession_missed) === 1;
+
+const hasRecording = Number(course.recording_available) === 1; 
     return (
       <div
   className={`relative rounded-2xl border-l-4 p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg
@@ -275,10 +285,13 @@ const hasAnyEnrollment = enrolledCourses.length > 0;
               {/* {course.coursetype} */}
 
               <div className="flex gap-4 text-xs mb-4 text-green-700 mt-3">
-               <span className="flex items-center gap-1">{course.webinarstatus}</span>
-      <span className={`flex items-center gap-1 ${style.dn}`}>
-        📅 {course.date ?? "Coming soon"} 
-      </span>
+               <span className="flex items-center gap-1">{course.webinarstatus} </span>
+              
+      {(course.webinar_status != 2) && (
+  <span className={`flex items-center gap-1 ${style.dn}`}>
+    📅 {course.date ? course.date : "Coming soon"}
+  </span>
+)}
       <span className="flex items-center gap-1">
         ⏰ {course.duration ? `${course.duration} Hours` : "To be announced"}
       </span>
@@ -358,15 +371,46 @@ const hasAnyEnrollment = enrolledCourses.length > 0;
       </Link>
     )
   
-  ) : enrolled &&  Number(course.coursetype) === 3  && course.webinar_status==2 ?  (
-    <Link
-        href={course.zoom_link}
+  // ) : enrolled &&  Number(course.coursetype) === 3  && course.webinar_status==2 ?  (
+  //   <Link
+  //       href={course.zoom_link}
              
-        className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
-      >
-        Join Webinar
+  //       className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
+  //     >
+  //       Join Webinar
         
+  //     </Link>
+
+  ) : enrolled &&  Number(course.coursetype) === 3  && course.webinar_status==2 ?   (
+
+   !isEnded ? (
+    // 🟢 LIVE WEBINAR
+    <Link
+      href={course.zoom_link}
+      className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
+    >
+      Join Webinar
+    </Link>
+  ) :  (
+
+    hasRecording ? (
+      // 🎥 WATCH RECORDING
+      <Link
+        href={`/coursedetails/${course.id}`}
+        className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-green-700 transition"
+      >
+        ▶ Watch Recording
       </Link>
+    ) : (
+      <span className="text-sm text-gray-500">
+        Recording will be available soon
+      </span>
+    )
+
+  )
+
+
+
   ) : (hasAnyEnrollment && Number(course.coursetype) === 2) ? (
     
     <Link
@@ -381,7 +425,7 @@ const hasAnyEnrollment = enrolledCourses.length > 0;
           ? "Completed ✓"
           : course.watched_topics > 0 
           ?   "Continue Watching"
-          : cta.text
+          : cta.text 
         } </span>
       <ArrowRightIcon />
     </Link>
@@ -398,15 +442,14 @@ const hasAnyEnrollment = enrolledCourses.length > 0;
       <ArrowRightIcon />
     </button>
  ) : (
-    <button
-      onClick={() =>
-        alert("Please purchase at least one course to watch these webinar add-ons.")
-      }
-      className={`inline-flex items-center justify-center gap-2 w-[50%] rounded-lg px-6 py-2.5 text-sm font-semibold transition border ${cta.className}`}
-    >
-      <span>{cta.text}</span>
-      <ArrowRightIcon />
-    </button>
+    <a
+  href={`/${course.urlpath}`}
+ 
+  className={`inline-flex items-center justify-center gap-2 w-[50%] rounded-lg px-6 py-2.5 text-sm font-semibold transition border ${cta.className}`}
+>
+  <span>{cta.text}</span>
+  <ArrowRightIcon />
+</a>
   )}
 </div>
           </div>
