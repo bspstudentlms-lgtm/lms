@@ -5,6 +5,8 @@ import axios from "axios";
 
 
 interface Course {
+  coursetype: number;
+  coursename: string;
   value: string;
   label: string;
   orignialpayment: number;
@@ -42,6 +44,8 @@ const [username, setUsername] = useState<string | null>(null);
     originalPayment: 0,
     discountValue: 0,
     finalAmount: 0,
+    coursename:'',
+    coursetype: 0,
   });
 
   /* -------------------- SET URL (CLIENT SAFE) -------------------- */
@@ -67,24 +71,24 @@ console.log('phoneno'+storedPhone);
 
   /* -------------------- FETCH COURSE BY courseId -------------------- */
   useEffect(() => {
-    let slug = "";
-
-    if (courseId === 23 || courseId === "23") {
-      slug = "certificate-program-in-basics-of-maya";
-    }
-
+   
+    if (!courseId || courseId === "") return; // 🔥 hard stop
     axios
-      .get(`https://www.backstagepass.co.in/reactapi/courses_api.php?slug=${slug}`)
+     .get(`https://www.backstagepass.co.in/reactapi/getcourses_api.php?courseid=${courseId}`)
       .then((res) => {
         const data = res.data || [];
         setCourses(data);
 
         if (data.length === 1) {
+           
           setFormData((prev) => ({ ...prev, course: data[0].value }));
           setPaymentDetails({
+           
             originalPayment: data[0].orignialpayment,
             discountValue: 0,
             finalAmount: data[0].gstpayment,
+            coursename: data[0].label,
+            coursetype: data[0].coursetype,
           });
         }
       })
@@ -188,6 +192,8 @@ const handleEmailBlur = async () => {
           originalPayment: data[0].orignialpayment,
           discountValue: data[0].discountvalue,
           finalAmount: data[0].finalamount,
+          coursename:data[0].coursename,
+          coursetype: data[0].coursetype,
         });
 
         setCouponRemarks(data[0].remarkscoupon || "");
@@ -213,6 +219,9 @@ const handleEmailBlur = async () => {
         originalPayment: selected.orignialpayment,
         discountValue: 0,
         finalAmount: selected.gstpayment,
+        coursename:selected.coursename,
+        coursetype: selected.coursetype,
+
       });
     }
   };
@@ -238,19 +247,35 @@ const handleEmailBlur = async () => {
 
         {/* TITLE */}
         <h2 className="text-2xl font-semibold text-center mb-2">
-          Enroll in Basics of Maya
+        
+          Enroll in  {paymentDetails.coursename} 
         </h2>
         <p className="text-center text-gray-500 mb-6">
           Fill details & start your journey 🚀
         </p>
+{paymentDetails.coursetype == 2 ? (
+  <div className="mt-6 text-center space-y-4">
+    <div className="p-5 rounded-2xl bg-yellow-50 border border-yellow-200">
+      <h3 className="text-lg font-semibold text-yellow-800">
+        Free Webinar Access
+      </h3>
 
-        {/* FORM */}
-        <form
-          className="space-y-4"
-  action="https://www.backstagepass.co.in/payment_process.php"
-  method="POST"
-        
-        >
+      <p className="text-sm text-gray-600 mt-2">
+        This is a free webinar. To watch this webinar, you need to purchase
+        at least one course.
+      </p>
+
+      
+    </div>
+
+   
+  </div>
+) : (
+  <form
+    className="space-y-4"
+    action="https://www.backstagepass.co.in/payment_process.php"
+    method="POST"
+  >
           <Input
             label="Full Name"
             name="fullname"
@@ -367,6 +392,7 @@ const handleEmailBlur = async () => {
   {alreadyEnrolled ? "Already Enrolled" : "Proceed to Payment"}
 </button>
         </form>
+        )}
       </div>
 
       {/* ANIMATION */}

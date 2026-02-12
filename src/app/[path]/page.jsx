@@ -488,7 +488,7 @@ import { signIn } from "next-auth/react";
               Enroll @ ₹{course.total_payment}
             </button>
           </section>
-                <EnrollModal open={open1} onClose={() => setOpen1(false)} courseId='23' />
+                <EnrollModal open={open1} onClose={() => setOpen1(false)} courseId={course.course_id} />
     
     <div className="fixed bottom-0 left-0 w-full z-[9999]">
           <div className="bg-[#1f1f1f] h-20 flex items-center justify-center relative">

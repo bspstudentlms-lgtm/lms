@@ -317,7 +317,7 @@ export default function CourseGrid() {
                                     </div>
                                   </div>
                                   <div className="course-content"><a className="c_btn" href="single_course.html">{course.category}</a>
-                                    <h3><a href="#"> {course.title}</a></h3>
+                                    <h3><a href={course.urlpath}> {course.title}</a></h3>
                                     <span><i className="fa fa-star-half-o"></i>{course.level}</span>
                                     <span><i className="fa fa-clock-o"></i>{course.duration} hours</span>
                                     <span><i className="fa fa-user"></i>Mentor</span>
@@ -359,7 +359,7 @@ export default function CourseGrid() {
                                     </div>
                                   </div>
                                   <div className="course-content"><a className="c_btn" href="single_course.html">{course.category}</a>
-                                    <h3><a href="#"> {course.title}</a></h3>
+                                    <h3><a href={course.urlpath}> {course.title}</a></h3>
                                     <span><i className="fa fa-star-half-o"></i>{course.level}</span>
                                     <span><i className="fa fa-clock-o"></i>{course.duration} hours</span>
                                     <span><i className="fa fa-user"></i>Mentor</span><br/>
@@ -528,7 +528,7 @@ export default function CourseGrid() {
                                     </div>
                                   </div>
                                   <div className="course-content"><a className="c_btn" href="single_course.html">{course.category}</a>
-                                    <h3><a href="#"> {course.title}</a></h3>
+                                    <h3><a href={course.urlpath}> {course.title}</a></h3>
                                     <span><i className="fa fa-star-half-o"></i>{course.level}</span>
                                     <span><i className="fa fa-clock-o"></i>{course.duration} hours</span>
                                     <span><i className="fa fa-user"></i>Mentor</span>
