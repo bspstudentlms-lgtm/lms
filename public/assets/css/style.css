@@ -39,7 +39,7 @@ Version      : 1.0
 */
 body {
 color:#888;
-font-family: 'Mulish', sans-serif;
+
 font-size: 16px;
 font-weight: 500;
 line-height: 26px;
@@ -57,12 +57,12 @@ h5,
 h6 {
   letter-spacing: 0px;
   margin: 0px;
-  font-family: 'Mulish', sans-serif;
+  
   color: #1a2d62;
   font-weight: 400;
 }
 a {
-	font-family: 'Mulish', sans-serif;
+	
     text-decoration: none;
     -webkit-transition: all 0.2s;
     -o-transition: all 0.2s;
@@ -94,14 +94,14 @@ fieldset {
 b, strong {
 	font-weight: 600;
 }
-span{font-family: 'Mulish', sans-serif;}
+span{}
 .no-padding { padding: 0 }
 
 /*END PRELOADER DESIGN*/
-.section-padding { padding: 80px 0 }
+.section-padding { padding: 20px 0 }
 /*START SECTION TITLE DESIGN*/
 .section-title {
-  margin-bottom: 60px;
+  margin-bottom: 30px;
   position:relative;
 }
 
@@ -1280,7 +1280,6 @@ margin-top: 5px;
     color: #fff;
     font-size: 12px;
     font-weight: 700;
-    background: #1a2d62;
     width: auto;
     text-align: center;
     border-radius: 8px;
@@ -1627,7 +1626,7 @@ border-bottom:1px solid #eee;
 }
 
 .video-button::before {
-    background: rgba(46, 202, 127, 0.161);
+    background: rgb(202 46 60 / 16%);
     width: 150px;
     height: 150px;
     animation-delay: 0.5s;
@@ -1639,7 +1638,7 @@ border-bottom:1px solid #eee;
 }
 
 .video-button::after {
-    background: rgba(46, 202, 127, 0.302);
+    background: rgb(202 46 46 / 30%);
     height: 120px;
     width: 120px;
 }
@@ -2236,7 +2235,7 @@ font-size: 30px;
 .single_tca h2{overflow: hidden;}
 .single_tca h2 a {
 	color: #1a2d62;
-	font-size: 24px;
+	font-size: 18px;
 	font-weight: 700;
 	transition: 0.3s;
 	margin-bottom: 10px;
@@ -2474,7 +2473,7 @@ background:#fff;
 	margin: 15px 0;
 	/* margin: 0 5px; */
 }
-.sth_det u{font-family:'Mulish', sans-serif;}
+.sth_det u{}
 /*END HOME PAGE TEAM DESIGN*/
 
 /*START TEAM PAGE THREE CSS*/
@@ -2609,7 +2608,6 @@ margin-top:60px;
 }
 .sth_det2 u{
 color: #1a2d62;
-font-family:'Mulish', sans-serif;
 }
 /*END TEAM PAGE THREE CSS*/
 /*START SINGLE TEAM DETAILS*/
@@ -2617,11 +2615,8 @@ font-family:'Mulish', sans-serif;
 	padding-bottom: 0;
 }
 .single_agent{
-background: #fff none repeat scroll 0 0;
-box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.07);
-margin-bottom: 30px;
 overflow: hidden;
-padding: 60px;
+padding: 0px;
 }
 .single_agent_image img{
 float: left;
@@ -3212,12 +3207,12 @@ text-decoration: underline;
 * ----------------------------------------------------------------------------------------
 */
 .section-top {
-	padding-top: 200px;
+	padding-top: 20px;
 	position: relative;
 	background: url(../images/banner/section-top.png);
 	background-size: cover;
 	background-position: center;
-	padding-bottom: 120px;
+	padding-bottom: 20px;
 }
 
 .section-top-title {
@@ -3230,7 +3225,7 @@ text-decoration: underline;
 	margin-bottom: 10px;
 	text-transform: capitalize;
 	font-weight: 700;
-	font-size: 50px;
+	font-size: 44px;
 }
 .section-top-title ul {
 	background:#fff;

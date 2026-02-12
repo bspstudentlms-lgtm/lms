@@ -125,7 +125,6 @@
 }
 .ps_control_txt_icon .carousel-control > span{
   text-transform: uppercase;
-  font-family: 'Mulish', sans-serif;
   -webkit-font-smoothing: antialiased;
   -webkit-transition: all cubic-bezier(.165,.84,.44,1) 0.5s;
   transition: all cubic-bezier(.165,.84,.44,1) 0.5s;

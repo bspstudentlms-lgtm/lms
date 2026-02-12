@@ -3,7 +3,6 @@
 import { useState, useEffect, useMemo, KeyboardEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 import axios from "axios";
 import { Heart, Lock, PlayCircle, ShoppingCart } from "lucide-react";
@@ -23,7 +22,6 @@ type Course = {
   urlpath: string;
   duration: number;
   tags: string[];
-  mentor_name: string;
   is_coursecompleted?: number | null;
 };
 
@@ -37,10 +35,6 @@ export default function CourseGrid() {
   const [email, setEmail] = useState("");
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showAll, setShowAll] = useState(false);
-
-  
-
 
   /* ---------- SEARCH / FILTER STATE ---------- */
   const [search, setSearch] = useState("");
@@ -75,9 +69,6 @@ export default function CourseGrid() {
       })
       .catch(() => setLoading(false));
   }, []);
-
-  const router = useRouter();
-
 
   /* ---------- FILTER LOGIC ---------- */
   const filteredCourses = useMemo(() => {
@@ -158,35 +149,30 @@ export default function CourseGrid() {
     //}
   };
 
-  const visibleCourses = showAll
-  ? filteredCourses
-  : filteredCourses.slice(0, 3);
-
-
   /* ================= RENDER ================= */
   return (
     <div>
       <div>
 
         {/* ================= SEARCH SECTION ================= */}
-        {/* <div className="bg-white rounded-2xl shadow-md p-6 mb-10 space-y-4"> */}
+        <div className="bg-white rounded-2xl shadow-md p-6 mb-10 space-y-4">
 
          
-          {/* <input
+          <input
             type="text"
             placeholder="Search courses, webinars, skills..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full border border-gray-200 rounded-xl px-5 py-3 text-sm 
                focus:outline-none focus:ring-2 focus:ring-red-500"
-          /> */}
+          />
 
           {/* FILTER ROW */}
-          {/* <div className="flex flex-wrap items-center justify-between gap-4"> */}
+          <div className="flex flex-wrap items-center justify-between gap-4" style={{marginTop: "20px"}}>
 
            
             <div className="product_filter">
-              <ul>
+              <ul style={{marginBottom: "0px"}}>
               {[
                 ["all", "All"],
                 ["course", "Course"],
@@ -210,7 +196,7 @@ export default function CourseGrid() {
             </div>
 
             {/* SECONDARY FILTERS */}
-            {/* <div className="flex gap-3">
+            <div className="flex gap-3">
               <select
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
@@ -231,9 +217,9 @@ export default function CourseGrid() {
                 <option value="Intermediate">Intermediate</option>
                 <option value="Advanced">Advanced</option>
               </select>
-            </div> */}
-          {/* </div> */}
-        {/* </div> */}
+            </div>
+          </div>
+        </div>
 
 
         {/* ================= CARDS GRID ================= */}
@@ -241,7 +227,7 @@ export default function CourseGrid() {
           <p className="text-center text-gray-500">Loading...</p>
         ) : (
           <div className="row">
-            {visibleCourses.map((course) => {
+            {filteredCourses.map((course) => {
               /* ============ COURSE CARD ============ */
               if (course.coursetype === 1)
                 return (
@@ -545,7 +531,7 @@ export default function CourseGrid() {
                                     <h3><a href={course.urlpath}> {course.title}</a></h3>
                                     <span><i className="fa fa-graduation-cap"></i>{course.level}</span>
                                     <span><i className="fa fa-clock-o"></i>{course.duration} hours</span>
-                                    <span><i className="fa fa-user"></i> {course.mentor_name ? course.mentor_name : "Mentor"}</span>
+                                    <span><i className="fa fa-user"></i>Mentor</span>
                                     <span className="course-desc">{course.description}</span>
                                     
                 
@@ -557,19 +543,7 @@ export default function CourseGrid() {
             })}
 
 
-            {!showAll && filteredCourses.length > 3 && (
-  <div className="col-lg-12 text-center">
-    <div className="cc_btn">
-      <button
-        onClick={() => router.push("/all-courses")}
-        className="btn_one"
-      >
-        View All Course
-      </button>
-    </div>
-  </div>
-)}
-
+          
           </div>
         )}
 

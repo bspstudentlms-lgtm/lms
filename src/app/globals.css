@@ -1142,3 +1142,51 @@ strong, b {
   line-height: 1.6;
   max-height: calc(1.6em * 4);
 }
+
+
+.course-details {
+  background: #f9fafb;
+}
+
+.feature-box {
+  background: #ffffff;
+  padding: 15px 20px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.feature-box i {
+  font-size: 20px;
+  color: #ff3b3b;
+}
+
+/* Sticky Right Card */
+.sticky-sidebar {
+  position: sticky;
+  top: 90px; /* adjust if navbar height changes */
+}
+
+.enroll-card {
+  background: #ffffff;
+  padding: 10px;
+  border-radius: 16px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+}
+.enroll-card img{
+  border-radius: 16px;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+  .sticky-sidebar {
+    position: static;
+    margin-top: 40px;
+  }
+}
+.course-overview p {
+  margin-bottom: 10px;
+  line-height: 1.6;
+}

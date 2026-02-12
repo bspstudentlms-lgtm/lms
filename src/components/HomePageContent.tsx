@@ -448,7 +448,7 @@ return (
       </div>		
     </section>	
 		
-	
+	<br/><br/>
 	
 	<div className="partner-logo section-padding">
 		<div className="container">
@@ -471,7 +471,7 @@ return (
 			</div>
 		</div>
 	</div>
-	
+	<br/><br/>
 	<section className="marketing_content_area section-padding">
 	   <div className="container">
 			<div className="section-title">
@@ -560,7 +560,7 @@ return (
  
       
 
-	
+	<br/><br/>
 	
 	
 	<section className="course_promo section-padding">
@@ -614,7 +614,7 @@ return (
 			</div>	
 		</div>	
 	</section> */}
-	
+	<br/><br/>
 	<section className="topic_content_area section-padding">
 	   <div className="container">
 			<div className="section-title">
@@ -826,7 +826,7 @@ return (
 		</div>
 	</section> */}
 	
-	<div className="footer section-padding">
+	<div className="footer section-padding" style={{paddingTop: "80px"}}>
 		<div className="container">				
 			<div className="row">						
 				<div className="col-lg-3 col-sm-6 col-xs-12">
