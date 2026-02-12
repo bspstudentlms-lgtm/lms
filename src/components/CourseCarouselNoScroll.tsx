@@ -555,7 +555,7 @@ export default function CourseGrid() {
         
 
 
-        {/* {showModal && selectedCourse && (
+        {showModal && selectedCourse && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-lg relative">
               <button
@@ -593,10 +593,10 @@ export default function CourseGrid() {
               </button>
             </div>
           </div>
-        )} */}
+        )}
 
 
-        {/* {showAccessModal && lockedCourse && (
+        {showAccessModal && lockedCourse && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-fadeIn">
 
@@ -644,7 +644,7 @@ export default function CourseGrid() {
               </div>
             </div>
           </div>
-        )} */}
+        )}
 
       </div>
     </div>
