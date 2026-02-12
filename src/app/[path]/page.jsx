@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import Script from "next/script";
+import MuxPlayer from '@mux/mux-player-react';
 
 import {
   CheckCircle,
@@ -395,7 +396,16 @@ export default function CoursePage({ params }) {
 					</div>
        <br/><br/>
 
-       <section
+       {/* <section
+  className="vid_area section-padding"
+  style={{
+    backgroundImage: "url('/assets/images/banner/video.jpg')",
+    backgroundSize: "cover",
+    backgroundPosition: "center center",
+    backgroundAttachment: "fixed",
+  }}
+> */}
+<section
   className="vid_area section-padding"
   style={{
     backgroundImage: "url('/assets/images/banner/video.jpg')",
@@ -404,7 +414,23 @@ export default function CoursePage({ params }) {
     backgroundAttachment: "fixed",
   }}
 >
-		<div class="container">																
+  <div className="container text-center">
+    {course?.playback_id && (
+      <MuxPlayer
+        playbackId={course.playback_id}
+        autoPlay
+        muted
+        playsInline
+        style={{
+          width: "100%",
+          maxWidth: "900px",
+          borderRadius: "10px",
+        }}
+      />
+    )}
+  </div>
+</section>
+		{/* <div class="container">																
 			<div class="row">
 				<div class="col-lg-12 vp_top wow fadeInUDown" data-wow-duration="1s" data-wow-delay="0.2s" data-wow-offset="0">
 					<div class="video-area">
@@ -413,7 +439,7 @@ export default function CoursePage({ params }) {
 				</div>
 			</div>
 		</div>
-	</section>
+	</section> */}
 
   <br/><br/>
 
@@ -705,10 +731,11 @@ export default function CoursePage({ params }) {
 
               {/* RIGHT ILLUSTRATION */}
               <div className="flex justify-center lg:justify-end">
+                
                 <img
-                  src="https://backstagepass.co.in/didyouneed-131b8fce.webp"
+                  src={`https://backstagepass.co.in/studentlms/uploads/course_inner/${course.didyouknow_image}`}
                   alt="Career Illustration"
-                  className="max-h-[260px] w-auto"
+                  className="w-full rounded-xl"
                 />
               </div>
             </div>

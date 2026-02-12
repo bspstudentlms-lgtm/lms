@@ -66,6 +66,7 @@ export default function CourseGrid() {
           shortname: item.shortname,
           level: item.level,
           urlpath: item.urlpath,
+           mentor_name: item.mentor_name,
           coursetype: Number(item.coursetype),
           duration: Number(item.duration),
           tags: [item.category, item.level],
@@ -334,7 +335,7 @@ export default function CourseGrid() {
                                     <h3><a href={course.urlpath}> {course.title}</a></h3>
                                     <span><i className="fa fa-graduation-cap"></i>{course.level}</span>
                                     <span><i className="fa fa-clock-o"></i>{course.duration} hours</span>
-                                    <span><i className="fa fa-user"></i>Mentor</span>
+                                    <span><i className="fa fa-user"></i>{course.mentor_name ? course.mentor_name : "Mentor"}</span>
                                     <span className="course-desc">{course.description}</span>
                                     
                 
@@ -376,7 +377,7 @@ export default function CourseGrid() {
                                     <h3><a href={course.urlpath}> {course.title}</a></h3>
                                     <span><i className="fa fa-graduation-cap"></i>{course.level}</span>
                                     <span><i className="fa fa-clock-o"></i>{course.duration} hours</span>
-                                    <span><i className="fa fa-user"></i>Mentor</span><br/>
+                                    <span><i className="fa fa-user"></i>{course.mentor_name ? course.mentor_name : "Mentor"}</span><br/>
                                     <span className="course-desc">{course.description}</span>
                                     
                 
