@@ -116,10 +116,13 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const [courseOutcome, setCourseOutcome] = useState("");
+  const [courseWhomFor,  setcourseWhomFor] = useState("");
+   const [courseType,  setcourseType] = useState("");
+ 
   const [mentorname, setMentorname] = useState("");
   const [isQuizActive, setIsQuizActive] = useState(false);
   const [activeTab, setActiveTab] =
-    useState<"overview" | "contact" | "outcome" | "resources" | "assignment">("overview");
+    useState<"overview" | "contact" | "outcome" | "resources" | "whomfor"  | "assignment">("overview");
 
   const [resumeTime, setResumeTime] = useState<number>(0);
   const [topics, setTopics] = useState<any[]>([]);
@@ -274,6 +277,14 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
           }
           if (progress?.course_outcome) {
             setCourseOutcome(progress.course_outcome);
+            
+          }
+            if (progress?.course_outcome) {
+            setcourseWhomFor(progress.course_whom_for);
+            
+          }
+          if (progress?.course_type) {
+            setcourseType(progress.course_type);
             
           }
           
@@ -1731,6 +1742,8 @@ const isCurrentWatched =
           {/* TAB HEADER */}
           <div className="border-b border-gray-200">
             <nav className="flex space-x-6">
+              
+              {currentTopic?.description && (
               <button
                 onClick={() => setActiveTab("overview")}
                 className={`pb-2 text-sm font-medium border-b-2 ${activeTab === "overview"
@@ -1740,7 +1753,8 @@ const isCurrentWatched =
               >
                 Overview
               </button>
-
+)}
+              {Number(courseType) === 1 && (
               <button
                 onClick={() => setActiveTab("contact")}
                 className={`pb-2 text-sm font-medium border-b-2 ${activeTab === "contact"
@@ -1749,9 +1763,10 @@ const isCurrentWatched =
                   }`}
               >
                 Connect with Mentor
-              </button>
+              </button> )}
 
-              {/* <button
+{courseWhomFor && (
+              <button
         onClick={() => setActiveTab("whomfor")}
         className={`pb-2 text-sm font-medium border-b-2 ${
           activeTab === "whomfor"
@@ -1760,8 +1775,9 @@ const isCurrentWatched =
         }`}
       >
         Whom For
-      </button> */}
-
+      </button>
+      )}
+{courseOutcome && (
               <button
                 onClick={() => setActiveTab("outcome")}
                 className={`pb-2 text-sm font-medium border-b-2 ${activeTab === "outcome"
@@ -1770,7 +1786,7 @@ const isCurrentWatched =
                   }`}
               >
                 Outcome
-              </button>
+              </button>)}
                 {activeModule?.resourceslink && (
               <button
                 onClick={() => setActiveTab("resources")}
@@ -1803,7 +1819,7 @@ const isCurrentWatched =
               </div>
             )}
 
-            {/* {activeTab === "whomfor" && (
+            {activeTab === "whomfor" && (
       <div>
         <h3 className="text-lg font-semibold mb-2">Whom is this course for?</h3>
         <p>
@@ -1811,7 +1827,7 @@ const isCurrentWatched =
             "This section will describe who should take this course (beginners, intermediate learners, etc.)."}
         </p>
       </div>
-    )} */}
+    )}
 
             {activeTab === "outcome" && (
               <div>
