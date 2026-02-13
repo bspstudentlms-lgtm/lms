@@ -21,7 +21,7 @@ type Course = {
   category: string;
   level: string;
   urlpath: string;
-  duration: number;
+  duration: string;
   tags: string[];
   mentor_name: string;
   is_coursecompleted?: number | null;
@@ -68,7 +68,7 @@ export default function CourseGrid() {
           urlpath: item.urlpath,
            mentor_name: item.mentor_name,
           coursetype: Number(item.coursetype),
-          duration: Number(item.duration),
+          duration: item.duration || "0",
           tags: [item.category, item.level],
         }));
         setCourses(formatted);
