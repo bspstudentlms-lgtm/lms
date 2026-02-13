@@ -620,11 +620,13 @@ const [showVideoModal, setShowVideoModal] = useState(false);
                                 ))}
                               </ul>
                             </div>
+                            {course?.outcomes_image?.trim() !== "" && (
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                               <div class="cp_img">
                                 <img src={`https://backstagepass.co.in/studentlms/uploads/course_outcomes/${course.outcomes_image}`} alt="image" />
                               </div>
                             </div>
+                            )}
                           </div>
 
 
