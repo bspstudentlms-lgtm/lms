@@ -235,6 +235,19 @@ export default function CoursePage({ params }) {
         section.is_active === "1"
     );
 
+    const getButtonLabel = () => {
+  switch (Number(course.course_type)) {
+    case 1:
+      return "ENROLL NOW";
+    case 2:
+      return "WATCH NOW";
+    case 3:
+      return "REGISTER NOW";
+    default:
+      return "ENROLL NOW";
+  }
+};
+
   return (
     <>
       {loading && (
@@ -315,9 +328,17 @@ export default function CoursePage({ params }) {
 
               <div className="relative bg-white rounded-xl shadow-lg grid grid-cols-4 text-center text-black">
                 <div className="py-6">
-                  <p className="font-semibold">{course.number_of_modules} Modules</p>
-                  <p className="text-sm text-gray-600">with Certifications</p>
-                </div>
+  <p className="font-semibold">
+    {course.number_of_modules}
+    {Number(course.course_type) === 1 ? " Modules" : ""}
+  </p>
+
+  <p className="text-sm text-gray-600">
+    {Number(course.course_type) === 1
+      ? "with Certifications"
+      : "Learning Modules"}
+  </p>
+</div>
                 <div className="py-6">
                   <p className="font-semibold">{course.duration} Hours</p>
                   <p className="text-sm text-gray-600">Recorded Content</p>
@@ -721,7 +742,8 @@ export default function CoursePage({ params }) {
                 </p>
 
                 <p className="text-5xl font-bold text-[#ffd24d] mb-2">
-                  {course.average_salary}
+                  {/* {course.average_salary} */}
+                  4L
                 </p>
 
                 <p className="text-lg">
@@ -850,7 +872,7 @@ export default function CoursePage({ params }) {
                 setOpen1(true);
               }
             }} className="px-20 py-4 rounded-full bg-red-600 text-white">
-              ENROLL NOW
+             {getButtonLabel()}
             </button>
           </div>
         </div>    
