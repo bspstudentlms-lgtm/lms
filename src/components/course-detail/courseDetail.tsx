@@ -1215,7 +1215,7 @@ const isCurrentWatched =
             <div className="video-surface p-4 rounded-lg">
               {/* provide a stable aspect ratio */}
               <div className="relative w-full rounded-lg">
-                {/* If currentModule is a video, render Muxvideo, otherwise render module UI */}
+               
                 {currentModule ? (
                   (() => {
                     const titleLower = String(currentModule.title || "").toLowerCase();
