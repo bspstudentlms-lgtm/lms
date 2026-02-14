@@ -1214,7 +1214,7 @@ const isCurrentWatched =
           <div className="md:col-span-2">
             <div className="video-surface p-4 rounded-lg">
               {/* provide a stable aspect ratio */}
-              <div className="relative w-full rounded-lg overflow-hidden" style={{height: "590px"}}>
+              <div className="relative w-full rounded-lg">
                 {/* If currentModule is a video, render Muxvideo, otherwise render module UI */}
                 {currentModule ? (
                   (() => {
@@ -1226,7 +1226,7 @@ const isCurrentWatched =
                     //{activeView === "assignment" && (
                     if (activeView === "assignment") {
                       return (
-                        <div className="absolute inset-0 p-6 overflow-auto bg-white">
+                        <div className="p-6 bg-white">
 
                           <AssignmentPanel
                             courseId={id}
@@ -1256,8 +1256,10 @@ const isCurrentWatched =
 
                     // Default -> video player newone
                     return (
-                      <div className="absolute inset-0">
+                      <div>
+                        
                         {isQuizActive ? (
+                          <div className="p-6 bg-white rounded-lg">
                           <QuizPanel
                             isQuizActive={isQuizActive}
                             isCompleted={isCompleted}
@@ -1282,6 +1284,7 @@ const isCurrentWatched =
                             handleContinue={handleContinue}
 
                           />
+                          </div>
 
                         ) : (
                           /* ================= VIDEO UI ================= */
@@ -1338,6 +1341,7 @@ const isCurrentWatched =
                             )}
 
                             {currentTopic?.id && isPlaying[currentTopic.id] && (
+                              <div className="aspect-video rounded-lg overflow-hidden">
                               <Muxvideo
                                 key={`module-${openModule}-topic-${currentPointIndex}`}
                                 videos={
@@ -1352,6 +1356,7 @@ const isCurrentWatched =
                                 onFinish={handleVideoEnd}
                                 autoplay
                               />
+                              </div>
                             )}
                           </>
                         )}

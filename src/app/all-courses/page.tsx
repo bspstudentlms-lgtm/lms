@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from "react";
 
 import CourseCarouselNoScrollAll from "@/components/CourseCarouselNoScrollAll";
-
+import SiteNavigation from "@/components/SiteNavigation";
 
 import SuccessCarousel from "@/components/SuccessCarousel";
 import Corporate from "@/components/Corporate";
@@ -97,109 +97,26 @@ useEffect(() => {
   };
 }, []);
 
-useEffect(() => {
-  const initOwl = () => {
-    if (
-      typeof window !== "undefined" &&
-      (window as any).$ &&
-      (window as any).$.fn.owlCarousel
-    ) {
-      const $ = (window as any).$;
-
-      // Destroy if already initialized (important for Next.js HMR)
-      if ($("#testimonial-slider").hasClass("owl-loaded")) {
-        $("#testimonial-slider").trigger("destroy.owl.carousel");
-        $("#testimonial-slider").removeClass("owl-loaded");
-        $("#testimonial-slider").find(".owl-stage-outer").children().unwrap();
-      }
-
-      $("#testimonial-slider").owlCarousel({
-        items: 3,
-        loop: true,
-        margin: 30,
-        nav: true,          // ✅ arrows enabled
-        dots: false,
-        autoplay: true,
-        autoplayTimeout: 4000,
-        navText: [
-          "<span class='owl-prev-icon'>&larr;</span>",
-          "<span class='owl-next-icon'>&rarr;</span>"
-        ],
-        responsive: {
-          0: { items: 1 },
-          768: { items: 2 },
-          1024: { items: 3 }
-        }
-      });
-    } else {
-      setTimeout(initOwl, 200); // wait for scripts
-    }
-  };
-
-  initOwl();
-}, []);
 
 useEffect(() => {
-  const initLogoCarousel = () => {
-    if (
-      typeof window !== "undefined" &&
-      (window as any).$ &&
-      (window as any).$.fn.owlCarousel
-    ) {
-      const $ = (window as any).$;
+  const handleLoad = () => {
+    document.body.classList.add("loaded");
 
-      $("#logo-carousel").owlCarousel({
-        loop: true,
-        margin: 60,
-        autoplay: true,
-        autoplayTimeout: 0,      // 👈 continuous
-        autoplaySpeed: 5000,
-        smartSpeed: 5000,
-        slideTransition: "linear",
-        dots: false,
-        nav: false,
-        autoplayHoverPause: false,
-        responsive: {
-          0: { items: 2 },
-          600: { items: 3 },
-          1000: { items: 5 }
-        }
-      });
-    } else {
-      setTimeout(initLogoCarousel, 200);
-    }
-  };
-
-  initLogoCarousel();
-}, []);
-
-
-useEffect(() => {
-  const initScripts = () => {
-    if (typeof window !== "undefined" && window.WOW) {
-      new window.WOW().init();
-    }
-
-    if (window.$ && $("#main-menu").length) {
-      $("#main-menu").slicknav({
-        prependTo: "#mobile_menu",
-        label: "",
-      });
-    }
-  };
-
-  // Delay ensures DOM is ready
-  const timer = setTimeout(initScripts, 500);
-
-  return () => clearTimeout(timer);
-}, []);
-useEffect(() => {
-  const loader = document.getElementById("loader-wrapper");
-  if (loader) {
     setTimeout(() => {
-      loader.style.display = "none";
-    }, 800); // hide after mount
+      const loader = document.getElementById("loader-wrapper");
+      if (loader) loader.style.display = "none";
+    }, 900);
+  };
+
+  if (document.readyState === "complete") {
+    handleLoad();
+  } else {
+    window.addEventListener("load", handleLoad);
   }
+
+  return () => {
+    window.removeEventListener("load", handleLoad);
+  };
 }, []);
 
 
@@ -249,31 +166,7 @@ return (
   
   
     
-  <div id="navigation" className="fixed-top navbar-light bg-faded site-navigation">
-    <div className="container">
-      <div className="row dfm">
-        <div className="col-lg-3 col-md-3 col-sm-4 dfa">
-          <div className="site-logo">
-            <a href="index.html"><img src="https://backstagepass.co.in/newlogo-324ee245.webp" alt="" /></a>          			        				
-          </div>
-        </div>
-        
-        <div className="col-lg-4 col-md-3 col-sm-8">
-          <div className="dfe"> 
-          <div className="home_lc">
-            <a href="#" className="hlc">
-              <i className="ti-heart"></i>
-              <span className="gactive">0</span>
-             </a>
-          </div>
-          <div className="call_to_action">
-            <a className="btn_one" href="login.html">Login</a>
-          </div>
-          </div>				
-        </div>
-      </div>
-    </div>
-  </div>
+ <SiteNavigation />
     
 
   
@@ -310,7 +203,7 @@ return (
       <div className="row">						
         <div className="col-lg-3 col-sm-6 col-xs-12">
           <div className="single_footer">
-            <a href="index.html"><img src="https://backstagepass.co.in/newlogo-324ee245.webp" alt="" /></a>         
+            <a href="#"><img src="https://backstagepass.co.in/newlogo-324ee245.webp" alt="" /></a>         
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae risus nec dui venenatis dignissim.</p>
           </div>		
         </div>						

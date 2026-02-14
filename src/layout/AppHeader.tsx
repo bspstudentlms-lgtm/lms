@@ -31,6 +31,13 @@ const AppHeader: React.FC = () => {
     }
   };
 
+const hideHeaderRoutes = ["/", "/all-courses"];
+
+if (pathname && hideHeaderRoutes.includes(pathname)) {
+  return null;
+}
+
+
   const toggleApplicationMenu = () => {
     setApplicationMenuOpen(!isApplicationMenuOpen);
   };

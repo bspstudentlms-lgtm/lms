@@ -4,6 +4,7 @@
 import React, { useEffect, useState } from "react";
 
 import CourseCarouselNoScroll from "@/components/CourseCarouselNoScroll";
+import SiteNavigation from "@/components/SiteNavigation";
 
 
 import SuccessCarousel from "@/components/SuccessCarousel";
@@ -194,13 +195,26 @@ useEffect(() => {
   return () => clearTimeout(timer);
 }, []);
 useEffect(() => {
-  const loader = document.getElementById("loader-wrapper");
-  if (loader) {
+  const handleLoad = () => {
+    document.body.classList.add("loaded");
+
     setTimeout(() => {
-      loader.style.display = "none";
-    }, 800); // hide after mount
+      const loader = document.getElementById("loader-wrapper");
+      if (loader) loader.style.display = "none";
+    }, 900);
+  };
+
+  if (document.readyState === "complete") {
+    handleLoad();
+  } else {
+    window.addEventListener("load", handleLoad);
   }
+
+  return () => {
+    window.removeEventListener("load", handleLoad);
+  };
 }, []);
+
 
 
    useEffect(() => {
@@ -249,31 +263,7 @@ return (
 	
 	
 	  
-	<div id="navigation" className="fixed-top navbar-light bg-faded site-navigation">
-		<div className="container">
-			<div className="row dfm">
-				<div className="col-lg-3 col-md-3 col-sm-4 dfa">
-					<div className="site-logo">
-						<a href="index.html"><img src="https://backstagepass.co.in/newlogo-324ee245.webp" alt="" /></a>          			        				
-					</div>
-				</div>
-				
-				<div className="col-lg-4 col-md-3 col-sm-8">
-          <div className="dfe"> 
-					<div className="home_lc">
-						<a href="#" className="hlc">
-						  <i className="ti-heart"></i>
-						  <span className="gactive">0</span>
-					   </a>
-					</div>
-					<div className="call_to_action">
-						<a className="btn_one" href="login.html">Login</a>
-					</div>
-          </div>				
-				</div>
-			</div>
-		</div>
-	</div> 	  
+	<SiteNavigation /> 	  
 	
 								
 	
@@ -291,11 +281,11 @@ return (
 			<div className="row">
 				<div className="col-lg-6 col-sm-6 col-xs-12">	
 					<div className="home_content">
-						<h1>Better <span>Learning Future</span> Starts With Bsp</h1>
-						<p>It is a long established fact that reader will be distracted readable content of a page when.</p>						
+						<h1>Build Games <span>Build Skills</span> <br/>Build Your Future</h1>
+						<p>Backstage Pass LMS helps aspiring creators master game development through structured, industry-ready courses, real projects, and expert mentorship.</p>						
 					</div>
 					<div className="home_btn">
-						<a href="#" className="cta"><span>Explore Courses</span>
+						<a href="/all-courses" className="cta"><span>Explore Courses</span>
 						  <svg width="13px" height="10px" viewBox="0 0 13 10">
 							<path d="M1,5 L11,5"></path>
 							<polyline points="8 1 12 5 8 9"></polyline>
@@ -381,19 +371,19 @@ return (
 				<div className="col-lg-6 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
 					<div className="ab_content">
 						<h2>Learn new skills to go <u><span>ahead for your </span></u> career.</h2>
-						<p>Lorem ipsum dolor sit amet, consectetur notted adipisicing elit sed do eiusmod tempor incididunt ut labore et simply.</p>
+						<p>Backstage Pass LMS is built for creators who want more than tutorials.</p>
 					</div>
 					<div className="abmv">
 						<span className="ti-medall"></span>
 						<h4>Our Mission</h4>
-						<p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor ut labore.</p>
+						<p>Our commitment is to provide industry-ready education that is accessible, outcome-driven, and built for real career growth.</p>
 					</div>
 					<div className="abmv">
 						<span className="ti-wand"></span>
 						<h4>Our Vision</h4>
-						<p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor ut labore.</p>
+						<p>Backstage Pass LMS aims to bridge the gap between learning and employment by setting the standard for job-ready courses in the gaming industry.</p>
 					</div>	
-						<a className="btn_one" href="about.html">Discover More</a>
+						<a className="btn_one" href="#">Discover More</a>
 				</div>								  
 			</div>
 		</div>
@@ -475,62 +465,62 @@ return (
 	<section className="marketing_content_area section-padding">
 	   <div className="container">
 			<div className="section-title">
-				<h2>Why Choose Bsp</h2>
-				<p>Find the <span><u>best features</u></span> of Bsp.</p>
+				<h2>WHY CHOOSE BACKSTAGE PASS LMS</h2>
+				<p>Find The <span><u>Best Features </u></span> Of Backstage Pass LMS.</p>
 			</div>		
 			<div className="row">									
 				<div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
 					<div className="single_feature_one">
 						<div className="sf_top">
 							<span className="ti-book ss_one"></span>
-							<h2><a href="single-service.html" target="_blank">Learn More Anywhere</a></h2>
+							<h2><a href="#" target="_blank">Learn by Building</a></h2>
 						</div>
-						<p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor ut labore.</p>
+						<p>Every course revolves around real production workflows used in studios.</p>
 					</div>					
 				</div>								
 				<div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.2s" data-wow-offset="0">
 					<div className="single_feature_one">
 						<div className="sf_top">
-							<span className="ti-heart ss_two"></span>
-							<h2><a href="single-service.html" target="_blank">Expert <br />Instructor</a></h2>
+							<span className="ti-user ss_three"></span>
+							<h2><a href="#" target="_blank">Industry Mentors</a></h2>
 						</div>	
-						<p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor ut labore.</p>
+						<p>Train with professionals who ship games, not just teach theory.</p>
 					</div>					
 				</div>								
 				<div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.3s" data-wow-offset="0">
 					<div className="single_feature_one">
 						<div className="sf_top">
-							<span className="ti-user ss_three"></span>
-							<h2><a href="single-service.html" target="_blank">Team <br />Management</a></h2>
+							<span className="ti-heart ss_two"></span>
+							<h2><a href="#" target="_blank">Beginner to Pro Path</a></h2>
 						</div>	
-						<p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor ut labore.</p>
+						<p>Clear roadmaps guiding you from fundamentals to advanced pipelines.</p>
 					</div>					
 				</div>								
 				<div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.4s" data-wow-offset="0">
 					<div className="single_feature_one">
 						<div className="sf_top">
 							<span className="ti-eye ss_four"></span>
-							<h2><a href="single-service.html" target="_blank">Course <br /> Planing</a></h2>
+							<h2><a href="#" target="_blank">Project-Based Curriculum</a></h2>
 						</div>	
-						<p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor ut labore.</p>
+						<p>Create portfolio-ready assets, mechanics, and complete games.</p>
 					</div>					
 				</div>								
 				<div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.5s" data-wow-offset="0">
 					<div className="single_feature_one">
 						<div className="sf_top">
 							<span className="ti-light-bulb ss_five"></span>
-							<h2><a href="single-service.html" target="_blank">Teacher Monitoring</a></h2>
+							<h2><a href="#" target="_blank">Flexible Learning</a></h2>
 						</div>		
-						<p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor ut labore.</p>
+						<p>Learn anytime with lifetime access and updates.</p>
 					</div>					
 				</div>								
 				<div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s" data-wow-offset="0">
 					<div className="single_feature_one">
 						<div className="sf_top">
 							<span className="ti-email ss_six"></span>
-							<h2><a href="single-service.html" target="_blank">24/7 Strong Support</a></h2>
+							<h2><a href="#" target="_blank">Career Focused</a></h2>
 						</div>		
-						<p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor ut labore.</p>
+						<p>Prepare for internships, freelance, or studio roles.</p>
 					</div>					
 				</div>																
 			</div>
@@ -578,7 +568,7 @@ return (
 						</ul>
 					</div>
 					<div className="cp_btn">
-						<a href="#" className="cta"><span>Explore Our Courses</span>
+						<a href="/all-courses" className="cta"><span>Explore Our Courses</span>
 						  <svg width="13px" height="10px" viewBox="0 0 13 10">
 							<path d="M1,5 L11,5"></path>
 							<polyline points="8 1 12 5 8 9"></polyline>
@@ -831,7 +821,7 @@ return (
 			<div className="row">						
 				<div className="col-lg-3 col-sm-6 col-xs-12">
 					<div className="single_footer">
-						<a href="index.html"><img src="https://backstagepass.co.in/newlogo-324ee245.webp" alt="" /></a>         
+						<a href="#"><img src="https://backstagepass.co.in/newlogo-324ee245.webp" alt="" /></a>         
 						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae risus nec dui venenatis dignissim.</p>
 					</div>		
 				</div>						

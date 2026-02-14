@@ -155,7 +155,7 @@ export default function CourseGrid() {
       <div>
 
         {/* ================= SEARCH SECTION ================= */}
-        <div className="bg-white rounded-2xl shadow-md p-6 mb-10 space-y-4">
+        <div className="bg-white rounded-2xl shadow-md p-6 mb-10 space-y-4" style={{boxShadow: "0 0 10px #cdcdcd", paddingTop: "40px"}}>
 
          
           <input
@@ -316,7 +316,7 @@ export default function CourseGrid() {
                       </button>
                                     </div>
                                   </div>
-                                  <div className="course-content" style={{minHeight : "285px"}}><a className="c_btn" href="single_course.html">{course.category}</a>
+                                  <div className="course-content" style={{minHeight : "285px"}}><a className="c_btn" href="#">{course.category}</a>
                                     <h3><a href={course.urlpath}> {course.title}</a></h3>
                                     <span><i className="fa fa-graduation-cap"></i>{course.level}</span>
                                     <span><i className="fa fa-clock-o"></i>{course.duration} hours</span>
@@ -358,7 +358,7 @@ export default function CourseGrid() {
                       </button>
                                     </div>
                                   </div>
-                                  <div className="course-content" style={{minHeight : "285px"}}><a className="c_btn" href="single_course.html">{course.category}</a>
+                                  <div className="course-content" style={{minHeight : "285px"}}><a className="c_btn" href="#">{course.category}</a>
                                     <h3><a href={course.urlpath}> {course.title}</a></h3>
                                     <span><i className="fa fa-graduation-cap"></i>{course.level}</span>
                                     <span><i className="fa fa-clock-o"></i>{course.duration} hours</span>
@@ -527,7 +527,7 @@ export default function CourseGrid() {
                       </button>
                                     </div>
                                   </div>
-                                  <div className="course-content" style={{minHeight : "285px"}}><a className="c_btn" href="single_course.html">{course.category}</a>
+                                  <div className="course-content" style={{minHeight : "285px"}}><a className="c_btn" href="#">{course.category}</a>
                                     <h3><a href={course.urlpath}> {course.title}</a></h3>
                                     <span><i className="fa fa-graduation-cap"></i>{course.level}</span>
                                     <span><i className="fa fa-clock-o"></i>{course.duration} hours</span>
