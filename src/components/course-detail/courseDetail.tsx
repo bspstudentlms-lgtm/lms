@@ -1808,7 +1808,7 @@ const isCurrentWatched =
 
           {/* TAB CONTENT */}
           <div className="mt-4 text-sm text-gray-700">
-            {activeTab === "overview" && (
+           {currentTopic?.description && activeTab === "overview" && (
               <div>
                 <h3 className="text-lg font-semibold mb-2">Topic Overview</h3>
                 {/* <p>{courseOverview || "Overview will be updated soon."}</p> */}

@@ -246,13 +246,17 @@ const handleEmailBlur = async () => {
         </button>
 
         {/* TITLE */}
-        <h2 className="text-2xl font-semibold text-center mb-2">
-        
-          Enroll in  {paymentDetails.coursename} 
-        </h2>
-        <p className="text-center text-gray-500 mb-6">
-          Fill details & start your journey 🚀
-        </p>
+        {Number(paymentDetails.coursetype) !== 2 && (
+  <>
+    <h2 className="text-2xl font-semibold text-center mb-2">
+      Enroll in {paymentDetails.coursename}
+    </h2>
+
+    <p className="text-center text-gray-500 mb-6">
+      Fill details & start your journey 🚀
+    </p>
+  </>
+)}
 {paymentDetails.coursetype == 2 ? (
   <div className="mt-6 text-center space-y-4">
     <div className="p-5 rounded-2xl bg-yellow-50 border border-yellow-200">
