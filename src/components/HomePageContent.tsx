@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 
 import CourseCarouselNoScroll from "@/components/CourseCarouselNoScroll";
 import SiteNavigation from "@/components/SiteNavigation";
-
+import AppHeaders from "@/layout/AppHeaders";
 
 import SuccessCarousel from "@/components/SuccessCarousel";
 import Corporate from "@/components/Corporate";
@@ -263,7 +263,8 @@ return (
 	
 	
 	  
-	<SiteNavigation /> 	  
+	{/* <SiteNavigation /> */}
+	<AppHeaders />
 	
 								
 	

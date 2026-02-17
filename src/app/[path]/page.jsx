@@ -5,6 +5,7 @@ import { ChevronDown } from "lucide-react";
 import Script from "next/script";
 import MuxPlayer from '@mux/mux-player-react';
 import SiteNavigation from "@/components/SiteNavigation";
+import AppHeaders from "@/layout/AppHeaders";
 import {
   CheckCircle,
   Clock,
@@ -104,8 +105,10 @@ export default function CoursePage({ params }) {
 
   const [loading, setLoading] = useState(true);
 
+  
+
+
   const [showVideoModal, setShowVideoModal] = useState(false);
-  const [showVideo, setShowVideo] = useState(false);
 
   // Example: use slug to load course data
 
@@ -202,19 +205,19 @@ export default function CoursePage({ params }) {
 
   const [visibleCount, setVisibleCount] = useState(3);
 
-useEffect(() => {
-  const handleScroll = () => {
-    if (
-      window.innerHeight + window.scrollY >=
-      document.body.offsetHeight - 200
-    ) {
-      setVisibleCount((prev) => Math.min(prev + 3, awards.length));
-    }
-  };
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + window.scrollY >=
+        document.body.offsetHeight - 200
+      ) {
+        setVisibleCount((prev) => Math.min(prev + 3, awards.length));
+      }
+    };
 
-  window.addEventListener("scroll", handleScroll);
-  return () => window.removeEventListener("scroll", handleScroll);
-}, []);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
 
   useEffect(() => {
@@ -308,12 +311,18 @@ useEffect(() => {
     <div className="loader-section section-right"></div>
   </div>;
 
-  const sortedSections =
+const ALWAYS_VISIBLE_SECTIONS = [
+  "basic_details",
+];
+
+const sortedSections =
   course?.sections
-    ?.filter((s) => s.is_active === "1")
-    ?.sort(
-      (a, b) => Number(a.order_index) - Number(b.order_index)
-    ) || [];
+    ?.filter(
+      (section) =>
+        ALWAYS_VISIBLE_SECTIONS.includes(section.section_type) ||
+        section.is_active === "1"
+    )
+    ?.sort((a, b) => Number(a.order_index) - Number(b.order_index)) || [];
 
 
   const isSectionActive = (type) =>
@@ -347,7 +356,8 @@ useEffect(() => {
       )}
 
 
-      <SiteNavigation />
+      <AppHeaders />
+      {/* <SiteNavigation /> */}
       <section className="section-padding ">
 
         <div className="container">
@@ -357,75 +367,68 @@ useEffect(() => {
             <div className="col-lg-8">
               <br /><br /><br />
 
-              <section className="section-top">
-                <div className="container">
-                  <div className="col-lg-10 offset-lg-1">
-                    <div className="section-top-title wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.3s" data-wow-offset="0">
-                      <div>
-                        <h1 className="text-[44px] font-semibold text-[#ffb347] mb-6">
-                          {course.coursename}
-                        </h1>
-                        <p className="text-md leading-relaxed mb-8" style={{ marginBottom: "20px" }}>
-                          {course.innerpage_description}
-                        </p>
-                        {Number(course.buy_course) === 1 && (
 
-                          <h3 className="text-xl font-semibold mb-4" style={{
-                            fontWeight: 600,
-                            fontSize: "21px"
-                          }}
-                          >Buy this Course @</h3>
-                        )}
-                        {Number(course.course_type) !== 2 && (
-                          <div className="flex items-center gap-4 mb-4">
-                            <span className="line-through text-gray-300 text-3xl">₹{course.orignialpayment}</span>
-                            <span className="text-3xl font-bold text-[#ee1b24]">₹{course.total_payment}</span>
-                            <span className="bg-white text-red-600 font-semibold px-4 py-1 rounded-full text-sm">
-                              {course.discount_value}% Disc.
-                            </span>
-                          </div>)}
-                        {Number(course.limited_offer) === 1 && (
-                          <span className="inline-block bg-red-600 text-white px-5 py-2 rounded-full text-sm mb-8">
-                            Limited Time Offer!
-                          </span>
-                        )}
+              {/* ================= DYNAMIC SECTIONS RENDER ================= */}
+{sortedSections.map((section) => {
+  switch (section.section_type) {
 
-                        <div className="relative bg-white rounded-xl shadow-lg grid grid-cols-4 text-center text-black">
-                          <div className="py-6">
-                            <p className="font-semibold">
-                              {course.number_of_modules}
-                              {Number(course.course_type) === 1 ? " Modules" : " Learning"}
-                            </p>
+    case "basic_details":
+      return <BasicDetails key="basic_details" course={course} />;
 
-                            <p className="text-sm text-gray-600">
-                              {Number(course.course_type) === 1
-                                ? "with Certifications"
-                                : " Modules"}
-                            </p>
-                          </div>
-                          <div className="py-6">
-                            <p className="font-semibold">{course.duration} Hours</p>
-                            <p className="text-sm text-gray-600">Recorded Content</p>
-                          </div>
-                          <div className="py-6">
-                            <p className="font-semibold">Online</p>
-                            <p className="text-sm text-gray-600">Mode</p>
-                          </div>
-                          <div className="py-6">
-                            <p className="font-semibold">English</p>
-                            <p className="text-sm text-gray-600">Language</p>
-                          </div>
-                          <span className="absolute top-6 bottom-6 left-1/4 w-px bg-gray-200" />
-                          <span className="absolute top-6 bottom-6 left-2/4 w-px bg-gray-200" />
-                          <span className="absolute top-6 bottom-6 left-3/4 w-px bg-gray-200" />
-                        </div>
-                      </div>
+    case "key_features":
+      return <KeyFeatures key="key_features" course={course} />;
 
-                    </div>
-                  </div>
-                </div>
-              </section>
-              <br /><br />
+    case "outcomes":
+      return <Outcomes key="outcomes" course={course} />;
+
+    case "system":
+      return <SystemRequirements key="system" course={course} />;
+
+    case "audience":
+      return <Audience key="audience" course={course} />;
+
+    case "career":
+      return <Career key="career" course={course} />;
+
+    case "faqs":
+      return <FaqSection key="faqs" course={course} />;
+
+    // case "custom_22":
+    //   return <CustomSection key="custom_22" title="Custom Section 22" />;
+
+    // case "custom_23":
+    //   return <CustomSection key="custom_23" title="Custom Section 23" />;
+
+    default:
+      if (section.section_type.startsWith("custom_")) {
+
+    const customSections = course?.custom_sections || [];
+
+    // Get index dynamically based on order
+    const customSectionTypes = sortedSections
+      .filter(s => s.section_type.startsWith("custom_"));
+
+    const customIndex = customSectionTypes.findIndex(
+      s => s.section_type === section.section_type
+    );
+
+    const customData = customSections[customIndex];
+
+    if (!customData) return null;
+
+    return (
+      <CustomSection
+        key={section.section_type}
+        data={customData}
+      />
+    );
+  }
+      return null;
+  }
+})}
+
+
+             
 
               {/* <div class="ab_content">
 						<h2>{course.overview_title} </h2>
@@ -441,67 +444,67 @@ useEffect(() => {
 					</div> */}
 
 
-{Number(course?.course_type) !== 2 && (
-  <>
-              <div
-                className="video-area"
-                style={{
-                  position: "relative",
-                  backgroundImage: `url(https://backstagepass.co.in/studentlms/uploads/featuredcourses/${course?.courses_image})`,
-                  backgroundSize: "contain",
-                  backgroundPosition: "center",
-                  backgroundRepeat: "no-repeat",
-                  backgroundColor: "#000",
-                  width: "100%",
-                  maxWidth: "900px",
-                  margin: "0 auto",
-                  aspectRatio: "16/9",
-                  borderRadius: "12px",
-                  paddingTop: "56.25%", // 16:9 ratio trick
-                }}
-              >
-                {!showVideo ? (
-                  <button
-                    type="button"
-                    onClick={() => setShowVideo(true)}
+              {/* {Number(course?.course_type) !== 2 && (
+                <>
+                  <div
+                    className="video-area"
                     style={{
-                      position: "absolute",
-                      top: "50%",
-                      left: "50%",
-                      transform: "translate(-50%, -50%)",
-                      border: "none",
-                      background: "rgba(0,0,0,0.5)",
-                      borderRadius: "50%",
-                      width: "80px",
-                      height: "80px",
-                      color: "#fff",
-                      fontSize: "30px",
+                      position: "relative",
+                      backgroundImage: `url(https://backstagepass.co.in/studentlms/uploads/featuredcourses/${course?.courses_image})`,
+                      backgroundSize: "contain",
+                      backgroundPosition: "center",
+                      backgroundRepeat: "no-repeat",
+                      backgroundColor: "#000",
+                      width: "100%",
+                      maxWidth: "900px",
+                      margin: "0 auto",
+                      aspectRatio: "16/9",
+                      borderRadius: "12px",
+                      paddingTop: "56.25%", // 16:9 ratio trick
                     }}
                   >
-                    <i className="fa fa-play"></i>
-                  </button>
-                ) : (
-                  course?.playback_id && (
-                    <MuxPlayer
-                      playbackId={course.playback_id}
-                      autoPlay
-                      playsInline
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        width: "100%",
-                        height: "100%",
-                      }}
-                    />
-                  )
-                )}
-              </div>
+                    {!showVideo ? (
+                      <button
+                        type="button"
+                        onClick={() => setShowVideo(true)}
+                        style={{
+                          position: "absolute",
+                          top: "50%",
+                          left: "50%",
+                          transform: "translate(-50%, -50%)",
+                          border: "none",
+                          background: "rgba(0,0,0,0.5)",
+                          borderRadius: "50%",
+                          width: "80px",
+                          height: "80px",
+                          color: "#fff",
+                          fontSize: "30px",
+                        }}
+                      >
+                        <i className="fa fa-play"></i>
+                      </button>
+                    ) : (
+                      course?.playback_id && (
+                        <MuxPlayer
+                          playbackId={course.playback_id}
+                          autoPlay
+                          playsInline
+                          style={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            width: "100%",
+                            height: "100%",
+                          }}
+                        />
+                      )
+                    )}
+                  </div>
 
 
 
 
-              <br /><br /></>)}
+                  <br /><br /></>)}
 
               <section class="topic_content_p2 section-padding">
                 <div class="container">
@@ -523,56 +526,44 @@ useEffect(() => {
 
                   </div>
                 </div>
-              </section>
+              </section> */}
 
 
-<div className="bg-gray-50 rounded-3xl shadow-md p-8 flex flex-col md:flex-row items-center gap-8 min-h-[220px]">
+              {/* <div className="bg-gray-50 rounded-3xl shadow-md p-8 flex flex-col md:flex-row items-center gap-8 min-h-[220px]">
 
-  {/* IMAGE */}
-  <div className="flex-shrink-0">
-    <img
-      src={`https://backstagepass.co.in/studentlms/uploads/mentors/${course.mentor_photo}`}
-      alt={course.mentor_name}
-      className="w-36 h-36 object-cover rounded-2xl border-4 border-red-600 shadow-sm"
-    />
-  </div>
-
-  {/* CONTENT */}
-  <div className="flex flex-col justify-center text-center md:text-left flex-1">
-    <h3 className="text-2xl font-bold text-[#1a2d62]">
-      {course.mentor_name}
-    </h3>
-
-    <p className="text-red-600 font-semibold mt-1 mb-3">
-      {course.mentor_designation}
-    </p>
-
-    {course.mentor_bio && course.mentor_bio.trim() !== "Bio" && (
-      <p className="text-gray-600 leading-relaxed max-w-2xl">
-        {course.mentor_bio}
-      </p>
-    )}
-  </div>
-
-</div>
-
-
-
-
-              {/* <div class="single_agent">
-                <div class="single_agent_image">
-                  <img src={`https://backstagepass.co.in/studentlms/uploads/mentors/${course.mentor_photo}`} class="img-fluid" alt="image" />
+                
+                <div className="flex-shrink-0">
+                  <img
+                    src={`https://backstagepass.co.in/studentlms/uploads/mentors/${course.mentor_photo}`}
+                    alt={course.mentor_name}
+                    className="w-36 h-36 object-cover rounded-2xl border-4 border-red-600 shadow-sm"
+                  />
                 </div>
-                <div class="single_agent_content">
-                  <h4>{course.mentor_name}</h4>
-                  <h5>{course.mentor_designation}</h5>
-                   <p>{course.mentor_bio === "Bio" ? "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever type book." : "Bio"}</p>
-                  <ul>
-                    <li><i class="fa fa-envelope-o"></i> {course.mentor_email}</li>
-                  </ul>
+
+               
+                <div className="flex flex-col justify-center text-center md:text-left flex-1">
+                  <h3 className="text-2xl font-bold text-[#1a2d62]">
+                    {course.mentor_name}
+                  </h3>
+
+                  <p className="text-red-600 font-semibold mt-1 mb-3">
+                    {course.mentor_designation}
+                  </p>
+
+                  {course.mentor_bio && course.mentor_bio.trim() !== "Bio" && (
+                    <p className="text-gray-600 leading-relaxed max-w-2xl">
+                      {course.mentor_bio}
+                    </p>
+                  )}
                 </div>
-              </div> */}
-              <br /><br />
+
+              </div>
+
+
+
+
+              
+              <br /><br /> */}
 
               {/* <section
   className="vid_area section-padding"
@@ -586,7 +577,7 @@ useEffect(() => {
 
 
 
-              {isSectionActive("key_features") && course.key_features?.length > 0 && (
+              {/* {isSectionActive("key_features") && course.key_features?.length > 0 && (
                 <section class="topic_content_p2 section-padding">
                   <div class="container">
                     <div class="section-title">
@@ -605,79 +596,79 @@ useEffect(() => {
                   </div>
                 </section>
               )}
-              <br />
+              <br /> */}
 
-             <section className="topic_content_p2 section-padding">
-  <div className="container">
-    <div className="section-title">
-      <h2>About</h2>
-      <p>
-        Our <span><u>Awards</u></span>
-      </p>
-    </div>
-
-    <Swiper
-      modules={[Navigation, Autoplay]}
-      spaceBetween={20}
-      navigation
-      autoplay={{ delay: 4000 }}
-      loop
-      breakpoints={{
-        0: { slidesPerView: 1 },
-        768: { slidesPerView: 2 },
-        1024: { slidesPerView: 3 }
-      }}
-    >
-      {awards.map((award, index) => (
-        <SwiperSlide key={index}>
-          <Award img={award.img} title={award.title} />
-        </SwiperSlide>
-      ))}
-    </Swiper>
-  </div>
-</section>
-
-             {![2, 3].includes(Number(course?.course_type)) && (
-                <>
-              <br /><br />
-              <section class="course_promo section-padding">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-lg-6 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0" style={{
-                      visibility: "visible",
-                      animationDuration: "1s",
-                      animationDelay: "0.1s",
-                      animationName: "fadeInUp"
-                    }}
-                    >
-                      <div class="cp_content">
-                        <h4>Best Online Learning Platform</h4>
-                        <h2>Let Your  <span><u>Certificates </u></span> Speak</h2>
-                        <ul>
-                          <li><span class="ti-check"></span>Industry recognized certificate </li>
-                          <li><span class="ti-check"></span>Shareable on LinkedIn </li>
-                          <li><span class="ti-check"></span>Add to resume & portfolio</li>
-                        </ul>
-                      </div>
-
-                    </div>
-                    <div class="col-lg-6 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.2s" data-wow-offset="0" style={{
-                      visibility: "visible",
-                      animationDuration: "1s",
-                      animationDelay: "0.1s",
-                      animationName: "fadeInUp"
-                    }}
-                    >
-                      <div class="cp_img">
-                        <img src="https://backstagepass.co.in/certificate-with-badge-265a0669.png" class="img-fluid" alt="image" />
-                      </div>
-                    </div>
+              <section className="topic_content_p2 section-padding">
+                <div className="container">
+                  <div className="section-title">
+                    <h2>About</h2>
+                    <p>
+                      Our <span><u>Awards</u></span>
+                    </p>
                   </div>
+
+                  <Swiper
+                    modules={[Navigation, Autoplay]}
+                    spaceBetween={20}
+                    navigation
+                    autoplay={{ delay: 4000 }}
+                    loop
+                    breakpoints={{
+                      0: { slidesPerView: 1 },
+                      768: { slidesPerView: 2 },
+                      1024: { slidesPerView: 3 }
+                    }}
+                  >
+                    {awards.map((award, index) => (
+                      <SwiperSlide key={index}>
+                        <Award img={award.img} title={award.title} />
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
                 </div>
-              </section></> )}
+              </section>
+
+              {![2, 3].includes(Number(course?.course_type)) && (
+                <>
+                  <br /><br />
+                  <section class="course_promo section-padding">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-lg-6 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0" style={{
+                          visibility: "visible",
+                          animationDuration: "1s",
+                          animationDelay: "0.1s",
+                          animationName: "fadeInUp"
+                        }}
+                        >
+                          <div class="cp_content">
+                            <h4>Best Online Learning Platform</h4>
+                            <h2>Let Your  <span><u>Certificates </u></span> Speak</h2>
+                            <ul>
+                              <li><span class="ti-check"></span>Industry recognized certificate </li>
+                              <li><span class="ti-check"></span>Shareable on LinkedIn </li>
+                              <li><span class="ti-check"></span>Add to resume & portfolio</li>
+                            </ul>
+                          </div>
+
+                        </div>
+                        <div class="col-lg-6 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.2s" data-wow-offset="0" style={{
+                          visibility: "visible",
+                          animationDuration: "1s",
+                          animationDelay: "0.1s",
+                          animationName: "fadeInUp"
+                        }}
+                        >
+                          <div class="cp_img">
+                            <img src="https://backstagepass.co.in/certificate-with-badge-265a0669.png" class="img-fluid" alt="image" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </section></>)}
               <br /><br />
 
-              {isSectionActive("outcomes") && course.outcomes?.length > 0 && (
+              {/* {isSectionActive("outcomes") && course.outcomes?.length > 0 && (
                 <section class=" section-padding">
                   <div class="container">
                     <div class="row">
@@ -711,29 +702,15 @@ useEffect(() => {
                           </div>
 
 
-                          {/* <ul>
-							<li><span class="ti-check"></span>Industry recognized certificate </li>
-							<li><span class="ti-check"></span>Shareable on LinkedIn </li>
-							<li><span class="ti-check"></span>Add to resume & portfolio</li>
-						</ul> */}
+                          
                         </div>
 
                       </div>
-                      {/* <div class="col-lg-8 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.2s" data-wow-offset="0" style={{
-    visibility: "visible",
-    animationDuration: "1s",
-    animationDelay: "0.1s",
-    animationName: "fadeInUp"
-  }}
->
-					<div class="cp_img">
-						 <img src={`https://backstagepass.co.in/studentlms/uploads/course_outcomes/${course.outcomes_image}`} alt="image" />
-					</div>
-				</div>			   */}
+                     
                     </div>
                   </div>
                 </section>
-              )}
+              )} */}
 
 
               <section className="max-w-7xl mx-auto px-6 py-0">
@@ -752,7 +729,7 @@ useEffect(() => {
               </section>
               <br /><br />
 
-              {isSectionActive("system") && course.requirement?.length > 0 && (
+              {/* {isSectionActive("system") && course.requirement?.length > 0 && (
                 <section class=" section-padding">
                   <div class="container">
                     <div class="row">
@@ -785,31 +762,17 @@ useEffect(() => {
                           </div>
 
 
-                          {/* <ul>
-							<li><span class="ti-check"></span>Industry recognized certificate </li>
-							<li><span class="ti-check"></span>Shareable on LinkedIn </li>
-							<li><span class="ti-check"></span>Add to resume & portfolio</li>
-						</ul> */}
+                         
                         </div>
 
                       </div>
-                      {/* <div class="col-lg-8 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.2s" data-wow-offset="0" style={{
-    visibility: "visible",
-    animationDuration: "1s",
-    animationDelay: "0.1s",
-    animationName: "fadeInUp"
-  }}
->
-					<div class="cp_img">
-						 <img src={`https://backstagepass.co.in/studentlms/uploads/system_requirement/${course.requirements_image}`} alt="image" />
-					</div>
-				</div>			   */}
+                     
                     </div>
                   </div>
                 </section>
-              )}
+              )} */}
 
-              {isSectionActive("audience") && course.card?.length > 0 && (
+              {/* {isSectionActive("audience") && course.card?.length > 0 && (
                 <section class="topic_content_p2 section-padding">
                   <div class="container">
                     <div class="section-title">
@@ -831,9 +794,9 @@ useEffect(() => {
                   </div>
                 </section>
               )}
-              <br /><br />
+              <br /><br /> */}
 
-              {isSectionActive("career") && course.career?.length > 0 && (
+              {/* {isSectionActive("career") && course.career?.length > 0 && (
                 <>
                   <section class="topic_content_p2 section-padding">
                     <div class="container">
@@ -856,13 +819,10 @@ useEffect(() => {
 
 
 
-                    {/* DID YOU KNOW */}
+                    
                     <div className="relative overflow-hidden rounded-2xl bg-[#a43a3a] text-white grid lg:grid-cols-1 items-center">
 
-                      {/* LEFT CONTENT */}
-
-
-                      {/* RIGHT ILLUSTRATION */}
+                     
                       <div className="flex justify-center lg:justify-end">
 
                         <img
@@ -878,9 +838,9 @@ useEffect(() => {
               )}
 
 
-              <br /><br />
+              <br /><br /> */}
 
-              {isSectionActive("faqs") && course.faqs?.length > 0 && (
+              {/* {isSectionActive("faqs") && course.faqs?.length > 0 && (
                 <>
 
                   <section class="topic_content_p2 section-padding">
@@ -899,7 +859,7 @@ useEffect(() => {
                               key={item.q}
                               className="bg-white rounded-xl shadow-[0_6px_20px_rgba(0,0,0,0.08)]"
                             >
-                              {/* QUESTION */}
+                             
                               <button
                                 onClick={() => setOpen(isOpen ? null : index)}
                                 className="w-full flex justify-between items-center px-8 py-6 text-left"
@@ -923,7 +883,7 @@ useEffect(() => {
                                 </span>
                               </button>
 
-                              {/* ANSWER */}
+                            
                               {isOpen && (
                                 <div className="px-8 pb-6 text-[15px] leading-[26px] text-[#444]">
                                   {item.a}
@@ -938,13 +898,13 @@ useEffect(() => {
                   </section>
 
                 </>
-              )}
+              )} */}
 
 
               <br /><br />
               <div class="sidebar-post" id="page-enroll-cta">
                 <div class="newsletter-form">
-                  <h4>Enroll in the {course.coursename}</h4>
+                  <h4>{getButtonLabel()} the {course.coursename}</h4>
                   <form action="#" class="subscribe">
 
                     <button type="button" class="sub_btn" onClick={() => setOpen1(true)}> {getButtonLabel()} @ ₹{course.total_payment}</button>
@@ -1529,15 +1489,576 @@ useEffect(() => {
 
 // COMPONENTS
 
+
+const BasicDetails = ({ course }) => {
+  if (!course?.course_overview) return null;
+const [showVideo, setShowVideo] = useState(false); 
+
+const shouldShowVideo =
+    course?.video_on_off === "1" &&
+    course?.playback_id;
+  return (
+    <>
+     <section className="section-top">
+                <div className="container">
+                  <div className="col-lg-10 offset-lg-1">
+                    <div className="section-top-title wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.3s" data-wow-offset="0">
+                      <div>
+                        <h1 className="text-[44px] font-semibold text-[#ffb347] mb-6">
+                          {course.coursename}
+                        </h1>
+                        <p className="text-md leading-relaxed mb-8" style={{ marginBottom: "20px" }}>
+                          {course.innerpage_description}
+                        </p>
+                        {Number(course.buy_course) === 1 && (
+
+                          <h3 className="text-xl font-semibold mb-4" style={{
+                            fontWeight: 600,
+                            fontSize: "21px"
+                          }}
+                          >Buy this Course @</h3>
+                        )}
+                        {Number(course.course_type) !== 2 && (
+                        <div className="gap-4 mb-4">  <div className="flex items-center gap-4 mb-1">
+                            <span className="line-through text-gray-300 text-3xl">₹{course.orignialpayment}</span>
+                            <span className="text-3xl font-bold text-[#ee1b24]">₹{course.total_payment}</span>
+                            <span className="bg-white text-red-600 font-semibold px-4 py-1 rounded-full text-sm">
+                              {course.discount_value}% Disc.
+                            </span>
+                          </div>
+                        <p style={{fontSize: "14px"}}>*Price inclusive of all applicable taxes (GST)</p></div>)}
+                          
+                        {Number(course.limited_offer) === 1 && (
+                          <span className="inline-block bg-red-600 text-white px-5 py-2 rounded-full text-sm mb-8">
+                            Limited Time Offer!
+                          </span>
+                        )}
+
+                        <div className="relative bg-white rounded-xl shadow-lg grid grid-cols-4 text-center text-black">
+                          <div className="py-6">
+                            <p className="font-semibold">
+                              {course.number_of_modules}
+                              {Number(course.course_type) === 1 ? " Modules" : " Learning"}
+                            </p>
+
+                            <p className="text-sm text-gray-600">
+                              {Number(course.course_type) === 1
+                                ? "with Certifications"
+                                : " Modules"}
+                            </p>
+                          </div>
+                          <div className="py-6">
+                            <p className="font-semibold">{course.duration} Hours</p>
+                            <p className="text-sm text-gray-600">Recorded Content</p>
+                          </div>
+                          <div className="py-6">
+                            <p className="font-semibold">Online</p>
+                            <p className="text-sm text-gray-600">Mode</p>
+                          </div>
+                          <div className="py-6">
+                            <p className="font-semibold">English</p>
+                            <p className="text-sm text-gray-600">Language</p>
+                          </div>
+                          <span className="absolute top-6 bottom-6 left-1/4 w-px bg-gray-200" />
+                          <span className="absolute top-6 bottom-6 left-2/4 w-px bg-gray-200" />
+                          <span className="absolute top-6 bottom-6 left-3/4 w-px bg-gray-200" />
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <br /><br />
+              {shouldShowVideo && (
+                <>
+                  <div
+                    className="video-area"
+                    style={{
+                      position: "relative",
+                      backgroundImage: `url(https://backstagepass.co.in/studentlms/uploads/course_inner/${course?.innerpage_image})`,
+                      backgroundSize: "contain",
+                      backgroundPosition: "center",
+                      backgroundRepeat: "no-repeat",
+                      backgroundColor: "#000",
+                      width: "100%",
+                      maxWidth: "900px",
+                      margin: "0 auto",
+                      aspectRatio: "16/9",
+                      borderRadius: "12px",
+                      paddingTop: "56.25%", // 16:9 ratio trick
+                    }}
+                  >
+                    {!showVideo ? (
+                      <button
+  type="button"
+  onClick={() => setShowVideo(true)}
+  className="video-play-btn"
+>
+  <span className="ripple"></span>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="34"
+    height="34"
+    viewBox="0 0 24 24"
+    fill="white"
+  >
+    <path d="M8 5v14l11-7z" />
+  </svg>
+</button>
+
+                    ) : (
+                      course?.playback_id && (
+                        <MuxPlayer
+                          playbackId={course.playback_id}
+                          autoPlay
+                          playsInline
+                          style={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            width: "100%",
+                            height: "100%",
+                            borderRadius: "12px",
+    animation: "fadeInVideo 0.6s ease forwards",
+                          }}
+                        />
+                      )
+                    )}
+                  </div>
+
+
+
+
+                  <br /><br /></>)}
+
+              <section class="topic_content_p2 section-padding">
+                <div class="container">
+                  <div class="section-title">
+                    <h2>AboutUs </h2>
+                    <p>{course.overview_title}</p>
+                  </div>
+                  <div class="row">
+
+                    <div className="course-overview"
+                      dangerouslySetInnerHTML={{
+                        __html: course.course_overview
+                          ?.replace(/<p>\s*<\/p>/g, "")
+                          ?.replace(/<p>&nbsp;<\/p>/g, "")
+                      }}
+                    ></div>
+
+
+
+                  </div>
+                </div>
+              </section>
+              <div className="bg-gray-50 rounded-3xl shadow-md p-8 flex flex-col md:flex-row items-center gap-8 min-h-[220px]">
+
+                {/* IMAGE */}
+                <div className="flex-shrink-0">
+                  <img
+                    src={`https://backstagepass.co.in/studentlms/uploads/mentors/${course.mentor_photo}`}
+                    alt={course.mentor_name}
+                    className="w-36 h-36 object-cover rounded-2xl border-4 border-red-600 shadow-sm"
+                  />
+                </div>
+
+                {/* CONTENT */}
+                <div className="flex flex-col justify-center text-left flex-1">
+
+                  <h3 className="text-2xl font-bold text-[#1a2d62]">
+                    {course.mentor_name}
+                  </h3>
+
+                  <p className="text-red-600 font-semibold mt-1 mb-3">
+                    {course.mentor_designation}
+                  </p>
+
+                  {course.mentor_bio && course.mentor_bio.trim() !== "Bio" && (
+                    <p className="text-gray-600 leading-relaxed max-w-2xl">
+                      {course.mentor_bio}
+                    </p>
+                  )}
+                </div>
+
+              </div>
+
+
+
+
+              
+              <br /><br />
+              </>
+  );
+};
+
+
+const KeyFeatures = ({ course }) => {
+  if (!course?.key_features?.length) return null;
+
+  return (
+    <section class="topic_content_p2 section-padding">
+                  <div class="container">
+                    <div class="section-title">
+                      <h2>Important </h2>
+                      <p>Key  <span><u>Features</u></span></p>
+                    </div>
+                    <div class="row">
+
+                      {course.key_features.map((feature, index) => (
+                        <Feature key={index} text={feature} />
+                      ))}
+
+
+
+                    </div>
+                  </div>
+                </section>
+  );
+};
+
+
+const Outcomes = ({ course }) => {
+  if (!course?.outcomes?.length) return null;
+
+  return (
+     <section class=" section-padding">
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-lg-12 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0" style={{
+                        visibility: "visible",
+                        animationDuration: "1s",
+                        animationDelay: "0.1s",
+                        animationName: "fadeInUp"
+                      }}
+                      >
+                        <div class="cp_content">
+                          <h4>Best Online Learning Platform</h4>
+                          <h2>After this {Number(course.course_type) === 1
+                            ? "Course"
+                            : "Webinar"},   <span><u>You will be  </u></span> Able to</h2>
+                          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                              <ul className="space-y-3">
+                                {course.outcomes?.map((outcomes, index) => (
+                                  <List key={index} text={outcomes} />
+                                ))}
+                              </ul>
+                            </div>
+                            {course?.outcomes_image?.trim() !== "" && (
+                              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                                <div class="cp_img">
+                                  <img src={`https://backstagepass.co.in/studentlms/uploads/course_outcomes/${course.outcomes_image}`} alt="image" />
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
+
+                          
+                        </div>
+
+                      </div>
+                     
+                    </div>
+                  </div>
+                </section>
+  );
+};
+
+
+
+const SystemRequirements = ({ course }) => {
+  if (!course?.requirement?.length) return null;
+
+  return (
+    <section class=" section-padding">
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-lg-12 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0" style={{
+                        visibility: "visible",
+                        animationDuration: "1s",
+                        animationDelay: "0.1s",
+                        animationName: "fadeInUp"
+                      }}
+                      >
+                        <div class="cp_content">
+                          <h4>Best Online Learning Platform</h4>
+                          <h2>{course.requirements_main_title}</h2>
+
+
+                          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                              <ul className="space-y-6">
+                                {course.requirement?.map((requirement, index) => (
+                                  <Requirement key={index} text={requirement} />
+                                ))}
+                              </ul>
+                            </div>
+                            {course?.requirements_image?.trim() !== "" && (
+                              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                                <div class="cp_img">
+                                  <img src={`https://backstagepass.co.in/studentlms/uploads/system_requirement/${course.requirements_image}`} alt="image" />
+                                </div>
+                              </div>)}
+                          </div>
+
+
+                         
+                        </div>
+
+                      </div>
+                     
+                    </div>
+                  </div>
+                </section>
+  );
+};
+
+
+const Audience = ({ course }) => {
+  if (!course?.card?.length) return null;
+
+  return (
+    <>
+    <section class="topic_content_p2 section-padding">
+                  <div class="container">
+                    <div class="section-title">
+                      <h2>Important </h2>
+                      <p> This {Number(course.course_type) === 1
+                        ? "Course"
+                        : "Webinar"} is for You,  <span><u>If You are</u></span></p>
+                    </div>
+                    <div class="row">
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {course.card?.map((card, index) => (
+                          <Card key={index} text={card} />
+                        ))}
+                      </div>
+
+
+                    </div>
+                  </div>
+                </section>
+                <br/><br/>
+                </>
+  );
+};
+
+
+const Career = ({ course }) => {
+  if (!course?.career?.length) return null;
+
+  const hasCareerImage =
+  course?.didyouknow_image &&
+  course.didyouknow_image !== "" &&
+  course.didyouknow_image !== "0";
+
+  return (
+    <>
+    <section class="topic_content_p2 section-padding">
+                    <div class="container">
+                      <div class="section-title">
+                        <h2>Career Opportunities </h2>
+                        <p>{course.career_main_title}</p>
+                      </div>
+                      <div class="row">
+
+                        {course.career?.map((career, index) => (
+                          <CareerCard key={index} text={career} />
+                        ))}
+
+
+
+                      </div>
+                    </div>
+                  </section>
+                  {hasCareerImage && (
+                  <section className="max-w-7xl mx-auto px-6 py-0">
+
+
+
+                    
+                    <div className="relative overflow-hidden rounded-2xl bg-[#a43a3a] text-white grid lg:grid-cols-1 items-center">
+
+                     
+                      <div className="flex justify-center lg:justify-end">
+
+                        <img
+                          src={`https://backstagepass.co.in/studentlms/uploads/course_inner/${course.didyouknow_image}`}
+                          alt="Career Illustration"
+                          className="w-full rounded-xl"
+                        />
+                      </div>
+                    </div>
+
+                  </section>)}<br/><br/>
+                  </>
+  );
+};
+
+
+const FaqSection = ({ course }) => {
+  const [open, setOpen] = useState(null);
+
+  if (!course?.faqs?.length) return null;
+
+  return (
+    <>
+    <section class="topic_content_p2 section-padding">
+                    <div class="container">
+                      <div className="section-title">
+                        <h2>Frequently Asked Question</h2>
+                        <p>General <span><u>Questions</u></span></p>
+                      </div>
+
+                      <div className="space-y-5">
+                        {course.faqs.map((item, index) => {
+                          const isOpen = open === index;
+
+                          return (
+                            <div
+                              key={item.q}
+                              className="bg-white rounded-xl shadow-[0_6px_20px_rgba(0,0,0,0.08)]"
+                            >
+                              {/* QUESTION */}
+                              <button
+                                onClick={() => setOpen(isOpen ? null : index)}
+                                className="w-full flex justify-between items-center px-8 py-6 text-left"
+                              >
+                                <span className="text-[16px] font-medium text-blue-600" style={{
+                                  color: "#1a2d62",
+                                  fontWeight: 600,
+                                  fontSize: "19px"
+                                }}
+                                >
+                                  {item.q}
+                                </span>
+
+                                <span className="text-red-600 text-xl font-semibold" style={{
+                                  color: "#1a2d62",
+                                  fontWeight: 600,
+                                  fontSize: "24px"
+                                }}
+                                >
+                                  {isOpen ? "−" : "+"}
+                                </span>
+                              </button>
+
+                              {/* ANSWER */}
+                              {isOpen && (
+                                <div className="px-8 pb-6 text-[15px] leading-[26px] text-[#444]">
+                                  {item.a}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                    </div>
+                  </section><br/><br/>
+                  </>
+  );
+};
+
+const CustomSection = ({ data }) => {
+  if (!data) return null;
+
+  const imageUrl =
+  data?.image &&
+  data.image.trim() !== "" &&
+  data.image !== "null"
+    ? data.image.startsWith("http")
+      ? data.image
+      : `https://backstagepass.co.in/studentlms/uploads/course_sections/${data.image}`
+    : null;
+
+
+  return (
+    <section className="py-10 bg-[#fff]">
+      <div className="max-w-6xl mx-auto px-6">
+
+        {/* TITLE */}
+        {data?.title && (
+          // <div className="mb-10">
+          //   <h2 className="text-3xl md:text-4xl font-bold text-[#1a2d62] relative inline-block">
+          //     {data.title}
+          //     <span className="absolute left-0 -bottom-2 w-16 h-1 bg-red-600 rounded-full"></span>
+          //   </h2>
+          // </div>
+
+          <div className="section-title">
+                        <h2>Sections</h2>
+                        <p>{data.title}</p>
+                      </div>
+        )}
+
+        {/* CARD WRAPPER */}
+        <div className="bg-white rounded-3xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl">
+
+          {/* IMAGE */}
+         {imageUrl && (
+  <div className="relative w-full aspect-[16/7] overflow-hidden rounded-2xl mb-3">
+    <img
+      src={imageUrl}
+      alt={data?.title || "Custom section"}
+      className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+      onError={(e) => {
+        e.currentTarget.style.display = "none";
+      }}
+    />
+    {/* <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div> */}
+  </div>
+)}
+          {/* CONTENT */}
+          {data?.description && (
+            <div className="p-4 md:p-6">
+              <div
+                className="
+                  custom-content
+                  prose
+                  prose-lg
+                  max-w-none
+                  text-gray-700
+                  leading-relaxed
+                "
+                dangerouslySetInnerHTML={{
+                  __html: data.description,
+                }}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+
+
+
 const Feature = ({ text }) => (
-  <div class="col-lg-6 col-sm-6 col-xs-12">
-    <div className="single_tca">
-      <img src="assets/images/icon/star.svg" alt="" style={{ color: "#ee1b24" }} />
-      <h2><a href="#">{text}</a></h2>
+  <div className="col-lg-6 col-sm-6 col-xs-12 mb-4 d-flex">
+    <div className="single_tca d-flex w-100 align-items-center">
+      
+      <div className="icon-wrapper">
+        <img
+          src="assets/images/icon/star.svg"
+          alt=""
+          style={{ width: "32px" }}
+        />
+      </div>
+
+      <h5 className="feature-text">
+        {text}
+      </h5>
     </div>
   </div>
-
 );
+
 
 const Award = ({ img, title }) => (
   <div className="relative rounded-2xl overflow-hidden shadow-lg group">
