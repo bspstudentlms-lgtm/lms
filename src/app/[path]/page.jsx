@@ -16,6 +16,11 @@ import {
 } from "lucide-react";
 import EnrollModal from "@/components/EnrollModal";
 import { signIn } from "next-auth/react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+
 
 import Image from "next/image";
 
@@ -38,6 +43,47 @@ const companies = [
   "https://www.guvi.in/assets/BeM-RDUa-amazon.webp",
 ];
 
+const awards = [
+  {
+    img: "https://backstagepass.co.in/ET_Achievers_2025-a03e9ae8.webp",
+    title: "ET Industry Achievers 2025",
+  },
+  {
+    img: "https://backstagepass.co.in/Best_Education_Brand_2018-8ffd3a56.webp",
+    title: "Best Education Brand Award – Economic Times 2018",
+  },
+  {
+    img: "https://backstagepass.co.in/Times_Education_Excellence_2019-c24c65ad.webp",
+    title: "Times Education Excellence Awards 2019",
+  },
+
+  // Add more awards here
+  {
+    img: "https://backstagepass.co.in/ET_Achievers_2025-a03e9ae8.webp",
+    title: "ET Industry Achievers 2025",
+  },
+  {
+    img: "https://backstagepass.co.in/Best_Education_Brand_2018-8ffd3a56.webp",
+    title: "Best Education Brand Award – Economic Times 2018",
+  },
+  {
+    img: "https://backstagepass.co.in/Times_Education_Excellence_2019-c24c65ad.webp",
+    title: "Times Education Excellence Awards 2019",
+  },
+
+  {
+    img: "https://backstagepass.co.in/ET_Achievers_2025-a03e9ae8.webp",
+    title: "ET Industry Achievers 2025",
+  },
+  {
+    img: "https://backstagepass.co.in/Best_Education_Brand_2018-8ffd3a56.webp",
+    title: "Best Education Brand Award – Economic Times 2018",
+  },
+  {
+    img: "https://backstagepass.co.in/Times_Education_Excellence_2019-c24c65ad.webp",
+    title: "Times Education Excellence Awards 2019",
+  },
+];
 
 
 const styles = `
@@ -58,8 +104,8 @@ export default function CoursePage({ params }) {
 
   const [loading, setLoading] = useState(true);
 
-const [showVideoModal, setShowVideoModal] = useState(false);
-const [showVideo, setShowVideo] = useState(false);
+  const [showVideoModal, setShowVideoModal] = useState(false);
+  const [showVideo, setShowVideo] = useState(false);
 
   // Example: use slug to load course data
 
@@ -136,24 +182,39 @@ const [showVideo, setShowVideo] = useState(false);
   useEffect(() => {
     const handleLoad = () => {
       document.body.classList.add("loaded");
-  
+
       setTimeout(() => {
         const loader = document.getElementById("loader-wrapper");
         if (loader) loader.style.display = "none";
       }, 900);
     };
-  
+
     if (document.readyState === "complete") {
       handleLoad();
     } else {
       window.addEventListener("load", handleLoad);
     }
-  
+
     return () => {
       window.removeEventListener("load", handleLoad);
     };
   }, []);
 
+  const [visibleCount, setVisibleCount] = useState(3);
+
+useEffect(() => {
+  const handleScroll = () => {
+    if (
+      window.innerHeight + window.scrollY >=
+      document.body.offsetHeight - 200
+    ) {
+      setVisibleCount((prev) => Math.min(prev + 3, awards.length));
+    }
+  };
+
+  window.addEventListener("scroll", handleScroll);
+  return () => window.removeEventListener("scroll", handleScroll);
+}, []);
 
 
   useEffect(() => {
@@ -242,10 +303,18 @@ const [showVideo, setShowVideo] = useState(false);
 
 
   if (!course) return <div id="loader-wrapper">
-      <div id="loader"></div>
-      <div className="loader-section section-left"></div>
-      <div className="loader-section section-right"></div>
-    </div>;
+    <div id="loader"></div>
+    <div className="loader-section section-left"></div>
+    <div className="loader-section section-right"></div>
+  </div>;
+
+  const sortedSections =
+  course?.sections
+    ?.filter((s) => s.is_active === "1")
+    ?.sort(
+      (a, b) => Number(a.order_index) - Number(b.order_index)
+    ) || [];
+
 
   const isSectionActive = (type) =>
     course.sections?.some(
@@ -307,14 +376,14 @@ const [showVideo, setShowVideo] = useState(false);
                           }}
                           >Buy this Course @</h3>
                         )}
-                    {Number(course.course_type) !== 2 && (
-                        <div className="flex items-center gap-4 mb-4">
-                          <span className="line-through text-gray-300 text-3xl">₹{course.orignialpayment}</span>
-                          <span className="text-3xl font-bold text-[#ee1b24]">₹{course.total_payment}</span>
-                          <span className="bg-white text-red-600 font-semibold px-4 py-1 rounded-full text-sm">
-                            {course.discount_value}% Disc.
-                          </span>
-                        </div>)}
+                        {Number(course.course_type) !== 2 && (
+                          <div className="flex items-center gap-4 mb-4">
+                            <span className="line-through text-gray-300 text-3xl">₹{course.orignialpayment}</span>
+                            <span className="text-3xl font-bold text-[#ee1b24]">₹{course.total_payment}</span>
+                            <span className="bg-white text-red-600 font-semibold px-4 py-1 rounded-full text-sm">
+                              {course.discount_value}% Disc.
+                            </span>
+                          </div>)}
                         {Number(course.limited_offer) === 1 && (
                           <span className="inline-block bg-red-600 text-white px-5 py-2 rounded-full text-sm mb-8">
                             Limited Time Offer!
@@ -372,7 +441,67 @@ const [showVideo, setShowVideo] = useState(false);
 					</div> */}
 
 
+{Number(course?.course_type) !== 2 && (
+  <>
+              <div
+                className="video-area"
+                style={{
+                  position: "relative",
+                  backgroundImage: `url(https://backstagepass.co.in/studentlms/uploads/featuredcourses/${course?.courses_image})`,
+                  backgroundSize: "contain",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                  backgroundColor: "#000",
+                  width: "100%",
+                  maxWidth: "900px",
+                  margin: "0 auto",
+                  aspectRatio: "16/9",
+                  borderRadius: "12px",
+                  paddingTop: "56.25%", // 16:9 ratio trick
+                }}
+              >
+                {!showVideo ? (
+                  <button
+                    type="button"
+                    onClick={() => setShowVideo(true)}
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                      border: "none",
+                      background: "rgba(0,0,0,0.5)",
+                      borderRadius: "50%",
+                      width: "80px",
+                      height: "80px",
+                      color: "#fff",
+                      fontSize: "30px",
+                    }}
+                  >
+                    <i className="fa fa-play"></i>
+                  </button>
+                ) : (
+                  course?.playback_id && (
+                    <MuxPlayer
+                      playbackId={course.playback_id}
+                      autoPlay
+                      playsInline
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                      }}
+                    />
+                  )
+                )}
+              </div>
 
+
+
+
+              <br /><br /></>)}
 
               <section class="topic_content_p2 section-padding">
                 <div class="container">
@@ -396,44 +525,38 @@ const [showVideo, setShowVideo] = useState(false);
                 </div>
               </section>
 
-  
 
-<div className="mentor-card-pro wow fadeInUp">
+<div className="bg-gray-50 rounded-3xl shadow-md p-8 flex flex-col md:flex-row items-center gap-8 min-h-[220px]">
 
-  <div className="mentor-image-wrap">
-    <div className="mentor-image-ring"></div>
+  {/* IMAGE */}
+  <div className="flex-shrink-0">
     <img
       src={`https://backstagepass.co.in/studentlms/uploads/mentors/${course.mentor_photo}`}
       alt={course.mentor_name}
-      className="mentor-image-pro"
+      className="w-36 h-36 object-cover rounded-2xl border-4 border-red-600 shadow-sm"
     />
   </div>
 
-  <div className="mentor-content-pro">
-    <div className="mentor-badges-pro">
-      <span className="exp-badge-pro">10+ Years</span>
-      <span className="qa-badge-pro">Available for Q&A</span>
-    </div>
+  {/* CONTENT */}
+  <div className="flex flex-col justify-center text-center md:text-left flex-1">
+    <h3 className="text-2xl font-bold text-[#1a2d62]">
+      {course.mentor_name}
+    </h3>
 
-    <h3>{course.mentor_name}</h3>
-    <p className="mentor-role">{course.mentor_designation}</p>
+    <p className="text-red-600 font-semibold mt-1 mb-3">
+      {course.mentor_designation}
+    </p>
 
-    <div className="mentor-rating-pro">
-      <i className="fa fa-star"></i>
-      <i className="fa fa-star"></i>
-      <i className="fa fa-star"></i>
-      <i className="fa fa-star"></i>
-      <i className="fa fa-star"></i>
-      <span>4.9 Rating</span>
-    </div>
-
-    <div className="mentor-social-pro">
-      <a href="#"><i className="fa fa-linkedin"></i></a>
-      <a href="#"><i className="fa fa-twitter"></i></a>
-    </div>
+    {course.mentor_bio && course.mentor_bio.trim() !== "Bio" && (
+      <p className="text-gray-600 leading-relaxed max-w-2xl">
+        {course.mentor_bio}
+      </p>
+    )}
   </div>
 
 </div>
+
+
 
 
               {/* <div class="single_agent">
@@ -460,65 +583,8 @@ const [showVideo, setShowVideo] = useState(false);
     backgroundAttachment: "fixed",
   }}
 > */}
-            <div
-  className="video-area"
-  style={{
-    position: "relative",
-  backgroundImage: `url(https://backstagepass.co.in/studentlms/uploads/featuredcourses/${course?.courses_image})`,
-  backgroundSize: "contain",
-  backgroundPosition: "center",
-  backgroundRepeat: "no-repeat",
-  backgroundColor: "#000",
-  width: "100%",
-  maxWidth: "900px",
-  margin: "0 auto",
-  aspectRatio: "16/9",
-  borderRadius: "12px",
-    paddingTop: "56.25%", // 16:9 ratio trick
-  }}
->
-  {!showVideo ? (
-    <button
-      type="button"
-      onClick={() => setShowVideo(true)}
-      style={{
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        border: "none",
-        background: "rgba(0,0,0,0.5)",
-        borderRadius: "50%",
-        width: "80px",
-        height: "80px",
-        color: "#fff",
-        fontSize: "30px",
-      }}
-    >
-      <i className="fa fa-play"></i>
-    </button>
-  ) : (
-    course?.playback_id && (
-      <MuxPlayer
-        playbackId={course.playback_id}
-        autoPlay
-        playsInline
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-        }}
-      />
-    )
-  )}
-</div>
 
 
-
-
-              <br /><br />
 
               {isSectionActive("key_features") && course.key_features?.length > 0 && (
                 <section class="topic_content_p2 section-padding">
@@ -541,39 +607,38 @@ const [showVideo, setShowVideo] = useState(false);
               )}
               <br />
 
-              <section class="topic_content_p2 section-padding">
-                <div class="container">
-                  <div class="section-title">
-                    <h2>About </h2>
-                    <p>Our <span><u>Awards</u></span></p>
-                  </div>
-                  <div class="row">
+             <section className="topic_content_p2 section-padding">
+  <div className="container">
+    <div className="section-title">
+      <h2>About</h2>
+      <p>
+        Our <span><u>Awards</u></span>
+      </p>
+    </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                      <Award
-                        img="https://backstagepass.co.in/ET_Achievers_2025-a03e9ae8.webp"
-                        title="ET Industry Achievers 2025"
-                      />
-                      <Award
-                        img="https://backstagepass.co.in/Best_Education_Brand_2018-8ffd3a56.webp"
-                        title="Best Education Brand Award – Economic Times 2018"
-                      />
-                      <Award
-                        img="https://backstagepass.co.in/Times_Education_Excellence_2019-c24c65ad.webp"
-                        title="Times Education Excellence Awards 2019"
-                      />
-                      {/* <Award
-              img="https://backstagepass.co.in/Time_Excellence_Awards_2020-9b0861f1.webp"
-              title="Times Excellence Award 2020"
-            /> */}
-                    </div>
+    <Swiper
+      modules={[Navigation, Autoplay]}
+      spaceBetween={20}
+      navigation
+      autoplay={{ delay: 4000 }}
+      loop
+      breakpoints={{
+        0: { slidesPerView: 1 },
+        768: { slidesPerView: 2 },
+        1024: { slidesPerView: 3 }
+      }}
+    >
+      {awards.map((award, index) => (
+        <SwiperSlide key={index}>
+          <Award img={award.img} title={award.title} />
+        </SwiperSlide>
+      ))}
+    </Swiper>
+  </div>
+</section>
 
-
-
-                  </div>
-                </div>
-              </section>
-
+             {![2, 3].includes(Number(course?.course_type)) && (
+                <>
               <br /><br />
               <section class="course_promo section-padding">
                 <div class="container">
@@ -609,7 +674,7 @@ const [showVideo, setShowVideo] = useState(false);
                     </div>
                   </div>
                 </div>
-              </section>
+              </section></> )}
               <br /><br />
 
               {isSectionActive("outcomes") && course.outcomes?.length > 0 && (
@@ -637,11 +702,11 @@ const [showVideo, setShowVideo] = useState(false);
                               </ul>
                             </div>
                             {course?.outcomes_image?.trim() !== "" && (
-                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                              <div class="cp_img">
-                                <img src={`https://backstagepass.co.in/studentlms/uploads/course_outcomes/${course.outcomes_image}`} alt="image" />
+                              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                                <div class="cp_img">
+                                  <img src={`https://backstagepass.co.in/studentlms/uploads/course_outcomes/${course.outcomes_image}`} alt="image" />
+                                </div>
                               </div>
-                            </div>
                             )}
                           </div>
 
@@ -795,7 +860,7 @@ const [showVideo, setShowVideo] = useState(false);
                     <div className="relative overflow-hidden rounded-2xl bg-[#a43a3a] text-white grid lg:grid-cols-1 items-center">
 
                       {/* LEFT CONTENT */}
-                     
+
 
                       {/* RIGHT ILLUSTRATION */}
                       <div className="flex justify-center lg:justify-end">
@@ -880,10 +945,9 @@ const [showVideo, setShowVideo] = useState(false);
               <div class="sidebar-post" id="page-enroll-cta">
                 <div class="newsletter-form">
                   <h4>Enroll in the {course.coursename}</h4>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ultricies quam nisi my business</p>
                   <form action="#" class="subscribe">
 
-                    <button type="button" class="sub_btn" onClick={() => setOpen1(true)}> Enroll @ ₹{course.total_payment}</button>
+                    <button type="button" class="sub_btn" onClick={() => setOpen1(true)}> {getButtonLabel()} @ ₹{course.total_payment}</button>
                   </form>
                 </div>
               </div>
@@ -957,11 +1021,11 @@ const [showVideo, setShowVideo] = useState(false);
                       setOpen1(true);
                     }
                   }} className="inline-block bg-red-600 text-white px-5 py-2 rounded-full text-sm mb-8  w-100" style={{
-  marginTop: "15px",
-  marginBottom: "10px",
-  borderRadius: "26px",
-}}
->
+                    marginTop: "15px",
+                    marginBottom: "10px",
+                    borderRadius: "26px",
+                  }}
+                  >
                     {getButtonLabel()}
                   </button>
                 </div>
@@ -1385,80 +1449,80 @@ const [showVideo, setShowVideo] = useState(false);
 
       </main> */}
 
-      <div className="footer section-padding" style={{paddingTop: "80px"}}>
-		<div className="container">				
-			<div className="row">						
-				<div className="col-lg-3 col-sm-6 col-xs-12">
-					<div className="single_footer">
-						<a href="#"><img src="https://backstagepass.co.in/newlogo-324ee245.webp" alt="" /></a>         
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae risus nec dui venenatis dignissim.</p>
-					</div>		
-				</div>						
-				<div className="col-lg-3 col-sm-6 col-xs-12">
-					<div className="single_footer">
-						<h4>Courses</h4>
-						<ul>
-							<li><a href="#">Creative Writing</a></li>
-							<li><a href="#">Digital Marketing</a></li>
-							<li><a href="#">SEO Business</a></li>
-							<li><a href="#">Social Marketing</a></li>
-							<li><a href="#">Graphic Design</a></li>
-							<li><a href="#">Website Development</a></li>
-						</ul>
-					</div>
-				</div>	
-				<div className="col-lg-3 col-sm-6 col-xs-12">
-					<div className="single_footer">
-						<h4>Company</h4>
-						<ul>
-							<li><a href="#">About us</a></li>
-							<li><a href="#">Knowledge Base</a></li>
-							<li><a href="#">Affiliate Program</a></li>
-							<li><a href="#">Community</a></li>
-							<li><a href="#">Market API</a></li>						
-							<li><a href="#">Support team</a></li>						
-						</ul>
-					</div>
-				</div>	
-				<div className="col-lg-3 col-sm-6 col-xs-12">
-					<div className="single_footer">
-						<h4>Contact Info</h4>
-						<div className="sf_contact">
-							<span className="ti-mobile"></span>
-							<h3>Phone number</h3>
-							<p>+91-8008002794</p>
-						</div>
-						<div className="sf_contact">
-							<span className="ti-email"></span>
-							<h3>Email Address</h3>
-							<p>info@backstagepass.co.in</p>
-						</div>
-						<div className="sf_contact">
-							<span className="ti-map"></span>
-							<h3>Office Address</h3>
-							<p>Plot No. 72, Jubilee Enclave, HITEC City, Hyderabad, Telangana 500081</p>
-						</div>
-					</div>
-				</div>	
-			</div>		
-			<div className="row fc">
-				<div className="col-lg-6 col-sm-6 col-xs-12">
-					<div className="footer_copyright">
-						<p>&copy; 2026. All Rights Reserved.</p>
-					</div>
-				</div>
-				<div className="col-lg-6 col-sm-6 col-xs-12">
-					<div className="footer_menu">
-						<ul>
-							<li><a href="#">Terms of use</a></li>
-							<li><a href="#">Privacy Policy</a></li>
-							<li><a href="#">Cookie Policy</a></li>
-						</ul>
-					</div>
-				</div>
-			</div>				
-		</div>
-	</div>
+      <div className="footer section-padding" style={{ paddingTop: "80px" }}>
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-3 col-sm-6 col-xs-12">
+              <div className="single_footer">
+                <a href="#"><img src="https://backstagepass.co.in/newlogo-324ee245.webp" alt="" /></a>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae risus nec dui venenatis dignissim.</p>
+              </div>
+            </div>
+            <div className="col-lg-3 col-sm-6 col-xs-12">
+              <div className="single_footer">
+                <h4>Courses</h4>
+                <ul>
+                  <li><a href="#">Creative Writing</a></li>
+                  <li><a href="#">Digital Marketing</a></li>
+                  <li><a href="#">SEO Business</a></li>
+                  <li><a href="#">Social Marketing</a></li>
+                  <li><a href="#">Graphic Design</a></li>
+                  <li><a href="#">Website Development</a></li>
+                </ul>
+              </div>
+            </div>
+            <div className="col-lg-3 col-sm-6 col-xs-12">
+              <div className="single_footer">
+                <h4>Company</h4>
+                <ul>
+                  <li><a href="#">About us</a></li>
+                  <li><a href="#">Knowledge Base</a></li>
+                  <li><a href="#">Affiliate Program</a></li>
+                  <li><a href="#">Community</a></li>
+                  <li><a href="#">Market API</a></li>
+                  <li><a href="#">Support team</a></li>
+                </ul>
+              </div>
+            </div>
+            <div className="col-lg-3 col-sm-6 col-xs-12">
+              <div className="single_footer">
+                <h4>Contact Info</h4>
+                <div className="sf_contact">
+                  <span className="ti-mobile"></span>
+                  <h3>Phone number</h3>
+                  <p>+91-8008002794</p>
+                </div>
+                <div className="sf_contact">
+                  <span className="ti-email"></span>
+                  <h3>Email Address</h3>
+                  <p>info@backstagepass.co.in</p>
+                </div>
+                <div className="sf_contact">
+                  <span className="ti-map"></span>
+                  <h3>Office Address</h3>
+                  <p>Plot No. 72, Jubilee Enclave, HITEC City, Hyderabad, Telangana 500081</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row fc">
+            <div className="col-lg-6 col-sm-6 col-xs-12">
+              <div className="footer_copyright">
+                <p>&copy; 2026. All Rights Reserved.</p>
+              </div>
+            </div>
+            <div className="col-lg-6 col-sm-6 col-xs-12">
+              <div className="footer_menu">
+                <ul>
+                  <li><a href="#">Terms of use</a></li>
+                  <li><a href="#">Privacy Policy</a></li>
+                  <li><a href="#">Cookie Policy</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }
@@ -1475,19 +1539,14 @@ const Feature = ({ text }) => (
 
 );
 
-
-
-
 const Award = ({ img, title }) => (
   <div className="relative rounded-2xl overflow-hidden shadow-lg group">
-    {/* Image */}
     <img
       src={img}
       alt={title}
       className="w-full h-[260px] object-cover transition-transform duration-300 group-hover:scale-105"
     />
 
-    {/* Overlay */}
     <div className="absolute inset-x-0 bottom-0 bg-black/60 px-4 py-3">
       <p className="text-white text-sm font-medium leading-snug">
         {title}
@@ -1495,6 +1554,26 @@ const Award = ({ img, title }) => (
     </div>
   </div>
 );
+
+
+
+// const Award = ({ img, title }) => (
+//   <div className="relative rounded-2xl overflow-hidden shadow-lg group">
+//     {/* Image */}
+//     <img
+//       src={img}
+//       alt={title}
+//       className="w-full h-[260px] object-cover transition-transform duration-300 group-hover:scale-105"
+//     />
+
+//     {/* Overlay */}
+//     <div className="absolute inset-x-0 bottom-0 bg-black/60 px-4 py-3">
+//       <p className="text-white text-sm font-medium leading-snug">
+//         {title}
+//       </p>
+//     </div>
+//   </div>
+//);
 
 const Requirement = ({ text }) => (
   <li><span class="ti-check"></span>{text} </li>

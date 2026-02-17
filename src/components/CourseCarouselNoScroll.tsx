@@ -24,6 +24,7 @@ type Course = {
   duration: string;
   tags: string[];
   mentor_name: string;
+  webinar_datetime: string;
   is_coursecompleted?: number | null;
 };
 
@@ -39,7 +40,7 @@ export default function CourseGrid() {
   const [loading, setLoading] = useState(true);
   const [showAll, setShowAll] = useState(false);
 
-  
+
 
 
   /* ---------- SEARCH / FILTER STATE ---------- */
@@ -66,7 +67,8 @@ export default function CourseGrid() {
           shortname: item.shortname,
           level: item.level,
           urlpath: item.urlpath,
-           mentor_name: item.mentor_name,
+          mentor_name: item.mentor_name,
+          webinar_datetime: item.webinar_datetime,
           coursetype: Number(item.coursetype),
           duration: item.duration || "0",
           tags: [item.category, item.level],
@@ -160,8 +162,42 @@ export default function CourseGrid() {
   };
 
   const visibleCourses = showAll
-  ? filteredCourses
-  : filteredCourses.slice(0, 3);
+    ? filteredCourses
+    : filteredCourses.slice(0, 3);
+
+  const formatWebinar = (dateString?: string) => {
+    if (!dateString) {
+      return {
+        date: "Coming Soon",
+        time: "",
+      };
+    }
+
+    // Fix for Safari parsing issue
+    const dateObj = new Date(dateString.replace(" ", "T"));
+
+    if (isNaN(dateObj.getTime())) {
+      return {
+        date: "Coming Soon",
+        time: "",
+      };
+    }
+
+    return {
+      date: dateObj.toLocaleDateString("en-IN", {
+        weekday: "long",
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      }),
+      time: dateObj.toLocaleTimeString("en-IN", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      }),
+    };
+  };
+
 
 
   /* ================= RENDER ================= */
@@ -172,8 +208,8 @@ export default function CourseGrid() {
         {/* ================= SEARCH SECTION ================= */}
         {/* <div className="bg-white rounded-2xl shadow-md p-6 mb-10 space-y-4"> */}
 
-         
-          {/* <input
+
+        {/* <input
             type="text"
             placeholder="Search courses, webinars, skills..."
             value={search}
@@ -182,11 +218,11 @@ export default function CourseGrid() {
                focus:outline-none focus:ring-2 focus:ring-red-500"
           /> */}
 
-          {/* FILTER ROW */}
-          {/* <div className="flex flex-wrap items-center justify-between gap-4"> */}
+        {/* FILTER ROW */}
+        {/* <div className="flex flex-wrap items-center justify-between gap-4"> */}
 
-           
-            <div className="product_filter">
+
+        {/* <div className="product_filter">
               <ul>
               {[
                 ["all", "All"],
@@ -208,10 +244,12 @@ export default function CourseGrid() {
                 </li>
               ))}
               </ul>
-            </div>
+            </div> */}
 
-            {/* SECONDARY FILTERS */}
-            {/* <div className="flex gap-3">
+        <br />
+
+        {/* SECONDARY FILTERS */}
+        {/* <div className="flex gap-3">
               <select
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
@@ -233,7 +271,7 @@ export default function CourseGrid() {
                 <option value="Advanced">Advanced</option>
               </select>
             </div> */}
-          {/* </div> */}
+        {/* </div> */}
         {/* </div> */}
 
 
@@ -246,102 +284,104 @@ export default function CourseGrid() {
               /* ============ COURSE CARD ============ */
               if (course.coursetype === 1)
                 return (
-                //   <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition overflow-hidden flex flex-col">
+                  //   <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition overflow-hidden flex flex-col">
 
-                //     {/* IMAGE */}
-                //     <div className="relative h-70">
-                //       <Image
-                //         src={course.image}
-                //         alt={course.title}
-                //         fill
-                //         className="object-contain"
-                //       />
+                  //     {/* IMAGE */}
+                  //     <div className="relative h-70">
+                  //       <Image
+                  //         src={course.image}
+                  //         alt={course.title}
+                  //         fill
+                  //         className="object-contain"
+                  //       />
 
-                //       {/* Soft bottom gradient */}
-                //       <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t to-transparent" />
+                  //       {/* Soft bottom gradient */}
+                  //       <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t to-transparent" />
 
-                //       {/* Badge */}
-                //       <span className="absolute top-4 left-4 bg-blue-600 text-white text-xs px-4 py-1 rounded-full">
-                //         📘 COURSE
-                //       </span>
-                //       <button
-                //         onClick={() => handleFavouriteClick(course)}
-                //         className="absolute top-2 right-2 bg-white bg-opacity-70 p-2 rounded-full shadow-md hover:bg-opacity-100 transition"
-                //       >
-                //         {favourites[course.course_id] ? (
-                //           <Heart />
-                //         ) : (
-                //           <Heart />
-                //         )}
-                //       </button>
-                //     </div>
-
-
-                //     <div className="p-4 flex flex-col flex-1">
-                //       <h4 className="text-lg font-semibold text-gray-900 line-clamp-2 min-h-[48px]">
-                //         {course.title}
-                //       </h4>
-
-                //       <p className="text-xs text-gray-500 mt-1">
-                //         {course.category} • {course.level}
-                //       </p>
-
-                //       <p className="text-sm text-gray-600 mt-3 line-clamp-3 min-h-[65px]">
-                //         {course.description}
-                //       </p>
+                  //       {/* Badge */}
+                  //       <span className="absolute top-4 left-4 bg-blue-600 text-white text-xs px-4 py-1 rounded-full">
+                  //         📘 COURSE
+                  //       </span>
+                  //       <button
+                  //         onClick={() => handleFavouriteClick(course)}
+                  //         className="absolute top-2 right-2 bg-white bg-opacity-70 p-2 rounded-full shadow-md hover:bg-opacity-100 transition"
+                  //       >
+                  //         {favourites[course.course_id] ? (
+                  //           <Heart />
+                  //         ) : (
+                  //           <Heart />
+                  //         )}
+                  //       </button>
+                  //     </div>
 
 
-                //       <Link className="mt-auto" href="/basics-of-maya-for-beginners" >
-                //         <button
-                //           onClick={() => {
+                  //     <div className="p-4 flex flex-col flex-1">
+                  //       <h4 className="text-lg font-semibold text-gray-900 line-clamp-2 min-h-[48px]">
+                  //         {course.title}
+                  //       </h4>
 
-                //             localStorage.clear();
-                //             sessionStorage.clear();
-                //           }}
-                //           className=" w-full py-2.5 rounded-lg border border-red-600 text-red-600 font-semibold
-                //  hover:bg-red-600 hover:text-white transition"
-                //         >
-                //           Know More
-                //         </button></Link>
-                //     </div>
+                  //       <p className="text-xs text-gray-500 mt-1">
+                  //         {course.category} • {course.level}
+                  //       </p>
+
+                  //       <p className="text-sm text-gray-600 mt-3 line-clamp-3 min-h-[65px]">
+                  //         {course.description}
+                  //       </p>
 
 
-                //   </div>
+                  //       <Link className="mt-auto" href="/basics-of-maya-for-beginners" >
+                  //         <button
+                  //           onClick={() => {
 
-                <div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
-                                <div className="course-slide">
-                                  <div className="course-img">
-                                    <img src="assets/images/all-img/c1.png" alt="" />
-                                    <Image
-                                        src={course.image}
-                                        alt={course.title}
-                                        fill
-                                      />
-                                    <div className="course-date">
-                                      <span className="month bg-blue-600">📘 COURSE</span>
-                                      <button
-                        onClick={() => handleFavouriteClick(course)}
-                        className="absolute top-0 right-3 bg-white bg-opacity-70 p-2 rounded-full shadow-md hover:bg-opacity-100 transition" style={{borderRadius: "32px", boxShadow: "0 0 10px #cdcdcd"}}
-                      >
-                        {favourites[course.course_id] ? (
-                          <Heart />
-                        ) : (
-                          <Heart />
-                        )}
-                      </button>
-                                    </div>
-                                  </div>
-                                  <div className="course-content" style={{minHeight : "285px"}}><a className="c_btn" href="#">{course.category}</a>
-                                    <h3><a href={course.urlpath}> {course.title}</a></h3>
-                                    <span><i className="fa fa-graduation-cap"></i>{course.level}</span>
-                                    <span><i className="fa fa-clock-o"></i>{course.duration} hours</span>
-                                    <span><i className="fa fa-user"></i>{course.mentor_name ? course.mentor_name : "Mentor"}</span>
-                                    <span className="course-desc">{course.description}</span>
-                                    
-                
-                                  </div>
-                                </div>
-                              </div>
+                  //             localStorage.clear();
+                  //             sessionStorage.clear();
+                  //           }}
+                  //           className=" w-full py-2.5 rounded-lg border border-red-600 text-red-600 font-semibold
+                  //  hover:bg-red-600 hover:text-white transition"
+                  //         >
+                  //           Know More
+                  //         </button></Link>
+                  //     </div>
+
+
+                  //   </div>
+
+                  <div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
+                    <div className="course-slide">
+                      <div className="course-img">
+                        <a target="_blank" href={course.urlpath}>
+                        <img src="assets/images/all-img/c1.png" alt="" />
+                        <Image
+                          src={course.image}
+                          alt={course.title}
+                          fill
+                        />
+                        <div className="course-date">
+                          <span className="month bg-blue-600">📘 COURSE</span>
+                          <button
+                            onClick={() => handleFavouriteClick(course)}
+                            className="absolute top-0 right-3 bg-white bg-opacity-70 p-2 rounded-full shadow-md hover:bg-opacity-100 transition" style={{ borderRadius: "32px", boxShadow: "0 0 10px #cdcdcd" }}
+                          >
+                            {favourites[course.course_id] ? (
+                              <Heart />
+                            ) : (
+                              <Heart />
+                            )}
+                          </button>
+                        </div>
+                        </a>
+                      </div>
+                      <div className="course-content" style={{ minHeight: "320px" }}><a className="c_btn" target="_blank" href={course.urlpath}>{course.category}</a>
+                        <h3><a href={course.urlpath} target="_blank"> {course.title}</a></h3>
+                        <span><i className="fa fa-graduation-cap"></i>{course.level}</span>
+                        <span><i className="fa fa-clock-o"></i>{course.duration} hours</span>
+                        <span><i className="fa fa-user"></i>{course.mentor_name ? course.mentor_name : "Mentor"}</span>
+                        <span className="course-desc">{course.description}</span>
+
+
+                      </div>
+                    </div>
+                  </div>
 
                 );
 
@@ -350,101 +390,103 @@ export default function CourseGrid() {
 
               if (course.coursetype === 2)
                 return (
-              <div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
-                              <div className="course-slide">
-                                <div className="course-img">
-                                    <img src="assets/images/all-img/c1.png" alt="" />
-                                    <Image
-                                        src={course.image}
-                                        alt={course.title}
-                                        fill
-                                      />
-                                    <div className="course-date">
-                                      <span className="month bg-purple-600">🎥 RECORDED WEBINAR</span>
-                                      <button
-                        onClick={() => handleFavouriteClick(course)}
-                        className="absolute top-0 right-3 bg-white bg-opacity-70 p-2 rounded-full shadow-md hover:bg-opacity-100 transition" style={{borderRadius: "32px", boxShadow: "0 0 10px #cdcdcd"}}
-                      >
-                        {favourites[course.course_id] ? (
-                          <Heart />
-                        ) : (
-                          <Heart />
-                        )}
-                      </button>
-                                    </div>
-                                  </div>
-                                  <div className="course-content" style={{minHeight : "285px"}}><a className="c_btn" href="#">{course.category}</a>
-                                    <h3><a href={course.urlpath}> {course.title}</a></h3>
-                                    <span><i className="fa fa-graduation-cap"></i>{course.level}</span>
-                                    <span><i className="fa fa-clock-o"></i>{course.duration} hours</span>
-                                    <span><i className="fa fa-user"></i>{course.mentor_name ? course.mentor_name : "Mentor"}</span><br/>
-                                    <span className="course-desc">{course.description}</span>
-                                    
-                
-                                  </div>
-                              </div>
-                            </div>
-                //   <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition overflow-hidden flex flex-col">
-
-                //     {/* IMAGE */}
-                //     <div className="relative h-70">
-                //       <Image
-                //         src={course.image}
-                //         alt={course.title}
-                //         fill
-                //         className="object-contain"
-                //       />
+                  <div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
+                    <div className="course-slide">
+                      <div className="course-img">
+                         <a target="_blank" href={course.urlpath}>
+                        <img src="assets/images/all-img/c1.png" alt="" />
+                        <Image
+                          src={course.image}
+                          alt={course.title}
+                          fill
+                        />
+                        <div className="course-date">
+                          <span className="month bg-purple-600">🎥 RECORDED WEBINAR</span>
+                          <button
+                            onClick={() => handleFavouriteClick(course)}
+                            className="absolute top-0 right-3 bg-white bg-opacity-70 p-2 rounded-full shadow-md hover:bg-opacity-100 transition" style={{ borderRadius: "32px", boxShadow: "0 0 10px #cdcdcd" }}
+                          >
+                            {favourites[course.course_id] ? (
+                              <Heart />
+                            ) : (
+                              <Heart />
+                            )}
+                          </button>
+                        </div>
+                        </a>
+                      </div>
+                      <div className="course-content" style={{ minHeight: "320px" }}><a className="c_btn" href={course.urlpath} target="_blank">{course.category}</a>
+                        <h3><a href={course.urlpath} target="_blank"> {course.title}</a></h3>
+                        <span><i className="fa fa-graduation-cap"></i>{course.level}</span>
+                        <span><i className="fa fa-clock-o"></i>{course.duration} hours</span>
+                        <span><i className="fa fa-user"></i>{course.mentor_name ? course.mentor_name : "Mentor"}</span><br />
+                        <span className="course-desc">{course.description}</span>
 
 
-                //       <div className="absolute inset-0" />
+                      </div>
+                    </div>
+                  </div>
+                  //   <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition overflow-hidden flex flex-col">
+
+                  //     {/* IMAGE */}
+                  //     <div className="relative h-70">
+                  //       <Image
+                  //         src={course.image}
+                  //         alt={course.title}
+                  //         fill
+                  //         className="object-contain"
+                  //       />
 
 
-                //       <span className="absolute top-4 left-4 bg-purple-600 text-white text-xs px-4 py-1 rounded-full">
-                //         🎥 RECORDED WEBINAR
-                //       </span>
-
-                //       <button
-                //         onClick={() => handleFavouriteClick(course)}
-                //         className="absolute top-2 right-2 bg-white bg-opacity-70 p-2 rounded-full shadow-md hover:bg-opacity-100 transition"
-                //       >
-                //         {favourites[course.course_id] ? (
-                //           <Heart />
-                //         ) : (
-                //           <Heart />
-                //         )}
-                //       </button>
+                  //       <div className="absolute inset-0" />
 
 
-                //     </div>
+                  //       <span className="absolute top-4 left-4 bg-purple-600 text-white text-xs px-4 py-1 rounded-full">
+                  //         🎥 RECORDED WEBINAR
+                  //       </span>
+
+                  //       <button
+                  //         onClick={() => handleFavouriteClick(course)}
+                  //         className="absolute top-2 right-2 bg-white bg-opacity-70 p-2 rounded-full shadow-md hover:bg-opacity-100 transition"
+                  //       >
+                  //         {favourites[course.course_id] ? (
+                  //           <Heart />
+                  //         ) : (
+                  //           <Heart />
+                  //         )}
+                  //       </button>
 
 
-                //     <div className="p-4 flex flex-col flex-1">
-                //       <h4 className="text-lg font-semibold text-gray-900 line-clamp-2 min-h-[48px]">
-                //         {course.title}
-                //       </h4>
-
-                //       <p className="text-xs text-gray-500 mt-1">
-                //         {course.category} • {course.level}
-                //       </p>
-
-                //       <p className="text-sm text-gray-600 mt-3 line-clamp-3 min-h-[65px]">
-                //         {course.description}
-                //       </p>
+                  //     </div>
 
 
-                //       <button onClick={() => {
-                //         localStorage.removeItem("postLoginRedirect");
-                //         localStorage.removeItem("openEnrollModal");
-                //         sessionStorage.clear();
-                //         handleWatchNow(course);
-                //       }}
-                //         className="mt-auto w-full py-2.5 rounded-lg border border-purple-600 text-purple-600 font-semibold
-                //  hover:bg-purple-600 hover:text-white transition"
-                //       >
-                //         Watch Now
-                //       </button>
-                //     </div>
-                //   </div>
+                  //     <div className="p-4 flex flex-col flex-1">
+                  //       <h4 className="text-lg font-semibold text-gray-900 line-clamp-2 min-h-[48px]">
+                  //         {course.title}
+                  //       </h4>
+
+                  //       <p className="text-xs text-gray-500 mt-1">
+                  //         {course.category} • {course.level}
+                  //       </p>
+
+                  //       <p className="text-sm text-gray-600 mt-3 line-clamp-3 min-h-[65px]">
+                  //         {course.description}
+                  //       </p>
+
+
+                  //       <button onClick={() => {
+                  //         localStorage.removeItem("postLoginRedirect");
+                  //         localStorage.removeItem("openEnrollModal");
+                  //         sessionStorage.clear();
+                  //         handleWatchNow(course);
+                  //       }}
+                  //         className="mt-auto w-full py-2.5 rounded-lg border border-purple-600 text-purple-600 font-semibold
+                  //  hover:bg-purple-600 hover:text-white transition"
+                  //       >
+                  //         Watch Now
+                  //       </button>
+                  //     </div>
+                  //   </div>
 
                 );
 
@@ -520,62 +562,81 @@ export default function CourseGrid() {
                 // </div>
 
                 <div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
-                                <div className="course-slide">
-                                  <div className="course-img">
-                                    <img src="assets/images/all-img/c1.png" alt="" />
-                                    <Image
-                                        src={course.image}
-                                        alt={course.title}
-                                        fill
-                                      />
-                                    <div className="course-date">
-                                      <span className="month bg-green-600">🎥 LIVE WEBINAR</span>
-                                      <button
-                        onClick={() => handleFavouriteClick(course)}
-                        className="absolute top-0 right-3 bg-white bg-opacity-70 p-2 rounded-full shadow-md hover:bg-opacity-100 transition" style={{borderRadius: "32px", boxShadow: "0 0 10px #cdcdcd"}}
-                      >
-                        {favourites[course.course_id] ? (
-                          <Heart />
-                        ) : (
-                          <Heart />
-                        )}
-                      </button>
-                                    </div>
-                                  </div>
-                                  <div className="course-content" style={{minHeight : "285px"}}><a className="c_btn" href="#">{course.category}</a>
-                                    <h3><a href={course.urlpath}> {course.title}</a></h3>
-                                    <span><i className="fa fa-graduation-cap"></i>{course.level}</span>
-                                    <span><i className="fa fa-clock-o"></i>{course.duration} hours</span>
-                                    <span><i className="fa fa-user"></i> {course.mentor_name ? course.mentor_name : "Mentor"}</span>
-                                    <span className="course-desc">{course.description}</span>
-                                    
-                
-                                  </div>
-                                </div>
-                              </div>
+                  <div className="course-slide">
+                    <div className="course-img">
+                      <a target="_blank" href={course.urlpath}>
+                        <img src="assets/images/all-img/c1.png" alt="" />
+                        <Image
+                          src={course.image}
+                          alt={course.title}
+                          fill
+                        />
+                        <div className="course-date">
+                          <span className="month bg-green-600">🎥 LIVE WEBINAR</span>
+                          <button
+                            onClick={() => handleFavouriteClick(course)}
+                            className="absolute top-0 right-3 bg-white bg-opacity-70 p-2 rounded-full shadow-md hover:bg-opacity-100 transition" style={{ borderRadius: "32px", boxShadow: "0 0 10px #cdcdcd" }}
+                          >
+                            {favourites[course.course_id] ? (
+                              <Heart />
+                            ) : (
+                              <Heart />
+                            )}
+                          </button>
+
+                        </div>
+                      </a>
+                    </div>
+                    <div className="course-content" style={{ minHeight: "320px" }}><a className="c_btn" target="_blank" href={course.urlpath}>{course.category}</a>
+                      <h3><a href={course.urlpath} target="_blank"> {course.title}</a></h3>
+                      {/* <span><i className="fa fa-graduation-cap"></i>{course.level}</span> */}
+                      <span>{(() => {
+                        const webinar = formatWebinar(course.webinar_datetime);
+
+                        return (
+                          <>
+                            <span>
+                              <i className="fa fa-calendar"></i> {webinar.date}
+                            </span>
+
+                            {webinar.time && (
+                              <span>
+                                <i className="fa fa-clock-o"></i> {webinar.time}
+                              </span>
+                            )}
+                          </>
+                        );
+                      })()}</span>
+                      <span><i className="fa fa-user"></i> {course.mentor_name ? course.mentor_name : "Mentor"}</span>
+                      <span className="course-desc">{course.description}</span>
+
+
+                    </div>
+                  </div>
+                </div>
 
               );
             })}
 
 
             {!showAll && filteredCourses.length > 3 && (
-  <div className="col-lg-12 text-center">
-    <div className="cc_btn">
-      <button
-        onClick={() => router.push("/all-courses")}
-        className="btn_one"
-      >
-        View All Course
-      </button>
-    </div>
-  </div>
-)}
+              <div className="col-lg-12 text-center">
+                <div className="cc_btn">
+                  <button
+                    onClick={() => router.push("/all-courses")}
+                    className="btn_one"
+                  >
+                    View All Course
+                  </button>
+                </div>
+              </div>
+            )}
 
           </div>
         )}
 
 
-        
+
 
 
         {showModal && selectedCourse && (
@@ -623,7 +684,7 @@ export default function CourseGrid() {
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
             <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-fadeIn">
 
-             
+
               <div className="bg-gradient-to-r from-purple-600 to-indigo-600 p-5 flex items-center gap-3">
                 <div className="bg-white/20 p-2 rounded-full">
                   <Lock className="text-white w-5 h-5" />
@@ -633,7 +694,7 @@ export default function CourseGrid() {
                 </h2>
               </div>
 
-             
+
               <div className="p-6">
                 <div className="flex items-start gap-3 mb-4">
                   <PlayCircle className="text-purple-600 w-6 h-6 mt-1" />
@@ -643,7 +704,7 @@ export default function CourseGrid() {
                   </p>
                 </div>
 
-               
+
                 <div className="border border-gray-200 rounded-lg p-4 bg-gray-50 mb-6">
                   <p className="text-sm font-semibold text-gray-900">
                     {lockedCourse.title}
@@ -653,9 +714,9 @@ export default function CourseGrid() {
                   </p>
                 </div>
 
-              
+
                 <div className="flex gap-3">
-                 
+
 
                   <button
                     onClick={() => setShowAccessModal(false)}
