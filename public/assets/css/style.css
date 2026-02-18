@@ -1268,7 +1268,7 @@ margin-top: 5px;
 }
 .course-slide .course-date{
         position: absolute;
-    top: 10%;
+    top: 5%;
     left: 0%;
     display: flex;
     justify-content: space-between;

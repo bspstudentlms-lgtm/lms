@@ -356,6 +356,7 @@ export default function CourseGrid() {
                           alt={course.title}
                           fill
                         />
+                         </a>
                         <div className="course-date">
                           <span className="month bg-blue-600">📘 COURSE</span>
                           <button
@@ -369,9 +370,9 @@ export default function CourseGrid() {
                             )}
                           </button>
                         </div>
-                        </a>
+                       
                       </div>
-                      <div className="course-content" style={{ minHeight: "320px" }}><a className="c_btn" target="_blank" href={course.urlpath}>{course.category}</a>
+                      <div className="course-content" style={{ minHeight: "340px" }}><a className="c_btn" target="_blank" href={course.urlpath}>{course.category}</a>
                         <h3><a href={course.urlpath} target="_blank"> {course.title}</a></h3>
                         <span><i className="fa fa-graduation-cap"></i>{course.level}</span>
                         <span><i className="fa fa-clock-o"></i>{course.duration} hours</span>
@@ -400,6 +401,7 @@ export default function CourseGrid() {
                           alt={course.title}
                           fill
                         />
+                         </a>
                         <div className="course-date">
                           <span className="month bg-purple-600">🎥 RECORDED WEBINAR</span>
                           <button
@@ -413,9 +415,9 @@ export default function CourseGrid() {
                             )}
                           </button>
                         </div>
-                        </a>
+                       
                       </div>
-                      <div className="course-content" style={{ minHeight: "320px" }}><a className="c_btn" href={course.urlpath} target="_blank">{course.category}</a>
+                      <div className="course-content" style={{ minHeight: "340px" }}><a className="c_btn" href={course.urlpath} target="_blank">{course.category}</a>
                         <h3><a href={course.urlpath} target="_blank"> {course.title}</a></h3>
                         <span><i className="fa fa-graduation-cap"></i>{course.level}</span>
                         <span><i className="fa fa-clock-o"></i>{course.duration} hours</span>
@@ -571,6 +573,7 @@ export default function CourseGrid() {
                           alt={course.title}
                           fill
                         />
+                         </a>
                         <div className="course-date">
                           <span className="month bg-green-600">🎥 LIVE WEBINAR</span>
                           <button
@@ -585,9 +588,9 @@ export default function CourseGrid() {
                           </button>
 
                         </div>
-                      </a>
+                     
                     </div>
-                    <div className="course-content" style={{ minHeight: "320px" }}><a className="c_btn" target="_blank" href={course.urlpath}>{course.category}</a>
+                    <div className="course-content" style={{ minHeight: "340px" }}><a className="c_btn" target="_blank" href={course.urlpath}>{course.category}</a>
                       <h3><a href={course.urlpath} target="_blank"> {course.title}</a></h3>
                       {/* <span><i className="fa fa-graduation-cap"></i>{course.level}</span> */}
                       <span>{(() => {

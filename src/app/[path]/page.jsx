@@ -1772,7 +1772,9 @@ const CertificateSection = ({ course }) => {
                   Let Your <span><u>Certificates</u></span> Speak
                 </h2>
                 <ul>
-                  <li><span className="ti-check"></span>Certificate are awarded immediately upon successfully completing all course modules.</li>
+                  <li><span className="ti-check"></span>Certificate are awarded immediately upon <span className="block">
+    successfully completing all course modules.
+  </span></li>
                   <li><span className="ti-check"></span>You receive an official completion certificate that validates your skills.</li>
                   <li><span className="ti-check"></span>Your certificate serves as proof of learning and can be added to your resume or portfolio.</li>
                 </ul>
@@ -1816,7 +1818,7 @@ const Outcomes = ({ course }) => {
                           {/* <h4>Best Online Learning Platform</h4> */}
                           <h2>After this {Number(course.course_type) === 1
                             ? "Course"
-                            : "Webinar"},   <span><u>You will be  </u></span> Able to</h2>
+                            : "Webinar"},   <span><u>You will be</u></span> Able to</h2>
                           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                               <ul className="space-y-3">
@@ -1877,9 +1879,9 @@ const Topics = ({ course }) => {
                 onClick={() =>
                   setActiveIndex(isOpen ? null : index)
                 }
-                className="w-full flex justify-between items-center px-8 py-6 text-left"
+                className="w-full flex justify-between items-center px-8 py-3 text-left"
               >
-                <span className="text-lg font-semibold">
+                <span className="text-lg font-semibold" style={{color: "#111"}}>
                   {topic.title}
                 </span>
 
@@ -1897,7 +1899,7 @@ const Topics = ({ course }) => {
               >
                 <ul className="list-disc pl-5 space-y-2 text-gray-700">
                   {topic.points.map((point, i) => (
-                    <li key={i}>{point}</li>
+                    <li style={{marginBottom: "7px"}} key={i}>{point}</li>
                   ))}
                 </ul>
               </div>

@@ -355,7 +355,7 @@ export default function CourseGrid() {
                         </div>
                         </a>
                       </div>
-                      <div className="course-content" style={{ minHeight: "320px" }}><a className="c_btn" target="_blank" href={course.urlpath}>{course.category}</a>
+                      <div className="course-content" style={{ minHeight: "340px" }}><a className="c_btn" target="_blank" href={course.urlpath}>{course.category}</a>
                         <h3><a href={course.urlpath} target="_blank"> {course.title}</a></h3>
                         <span><i className="fa fa-graduation-cap"></i>{course.level}</span>
                         <span><i className="fa fa-clock-o"></i>{course.duration} hours</span>
@@ -399,7 +399,7 @@ export default function CourseGrid() {
                         </div>
                         </a>
                       </div>
-                      <div className="course-content" style={{ minHeight: "320px" }}><a className="c_btn" href={course.urlpath} target="_blank">{course.category}</a>
+                      <div className="course-content" style={{ minHeight: "340px" }}><a className="c_btn" href={course.urlpath} target="_blank">{course.category}</a>
                         <h3><a href={course.urlpath} target="_blank"> {course.title}</a></h3>
                         <span><i className="fa fa-graduation-cap"></i>{course.level}</span>
                         <span><i className="fa fa-clock-o"></i>{course.duration} hours</span>
@@ -570,7 +570,7 @@ export default function CourseGrid() {
                       </div>
                       </a>
                     </div>
-                    <div className="course-content" style={{ minHeight: "320px" }}><a className="c_btn" target="_blank" href={course.urlpath}>{course.category}</a>
+                    <div className="course-content" style={{ minHeight: "340px" }}><a className="c_btn" target="_blank" href={course.urlpath}>{course.category}</a>
                       <h3><a href={course.urlpath} target="_blank"> {course.title}</a></h3>
                       {/* <span><i className="fa fa-graduation-cap"></i>{course.level}</span> */}
                       <span> <span>{(() => {
