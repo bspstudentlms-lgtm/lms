@@ -911,7 +911,10 @@ const sortedSections =
                   <h4>{getButtonLabel()} the {course.coursename}</h4>
                   <form action="#" class="subscribe">
 
-                    <button type="button" class="sub_btn" onClick={() => setOpen1(true)}> {getButtonLabel()} @ ₹{course.total_payment}</button>
+                    <button type="button" class="sub_btn" onClick={() => setOpen1(true)}> 
+                      
+                      {getButtonLabel()} @ <span className="line-through text-gray-300 text-xl">₹{course.orignialpayment}</span> ₹{course.total_payment}
+                      </button>
                   </form>
                 </div>
               </div>
