@@ -242,6 +242,7 @@ export default function CourseGrid() {
                 <option value="all">All Categories</option>
                 <option value="Game Design">Game Design</option>
                 <option value="Game Art">Game Art</option>
+                <option value="Game Development">Game Development</option>
               </select>
 
               <select

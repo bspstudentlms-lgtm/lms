@@ -5,6 +5,7 @@ import axios from "axios";
 
 
 interface Course {
+  actual_amount: any;
   coursetype: number;
   coursename: string;
   value: string;
@@ -46,6 +47,7 @@ const [username, setUsername] = useState<string | null>(null);
     finalAmount: 0,
     coursename:'',
     coursetype: 0,
+    actualamount:0,
   });
 
   /* -------------------- SET URL (CLIENT SAFE) -------------------- */
@@ -70,30 +72,32 @@ console.log('phoneno'+storedPhone);
 }, []);
 
   /* -------------------- FETCH COURSE BY courseId -------------------- */
+  
   useEffect(() => {
-   
-    if (!courseId || courseId === "") return; // 🔥 hard stop
-    axios
-     .get(`https://www.backstagepass.co.in/reactapi/getcourses_api.php?courseid=${courseId}`)
-      .then((res) => {
-        const data = res.data || [];
-        setCourses(data);
 
-        if (data.length === 1) {
-           
-          setFormData((prev) => ({ ...prev, course: data[0].value }));
-          setPaymentDetails({
-           
-            originalPayment: data[0].orignialpayment,
-            discountValue: 0,
-            finalAmount: data[0].gstpayment,
-            coursename: data[0].label,
-            coursetype: data[0].coursetype,
-          });
-        }
-      })
-      .catch(console.error);
-  }, [courseId]);
+  if (!courseId || courseId === "") return; // 🔥 hard stop
+
+  axios
+    .get(`https://www.backstagepass.co.in/reactapi/getcourses_api.php?courseid=${courseId}&t=${Date.now()}`)
+    .then((res) => {
+      const data = res.data || [];
+      setCourses(data);
+
+      if (data.length === 1) {
+        setFormData((prev) => ({ ...prev, course: data[0].value }));
+        setPaymentDetails({
+          originalPayment: data[0].orignialpayment,
+          discountValue: 0,
+          finalAmount: data[0].gstpayment,
+          coursename: data[0].label,
+          coursetype: data[0].coursetype,
+          actualamount: data[0].actual_amount,
+        });
+      }
+    })
+    .catch(console.error);
+
+}, [courseId]);
 
 
   /* -------------------- INPUT HANDLER -------------------- */
@@ -188,12 +192,14 @@ const handleEmailBlur = async () => {
       const data = await res.json();
 
       if (data?.length) {
+        
         setPaymentDetails({
           originalPayment: data[0].orignialpayment,
           discountValue: data[0].discountvalue,
           finalAmount: data[0].finalamount,
           coursename:data[0].coursename,
           coursetype: data[0].coursetype,
+          actualamount:data[0].actual_amount,
         });
 
         setCouponRemarks(data[0].remarkscoupon || "");
@@ -221,6 +227,7 @@ const handleEmailBlur = async () => {
         finalAmount: selected.gstpayment,
         coursename:selected.coursename,
         coursetype: selected.coursetype,
+        actualamount:selected.actual_amount,
 
       });
     }
@@ -342,6 +349,7 @@ const handleEmailBlur = async () => {
     <div className="flex justify-between text-sm text-gray-600">
       <span>Course Price</span>
       <span className="font-medium">
+        <span className="line-through text-gray-300 text-3xl">₹{paymentDetails.actualamount}</span>
         ₹{paymentDetails.originalPayment}
       </span>
     </div>
