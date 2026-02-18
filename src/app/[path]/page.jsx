@@ -376,10 +376,10 @@ const sortedSections =
       return <BasicDetails key="basic_details" course={course} />;
 
     case "key_features":
-      return <KeyFeatures key="key_features" course={course} />;
+      return <><KeyFeatures key="key_features" course={course} />  <AwardsSection /> <Topics course={course} /> <CertificateSection course={course} /></>;
 
     case "outcomes":
-      return <Outcomes key="outcomes" course={course} />;
+      return <><Outcomes key="outcomes" course={course} /> <TopCompaniesSection /></>;
 
     case "system":
       return <SystemRequirements key="system" course={course} />;
@@ -598,10 +598,10 @@ const sortedSections =
               )}
               <br /> */}
 
-              <section className="topic_content_p2 section-padding">
+              {/* <section className="topic_content_p2 section-padding">
                 <div className="container">
                   <div className="section-title">
-                    <h2>About</h2>
+                   
                     <p>
                       Our <span><u>Awards</u></span>
                     </p>
@@ -626,9 +626,9 @@ const sortedSections =
                     ))}
                   </Swiper>
                 </div>
-              </section>
+              </section> */}
 
-              {![2, 3].includes(Number(course?.course_type)) && (
+              {/* {![2, 3].includes(Number(course?.course_type)) && (
                 <>
                   <br /><br />
                   <section class="course_promo section-padding">
@@ -642,7 +642,7 @@ const sortedSections =
                         }}
                         >
                           <div class="cp_content">
-                            <h4>Best Online Learning Platform</h4>
+                           
                             <h2>Let Your  <span><u>Certificates </u></span> Speak</h2>
                             <ul>
                               <li><span class="ti-check"></span>Industry recognized certificate </li>
@@ -665,8 +665,8 @@ const sortedSections =
                         </div>
                       </div>
                     </div>
-                  </section></>)}
-              <br /><br />
+                  </section></>)} */}
+             
 
               {/* {isSectionActive("outcomes") && course.outcomes?.length > 0 && (
                 <section class=" section-padding">
@@ -713,8 +713,12 @@ const sortedSections =
               )} */}
 
 
-              <section className="max-w-7xl mx-auto px-6 py-0">
+              {/* <section className="max-w-7xl mx-auto px-6 py-0">
+                <div class="cp_content">
+                          
+                          <h2>Our Learners Work Across  <span><u>Top Companies </u></span></h2></div>
                 <div className="border-2 border-red-500 rounded-3xl px-10 py-12">
+                  
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-y-10 gap-x-8 items-center justify-items-center">
                     {logos.map((logo) => (
                       <img
@@ -726,8 +730,8 @@ const sortedSections =
                     ))}
                   </div>
                 </div>
-              </section>
-              <br /><br />
+              </section> */}
+             
 
               {/* {isSectionActive("system") && course.requirement?.length > 0 && (
                 <section class=" section-padding">
@@ -901,7 +905,7 @@ const sortedSections =
               )} */}
 
 
-              <br /><br />
+              
               <div class="sidebar-post" id="page-enroll-cta">
                 <div class="newsletter-form">
                   <h4>{getButtonLabel()} the {course.coursename}</h4>
@@ -1596,12 +1600,12 @@ const shouldShowVideo =
   className="video-play-btn"
 >
   <span className="ripple"></span>
-  <svg
+  <svg style={{fontSize: "44px", width: "55px", height: "55px"}}
     xmlns="http://www.w3.org/2000/svg"
     width="34"
     height="34"
     viewBox="0 0 24 24"
-    fill="white"
+    fill="red"
   >
     <path d="M8 5v14l11-7z" />
   </svg>
@@ -1630,12 +1634,12 @@ const shouldShowVideo =
 
 
 
-                  <br /><br /></>)}
+                  <br /></>)}
 
               <section class="topic_content_p2 section-padding">
                 <div class="container">
                   <div class="section-title">
-                    <h2>AboutUs </h2>
+                    {/* <h2>AboutUs </h2> */}
                     <p>{course.overview_title}</p>
                   </div>
                   <div class="row">
@@ -1668,7 +1672,7 @@ const shouldShowVideo =
                 <div className="flex flex-col justify-center text-left flex-1">
 
                   <h3 className="text-2xl font-bold text-[#1a2d62]">
-                    {course.mentor_name}
+                    <b>{course.mentor_name}</b>
                   </h3>
 
                   <p className="text-red-600 font-semibold mt-1 mb-3">
@@ -1719,6 +1723,81 @@ const KeyFeatures = ({ course }) => {
 };
 
 
+const AwardsSection = () => {
+  return (
+    <section className="topic_content_p2 section-padding">
+      <div className="container">
+        <div className="section-title">
+          <p>
+            Our <span><u>Awards</u></span>
+          </p>
+        </div>
+
+        <Swiper
+          modules={[Navigation, Autoplay]}
+          spaceBetween={20}
+          navigation
+          autoplay={{ delay: 4000 }}
+          loop
+          breakpoints={{
+            0: { slidesPerView: 1 },
+            768: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 }
+          }}
+        >
+          {awards.map((award, index) => (
+            <SwiperSlide key={index}>
+              <Award img={award.img} title={award.title} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
+    </section>
+  );
+};
+
+const CertificateSection = ({ course }) => {
+  if ([2, 3].includes(Number(course?.course_type))) return null;
+
+  return (
+    <>
+      <br /><br />
+      <section className="course_promo section-padding">
+        <div className="container">
+          <div className="row">
+            
+            <div className="col-lg-6 col-sm-12 col-xs-12">
+              <div className="cp_content">
+                <h2>
+                  Let Your <span><u>Certificates</u></span> Speak
+                </h2>
+                <ul>
+                  <li><span className="ti-check"></span>Certificate are awarded immediately upon successfully completing all course modules.</li>
+                  <li><span className="ti-check"></span>You receive an official completion certificate that validates your skills.</li>
+                  <li><span className="ti-check"></span>Your certificate serves as proof of learning and can be added to your resume or portfolio.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="col-lg-6 col-sm-12 col-xs-12">
+              <div className="cp_img">
+                <img
+                  src="https://backstagepass.co.in/certificate-with-badge-265a0669.png"
+                  className="img-fluid"
+                  alt="certificate"
+                />
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+      <br /><br />
+    </>
+  );
+};
+
+
 const Outcomes = ({ course }) => {
   if (!course?.outcomes?.length) return null;
 
@@ -1734,7 +1813,7 @@ const Outcomes = ({ course }) => {
                       }}
                       >
                         <div class="cp_content">
-                          <h4>Best Online Learning Platform</h4>
+                          {/* <h4>Best Online Learning Platform</h4> */}
                           <h2>After this {Number(course.course_type) === 1
                             ? "Course"
                             : "Webinar"},   <span><u>You will be  </u></span> Able to</h2>
@@ -1769,6 +1848,140 @@ const Outcomes = ({ course }) => {
 
 
 
+
+const Topics = ({ course }) => {
+
+  const [activeIndex, setActiveIndex] = useState(null);
+
+  if (!course?.topics?.length) return null;
+
+  return (
+    <section className="max-w-6xl mx-auto px-6 py-10">
+      
+<div className="section-title">
+          <p>
+            Course Topics <span><u>You will Learn</u></span>
+          </p>
+        </div>
+      <div className="space-y-6">
+        {course.topics.map((topic, index) => {
+
+          const isOpen = activeIndex === index;
+
+          return (
+            <div
+              key={index}
+              className="bg-white rounded-xl shadow-md overflow-hidden"
+            >
+              <button
+                onClick={() =>
+                  setActiveIndex(isOpen ? null : index)
+                }
+                className="w-full flex justify-between items-center px-8 py-6 text-left"
+              >
+                <span className="text-lg font-semibold">
+                  {topic.title}
+                </span>
+
+                <ChevronDown
+                  className={`text-red-600 transition-transform duration-300 ${
+                    isOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              <div
+                className={`px-8 transition-all duration-300 ease-in-out ${
+                  isOpen ? "max-h-[600px] pb-6" : "max-h-0"
+                } overflow-hidden`}
+              >
+                <ul className="list-disc pl-5 space-y-2 text-gray-700">
+                  {topic.points.map((point, i) => (
+                    <li key={i}>{point}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+};
+
+
+
+// {isSectionActive("topics") && course.topics?.length > 0 && (
+//           <section className="max-w-6xl mx-auto px-6 py-20">
+//             <h2 className="text-3xl font-semibold mb-10">Course Topics You will Learn</h2>
+//             <div className="space-y-6">
+//               {topics.map((topic, index) => {
+//                 const isOpen = activeIndex === index;
+
+//                 return (
+//                   <div key={topic.title} className="bg-white rounded-xl shadow-md overflow-hidden">
+//                     <button
+//                       onClick={() => setActiveIndex(isOpen ? null : index)}
+//                       className="w-full flex justify-between items-center px-8 py-6 text-left"
+//                     >
+//                       <span className="text-lg font-semibold">{topic.title}</span>
+//                       <ChevronDown
+//                         className={`text-red-600 transition-transform duration-300 ${isOpen ? "rotate-180" : ""
+//                           }`}
+//                       />
+//                     </button>
+
+
+//                     <div
+//                       className={`px-8 transition-all duration-300 ease-in-out ${isOpen ? "max-h-[600px] pb-6" : "max-h-0"
+//                         } overflow-hidden`}
+//                     >
+//                       <ul className="list-disc pl-5 space-y-2 text-gray-700">
+//                         {topic.points.map(point => (
+//                           <li key={point}>{point}</li>
+//                         ))}
+//                       </ul>
+//                     </div>
+//                   </div>
+
+
+//                 );
+//               })}
+//             </div>
+//           </section>
+//         )}
+
+const TopCompaniesSection = () => {
+  return (
+    <>
+      <section className="max-w-7xl mx-auto px-0 py-0 mb-10">
+        
+        <div className="cp_content text-left mb-8">
+          <h2>
+            Our Learners Work Across{" "}
+            <span><u>Top Companies</u></span>
+          </h2>
+        </div>
+
+        <div className="border-2 border-red-500 rounded-3xl px-10 py-12">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-y-10 gap-x-8 items-center justify-items-center">
+            {logos.map((logo) => (
+              <img
+                key={logo.alt}
+                src={logo.src}
+                alt={logo.alt}
+                className="max-h-12 object-contain transition duration-300 hover:scale-110"
+              />
+            ))}
+          </div>
+        </div>
+
+      </section>
+    </>
+  );
+};
+
+
 const SystemRequirements = ({ course }) => {
   if (!course?.requirement?.length) return null;
 
@@ -1784,8 +1997,8 @@ const SystemRequirements = ({ course }) => {
                       }}
                       >
                         <div class="cp_content">
-                          <h4>Best Online Learning Platform</h4>
-                          <h2>{course.requirements_main_title}</h2>
+                          {/* <h4>Best Online Learning Platform</h4> */}
+                          <h2>System Requirements for <span><u>{course.requirements_main_title} </u></span></h2>
 
 
                           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -1825,7 +2038,7 @@ const Audience = ({ course }) => {
     <section class="topic_content_p2 section-padding">
                   <div class="container">
                     <div class="section-title">
-                      <h2>Important </h2>
+                      {/* <h2>Important </h2> */}
                       <p> This {Number(course.course_type) === 1
                         ? "Course"
                         : "Webinar"} is for You,  <span><u>If You are</u></span></p>
@@ -1910,7 +2123,7 @@ const FaqSection = ({ course }) => {
     <section class="topic_content_p2 section-padding">
                     <div class="container">
                       <div className="section-title">
-                        <h2>Frequently Asked Question</h2>
+                        <h2>Frequently Asked</h2>
                         <p>General <span><u>Questions</u></span></p>
                       </div>
 

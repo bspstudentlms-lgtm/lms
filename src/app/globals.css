@@ -1421,7 +1421,7 @@ strong, b {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: rgba(238, 27, 36, 0.5);
+  background: #fff;
   animation: pulse 2s infinite;
   z-index: -1;
 }
@@ -1438,6 +1438,13 @@ strong, b {
   100% {
     opacity: 0;
   }
+}
+.course-overview p{
+  font-size: 16px !important;
+}
+
+.course-overview{
+  font-size: 16px !important;
 }
 
 /* 🔥 Hover Ripple */
