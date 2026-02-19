@@ -36,12 +36,12 @@ const SiteNavigation = () => {
 
           <div className="col-lg-4 col-md-3 col-sm-8">
             <div className="dfe">
-              <div className="home_lc">
+              {/* <div className="home_lc">
                 <Link href="#" className="hlc">
                   <i className="ti-heart"></i>
                   <span className="gactive">0</span>
                 </Link>
-              </div>
+              </div> */}
 
               <div className="call_to_action">
                 {status === "loading" ? null : session ? (

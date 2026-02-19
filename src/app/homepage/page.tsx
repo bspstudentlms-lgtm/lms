@@ -295,12 +295,12 @@ return (
         
         <div className="col-lg-4 col-md-3 col-sm-8">
           <div className="dfe"> 
-          <div className="home_lc">
+          {/* <div className="home_lc">
             <a href="#" className="hlc">
               <i className="ti-heart"></i>
               <span className="gactive">0</span>
              </a>
-          </div>
+          </div> */}
           <div className="call_to_action">
             <a className="btn_one" href="login.html">Login</a>
           </div>
@@ -866,7 +866,7 @@ return (
       <div className="row">						
         <div className="col-lg-3 col-sm-6 col-xs-12">
           <div className="single_footer">
-            <a href="index.html"><img src="https://backstagepass.co.in/newlogo-324ee245.webp" alt="" /></a>         
+            <a href="index.html"><img src="images/Bsp_White.png" alt="" /></a>         
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae risus nec dui venenatis dignissim.</p>
           </div>		
         </div>						

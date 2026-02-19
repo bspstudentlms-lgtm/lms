@@ -204,7 +204,7 @@ return (
       <div className="row">						
         <div className="col-lg-3 col-sm-6 col-xs-12">
           <div className="single_footer">
-            <a href="#"><img src="https://backstagepass.co.in/newlogo-324ee245.webp" alt="" /></a>         
+            <a href="#"><img src="images/Bsp_White.png" alt="" /></a>         
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae risus nec dui venenatis dignissim.</p>
           </div>		
         </div>						

@@ -913,7 +913,18 @@ const sortedSections =
 
                     <button type="button" class="sub_btn" onClick={() => setOpen1(true)}> 
                       
-                      {getButtonLabel()} @ <span className="line-through text-gray-300 text-xl">₹{course.orignialpayment}</span> ₹{course.total_payment}
+                      {getButtonLabel()} @ {course.course_type !== 2 && (
+    <>
+      {course.orignialpayment > 0 && (
+        <span className="line-through text-gray-300 ml-1">
+        ₹{course.orignialpayment}
+        </span>
+      )}
+      <span className="ml-1 font-bold text-[#fff]">
+        ₹{course.total_payment}
+      </span>
+    </>
+  )}
                       </button>
                   </form>
                 </div>
@@ -993,7 +1004,18 @@ const sortedSections =
                     borderRadius: "26px",
                   }}
                   >
-                    {getButtonLabel()}
+                  {getButtonLabel()} @ {course.course_type !== 2 && (
+    <>
+      {course.orignialpayment > 0 && (
+        <span className="line-through text-gray-300 ml-1">
+          ₹{course.orignialpayment}
+        </span>
+      )}
+      <span className="ml-1 font-bold text-[#fff]">
+        ₹{course.total_payment}
+      </span>
+    </>
+  )}
                   </button>
                 </div>
 
@@ -1421,7 +1443,7 @@ const sortedSections =
           <div className="row">
             <div className="col-lg-3 col-sm-6 col-xs-12">
               <div className="single_footer">
-                <a href="#"><img src="https://backstagepass.co.in/newlogo-324ee245.webp" alt="" /></a>
+                <a href="#"><img src="images/Bsp_White.png" alt="" /></a>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae risus nec dui venenatis dignissim.</p>
               </div>
             </div>
@@ -1660,7 +1682,7 @@ const shouldShowVideo =
                   </div>
                 </div>
               </section>
-              <div className="bg-gray-50 rounded-3xl shadow-md p-8 flex flex-col md:flex-row items-center gap-8 min-h-[220px]">
+              <div className="bg-gray-50 rounded-3xl shadow-md p-8 flex flex-col md:flex-row items-top gap-8 min-h-[220px]">
 
                 {/* IMAGE */}
                 <div className="flex-shrink-0">
