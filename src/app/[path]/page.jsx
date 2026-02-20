@@ -915,11 +915,11 @@ const sortedSections =
                       
                       {getButtonLabel()} @ {course.course_type !== 2 && (
     <>
-      {course.orignialpayment > 0 && (
+     
         <span className="line-through text-gray-300 ml-1">
         ₹{course.orignialpayment}
         </span>
-      )}
+     
       <span className="ml-1 font-bold text-[#fff]">
         ₹{course.total_payment}
       </span>
@@ -1006,11 +1006,11 @@ const sortedSections =
                   >
                   {getButtonLabel()} @ {course.course_type !== 2 && (
     <>
-      {course.orignialpayment > 0 && (
+      
         <span className="line-through text-gray-300 ml-1">
           ₹{course.orignialpayment}
         </span>
-      )}
+     
       <span className="ml-1 font-bold text-[#fff]">
         ₹{course.total_payment}
       </span>
