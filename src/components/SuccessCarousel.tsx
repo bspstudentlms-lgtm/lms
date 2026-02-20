@@ -73,20 +73,58 @@ const truncate = (text: string, limit = 120) =>
 
 /* ------------------ COMPONENT ------------------ */
 export default function CourseCarousel() {
-  const [emblaRef] = useEmblaCarousel(
+  const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: true, align: "start" },
     [Autoplay({ delay: 3500 })]
   );
 
+const scrollPrev = () => emblaApi && emblaApi.scrollPrev();
+const scrollNext = () => emblaApi && emblaApi.scrollNext();
   const [activeStudent, setActiveStudent] = useState<Student | null>(null);
 
   return (
     <div className="row">								
             <div className="col-lg-12">
-              <div id="testimonial-slider" className="owl-carousel">
+             
+                <div className="relative">
+  
+  {/* Left Arrow */}
+  <button
+    onClick={scrollPrev}
+    className="absolute left-[-20px] top-1/2 -translate-y-1/2 
+bg-red-100 text-red-600 
+hover:bg-red-200 
+shadow-md rounded-full 
+w-10 h-10 flex items-center justify-center 
+transition duration-300"
+  >
+    ←
+  </button>
+
+  {/* Right Arrow */}
+  <button
+    onClick={scrollNext}
+    className="absolute right-[-20px] top-1/2 -translate-y-1/2 
+bg-red-100 text-red-600 
+hover:bg-red-200 
+shadow-md rounded-full 
+w-10 h-10 flex items-center justify-center 
+transition duration-300"
+  >
+    →
+  </button>
+
+  {/* Embla Viewport */}
+  <div className="overflow-hidden" ref={emblaRef}>
+    <div className="flex">
+
         {students.map((s) => (
 
-          <div className="testimonial"  key={s.id}>
+          <div
+  key={s.id}
+  className="flex-[0_0_100%] md:flex-[0_0_50%] lg:flex-[0_0_33.333%] px-0"
+>
+  <div className="testimonial">
             <div className="testimonial_content">
               <i className="fa fa-star"></i>
               <i className="fa fa-star"></i>
@@ -115,6 +153,7 @@ export default function CourseCarousel() {
               <h4>{s.name}</h4>
               <small className="post">- {s.course}</small>
             </div>
+          </div>
           </div>
 
           // <div
@@ -168,6 +207,9 @@ export default function CourseCarousel() {
       </div>
        </div>
        
+       
+       </div>
+       </div>
 
       {/* ------------------ MODAL ------------------ */}
       {activeStudent && (
@@ -214,6 +256,8 @@ export default function CourseCarousel() {
           </div>
         </div>
       )}
+      
     </div>
+    
   );
 }

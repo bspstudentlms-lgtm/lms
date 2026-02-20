@@ -349,7 +349,7 @@ const handleEmailBlur = async () => {
     <div className="flex justify-between text-sm text-gray-600">
       <span>Course Price</span>
       <span className="font-medium">
-        <span className="line-through text-gray-300 text-3xl">₹{paymentDetails.actualamount}</span>
+        <span className="line-through text-gray-300 text-md mr-1">₹{paymentDetails.actualamount}</span>
         ₹{paymentDetails.originalPayment}
       </span>
     </div>

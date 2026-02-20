@@ -887,7 +887,7 @@ box-shadow:none;
 * ----------------------------------------------------------------------------------------
 */
 .home_bg{
-height:900px;
+height:750px;
 position:relative;
 }
 .home_bg2{
@@ -2134,9 +2134,12 @@ margin:30px 0;
 .cp_content ul{margin-bottom: 40px;}
 .cp_content ul li {
 	font-weight: 600;
-	line-height: 36px;
-	font-size: 18px;
-	color: #1a2d62;
+    /* line-height: 36px; */
+    font-size: 18px;
+    color: #1a2d62;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
 }
 .cp_content ul li span {
 	background: #ee1b24;
@@ -2149,6 +2152,9 @@ margin:30px 0;
 	border-radius: 2px;
 	margin-right: 15px;
 	font-size: 15px;
+	min-width: 25px;     /* Important */
+  min-height: 25px;    /* Important */
+  flex-shrink: 0;      /* 🔥 This fixes it */
 	font-weight: 600;
 }
 .cc_btn{margin-top:30px;}

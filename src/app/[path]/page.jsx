@@ -1797,9 +1797,7 @@ const CertificateSection = ({ course }) => {
                   Let Your <span><u>Certificates</u></span> Speak
                 </h2>
                 <ul>
-                  <li><span className="ti-check"></span>Certificate are awarded immediately upon <span className="block">
-    successfully completing all course modules.
-  </span></li>
+                  <li><span className="ti-check"></span>Certificate are awarded immediately upon <br/>successfully completing all course modules.</li>
                   <li><span className="ti-check"></span>You receive an official completion certificate that validates your skills.</li>
                   <li><span className="ti-check"></span>Your certificate serves as proof of learning and can be added to your resume or portfolio.</li>
                 </ul>

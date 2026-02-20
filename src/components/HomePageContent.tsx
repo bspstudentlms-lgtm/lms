@@ -6,6 +6,8 @@ import React, { useEffect, useState } from "react";
 import CourseCarouselNoScroll from "@/components/CourseCarouselNoScroll";
 import SiteNavigation from "@/components/SiteNavigation";
 import AppHeaders from "@/layout/AppHeaders";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
 
 import SuccessCarousel from "@/components/SuccessCarousel";
 import Corporate from "@/components/Corporate";
@@ -249,6 +251,16 @@ useEffect(() => {
      setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
    };
 
+
+   const [logoRef, logoApi] = useEmblaCarousel(
+  { loop: true, align: "start" },
+  [Autoplay({ delay: 2500 })]
+);
+
+const scrollLogoPrev = () => logoApi && logoApi.scrollPrev();
+const scrollLogoNext = () => logoApi && logoApi.scrollNext();
+
+
 return (
   <>
  
@@ -282,7 +294,7 @@ return (
 			<div className="row">
 				<div className="col-lg-6 col-sm-6 col-xs-12">	
 					<div className="home_content">
-						<h1>Build Games <span>Build Skills</span> <br/>Build Your Future</h1>
+						<h1>Build <span>Games</span> <span>Build</span> Skills <br/>Build <span>Your Future</span></h1>
 						<p>Backstage Pass LMS helps aspiring creators master game development through structured, industry-ready courses, real projects, and expert mentorship.</p>						
 					</div>
 					<div className="home_btn">
@@ -296,7 +308,7 @@ return (
 				</div>
 				<div className="col-lg-6 col-sm-6 col-xs-12">	
 					<div className="home_me_img">
-						<img src="assets/images/all-img/home-image.png" className="img-fluid" alt="" />
+						<img src="https://backstagepass.co.in/InternshipPlacement-307438cb.webp" className="img-fluid" alt="" />
 						<div className="home_ps">
 							<img src="assets/images/icon/user2.svg" alt="" />
 							<h2>7500+</h2>
@@ -322,36 +334,21 @@ return (
 					<div className="single_tp">
 						<h3>Quality Education</h3>
 						<p>Lorem ipsum dolor sit amet, consectetur notted adipisicing elit sed do eiusmod tempor incididunt ut labore.</p>
-						<a href="#" className="cta"><span>Explore</span>
-						  <svg width="13px" height="10px" viewBox="0 0 13 10">
-							<path d="M1,5 L11,5"></path>
-							<polyline points="8 1 12 5 8 9"></polyline>
-						  </svg>
-						</a>
+						
 					</div>
 				</div>			
 				<div className="col-lg-4 col-sm-4 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.3s" data-wow-offset="0">
 					<div className="single_tp">
 						<h3>Experienced Teachers</h3>
 						<p>Lorem ipsum dolor sit amet, consectetur notted adipisicing elit sed do eiusmod tempor incididunt ut labore.</p>
-						<a href="#" className="cta"><span>Explore</span>
-						  <svg width="13px" height="10px" viewBox="0 0 13 10">
-							<path d="M1,5 L11,5"></path>
-							<polyline points="8 1 12 5 8 9"></polyline>
-						  </svg>
-						</a>
+						
 					</div>
 				</div>			
 				<div className="col-lg-4 col-sm-4 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.4s" data-wow-offset="0">
 					<div className="single_tp">
 						<h3>Delicious Food</h3>
 						<p>Lorem ipsum dolor sit amet, consectetur notted adipisicing elit sed do eiusmod tempor incididunt ut labore.</p>
-						<a href="#" className="cta"><span>Explore</span>
-						  <svg width="13px" height="10px" viewBox="0 0 13 10">
-							<path d="M1,5 L11,5"></path>
-							<polyline points="8 1 12 5 8 9"></polyline>
-						  </svg>
-						</a>
+						
 					</div>
 				</div>							
 			</div>
@@ -365,14 +362,14 @@ return (
 			<div className="row">								
 				<div className="col-lg-6 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.2s" data-wow-offset="0">
 					<div className="ab_img">
-						<img src="assets/images/all-img/about1.png" className="img-fluid" alt="image" />
+						<img src="images/our.png" className="img-fluid" alt="image" />
 						
 					</div>
 				</div>					
 				<div className="col-lg-6 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
 					<div className="ab_content">
 						<h2>Learn new skills to go <u><span>ahead for your </span></u> career.</h2>
-						<p>Backstage Pass LMS is built for creators who want more than tutorials.</p>
+						<p>Backstage Pass is built for creators who want more than tutorials.</p>
 					</div>
 					<div className="abmv">
 						<span className="ti-medall"></span>
@@ -384,7 +381,7 @@ return (
 						<h4>Our Vision</h4>
 						<p>Backstage Pass LMS aims to bridge the gap between learning and employment by setting the standard for job-ready courses in the gaming industry.</p>
 					</div>	
-						<a className="btn_one" href="#">Discover More</a>
+						
 				</div>								  
 			</div>
 		</div>
@@ -443,37 +440,92 @@ return (
 	
 	<div className="partner-logo section-padding">
 		<div className="container">
+			<div className="section-title">
+		  <h2>Trusted</h2>
+		  <p>Company Arround <span><u> The World!</u></span></p>
+		</div>	
 			<div className="row">
-				<div className="col-lg-12 text-center">
-					<div className="partner_title">
-						<h3>Trusted Company Arround The World! </h3>
-					</div>
-					<div className="partner owl-carousel" id="logo-carousel">
-						<a href="#"><img src="https://backstagepass.co.in/r2-a450dbe9.webp" alt="image" /></a>
-						<a href="#"><img src="https://backstagepass.co.in/Qualcomm-02b58aca.webp" alt="image" /></a>
-						<a href="#"><img src="https://backstagepass.co.in/r4-31e22ac4.webp" alt="image" /></a>
-						<a href="#"><img src="https://backstagepass.co.in/GSNgames-d9a1517e.webp" alt="image" /></a>
-						<a href="#"><img src="https://backstagepass.co.in/r5-2e345bac.webp" alt="image" /></a>
-						<a href="#"><img src="assets/images/all-img/clients/1.png" alt="image" /></a>
-						<a href="#"><img src="assets/images/all-img/clients/3.png" alt="image" /></a>
-						<a href="#"><img src="assets/images/all-img/clients/4.png" alt="image" /></a>
-					</div>
-				</div>
-			</div>
+  <div className="col-lg-12 text-center">
+
+    <div className="relative">
+
+      {/* Left Arrow */}
+      <button
+        onClick={scrollLogoPrev}
+        className="absolute left-[-25px] top-1/2 -translate-y-1/2 
+        bg-[#FDECEC] text-[#E63946] hover:bg-[#F8D7DA]
+        shadow-md rounded-full 
+        w-10 h-10 flex items-center justify-center 
+        transition duration-300 z-10"
+      >
+        ←
+      </button>
+
+      {/* Right Arrow */}
+      <button
+        onClick={scrollLogoNext}
+        className="absolute right-[-25px] top-1/2 -translate-y-1/2 
+        bg-[#FDECEC] text-[#E63946] hover:bg-[#F8D7DA]
+        shadow-md rounded-full 
+        w-10 h-10 flex items-center justify-center 
+        transition duration-300 z-10"
+      >
+        →
+      </button>
+
+      {/* Embla Viewport */}
+      <div className="overflow-hidden" ref={logoRef}>
+        <div className="flex items-center">
+
+          {[
+            "https://backstagepass.co.in/r6-4428e17a.webp",
+			"https://backstagepass.co.in/2-d40d819e.webp",
+			"https://backstagepass.co.in/supergaming-9590ae14.png",
+			"https://backstagepass.co.in/r1-4dfae412.webp",
+			"https://backstagepass.co.in/r7-4be35cee.webp",
+			"https://backstagepass.co.in/r2-a450dbe9.webp",
+			"https://backstagepass.co.in/Sony-6e9ef00f.webp",
+			"https://backstagepass.co.in/Juego-e5b53916.webp",
+			"https://backstagepass.co.in/r5-2e345bac.webp",
+			"https://backstagepass.co.in/Gamitronics-d3bb8a73.webp",
+			"https://backstagepass.co.in/SumoDigital-c9cfd26c.webp"
+          ].map((logo, index) => (
+            <div
+              key={index}
+              className="flex-[0_0_50%] md:flex-[0_0_33%] lg:flex-[0_0_20%] p-4"
+            >
+              <div className="bg-white shadow-sm rounded-xl p-4 flex items-center justify-center">
+                <img
+                  src={logo}
+                  alt="partner"
+                  className="max-h-12 object-contain"
+                />
+              </div>
+            </div>
+          ))}
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
 		</div>
 	</div>
 	<br/><br/>
 	<section className="marketing_content_area section-padding">
 	   <div className="container">
 			<div className="section-title">
-				<h2>WHY CHOOSE BACKSTAGE PASS LMS</h2>
-				<p>Find The <span><u>Best Features </u></span> Of Backstage Pass LMS.</p>
+				<h2>Why Choose Backstage Pass</h2>
+				<p>Find The <span><u>Best Features </u></span> Of Backstage Pass.</p>
 			</div>		
 			<div className="row">									
 				<div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
 					<div className="single_feature_one">
 						<div className="sf_top">
-							<span className="ti-book ss_one"></span>
+							<span className="ti-book ss_five"></span>
 							<h2><a href="#" target="_blank">Learn by Building</a></h2>
 						</div>
 						<p>Every course revolves around real production workflows used in studios.</p>
@@ -482,7 +534,7 @@ return (
 				<div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.2s" data-wow-offset="0">
 					<div className="single_feature_one">
 						<div className="sf_top">
-							<span className="ti-user ss_three"></span>
+							<span className="ti-user ss_five"></span>
 							<h2><a href="#" target="_blank">Industry Mentors</a></h2>
 						</div>	
 						<p>Train with professionals who ship games, not just teach theory.</p>
@@ -491,7 +543,7 @@ return (
 				<div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.3s" data-wow-offset="0">
 					<div className="single_feature_one">
 						<div className="sf_top">
-							<span className="ti-heart ss_two"></span>
+							<span className="ti-direction   ss_five"></span>
 							<h2><a href="#" target="_blank">Beginner to Pro Path</a></h2>
 						</div>	
 						<p>Clear roadmaps guiding you from fundamentals to advanced pipelines.</p>
@@ -500,7 +552,7 @@ return (
 				<div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.4s" data-wow-offset="0">
 					<div className="single_feature_one">
 						<div className="sf_top">
-							<span className="ti-eye ss_four"></span>
+							<span className="ti-clipboard ss_five"></span>
 							<h2><a href="#" target="_blank">Project-Based Curriculum</a></h2>
 						</div>	
 						<p>Create portfolio-ready assets, mechanics, and complete games.</p>
@@ -509,7 +561,7 @@ return (
 				<div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.5s" data-wow-offset="0">
 					<div className="single_feature_one">
 						<div className="sf_top">
-							<span className="ti-light-bulb ss_five"></span>
+							<span className="ti-time  ss_five"></span>
 							<h2><a href="#" target="_blank">Flexible Learning</a></h2>
 						</div>		
 						<p>Learn anytime with lifetime access and updates.</p>
@@ -518,7 +570,7 @@ return (
 				<div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.6s" data-wow-offset="0">
 					<div className="single_feature_one">
 						<div className="sf_top">
-							<span className="ti-email ss_six"></span>
+							<span className="ti-briefcase ss_five"></span>
 							<h2><a href="#" target="_blank">Career Focused</a></h2>
 						</div>		
 						<p>Prepare for internships, freelance, or studio roles.</p>
@@ -568,18 +620,10 @@ return (
 							<li><span className="ti-check"></span>Friendly Environment & Expert Teacher</li>
 						</ul>
 					</div>
-					<div className="cp_btn">
-						<a href="/all-courses" className="cta"><span>Explore Our Courses</span>
-						  <svg width="13px" height="10px" viewBox="0 0 13 10">
-							<path d="M1,5 L11,5"></path>
-							<polyline points="8 1 12 5 8 9"></polyline>
-						  </svg>
-						</a>
-					</div>
 				</div>						
 				<div className="col-lg-6 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.2s" data-wow-offset="0">
 					<div className="cp_img">
-						<img src="assets/images/all-img/promo.png" className="img-fluid" alt="image" />
+						<img src="images/one.png" className="img-fluid" alt="image" />
 					
 					</div>
 				</div>			  
