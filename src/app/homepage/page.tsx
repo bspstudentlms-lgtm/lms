@@ -284,25 +284,26 @@ return (
   
   
     
-<div id="navigation" class="fixed-top navbar-light bg-faded site-navigation">
-  <div class="container">
-    <div class="header-wrapper">
-
-      <!-- Logo -->
-      <div class="site-logo">
-        <a href="/">
-          <img src="https://backstagepass.co.in/newlogo-324ee245.webp" alt="logo">
-        </a>
+  {/* <div id="navigation" className="fixed-top navbar-light bg-faded site-navigation">
+    <div className="container">
+      <div className="row dfm">
+        <div className="col-lg-3 col-md-3 col-sm-4 dfa">
+          <div className="site-logo">
+            <a href="index.html"><img src="https://backstagepass.co.in/newlogo-324ee245.webp" alt="" /></a>          			        				
+          </div>
+        </div>
+        
+        <div className="col-lg-4 col-md-3 col-sm-8">
+          <div className="dfe"> 
+          
+          <div className="call_to_action">
+            <a className="btn_one" href="login.html">Login</a>
+          </div>
+          </div>				
+        </div>
       </div>
-
-      <!-- Login Button -->
-      <div class="call_to_action">
-        <button class="btn_one">Login</button>
-      </div>
-
     </div>
-  </div>
-</div>
+  </div> 	   */}
   
                 
   
