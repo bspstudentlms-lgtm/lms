@@ -1439,79 +1439,78 @@ const sortedSections =
       </main> */}
 
       <div className="footer section-padding" style={{ paddingTop: "80px" }}>
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-3 col-sm-6 col-xs-12">
-              <div className="single_footer">
-                <a href="#"><img src="images/Bsp_White.png" alt="" /></a>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae risus nec dui venenatis dignissim.</p>
-              </div>
-            </div>
-            <div className="col-lg-3 col-sm-6 col-xs-12">
-              <div className="single_footer">
-                <h4>Courses</h4>
-                <ul>
-                  <li><a href="#">Creative Writing</a></li>
-                  <li><a href="#">Digital Marketing</a></li>
-                  <li><a href="#">SEO Business</a></li>
-                  <li><a href="#">Social Marketing</a></li>
-                  <li><a href="#">Graphic Design</a></li>
-                  <li><a href="#">Website Development</a></li>
-                </ul>
-              </div>
-            </div>
-            <div className="col-lg-3 col-sm-6 col-xs-12">
-              <div className="single_footer">
-                <h4>Company</h4>
-                <ul>
-                  <li><a href="#">About us</a></li>
-                  <li><a href="#">Knowledge Base</a></li>
-                  <li><a href="#">Affiliate Program</a></li>
-                  <li><a href="#">Community</a></li>
-                  <li><a href="#">Market API</a></li>
-                  <li><a href="#">Support team</a></li>
-                </ul>
-              </div>
-            </div>
-            <div className="col-lg-3 col-sm-6 col-xs-12">
-              <div className="single_footer">
-                <h4>Contact Info</h4>
-                <div className="sf_contact">
-                  <span className="ti-mobile"></span>
-                  <h3>Phone number</h3>
-                  <p>+91-8008002794</p>
-                </div>
-                <div className="sf_contact">
-                  <span className="ti-email"></span>
-                  <h3>Email Address</h3>
-                  <p>info@backstagepass.co.in</p>
-                </div>
-                <div className="sf_contact">
-                  <span className="ti-map"></span>
-                  <h3>Office Address</h3>
-                  <p>Plot No. 72, Jubilee Enclave, HITEC City, Hyderabad, Telangana 500081</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="row fc">
-            <div className="col-lg-6 col-sm-6 col-xs-12">
-              <div className="footer_copyright">
-                <p>&copy; 2026. All Rights Reserved.</p>
-              </div>
-            </div>
-            <div className="col-lg-6 col-sm-6 col-xs-12">
-              <div className="footer_menu">
-                <ul>
-                  <li><a href="#">Terms of use</a></li>
-                  <li><a href="#">Privacy Policy</a></li>
-                  <li><a href="#">Cookie Policy</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+				<div className="container">
+					<div className="row">
+						<div className="col-lg-3 col-sm-6 col-xs-12">
+							<div className="single_footer">
+								<a href="#"><img src="images/Bsp_White.png" alt="" /></a>
+								<p>Building future game developers through structured, practical learning.
+									Create real projects. Build real skills. Grow your career.
+								</p>
+							</div>
+						</div>
+						<div className="col-lg-3 col-sm-6 col-xs-12">
+							<div className="single_footer">
+								<h4>Courses</h4>
+								<ul>
+									<li><a target="_blank" href="/basics-of-maya-for-beginners">Basics of Maya</a></li>
+									{/* <li><a href="#">Digital Marketing</a></li>
+									<li><a href="#">SEO Business</a></li>
+									<li><a href="#">Social Marketing</a></li>
+									<li><a href="#">Graphic Design</a></li>
+									<li><a href="#">Website Development</a></li> */}
+								</ul>
+							</div>
+						</div>
+						<div className="col-lg-3 col-sm-6 col-xs-12">
+							<div className="single_footer">
+								<h4>Free Webinars</h4>
+								<ul>
+									<li><a target="_blank" href="/the-art-of-material-creation-in-substance-designer">The Art of Material Creation in Substance Designer</a></li>
+									<li><a target="_blank" href="/Build-a-Game-In-Just-1-Hour">Build a Game In Just 1 Hour!</a></li>
+									<li><a target="_blank" href="https://backstagepass.co.in/landingpage/certificate-program-in-essentials-of-game-design/">Build A Game-ready 3D Characters Like A Pro</a></li>
+									<li><a target="_blank" href="/organic-material-creation-using-substance-designer">Organic Material Creation Using Substance Designer</a></li>
+								</ul>
+							</div>
+						</div>
+						<div className="col-lg-3 col-sm-6 col-xs-12">
+							<div className="single_footer">
+								<h4>Contact Info</h4>
+								<div className="sf_contact">
+									<span className="ti-mobile"></span>
+									<h3>Phone number</h3>
+									<p>+91-8008002794</p>
+								</div>
+								<div className="sf_contact">
+									<span className="ti-email"></span>
+									<h3>Email Address</h3>
+									<p>info@backstagepass.co.in</p>
+								</div>
+								<div className="sf_contact">
+									<span className="ti-map"></span>
+									<h3>Office Address</h3>
+									<p>Plot No. 72, Jubilee Enclave, HITEC City, Hyderabad, Telangana 500081</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div className="row fc">
+						<div className="col-lg-6 col-sm-6 col-xs-12">
+							<div className="footer_copyright">
+								<p>&copy; 2026. All Rights Reserved.</p>
+							</div>
+						</div>
+						<div className="col-lg-6 col-sm-6 col-xs-12">
+							<div className="footer_menu">
+								<ul>
+									<li><a href="#">Terms of use</a></li>
+									<li><a href="#">Privacy Policy</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
     </>
   );
 }
