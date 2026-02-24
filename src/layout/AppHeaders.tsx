@@ -187,13 +187,14 @@ const handleDashboard = () => {
 
         {/* Right Side Button */}
         <div className="call_to_action">
-         {status === "loading" ? null : status === "authenticated" ? (
+        {status === "loading" ? null : 
+(status === "authenticated" || localStorage.getItem("email")) ? (
   <button className="btn_one" onClick={handleDashboard}>
     Dashboard
   </button>
 ) : (
   <button className="btn_one" onClick={handleSigninClick}>
-    Login
+    Login 
   </button>
 )}
         </div>
