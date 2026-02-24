@@ -209,7 +209,7 @@ export default function CourseGrid() {
 
 
             <div className="product_filter">
-              <ul style={{ marginBottom: "0px" }}>
+              <ul  className="flex flex-wrap gap-3" style={{ marginBottom: "0px" }}>
                 {[
                   ["all", "All"],
                   ["course", "Course"],
@@ -233,7 +233,7 @@ export default function CourseGrid() {
             </div>
 
             {/* SECONDARY FILTERS */}
-            <div className="flex gap-3">
+            <div className="flex gap-3 mobileflexDirection">
               <select
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
@@ -341,6 +341,7 @@ export default function CourseGrid() {
                           alt={course.title}
                           fill
                         />
+                        </a>
                         <div className="course-date">
                           <span className="month bg-blue-600">📘 COURSE</span>
                           <button
@@ -354,7 +355,7 @@ export default function CourseGrid() {
                             )}
                           </button>
                         </div>
-                        </a>
+                        
                       </div>
                       <div className="course-content" style={{ minHeight: "340px" }}><a className="c_btn" target="_blank" href={course.urlpath}>{course.category}</a>
                         <h3><a href={course.urlpath} target="_blank"> {course.title}</a></h3>
@@ -385,6 +386,7 @@ export default function CourseGrid() {
                           alt={course.title}
                           fill
                         />
+                        </a>
                         <div className="course-date">
                           <span className="month bg-purple-600">🎥 RECORDED WEBINAR</span>
                           <button
@@ -398,7 +400,7 @@ export default function CourseGrid() {
                             )}
                           </button>
                         </div>
-                        </a>
+                        
                       </div>
                       <div className="course-content" style={{ minHeight: "340px" }}><a className="c_btn" href={course.urlpath} target="_blank">{course.category}</a>
                         <h3><a href={course.urlpath} target="_blank"> {course.title}</a></h3>
@@ -556,6 +558,7 @@ export default function CourseGrid() {
                         alt={course.title}
                         fill
                       />
+                       </a>
                       <div className="course-date">
                         <span className="month bg-green-600">🎥 LIVE WEBINAR</span>
                         <button
@@ -569,7 +572,7 @@ export default function CourseGrid() {
                           )}
                         </button>
                       </div>
-                      </a>
+                     
                     </div>
                     <div className="course-content" style={{ minHeight: "340px" }}><a className="c_btn" target="_blank" href={course.urlpath}>{course.category}</a>
                       <h3><a href={course.urlpath} target="_blank"> {course.title}</a></h3>

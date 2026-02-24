@@ -72,9 +72,9 @@ const handleSigninClick = () => {
   const { data: session, status } = useSession();
   
   const hasCheckedRef = useRef(false);
-  const safeRedirect = (path: string) => {
+ const safeRedirect = (path: string) => {
   if (window.location.pathname !== path) {
-    window.location.replace(path);
+    router.replace(path);
   }
 };
 
@@ -89,6 +89,9 @@ useEffect(() => {
   const redirectPath =
     localStorage.getItem("postLoginRedirect") ||
     window.location.pathname;
+
+    console.log("STATUS:", status);
+    console.log("SESSION:", session); 
 
   if (status === "authenticated" && session?.user?.email) {
     const email = session.user.email;
@@ -161,128 +164,44 @@ const handleDashboard = () => {
   
     const roleLabel = user?.role === "mentor" ? "Mentor Menu" : "Student Menu";
 
-  return (
-//     <header className="sticky top-0 flex w-full bg-white border-gray-200 z-9 dark:border-gray-800 dark:bg-gray-900 lg:border-b">
-//       <div className="flex flex-col items-center justify-between grow lg:flex-row lg:px-6">
-// <div className="flex items-center gap-5">
+    console.log("STATUS:", status);
+    console.log("SESSION:", session); 
 
-//   {/* Sidebar Toggle (Only if NOT Home) */}
-//   {/* {pathname !== "/" && (
-//     <button
-//       className="flex items-center justify-center w-11 h-11 border border-gray-200 rounded-lg text-gray-600 dark:border-gray-700"
-//       onClick={handleToggle}
-//       aria-label="Toggle Sidebar"
-//     >
-//       <svg
-//         width="18"
-//         height="14"
-//         viewBox="0 0 16 12"
-//         fill="none"
-//       >
-//         <path
-//           fillRule="evenodd"
-//           clipRule="evenodd"
-//           d="M0.583252 1C0.583252 0.585788 0.919038 0.25 1.33325 0.25H14.6666C15.0808 0.25 15.4166 0.585786 15.4166 1C15.4166 1.41421 15.0808 1.75 14.6666 1.75H1.33325Z"
-//           fill="currentColor"
-//         />
-//       </svg>
-//     </button>
-//   )} */}
+ return (
+  <div
+    id="navigation"
+    className="fixed-top navbar-light bg-faded site-navigation"
+  >
+    <div className="container">
+      <div className="header-wrapper">
 
-//   {/* Logo ALWAYS Visible */}
-//   <Link href="/" className="flex items-center">
-//     <Image
-//       src="https://backstagepass.co.in/newlogo-324ee245.webp"
-//       alt="Logo"
-//       width={220}
-//       height={70}
-//       priority
-//       className="object-contain"
-//     />
-//   </Link>
-
-// </div>
-
-
-
-//         <div
-//           className={`${
-//             isApplicationMenuOpen ? "flex" : "hidden"
-//           } items-center justify-between w-full gap-4 px-5 py-4 lg:flex shadow-theme-md lg:justify-end lg:px-0 lg:shadow-none`}
-//         style={{    justifyContent: "right"}}>
-//           {/* <div className="flex items-center gap-2 2xsm:gap-3">
-//             <ThemeToggleButton />
-//           </div> */}
-
-         
-//           {status === "authenticated" ? (
-//             <>
-//               {isMobileOpen && <div>WELCOME</div>}
-//               <UserDropdown />
-//             </>
-//           ) : (
-//             <button
-//               className="px-6 py-2 border bg-red-500 text-white rounded-md hover:bg-red-600"
-//               onClick={handleSigninClick}
-//             >
-//               Login
-//             </button>
-//           )}
-
-//         </div>
-//       </div>
-//     </header>
-
-    <div
-          id="navigation"
-          className="fixed-top navbar-light bg-faded site-navigation"
-        >
-          <div className="container">
-            <div className="row dfm">
-              <div className="col-lg-3 col-md-3 col-sm-4 dfa">
-                <div className="site-logo">
-                  <Link href="/">
-                    <img
-                      src="https://backstagepass.co.in/newlogo-324ee245.webp"
-                      alt="logo"
-                    />
-                  </Link>
-                </div>
-              </div>
-    
-              <div className="col-lg-4 col-md-3 col-sm-8">
-                <div className="dfe">
-                  {/* <div className="home_lc">
-                    <Link href="#" className="hlc">
-                      <i className="ti-heart"></i>
-                      <span className="gactive">0</span>
-                    </Link>
-                  </div> */}
-    
-                  <div className="call_to_action">
-                    {status === "loading" ? null : session ? (
-                      <button
-                        className="btn_one"
-                        onClick={handleDashboard}
-                      >
-                        Dashboard
-                      </button>
-                    ) : (
-                      <button
-                        className="btn_one"
-                        onClick={handleSigninClick}
-                      >
-                        Login
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        {/* Logo */}
+        <div className="site-logo">
+          <Link href="/">
+            <img
+              src="https://backstagepass.co.in/newlogo-324ee245.webp"
+              alt="logo"
+            />
+          </Link>
         </div>
-    
-  );
+
+        {/* Right Side Button */}
+        <div className="call_to_action">
+         {status === "loading" ? null : status === "authenticated" ? (
+  <button className="btn_one" onClick={handleDashboard}>
+    Dashboard
+  </button>
+) : (
+  <button className="btn_one" onClick={handleSigninClick}>
+    Login
+  </button>
+)}
+        </div>
+
+      </div>
+    </div>
+  </div>
+);
 };
 
 export default AppHeader;

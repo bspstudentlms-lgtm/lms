@@ -533,7 +533,7 @@ const HomePageContent = () => {
 										].map((logo, index) => (
 											<div
 												key={index}
-												className="flex-[0_0_50%] md:flex-[0_0_33%] lg:flex-[0_0_20%] p-4"
+												className="flex-[0_0_100%] sm:flex-[0_0_50%] md:flex-[0_0_33%] lg:flex-[0_0_20%] p-4"
 											>
 												<div className="bg-white shadow-sm rounded-xl p-4 flex items-center justify-center">
 													<img

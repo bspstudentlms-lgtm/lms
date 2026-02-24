@@ -5,6 +5,7 @@ import { ChevronDown } from "lucide-react";
 import Script from "next/script";
 import MuxPlayer from '@mux/mux-player-react';
 import SiteNavigation from "@/components/SiteNavigation";
+import { useSidebar } from "@/context/SidebarContext";
 import AppHeaders from "@/layout/AppHeaders";
 import {
   CheckCircle,
@@ -106,7 +107,7 @@ export default function CoursePage({ params }) {
   const [loading, setLoading] = useState(true);
 
   
-
+const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
 
   const [showVideoModal, setShowVideoModal] = useState(false);
 
@@ -364,8 +365,9 @@ const sortedSections =
           <div className="row">
 
             {/* ================= LEFT SIDE ================= */}
-            <div className="col-lg-8">
-              <br /><br /><br />
+            <div className="col-lg-8 order-2 order-lg-1">
+              <br />
+             {!isMobileOpen ? ( <><br /><br /> </>) : null}
 
 
               {/* ================= DYNAMIC SECTIONS RENDER ================= */}
@@ -974,7 +976,7 @@ const sortedSections =
             </div>
 
             {/* ================= RIGHT SIDE (STICKY) ================= */}
-            <div className="col-lg-4">
+            <div className="col-lg-4 order-1 order-lg-2">
               <div className="sticky-sidebar">
 
                 <div className="enroll-card">
@@ -1562,7 +1564,20 @@ const shouldShowVideo =
                           </span>
                         )}
 
-                        <div className="relative bg-white rounded-xl shadow-lg grid grid-cols-4 text-center text-black">
+                       <div className="
+  bg-white 
+  rounded-xl 
+  shadow-lg 
+  grid 
+  grid-cols-2 
+  lg:grid-cols-4 
+  text-center 
+  text-black
+  divide-y 
+  lg:divide-y-0 
+  lg:divide-x 
+  divide-gray-200
+">
                           <div className="py-6">
                             <p className="font-semibold">
                               {course.number_of_modules}
@@ -1587,9 +1602,9 @@ const shouldShowVideo =
                             <p className="font-semibold">English</p>
                             <p className="text-sm text-gray-600">Language</p>
                           </div>
-                          <span className="absolute top-6 bottom-6 left-1/4 w-px bg-gray-200" />
+                          {/* <span className="absolute top-6 bottom-6 left-1/4 w-px bg-gray-200" />
                           <span className="absolute top-6 bottom-6 left-2/4 w-px bg-gray-200" />
-                          <span className="absolute top-6 bottom-6 left-3/4 w-px bg-gray-200" />
+                          <span className="absolute top-6 bottom-6 left-3/4 w-px bg-gray-200" /> */}
                         </div>
                       </div>
 

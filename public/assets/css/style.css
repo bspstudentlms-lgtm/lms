@@ -134,7 +134,8 @@ span{}
 	color: #1a2d62;
 }
 @media only screen and (max-width:480px){
-.section-title p {width:100%;}
+.section-title p {width:100%; line-height: 44px !important;
+        font-size: 32px !important;}
 }
 .section-title p span{color: #ee1b24;}
 h1.section-title-white{color:#fff;}
@@ -894,7 +895,24 @@ position:relative;
 .home_content{padding-top:250px;position:relative;}
 .hc_pt{padding-top:150px;position:relative;}
 @media only screen and (max-width:768px) { 
-.home_content{padding-left:30px;padding-right: 20px;}
+.home_content{padding-top:100px !important;padding-left:5px;padding-right: 5px;}
+.home_bg {
+    height: 650px !important;
+    position: relative;
+}
+.home_ps{
+	display: none !important;
+}
+.single_tp {
+    padding: 20px 40px !important;
+}
+.single_tp p {
+    margin-bottom: 0px !important;
+}
+.ab_content h2 {
+    line-height: 44px !important;
+    font-size: 32px !important;
+}
 }
 .home_content h1 {
 	font-size: 80px;
@@ -903,7 +921,7 @@ position:relative;
 	margin-bottom: 20px;
 }
  @media only screen and (max-width:960px){
-.home_content h1 {font-size: 60px;line-height:70px;}
+.home_content h1 {font-size: 54px;line-height:70px;}
  }
 .home_content h1 span{color:#ee1b24;}
 .home_content p {
@@ -4665,3 +4683,21 @@ border: 2px solid #ee1b24!important;
 }
 /*END SHOP CSS*/
 
+
+@media (max-width: 768px) {
+
+  .main-header {
+    padding: 10px 15px;
+    border-radius: 0;
+  }
+
+  .logo img {
+    height: 32px;
+  }
+
+  .login-btn {
+    padding: 8px 18px;
+    font-size: 14px;
+  }
+
+}
