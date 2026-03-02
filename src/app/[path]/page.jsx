@@ -1481,12 +1481,12 @@ const sortedSections =
 								<div className="sf_contact">
 									<span className="ti-mobile"></span>
 									<h3>Phone number</h3>
-									<p>+91-8008002794</p>
+									<p>+91-8065912040</p>
 								</div>
 								<div className="sf_contact">
 									<span className="ti-email"></span>
 									<h3>Email Address</h3>
-									<p>info@backstagepass.co.in</p>
+									<p>learning@backstagepass.co.in</p>
 								</div>
 								<div className="sf_contact">
 									<span className="ti-map"></span>
