@@ -6,9 +6,14 @@ import Link from "next/link";
 import { ArrowRightIcon } from "@/icons";
 
 interface Course {
-  date: any;
+  course_per_completed: number;
+  recording_available(recording_available: any): unknown;
+  islivesession_missed(islivesession_missed: any): unknown;
+  watched_topics: number;
+  zoom_link: string;
+  date: string;
   webinar_status: number;
-  webinarstatus: ReactNode;
+  webinarstatus: string;
   coursetype: 2 | 1 | 3;
   last_watched_topic_id: number;
   is_coursecompleted: number;
