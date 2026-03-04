@@ -366,7 +366,7 @@ const hasRecording = Number(course.recording_available) === 1;
   }}
         className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
       >
-        Continue Watching
+        Continue Learning
         <ArrowRightIcon />
       </Link>
     )
@@ -424,7 +424,7 @@ const hasRecording = Number(course.recording_available) === 1;
          course.is_coursecompleted
           ? "Completed ✓"
           : course.watched_topics > 0 
-          ?   "Continue Watching"
+          ?   "Continue Learning"
           : cta.text 
         } </span>
       <ArrowRightIcon />
@@ -468,7 +468,7 @@ const hasRecording = Number(course.recording_available) === 1;
   }}
               className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#E11D2E] py-3 text-base font-semibold text-white"
             >
-              Continue Watching
+              Continue Learning
               <ArrowRightIcon />
             </Link>
           </div>

@@ -1455,7 +1455,7 @@ const sortedSections =
 							<div className="single_footer">
 								<h4>Courses</h4>
 								<ul>
-									<li><a target="_blank" href="/basics-of-maya-for-beginners">Basics of Maya</a></li>
+									<li><a target="_blank" href="/basics-of-maya-for-beginners">Basics of Maya for Beginners</a></li>
 									{/* <li><a href="#">Digital Marketing</a></li>
 									<li><a href="#">SEO Business</a></li>
 									<li><a href="#">Social Marketing</a></li>
@@ -1745,7 +1745,7 @@ const KeyFeatures = ({ course }) => {
                   <div class="container">
                     <div class="section-title">
                       <h2>Important </h2>
-                      <p>Key  <span><u>Features</u></span></p>
+                      <p>Key  <span>Features</span></p>
                     </div>
                     <div class="row">
 
@@ -1768,7 +1768,7 @@ const AwardsSection = () => {
       <div className="container">
         <div className="section-title">
           <p>
-            Our <span><u>Awards</u></span>
+            Our <span>Awards</span>
           </p>
         </div>
 
@@ -1808,7 +1808,7 @@ const CertificateSection = ({ course }) => {
             <div className="col-lg-6 col-sm-12 col-xs-12">
               <div className="cp_content">
                 <h2>
-                  Let Your <span><u>Certificates</u></span> Speak
+                  Let Your <span>Certificates</span> Speak
                 </h2>
                 <ul>
                   <li><span className="ti-check"></span>Certificate are awarded immediately upon <br/>successfully completing all course modules.</li>
@@ -1855,7 +1855,7 @@ const Outcomes = ({ course }) => {
                           {/* <h4>Best Online Learning Platform</h4> */}
                           <h2>After this {Number(course.course_type) === 1
                             ? "Course"
-                            : "Webinar"},   <span><u>You will be</u></span> Able to</h2>
+                            : "Webinar"},   <span>You will be</span> Able to</h2>
                           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                               <ul className="space-y-3">
@@ -1899,7 +1899,7 @@ const Topics = ({ course }) => {
       
 <div className="section-title">
           <p>
-            Course Topics <span><u>You will Learn</u></span>
+            Course Topics <span>You will Learn</span>
           </p>
         </div>
       <div className="space-y-6">
@@ -1998,7 +1998,7 @@ const TopCompaniesSection = () => {
         <div className="cp_content text-left mb-8">
           <h2>
             Our Learners Work Across{" "}
-            <span><u>Top Companies</u></span>
+            <span>Top Companies</span>
           </h2>
         </div>
 
@@ -2037,7 +2037,7 @@ const SystemRequirements = ({ course }) => {
                       >
                         <div class="cp_content">
                           {/* <h4>Best Online Learning Platform</h4> */}
-                          <h2>System Requirements for <span><u>{course.requirements_main_title} </u></span></h2>
+                          <h2>System Requirements for <span>{course.requirements_main_title} </span></h2>
 
 
                           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -2080,7 +2080,7 @@ const Audience = ({ course }) => {
                       {/* <h2>Important </h2> */}
                       <p> This {Number(course.course_type) === 1
                         ? "Course"
-                        : "Webinar"} is for You,  <span><u>If You are</u></span></p>
+                        : "Webinar"} is for You,  <span>If You are</span></p>
                     </div>
                     <div class="row">
 
@@ -2163,7 +2163,7 @@ const FaqSection = ({ course }) => {
                     <div class="container">
                       <div className="section-title">
                         <h2>Frequently Asked</h2>
-                        <p>General <span><u>Questions</u></span></p>
+                        <p>General <span>Questions</span></p>
                       </div>
 
                       <div className="space-y-5">

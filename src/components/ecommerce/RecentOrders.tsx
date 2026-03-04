@@ -102,6 +102,7 @@ export default function DashboardCourses() {
                     Not Enrolled
                   </span>
                 )}
+                
               </div>
             </div>
 
@@ -138,7 +139,7 @@ export default function DashboardCourses() {
        }}
                   className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#B91C1C]"
                 >
-                  {isStarted ? "Continue Watching" : "Start Course"}
+                  {isStarted ? "Continue Learning" : "Start Course"}
                   <ArrowRightIcon />
                 </Link>
               )}

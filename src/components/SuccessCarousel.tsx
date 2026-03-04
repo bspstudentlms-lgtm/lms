@@ -52,7 +52,7 @@ const students: Student[] = [
     id: 5,
     photo: "https://backstagepass.co.in/zgast/Ansh_Srivastava.jpg",
     name: "Ansh Srivastava",
-    course: "M.Sc. Game Technology (Second Year)",
+    course: "M.Sc. Game Technology (2nd Year)",
     testimonial:
       "Learning Game Design taught me how every mechanic, level flow, and system ties back to creating fun for the player. It wasn’t just theory—it was about breaking down why games feel engaging and how to design mechanics that actually work in real gameplay. On the Game Art side, I learned how shapes, silhouettes, textures, and styles come together to match a game's mood and build a strong player experience. Backstage Pass makes you feel like you’re in the real game dev grind, but with the coolest vibe.",
   },
@@ -60,7 +60,7 @@ const students: Student[] = [
     id: 6,
     photo: "https://backstagepass.co.in/zgast/Shane_Warren_Silveira.jpg",
     name: "Shane Warren Silveira",
-    course: "B.Sc. (Hons.) CSGD – 4th Year",
+    course: "B.Sc. (Hons.) CSGD (4th Year)",
     testimonial:
       "Through Game Development, I learned how to design mechanics, build engaging systems, and implement technical features that bring interactive ideas to life. In Game Design, I understood how gameplay, story, and aesthetics shape player experiences. Together, these disciplines taught me how creativity and technology must work hand in hand, helping me think critically, solve problems systematically, and design with purpose. Backstage Pass and its mentors provide the perfect launchpad for aspiring game creators.",
   },

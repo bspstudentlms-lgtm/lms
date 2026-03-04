@@ -349,16 +349,16 @@ const HomePageContent = () => {
 						</div>
 						<div className="col-lg-6 col-sm-6 col-xs-12">
 							<div className="home_me_img">
-								<img src="https://backstagepass.co.in/InternshipPlacement-307438cb.webp" className="img-fluid" alt="" />
+								<img src="images/home-banner.png" style={{width: "85%"}} className="img-fluid" alt="" />
 								<div className="home_ps">
 									<img src="assets/images/icon/user2.svg" alt="" />
-									<h2>7500+</h2>
+									<h2>300+</h2>
 									<span>Active student</span>
 								</div>
 								<div className="home_ps2">
 									<img src="assets/images/icon/file2.svg" alt="" />
-									<h2>4500+</h2>
-									<span>Online Course</span>
+									<h2>100+</h2>
+									<span>Video Lessions</span>
 								</div>
 							</div>
 						</div>
@@ -403,13 +403,13 @@ const HomePageContent = () => {
 					<div className="row">
 						<div className="col-lg-6 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.2s" data-wow-offset="0">
 							<div className="ab_img">
-								<img src="images/our.png" className="img-fluid" alt="image" />
+								<img src="images/about-bsp.png" className="img-fluid" alt="image" />
 
 							</div>
 						</div>
 						<div className="col-lg-6 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
 							<div className="ab_content">
-								<h2>Learn new skills to go <u><span>ahead for your </span></u> career.</h2>
+								<h2>Learn new skills to go  <span>ahead for your </span>  career</h2>
 								<p>Backstage Pass LMS is built for creators who want more than tutorials.</p>
 							</div>
 							<div className="abmv">
@@ -433,8 +433,8 @@ const HomePageContent = () => {
 			<section id="counts" className="counts section-padding">
 				<div className="container" data-aos="fade-up">
 					<div className="section-title">
-						<h2>Some Fun Fact</h2>
-						<p>Our Great <span><u>Achievement</u></span></p>
+						<h2>Recognition</h2>
+						<p>Our <span> Journey </span> So Far </p>
 					</div>
 					<div className="row gy-4">
 						<div className="col-lg-3 col-md-6">
@@ -482,8 +482,8 @@ const HomePageContent = () => {
 			<div className="partner-logo section-padding">
 				<div className="container">
 					<div className="section-title">
-						<h2>Trusted</h2>
-						<p>Company Arround <span><u> The World!</u></span></p>
+						<h2>Our Learners</h2>
+						<p> Work Across  <span> Top Companies </span></p>
 					</div>
 					<div className="row">
 						<div className="col-lg-12 text-center">
@@ -560,7 +560,7 @@ const HomePageContent = () => {
 				<div className="container">
 					<div className="section-title">
 						<h2>Why Choose Backstage Pass</h2>
-						<p>Find The <span><u>Best Features </u></span> Of Backstage Pass.</p>
+						<p>Find The <span> Best Features  </span> Of Backstage Pass Online</p>
 					</div>
 					<div className="row">
 						<div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
@@ -627,7 +627,7 @@ const HomePageContent = () => {
 				<div className="container">
 					<div className="section-title">
 						<h2>Popular Courses</h2>
-						<p>Choose Our <span><u>Top Courses</u></span></p>
+						<p>Choose Our <span> Top Courses </span></p>
 					</div>
 
 
@@ -653,7 +653,7 @@ const HomePageContent = () => {
 						<div className="col-lg-6 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
 							<div className="cp_content">
 								<h4>Best Online Learning Platform</h4>
-								<h2>One Platfrom & Many <span><u>Courses</u></span> For You</h2>
+								<h2>One Platfrom & Many <span> Courses </span> For You</h2>
 								<p>From blogs to emails to ad copies, auto-generate catchy, original, and high-converting copies in popular tones languages.</p>
 								<ul>
 									<li><span className="ti-check"></span>9/10 Average Satisfaction Rate</li>
@@ -695,7 +695,7 @@ const HomePageContent = () => {
 				<div className="container">
 					<div className="section-title">
 						<h2>Start Learning </h2>
-						<p>Popular <span><u>Topics To Learn</u></span> From Today.</p>
+						<p>Popular <span> Topics To Learn </span> From Today</p>
 					</div>
 					<div className="row">
 						{topics.slice(0, visibleTopics).map((topic, index) => (
@@ -730,7 +730,7 @@ const HomePageContent = () => {
 		<div className="container">
 			<div className="section-title">
 				<h2>Upcoming Events</h2>
-				<p>Join With Us <span><u>Our Events</u></span></p>
+				<p>Join With Us <span> Our Events </span></p>
 			</div>				
 			<div className="row">				
 				<div className="col-lg-4 col-sm-6 col-xs-12">
@@ -803,7 +803,7 @@ const HomePageContent = () => {
 				<div className="container">
 					<div className="section-title">
 						<h2>Testimonial</h2>
-						<p>What Says <span><u>Our Students</u></span></p>
+						<p>What Says <span> Our Students </span></p>
 					</div>
 
 					<SuccessCarousel />
@@ -820,7 +820,7 @@ const HomePageContent = () => {
 	   <div className="container">
 			<div className="section-title">
 				<h2>Team Member</h2>
-				<p>Our Expert <span><u>Instructors</u></span></p>
+				<p>Our Expert <span> Instructors </span></p>
 			</div>		
 			<div className="row">								
 				<div className="col-lg-3 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
@@ -891,7 +891,7 @@ const HomePageContent = () => {
 							<div className="single_footer">
 								<a href="#"><img src="images/Bsp_White.png" alt="" /></a>
 								<p>Building future game developers through structured, practical learning.
-									Create real projects. Build real skills. Grow your career.
+									Create real projects. Build real skills. Grow your career
 								</p>
 							</div>
 						</div>
@@ -899,7 +899,7 @@ const HomePageContent = () => {
 							<div className="single_footer">
 								<h4>Courses</h4>
 								<ul>
-									<li><a target="_blank" href="/basics-of-maya-for-beginners">Basics of Maya</a></li>
+									<li><a target="_blank" href="/basics-of-maya-for-beginners">Basics of Maya for Beginners</a></li>
 									{/* <li><a href="#">Digital Marketing</a></li>
 									<li><a href="#">SEO Business</a></li>
 									<li><a href="#">Social Marketing</a></li>

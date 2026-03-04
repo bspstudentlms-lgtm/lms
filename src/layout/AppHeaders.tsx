@@ -8,7 +8,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useSession } from "next-auth/react";
- import mixpanel from "mixpanel-browser";
+import mixpanel from "mixpanel-browser";
 
 
 const AppHeader: React.FC = () => {
@@ -31,11 +31,11 @@ const AppHeader: React.FC = () => {
     }
   };
 
-// const hideHeaderRoutes = ["/", "/all-courses"];
+  // const hideHeaderRoutes = ["/", "/all-courses"];
 
-// if (pathname && hideHeaderRoutes.includes(pathname)) {
-//   return null;
-// }
+  // if (pathname && hideHeaderRoutes.includes(pathname)) {
+  //   return null;
+  // }
 
 
   const toggleApplicationMenu = () => {
@@ -59,150 +59,148 @@ const AppHeader: React.FC = () => {
     };
   }, []);
 
- 
-const handleSigninClick = () => {
-  mixpanel.track("Login Button Clicked", {
-    location: "Header",
-  });
 
-  router.push("/signin");
-};
+  const handleSigninClick = () => {
+    mixpanel.track("Login Button Clicked", {
+      location: "Header",
+    });
+
+    router.push("/signin");
+  };
 
 
   const { data: session, status } = useSession();
-  
+
   const hasCheckedRef = useRef(false);
- const safeRedirect = (path: string) => {
-  if (window.location.pathname !== path) {
-    router.replace(path);
-  }
-};
+  const safeRedirect = (path: string) => {
+    if (window.location.pathname !== path) {
+      router.replace(path);
+    }
+  };
 
-useEffect(() => {
-  const loginType = localStorage.getItem("loginType");
-  if (loginType === "manual") return;
-  if (status === "loading") return;
+  useEffect(() => {
+    const loginType = localStorage.getItem("loginType");
+    if (loginType === "manual") return;
+    if (status === "loading") return;
 
-  if (hasCheckedRef.current) return;
-  hasCheckedRef.current = true;
+    if (hasCheckedRef.current) return;
+    hasCheckedRef.current = true;
 
-  const redirectPath =
-    localStorage.getItem("postLoginRedirect") ||
-    window.location.pathname;
+    const redirectPath =
+      localStorage.getItem("postLoginRedirect") ||
+      window.location.pathname;
 
     console.log("STATUS:", status);
-    console.log("SESSION:", session); 
+    console.log("SESSION:", session);
 
-  if (status === "authenticated" && session?.user?.email) {
-    const email = session.user.email;
+    if (status === "authenticated" && session?.user?.email) {
+      const email = session.user.email;
 
-    const checkStudent = async () => {
-      try {
-        const res = await fetch(
-          `https://www.backstagepass.co.in/reactapi/check-student.php?email=${email}`,
-          { cache: "no-store" }
-        );
+      const checkStudent = async () => {
+        try {
+          const res = await fetch(
+            `https://www.backstagepass.co.in/reactapi/check-student.php?email=${email}`,
+            { cache: "no-store" }
+          );
 
-        const data = await res.json();
-        
-        if (data.status === 200) {
-          localStorage.setItem("userId", data.userid);
-          localStorage.setItem("username", data.username);
-          localStorage.setItem("email", data.email);
-          localStorage.setItem("role", data.role);
+          const data = await res.json();
 
-          const enrolled = String(data.enrolled).trim();
-          localStorage.setItem("enrolledcourses", String(enrolled));
+          if (data.status === 200) {
+            localStorage.setItem("userId", data.userid);
+            localStorage.setItem("username", data.username);
+            localStorage.setItem("email", data.email);
+            localStorage.setItem("role", data.role);
 
-          if (enrolled) {
-           
-            safeRedirect("/mycourses");
-          } else {
-           
-            safeRedirect(redirectPath);
-          }
-        } else {
-          const user = session.user;
-          if (!user) return;
+            const enrolled = String(data.enrolled).trim();
+            localStorage.setItem("enrolledcourses", String(enrolled));
 
-          localStorage.setItem("username", user.name ?? "");
-          localStorage.setItem("email", user.email ?? "");
-          localStorage.setItem("image", user.image ?? "");
-          localStorage.setItem("role", "sos");
-            if(redirectPath=='/'){
-            if (window.location.pathname !== "/dashboard") {
-            window.location.replace("/dashboard");
-          }
-            }else{
-            safeRedirect(redirectPath);
+            if (enrolled) {
+
+              safeRedirect("/mycourses");
+            } else {
+
+              safeRedirect(redirectPath);
             }
+          } else {
+            const user = session.user;
+            if (!user) return;
+
+            localStorage.setItem("username", user.name ?? "");
+            localStorage.setItem("email", user.email ?? "");
+            localStorage.setItem("image", user.image ?? "");
+            localStorage.setItem("role", "sos");
+            if (redirectPath == '/') {
+              if (window.location.pathname !== "/dashboard") {
+                window.location.replace("/dashboard");
+              }
+            } else {
+              safeRedirect(redirectPath);
+            }
+          }
+
+          // ✅ VERY IMPORTANT
+          localStorage.removeItem("postLoginRedirect");
+
+        } catch (err) {
+          console.error("Login redirect error:", err);
         }
+      };
 
-        // ✅ VERY IMPORTANT
-        localStorage.removeItem("postLoginRedirect");
-
-      } catch (err) {
-        console.error("Login redirect error:", err);
-      }
-    };
-
-    checkStudent();
-  }
-}, [status, session]);
+      checkStudent();
+    }
+  }, [status, session]);
 
 
 
-  
-const handleDashboard = () => {
+
+  const handleDashboard = () => {
     router.push("/dashboard");
   };
 
-  
-    const { user } = useAuth();
-  
-    const role = user?.role;
-  
-    const roleLabel = user?.role === "mentor" ? "Mentor Menu" : "Student Menu";
 
-    console.log("STATUS:", status);
-    console.log("SESSION:", session); 
+  const { user } = useAuth();
 
- return (
-  <div
-    id="navigation"
-    className="fixed-top navbar-light bg-faded site-navigation"
-  >
-    <div className="container">
-      <div className="header-wrapper">
+  const role = user?.role;
 
-        {/* Logo */}
-        <div className="site-logo">
-          <Link href="/">
-            <img
-              src="https://backstagepass.co.in/newlogo-324ee245.webp"
-              alt="logo"
-            />
-          </Link>
+  const roleLabel = user?.role === "mentor" ? "Mentor Menu" : "Student Menu";
+
+  console.log("STATUS:", status);
+  console.log("SESSION:", session);
+
+  return (
+    <div
+      id="navigation"
+      className="fixed-top navbar-light bg-faded site-navigation"
+    >
+      <div className="container">
+        <div className="header-wrapper">
+
+          {/* Logo */}
+          <div className="site-logo">
+            <Link href="/">
+              <img
+                src="https://backstagepass.co.in/newlogo-324ee245.webp"
+                alt="logo"
+              />
+            </Link>
+          </div>
+
+          {/* Right Side Button */}
+          <div className="call_to_action">
+            {status === "loading" ? null :
+              (status === "authenticated" || localStorage.getItem("email")) ? (
+                <UserDropdown />
+              ) : (
+                <button className="btn_one" onClick={handleSigninClick}>
+                  Login
+                </button>
+              )}
+          </div>
+
         </div>
-
-        {/* Right Side Button */}
-        <div className="call_to_action">
-        {status === "loading" ? null : 
-(status === "authenticated" || localStorage.getItem("email")) ? (
-  <button className="btn_one" onClick={handleDashboard}>
-    Dashboard
-  </button>
-) : (
-  <button className="btn_one" onClick={handleSigninClick}>
-    Login 
-  </button>
-)}
-        </div>
-
       </div>
     </div>
-  </div>
-);
+  );
 };
 
 export default AppHeader;

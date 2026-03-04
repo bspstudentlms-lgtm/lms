@@ -61,221 +61,221 @@ const styles = `
 `;
 
 const HomePageContent = () => {
- const [current, setCurrent] = useState(0);
- 
- const [currents, setCurrents] = useState(0);
- 
-useEffect(() => {
-  const links = [
-    "/assets/bootstrap/css/bootstrap.min.css",
-    "/assets/fonts/font-awesome.min.css",
-    "/assets/fonts/themify-icons.css",
-    "/assets/owlcarousel/css/owl.carousel.css",
-    "/assets/owlcarousel/css/owl.theme.css",
-    "/assets/css/slicknav.css",
-    "/assets/css/magnific-popup.css",
-    "/assets/css/animate.css",
-    "/assets/css/style.css",
-  ];
+  const [current, setCurrent] = useState(0);
 
-  const addedLinks: HTMLLinkElement[] = [];
+  const [currents, setCurrents] = useState(0);
 
-  links.forEach((href) => {
-    if (!document.querySelector(`link[href="${href}"]`)) {
-      const link = document.createElement("link");
-      link.rel = "stylesheet";
-      link.href = href;
-      document.head.appendChild(link);
-      addedLinks.push(link);
-    }
-  });
+  useEffect(() => {
+    const links = [
+      "/assets/bootstrap/css/bootstrap.min.css",
+      "/assets/fonts/font-awesome.min.css",
+      "/assets/fonts/themify-icons.css",
+      "/assets/owlcarousel/css/owl.carousel.css",
+      "/assets/owlcarousel/css/owl.theme.css",
+      "/assets/css/slicknav.css",
+      "/assets/css/magnific-popup.css",
+      "/assets/css/animate.css",
+      "/assets/css/style.css",
+    ];
 
-  // ✅ CLEANUP (VERY IMPORTANT)
-  return () => {
-    addedLinks.forEach((link) => {
-      document.head.removeChild(link);
+    const addedLinks: HTMLLinkElement[] = [];
+
+    links.forEach((href) => {
+      if (!document.querySelector(`link[href="${href}"]`)) {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = href;
+        document.head.appendChild(link);
+        addedLinks.push(link);
+      }
     });
+
+    // ✅ CLEANUP (VERY IMPORTANT)
+    return () => {
+      addedLinks.forEach((link) => {
+        document.head.removeChild(link);
+      });
+    };
+  }, []);
+
+
+  useEffect(() => {
+    const handleLoad = () => {
+      document.body.classList.add("loaded");
+
+      setTimeout(() => {
+        const loader = document.getElementById("loader-wrapper");
+        if (loader) loader.style.display = "none";
+      }, 900);
+    };
+
+    if (document.readyState === "complete") {
+      handleLoad();
+    } else {
+      window.addEventListener("load", handleLoad);
+    }
+
+    return () => {
+      window.removeEventListener("load", handleLoad);
+    };
+  }, []);
+
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrents((prev) => prev + 1);
+    }, 2000); // autoplay every 2s
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (currents >= logos.length) {
+      setTimeout(() => {
+        setCurrents(0);
+      }, 1000); // wait for transition before reset
+    }
+  }, [currents]);
+
+  // Auto-play effect
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+    }, 7000); // 4 seconds
+    return () => clearInterval(timer);
+  }, []);
+
+  const nextSlide = () => {
+    setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
   };
-}, []);
 
-
-useEffect(() => {
-  const handleLoad = () => {
-    document.body.classList.add("loaded");
-
-    setTimeout(() => {
-      const loader = document.getElementById("loader-wrapper");
-      if (loader) loader.style.display = "none";
-    }, 900);
+  const prevSlide = () => {
+    setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
   };
 
-  if (document.readyState === "complete") {
-    handleLoad();
-  } else {
-    window.addEventListener("load", handleLoad);
-  }
-
-  return () => {
-    window.removeEventListener("load", handleLoad);
-  };
-}, []);
+  return (
+    <>
 
 
-   useEffect(() => {
-     const interval = setInterval(() => {
-       setCurrents((prev) => prev + 1);
-     }, 2000); // autoplay every 2s
- 
-     return () => clearInterval(interval);
-   }, []);
- 
-   useEffect(() => {
-     if (currents >= logos.length) {
-       setTimeout(() => {
-         setCurrents(0);
-       }, 1000); // wait for transition before reset
-     }
-   }, [currents]);
- 
-   // Auto-play effect
-   useEffect(() => {
-     const timer = setInterval(() => {
-       setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-     }, 7000); // 4 seconds
-     return () => clearInterval(timer);
-   }, []);
- 
-   const nextSlide = () => {
-     setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-   };
- 
-   const prevSlide = () => {
-     setCurrent((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
-   };
 
-return (
-  <>
- 
 
-    
-  
-    <div id="loader-wrapper">
+      <div id="loader-wrapper">
         <div id="loader"></div>
         <div className="loader-section section-left"></div>
         <div className="loader-section section-right"></div>
-    </div>
-  
-  
-    
- {/* <SiteNavigation /> */}
-    
-<AppHeaders />
-  
-<br/><br/><br/><br/>
-  
-  
-  <div className="best-cpurse section-padding">
-          <div className="container">
-            <div className="section-title">
-              <h2>Popular Courses</h2>
-              <p>Choose Our <span><u>Top Courses</u></span></p>
-            </div>
-            
-              
-              
-              <CourseCarouselNoScrollAll />
-              
-              
-              
-              
-           
+      </div>
+
+
+
+      {/* <SiteNavigation /> */}
+
+      <AppHeaders />
+
+      <br /><br /><br /><br />
+
+
+      <div className="best-cpurse section-padding">
+        <div className="container">
+          <div className="section-title">
+            <h2>Popular Courses</h2>
+            <p>Choose Our <span>Top Courses</span></p>
           </div>
+
+
+
+          <CourseCarouselNoScrollAll />
+
+
+
+
+
         </div>
+      </div>
 
- 
-      
 
-  
-  
 
-  
-  <div className="footer section-padding" style={{ paddingTop: "80px" }}>
-				<div className="container">
-					<div className="row">
-						<div className="col-lg-3 col-sm-6 col-xs-12">
-							<div className="single_footer">
-								<a href="#"><img src="images/Bsp_White.png" alt="" /></a>
-								<p>Building future game developers through structured, practical learning.
-									Create real projects. Build real skills. Grow your career.
-								</p>
-							</div>
-						</div>
-						<div className="col-lg-3 col-sm-6 col-xs-12">
-							<div className="single_footer">
-								<h4>Courses</h4>
-								<ul>
-									<li><a target="_blank" href="/basics-of-maya-for-beginners">Basics of Maya</a></li>
-									{/* <li><a href="#">Digital Marketing</a></li>
+
+
+
+
+
+      <div className="footer section-padding" style={{ paddingTop: "80px" }}>
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-3 col-sm-6 col-xs-12">
+              <div className="single_footer">
+                <a href="#"><img src="images/Bsp_White.png" alt="" /></a>
+                <p>Building future game developers through structured, practical learning.
+                  Create real projects. Build real skills. Grow your career.
+                </p>
+              </div>
+            </div>
+            <div className="col-lg-3 col-sm-6 col-xs-12">
+              <div className="single_footer">
+                <h4>Courses</h4>
+                <ul>
+                  <li><a target="_blank" href="/basics-of-maya-for-beginners">Basics of Maya for Beginners</a></li>
+                  {/* <li><a href="#">Digital Marketing</a></li>
 									<li><a href="#">SEO Business</a></li>
 									<li><a href="#">Social Marketing</a></li>
 									<li><a href="#">Graphic Design</a></li>
 									<li><a href="#">Website Development</a></li> */}
-								</ul>
-							</div>
-						</div>
-						<div className="col-lg-3 col-sm-6 col-xs-12">
-							<div className="single_footer">
-								<h4>Free Webinars</h4>
-								<ul>
-									<li><a target="_blank" href="/the-art-of-material-creation-in-substance-designer">The Art of Material Creation in Substance Designer</a></li>
-									<li><a target="_blank" href="/Build-a-Game-In-Just-1-Hour">Build a Game In Just 1 Hour!</a></li>
-									<li><a target="_blank" href="https://backstagepass.co.in/landingpage/certificate-program-in-essentials-of-game-design/">Build A Game-ready 3D Characters Like A Pro</a></li>
-									<li><a target="_blank" href="/organic-material-creation-using-substance-designer">Organic Material Creation Using Substance Designer</a></li>
-								</ul>
-							</div>
-						</div>
-						<div className="col-lg-3 col-sm-6 col-xs-12">
-							<div className="single_footer">
-								<h4>Contact Info</h4>
-								<div className="sf_contact">
-									<span className="ti-mobile"></span>
-									<h3>Phone number</h3>
-									<p>+91-8065912040</p>
-								</div>
-								<div className="sf_contact">
-									<span className="ti-email"></span>
-									<h3>Email Address</h3>
-									<p>learning@backstagepass.co.in</p>
-								</div>
-								<div className="sf_contact">
-									<span className="ti-map"></span>
-									<h3>Office Address</h3>
-									<p>Plot No. 72, Jubilee Enclave, HITEC City, Hyderabad, Telangana 500081</p>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div className="row fc">
-						<div className="col-lg-6 col-sm-6 col-xs-12">
-							<div className="footer_copyright">
-								<p>&copy; 2026. All Rights Reserved.</p>
-							</div>
-						</div>
-						<div className="col-lg-6 col-sm-6 col-xs-12">
-							<div className="footer_menu">
-								<ul>
-									<li><a href="#">Terms of use</a></li>
-									<li><a href="#">Privacy Policy</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-  
-    <div>
+                </ul>
+              </div>
+            </div>
+            <div className="col-lg-3 col-sm-6 col-xs-12">
+              <div className="single_footer">
+                <h4>Free Webinars</h4>
+                <ul>
+                  <li><a target="_blank" href="/the-art-of-material-creation-in-substance-designer">The Art of Material Creation in Substance Designer</a></li>
+                  <li><a target="_blank" href="/Build-a-Game-In-Just-1-Hour">Build a Game In Just 1 Hour!</a></li>
+                  <li><a target="_blank" href="https://backstagepass.co.in/landingpage/certificate-program-in-essentials-of-game-design/">Build A Game-ready 3D Characters Like A Pro</a></li>
+                  <li><a target="_blank" href="/organic-material-creation-using-substance-designer">Organic Material Creation Using Substance Designer</a></li>
+                </ul>
+              </div>
+            </div>
+            <div className="col-lg-3 col-sm-6 col-xs-12">
+              <div className="single_footer">
+                <h4>Contact Info</h4>
+                <div className="sf_contact">
+                  <span className="ti-mobile"></span>
+                  <h3>Phone number</h3>
+                  <p>+91-8065912040</p>
+                </div>
+                <div className="sf_contact">
+                  <span className="ti-email"></span>
+                  <h3>Email Address</h3>
+                  <p>learning@backstagepass.co.in</p>
+                </div>
+                <div className="sf_contact">
+                  <span className="ti-map"></span>
+                  <h3>Office Address</h3>
+                  <p>Plot No. 72, Jubilee Enclave, HITEC City, Hyderabad, Telangana 500081</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row fc">
+            <div className="col-lg-6 col-sm-6 col-xs-12">
+              <div className="footer_copyright">
+                <p>&copy; 2026. All Rights Reserved.</p>
+              </div>
+            </div>
+            <div className="col-lg-6 col-sm-6 col-xs-12">
+              <div className="footer_menu">
+                <ul>
+                  <li><a href="#">Terms of use</a></li>
+                  <li><a href="#">Privacy Policy</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-   {/* <div className="relative w-full mx-auto">
+      <div>
+
+        {/* <div className="relative w-full mx-auto">
      
       <div className="relative overflow-hidden shadow-lg h-[150px] sm:h-[350px]">
         {slides.map((slide, index) => (
@@ -312,7 +312,6 @@ return (
 
      
     </div> */}
-   
 
 
 
@@ -320,57 +319,58 @@ return (
 
 
 
-    {/* <main className="px-4 py-3 sm:p-6">
+
+        {/* <main className="px-4 py-3 sm:p-6">
       <Corporate />
     </main> */}
-{/* 
+        {/* 
        <main className="px-4 py-3 sm:p-6">
       <HeroSection />
     </main> */}
 
-    {/* <main className="px-4 py-3 sm:p-6">
+        {/* <main className="px-4 py-3 sm:p-6">
       <ResourceBanner />
     </main> */}
 
-      {/* <main>
+        {/* <main>
       <Footer />
     </main> */}
-    
 
-    
 
-    
 
-    </div>
 
-    <>
-  {/* jQuery FIRST */}
-  <Script
-  src="https://code.jquery.com/jquery-3.6.0.min.js"
-  strategy="beforeInteractive"
-/>
 
-  {/* Bootstrap */}
-  <Script
-    src="/assets/bootstrap/js/bootstrap.min.js"
-    strategy="afterInteractive"
-  />
 
-  {/* Plugins */}
-  <Script
-    src="/assets/js/jquery.slicknav.js"
-    strategy="afterInteractive"
-  />
-  <Script
-  src="/assets/owlcarousel/js/owl.carousel.min.js"
-  strategy="afterInteractive"
-/>
+      </div>
 
-<Script
-  id="testimonial-carousel-init"
-  strategy="afterInteractive"
->
-{`
+      <>
+        {/* jQuery FIRST */}
+        <Script
+          src="https://code.jquery.com/jquery-3.6.0.min.js"
+          strategy="beforeInteractive"
+        />
+
+        {/* Bootstrap */}
+        <Script
+          src="/assets/bootstrap/js/bootstrap.min.js"
+          strategy="afterInteractive"
+        />
+
+        {/* Plugins */}
+        <Script
+          src="/assets/js/jquery.slicknav.js"
+          strategy="afterInteractive"
+        />
+        <Script
+          src="/assets/owlcarousel/js/owl.carousel.min.js"
+          strategy="afterInteractive"
+        />
+
+        <Script
+          id="testimonial-carousel-init"
+          strategy="afterInteractive"
+        >
+          {`
   if (window.$ && $.fn.owlCarousel) {
     $("#testimonial-slider").owlCarousel({
       items: 3,
@@ -394,20 +394,20 @@ return (
     console.error("OwlCarousel not loaded");
   }
 `}
-</Script>
+        </Script>
 
 
-  <Script
-    src="/assets/js/purecounter_vanilla.js"
-    strategy="afterInteractive"
-  />
-  <Script
-    src="/assets/js/wow.min.js"
-    strategy="afterInteractive"
-  />
- </>
-  {/* OPTIONAL: Remove scripts.js later */}
-  {/* <Script src="/assets/js/scripts.js" strategy="afterInteractive" /> */}
+        <Script
+          src="/assets/js/purecounter_vanilla.js"
+          strategy="afterInteractive"
+        />
+        <Script
+          src="/assets/js/wow.min.js"
+          strategy="afterInteractive"
+        />
+      </>
+      {/* OPTIONAL: Remove scripts.js later */}
+      {/* <Script src="/assets/js/scripts.js" strategy="afterInteractive" /> */}
 
     </>
   );

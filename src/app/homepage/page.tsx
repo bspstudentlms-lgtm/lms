@@ -871,7 +871,7 @@ return (
 							<div className="single_footer">
 								<h4>Courses</h4>
 								<ul>
-									<li><a target="_blank" href="/basics-of-maya-for-beginners">Basics of Maya</a></li>
+									<li><a target="_blank" href="/basics-of-maya-for-beginners">Basics of Maya for Beginners</a></li>
 									{/* <li><a href="#">Digital Marketing</a></li>
 									<li><a href="#">SEO Business</a></li>
 									<li><a href="#">Social Marketing</a></li>
