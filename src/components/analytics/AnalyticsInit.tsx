@@ -18,9 +18,11 @@ export default function AnalyticsInit() {
       const d = document;
       const g = d.createElement("script");
       const s = d.getElementsByTagName("script")[0];
+
       g.async = true;
       g.src =
         "https://cdn.matomo.cloud/learningco.matomo.cloud/container_aSiSUU5A.js";
+
       s.parentNode?.insertBefore(g, s);
     }
 
@@ -34,7 +36,26 @@ export default function AnalyticsInit() {
 
       w.__mixpanel_inited__ = true;
     }
+
+    /* ================= GOOGLE TAG MANAGER ================= */
+    w.dataLayer = w.dataLayer || [];
+
+    if (!w.__gtm_inited__) {
+      w.dataLayer.push({
+        "gtm.start": new Date().getTime(),
+        event: "gtm.js",
+      });
+
+      const gtmScript = document.createElement("script");
+      gtmScript.async = true;
+      gtmScript.src =
+        "https://www.googletagmanager.com/gtm.js?id=GTM-5RFGJJ2Q";
+
+      document.head.appendChild(gtmScript);
+
+      w.__gtm_inited__ = true;
+    }
   }, []);
 
-  return null; // no UI
+  return null; // No UI rendered
 }
