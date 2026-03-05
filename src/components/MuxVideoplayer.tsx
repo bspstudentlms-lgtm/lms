@@ -185,6 +185,7 @@ const handlePlay = () => {
     <MuxPlayer
   ref={playerRef}
   playbackId={video.playback_id}
+  poster=""
   currentTime={resumeTime}
   onTimeUpdate={handleTimeUpdate}
   onEnded={handleEnded}
