@@ -127,7 +127,7 @@ span{}
 .section-title p {
 	width: 80%;
 	margin: 0;
-	font-size: 42px;
+	font-size: 35px;
 	font-weight: 600;
 	text-transform: capitalize;
 	line-height: 46px;
@@ -892,7 +892,7 @@ position:relative;
 height:700px;
 position:relative;
 }
-.home_content{padding-top:250px;position:relative;}
+.home_content{padding-top:200px;position:relative;}
 .hc_pt{padding-top:150px;position:relative;}
 @media only screen and (max-width:768px) { 
 .home_content{padding-top:100px !important;padding-left:5px;padding-right: 5px;}
@@ -911,7 +911,7 @@ position:relative;
 }
 .ab_content h2 {
     line-height: 44px !important;
-    font-size: 32px !important;
+    font-size: 35px !important;
 }
 }
 .home_content h1 {
@@ -1093,7 +1093,7 @@ line-height:70px;
 	margin-bottom: 20px;
 	text-transform: capitalize;
 	line-height: 54px;
-	font-size: 44px;
+	font-size: 35px;
 }
 .ab_content h2 span{color: #ee1b24;}
 .ab_content h2 u {
@@ -2145,17 +2145,17 @@ margin:30px 0;
 }
 .cp_content h2 {
 	font-weight: 600;
-	font-size: 42px;
+	font-size: 32px;
 	margin-bottom: 20px;
 }
 .cp_content h2 span{color:#ee1b24;}
 .cp_content p{margin-bottom: 20px;}
 .cp_content ul{margin-bottom: 40px;}
 .cp_content ul li {
-	font-weight: 600;
+	font-weight: 400;
     /* line-height: 36px; */
     font-size:  16px;
-    color: #1a2d62;
+    color: #888;
     display: flex;
     align-items: flex-start;
     margin-bottom: 20px;
@@ -2259,9 +2259,9 @@ font-size: 30px;
 }
 .single_tca h2{overflow: hidden;}
 .single_tca h2 a {
-	color: #1a2d62;
-	font-size:  16px;
-	font-weight: 700;
+	color: #888;
+	font-size:  18px;
+	font-weight: 400;
 	transition: 0.3s;
 	margin-bottom: 10px;
 	display: block;
@@ -2270,6 +2270,11 @@ font-size: 30px;
 	    color: #888;
     font-size: 16px;
     font-weight: 400;
+}
+.feature-text{
+	color: #888;
+	font-size:  18px;
+	font-weight: 400;
 }
 /*
 * ----------------------------------------------------------------------------------------
@@ -3253,10 +3258,10 @@ text-decoration: underline;
     .section-top-title { width: 100% }
 }
 .section-top-title h1 {
-	margin-bottom: 10px;
+	margin-bottom: 15px;
 	text-transform: capitalize;
 	font-weight: 700;
-	font-size: 44px;
+	font-size: 38px;
 }
 .section-top-title ul {
 	background:#fff;

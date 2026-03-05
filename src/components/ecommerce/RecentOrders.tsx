@@ -352,7 +352,7 @@ const hasRecording = Number(course.recording_available) === 1;
               {/* {course.coursetype} */}
 
               <div className="flex gap-4 text-xs mb-4 text-green-700 mt-3">
-               <span className="flex items-center gap-1">{course.webinarstatus} </span>
+            {course.webinarstatus ?   <span className="flex items-center gap-1">{course.webinarstatus} </span> : null }
               
       {(course.webinar_status != 2) && (
   <span className={`flex items-center gap-1 ${style.dn}`}>
@@ -417,7 +417,7 @@ const hasRecording = Number(course.recording_available) === 1;
       localStorage.setItem("courseSourceMenu", "mycourses");
     
   }}
-        className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
+        className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-1.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
       >
         Start Course
         <ArrowRightIcon />
@@ -431,7 +431,7 @@ const hasRecording = Number(course.recording_available) === 1;
       localStorage.setItem("courseSourceMenu", "mycourses");
     
   }}
-        className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
+        className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-1.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"  style={{fontSize: "13px", fontWeight: "400"}}
       >
         Continue Learning
         <ArrowRightIcon />
@@ -454,7 +454,7 @@ const hasRecording = Number(course.recording_available) === 1;
     // 🟢 LIVE WEBINAR
     <Link
       href={course.zoom_link}
-      className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
+      className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-1.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
     >
       Join Webinar
     </Link>
@@ -464,7 +464,7 @@ const hasRecording = Number(course.recording_available) === 1;
       // 🎥 WATCH RECORDING
       <Link
         href={`/coursedetails/${course.id}`}
-        className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-green-700 transition"
+        className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-6 py-1.5 text-sm font-semibold text-white hover:bg-green-700 transition"
       >
         ▶ Watch Recording
       </Link>
@@ -485,9 +485,9 @@ const hasRecording = Number(course.recording_available) === 1;
       onClick={() =>
         localStorage.setItem("courseSourceMenu", "mycourses")
       }
-      className={`inline-flex items-center justify-center gap-2 w-[50%] rounded-lg px-6 py-2.5 text-sm font-semibold transition border ${cta.className}`}
+      className={`inline-flex items-center justify-center gap-2 w-[60%] rounded-lg px-6 py-1.5 text-sm font-semibold transition border ${cta.className}`}
     >
-      <span> {
+      <span style={{fontSize: "13px", fontWeight: "400"}}> {
          course.is_coursecompleted
           ? "Completed ✓"
           : course.watched_topics > 0 
@@ -503,18 +503,18 @@ const hasRecording = Number(course.recording_available) === 1;
           "Please purchase this live webinar to attend"
         )
       }
-      className={`inline-flex items-center justify-center gap-2 w-[50%] rounded-lg px-6 py-2.5 text-sm font-semibold transition border ${cta.className}`}
+      className={`inline-flex items-center justify-center gap-2 w-[60%] rounded-lg px-6 py-1.5 text-sm font-semibold transition border ${cta.className}`}
     >
-      <span>{cta.text} </span>
+      <span style={{fontSize: "13px", fontWeight: "400"}}>{cta.text} </span>
       <ArrowRightIcon />
     </button>
  ) : (
     <a
   href={`/${course.urlpath}`}
  
-  className={`inline-flex items-center justify-center gap-2 w-[50%] rounded-lg px-6 py-2.5 text-sm font-semibold transition border ${cta.className}`}
+  className={`inline-flex items-center justify-center gap-2 w-[60%] rounded-lg px-6 py-1.5 text-sm font-semibold transition border ${cta.className}`}
 >
-  <span>{cta.text}</span>
+  <span style={{fontSize: "13px", fontWeight: "400"}}>{cta.text}</span>
   <ArrowRightIcon />
 </a>
   )}
@@ -533,7 +533,7 @@ const hasRecording = Number(course.recording_available) === 1;
       localStorage.setItem("courseSourceMenu", "mycourses");
     
   }}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#E11D2E] py-3 text-base font-semibold text-white"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#E11D2E] py-3 text-base font-semibold text-white"  style={{fontSize: "13px", fontWeight: "400"}}
             >
               Continue Learning
               <ArrowRightIcon />

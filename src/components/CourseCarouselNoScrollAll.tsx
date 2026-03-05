@@ -20,7 +20,7 @@ type Course = {
   category: string;
   level: string;
   urlpath: string;
-  duration: number;
+  duration: string;
   tags: string[];
   webinar_datetime: string;
   mentor_name: string;
@@ -65,7 +65,7 @@ export default function CourseGrid() {
           mentor_name: item.mentor_name,
           webinar_datetime: item.webinar_datetime,
           coursetype: Number(item.coursetype),
-          duration: Number(item.duration),
+          duration: item.duration || "0:00",
           tags: [item.category, item.level],
         }));
         setCourses(formatted);

@@ -350,13 +350,13 @@ export default function CourseGrid() {
                     <div className="course-slide">
                       <div className="course-img">
                         <a target="_blank" href={course.urlpath}>
-                        <img src="assets/images/all-img/c1.png" alt="" />
-                        <Image
-                          src={course.image}
-                          alt={course.title}
-                          fill
-                        />
-                         </a>
+                          <img src="assets/images/all-img/c1.png" alt="" />
+                          <Image
+                            src={course.image}
+                            alt={course.title}
+                            fill
+                          />
+                        </a>
                         <div className="course-date">
                           <span className="month bg-blue-600">📘 COURSE</span>
                           <button
@@ -370,7 +370,7 @@ export default function CourseGrid() {
                             )}
                           </button>
                         </div>
-                       
+
                       </div>
                       <div className="course-content" style={{ minHeight: "340px" }}><a className="c_btn" target="_blank" href={course.urlpath}>{course.category}</a>
                         <h3><a href={course.urlpath} target="_blank"> {course.title}</a></h3>
@@ -394,14 +394,14 @@ export default function CourseGrid() {
                   <div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
                     <div className="course-slide">
                       <div className="course-img">
-                         <a target="_blank" href={course.urlpath}>
-                        <img src="assets/images/all-img/c1.png" alt="" />
-                        <Image
-                          src={course.image}
-                          alt={course.title}
-                          fill
-                        />
-                         </a>
+                        <a target="_blank" href={course.urlpath}>
+                          <img src="assets/images/all-img/c1.png" alt="" />
+                          <Image
+                            src={course.image}
+                            alt={course.title}
+                            fill
+                          />
+                        </a>
                         <div className="course-date">
                           <span className="month bg-purple-600">🎥 RECORDED WEBINAR</span>
                           <button
@@ -415,7 +415,7 @@ export default function CourseGrid() {
                             )}
                           </button>
                         </div>
-                       
+
                       </div>
                       <div className="course-content" style={{ minHeight: "340px" }}><a className="c_btn" href={course.urlpath} target="_blank">{course.category}</a>
                         <h3><a href={course.urlpath} target="_blank"> {course.title}</a></h3>
@@ -573,22 +573,22 @@ export default function CourseGrid() {
                           alt={course.title}
                           fill
                         />
-                         </a>
-                        <div className="course-date">
-                          <span className="month bg-green-600">🎥 LIVE WEBINAR</span>
-                          <button
-                            onClick={() => handleFavouriteClick(course)}
-                            className="absolute top-0 right-3 bg-white bg-opacity-70 p-2 rounded-full shadow-md hover:bg-opacity-100 transition" style={{ borderRadius: "32px", boxShadow: "0 0 10px #cdcdcd" }}
-                          >
-                            {favourites[course.course_id] ? (
-                              <Heart />
-                            ) : (
-                              <Heart />
-                            )}
-                          </button>
+                      </a>
+                      <div className="course-date">
+                        <span className="month bg-green-600">🎥 LIVE WEBINAR</span>
+                        <button
+                          onClick={() => handleFavouriteClick(course)}
+                          className="absolute top-0 right-3 bg-white bg-opacity-70 p-2 rounded-full shadow-md hover:bg-opacity-100 transition" style={{ borderRadius: "32px", boxShadow: "0 0 10px #cdcdcd" }}
+                        >
+                          {favourites[course.course_id] ? (
+                            <Heart />
+                          ) : (
+                            <Heart />
+                          )}
+                        </button>
 
-                        </div>
-                     
+                      </div>
+
                     </div>
                     <div className="course-content" style={{ minHeight: "340px" }}><a className="c_btn" target="_blank" href={course.urlpath}>{course.category}</a>
                       <h3><a href={course.urlpath} target="_blank"> {course.title}</a></h3>

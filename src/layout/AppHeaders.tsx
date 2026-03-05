@@ -90,8 +90,8 @@ const AppHeader: React.FC = () => {
       localStorage.getItem("postLoginRedirect") ||
       window.location.pathname;
 
-    console.log("STATUS:", status);
-    console.log("SESSION:", session);
+    // console.log("STATUS:", status);
+    // console.log("SESSION:", session);
 
     if (status === "authenticated" && session?.user?.email) {
       const email = session.user.email;
@@ -164,8 +164,8 @@ const AppHeader: React.FC = () => {
 
   const roleLabel = user?.role === "mentor" ? "Mentor Menu" : "Student Menu";
 
-  console.log("STATUS:", status);
-  console.log("SESSION:", session);
+  // console.log("STATUS:", status);
+  // console.log("SESSION:", session);
 
   return (
     <div

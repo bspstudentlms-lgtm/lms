@@ -232,7 +232,7 @@ notification.onclick = () => {
     request: visibleRequests[index],
   }));
 
-  console.log("rows", rows);
+  // console.log("rows", rows);
 
   function isSessionExpired(displayDate: string, slot: string) {
     // Example:
@@ -247,7 +247,7 @@ notification.onclick = () => {
   }
 
   const sendSessionNotification = async (upcoming: Session) => {
-    console.log("Clicked", upcoming);
+    // console.log("Clicked", upcoming);
 
     if (!("Notification" in window)) {
       alert("Notifications not supported");

@@ -40,14 +40,14 @@ export default function Fornotpassword() {
   
       // Check the raw response
       const responseText = await response.text();
-      console.log("Response Text:", responseText);
+      // console.log("Response Text:", responseText);
   
       // Try to parse it as JSON
       const data = JSON.parse(responseText); // manually parse the response text
   
       if (response.ok) {
         if (data.status === 200) {
-          console.log("Password reset link sent successfully", data);
+          // console.log("Password reset link sent successfully", data);
           setError("Login Details sent to your mail id.");
           // Redirect to sign-in page after 2 seconds
         setTimeout(() => {

@@ -285,7 +285,7 @@ const hasRecording = Number(course.recording_available) === 1;
               {/* {course.coursetype} */}
 
               <div className="flex gap-4 text-xs mb-4 text-green-700 mt-3">
-               <span className="flex items-center gap-1">{course.webinarstatus} </span>
+              {course.webinarstatus ? <span className="flex items-center gap-1">{course.webinarstatus} </span> : null}
               
       {(course.webinar_status != 2) && (
   <span className={`flex items-center gap-1 ${style.dn}`}>
@@ -350,7 +350,7 @@ const hasRecording = Number(course.recording_available) === 1;
       localStorage.setItem("courseSourceMenu", "mycourses");
     
   }}
-        className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
+        className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-1.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
       >
         Start Course
         <ArrowRightIcon />
@@ -364,7 +364,7 @@ const hasRecording = Number(course.recording_available) === 1;
       localStorage.setItem("courseSourceMenu", "mycourses");
     
   }}
-        className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
+        className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-1.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
       >
         Continue Learning
         <ArrowRightIcon />
@@ -387,7 +387,7 @@ const hasRecording = Number(course.recording_available) === 1;
     // 🟢 LIVE WEBINAR
     <Link
       href={course.zoom_link}
-      className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
+      className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-1.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
     >
       Join Webinar
     </Link>
@@ -418,7 +418,7 @@ const hasRecording = Number(course.recording_available) === 1;
       onClick={() =>
         localStorage.setItem("courseSourceMenu", "mycourses")
       }
-      className={`inline-flex items-center justify-center gap-2 w-[50%] rounded-lg px-6 py-2.5 text-sm font-semibold transition border ${cta.className}`}
+      className={`inline-flex items-center justify-center gap-2 w-[60%] rounded-lg px-6 py-1.5 text-sm font-semibold transition border ${cta.className}`}
     >
       <span> {
          course.is_coursecompleted
@@ -436,7 +436,7 @@ const hasRecording = Number(course.recording_available) === 1;
           "Please purchase this live webinar to attend"
         )
       }
-      className={`inline-flex items-center justify-center gap-2 w-[50%] rounded-lg px-6 py-2.5 text-sm font-semibold transition border ${cta.className}`}
+      className={`inline-flex items-center justify-center gap-2 w-[60%] rounded-lg px-6 py-1.5 text-sm font-semibold transition border ${cta.className}`}
     >
       <span>{cta.text} </span>
       <ArrowRightIcon />
@@ -445,7 +445,7 @@ const hasRecording = Number(course.recording_available) === 1;
     <a
   href={`/${course.urlpath}`}
  
-  className={`inline-flex items-center justify-center gap-2 w-[50%] rounded-lg px-6 py-2.5 text-sm font-semibold transition border ${cta.className}`}
+  className={`inline-flex items-center justify-center gap-2 w-[60%] rounded-lg px-6 py-1.5 text-sm font-semibold transition border ${cta.className}`}
 >
   <span>{cta.text}</span>
   <ArrowRightIcon />

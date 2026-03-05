@@ -325,7 +325,7 @@ const HomePageContent = () => {
 				id="home"
 				className="home_bg"
 				style={{
-					backgroundImage: "url(/assets/images/banner/home.png)",
+					backgroundImage: "url(/assets/images/banner/home2.png)",
 					backgroundSize: "cover",
 					backgroundPosition: "center center",
 				}}
