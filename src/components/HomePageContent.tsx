@@ -349,7 +349,7 @@ const HomePageContent = () => {
 						</div>
 						<div className="col-lg-6 col-sm-6 col-xs-12">
 							<div className="home_me_img">
-								<img src="images/home-banner.png" style={{width: "85%"}} className="img-fluid" alt="" />
+								<img src="images/home-image.png" style={{width: "85%"}} className="img-fluid" alt="" />
 								<div className="home_ps">
 									<img src="assets/images/icon/user2.svg" alt="" />
 									<h2>300+</h2>
@@ -932,11 +932,11 @@ const HomePageContent = () => {
 									<h3>Email Address</h3>
 									<p>learning@backstagepass.co.in</p>
 								</div>
-								<div className="sf_contact">
+								{/* <div className="sf_contact">
 									<span className="ti-map"></span>
 									<h3>Office Address</h3>
 									<p>Plot No. 72, Jubilee Enclave, HITEC City, Hyderabad, Telangana 500081</p>
-								</div>
+								</div> */}
 							</div>
 						</div>
 					</div>

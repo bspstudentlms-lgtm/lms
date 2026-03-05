@@ -247,11 +247,11 @@ const HomePageContent = () => {
                   <h3>Email Address</h3>
                   <p>learning@backstagepass.co.in</p>
                 </div>
-                <div className="sf_contact">
+                {/* <div className="sf_contact">
                   <span className="ti-map"></span>
                   <h3>Office Address</h3>
                   <p>Plot No. 72, Jubilee Enclave, HITEC City, Hyderabad, Telangana 500081</p>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

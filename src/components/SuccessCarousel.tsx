@@ -250,7 +250,7 @@ transition duration-300"
 
 
             {/* Full testimonial */}
-            <p className="text-gray-700 text-md leading-relaxed">
+            <p className="text-gray-400 text-md leading-relaxed">
               “{activeStudent.testimonial}”
             </p>
           </div>

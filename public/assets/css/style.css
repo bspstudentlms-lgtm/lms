@@ -927,7 +927,7 @@ position:relative;
 .home_content p {
 	margin-bottom: 40px;
 	font-weight: 400;
-	font-size: 18px;
+	font-size:  16px;
 }
 .home_me_img{	
 position: absolute;
@@ -1014,7 +1014,7 @@ line-height:70px;
 	padding: 20px;
 	border-radius: 30px;
 		position: absolute;
-	top: 10%;
+	top: 20%;
 	right:0;
 	box-shadow: 0px 0 30px rgba(1, 41, 112, 0.08);
 }
@@ -1072,6 +1072,7 @@ line-height:70px;
 }
 .single_tp p {
 	margin-bottom: 40px;
+	font-weight: 400;
 }
 /*
 * ----------------------------------------------------------------------------------------
@@ -1098,8 +1099,7 @@ line-height:70px;
 .ab_content h2 u {
 	color: #ee1b24;
 }
-.ab_content p{margin-bottom: 30px;}
-.ab_content p{margin-bottom: 30px;}
+.ab_content p{margin-bottom: 30px;font-weight: 400;}
 .abmv {
 	margin-bottom: 30px;
 	background: #fff;
@@ -1130,7 +1130,7 @@ overflow:hidden;
 margin-bottom:10px;
 font-size:22px;
 }
-.abmv p{overflow:hidden;}
+.abmv p{overflow:hidden; font-weight: 400;}
 .ss_btn {
 	margin-top: 50px;
 }
@@ -1181,6 +1181,8 @@ margin-bottom:60px;
 .counts .count-box p {
   padding: 0;
 margin-top: 5px;
+    font-weight: 400;
+	font-size: 16px;
 }
 /*
 * ----------------------------------------------------------------------------------------
@@ -1203,7 +1205,7 @@ margin-top: 5px;
 .single_feature_one {
 	background:#fff;
 	margin-bottom: 30px;
-	padding:40px;
+	padding:30px 40px;
 	border-radius:10px;
 	margin-bottom:30px;
 	position: relative;
@@ -1238,7 +1240,7 @@ margin-top: 5px;
 	transition: 0.3s;
 }
 .single_feature_one:hover h2 a{}
-.single_feature_one p{}
+.single_feature_one p{font-weight: 400;}
 .single_feature_one:hover{
 	-webkit-box-shadow: 0px 0px 150px 0px rgba(78, 67, 250, 0.06);
 	        box-shadow: 0px 0px 150px 0px rgba(78, 67, 250, 0.06);
@@ -1320,10 +1322,12 @@ color:#ee1b24;
 margin-right:8px;
 }
 .course-slide .course-content span {
-	color: #1a2d62;
+	color: #888;
 	margin-bottom: 5px;
 	display: inline-block;
 	margin-right: 10px;
+	font-size: 16px;
+	font-weight: 400;
 }
 .course-slide .course-content span strong{font-weight:700;}
 /*START COURSE STYLR TWO*/
@@ -1494,7 +1498,7 @@ color:#fff;
 	padding-top: 10px;
 	color: #1a2d62;
 	overflow: hidden;
-	font-size: 18px;
+	font-size:  16px;
 }
 .course_features ul li i{
 color:#ee1b24;
@@ -1535,7 +1539,7 @@ border-bottom:1px solid #eee;
 .single_rc i{color:#ffbd35;margin-right: 8px;}
 .single_rc h4 a {
 	color: #1a2d62;
-	font-size: 18px;
+	font-size:  16px;
 	font-weight: 800;
 	margin: 10px 0;
 	display: block;
@@ -1552,7 +1556,7 @@ border-bottom:1px solid #eee;
 .single_langu span a {
 	color: #1a2d62;
 	display: inline-block;
-	font-size: 18px;
+	font-size:  16px;
 	line-height: 36px;
 	transition: 0.3s;
 }
@@ -1933,7 +1937,7 @@ margin:30px 0;
 
 .review-contents li .cont .subtitle {
 	margin: 0;
-	font-size: 18px;
+	font-size:  16px;
 	margin-bottom: -3px;
 	font-weight: 700;
 	margin-bottom: 5px;
@@ -2135,7 +2139,7 @@ margin:30px 0;
 .cp_content{}
 .cp_content h4 {
 	font-weight: 700;
-	font-size: 18px;
+	font-size:  16px;
 	color: #ee1b24;
 	margin-bottom: 10px;
 }
@@ -2150,7 +2154,7 @@ margin:30px 0;
 .cp_content ul li {
 	font-weight: 600;
     /* line-height: 36px; */
-    font-size: 18px;
+    font-size:  16px;
     color: #1a2d62;
     display: flex;
     align-items: flex-start;
@@ -2256,7 +2260,7 @@ font-size: 30px;
 .single_tca h2{overflow: hidden;}
 .single_tca h2 a {
 	color: #1a2d62;
-	font-size: 18px;
+	font-size:  16px;
 	font-weight: 700;
 	transition: 0.3s;
 	margin-bottom: 10px;
@@ -2304,6 +2308,8 @@ font-size: 30px;
 .testimonial_content p {
 	overflow: hidden;
 	margin-top: 15px;
+	font-weight: 400;
+	font-size: 16px;
 }
 .testi_pic_title{
 
@@ -2334,7 +2340,6 @@ padding:20px;
 	font-size: 14px;
 	margin-top: 8px;
 	display: block;
-	font-family: 'Poppins', sans-serif;
 }
 .owl-theme{-webkit-transition:0.4s;-o-transition:0.4s;transition:0.4s;}
 .owl-theme .owl-controls{
@@ -2567,7 +2572,7 @@ margin-top:60px;
     background: #fff;
 }
 .our-team .title{
-    font-size: 18px;
+    font-size:  16px;
     font-weight: 800;
     color: #ee1b24;
     text-transform: capitalize;
@@ -2682,7 +2687,7 @@ overflow: hidden;
 	color: #1a2d62;
 	line-height: 40px;
 	overflow: hidden;
-	font-size: 18px;
+	font-size:  16px;
 	font-weight: 600;
 }
 .single_agent_content i{margin-right:10px;color:#ee1b24;}
@@ -3017,7 +3022,7 @@ margin: 0 0 30px;
 padding-bottom: 10px;
 font-weight: 700;
 text-transform: uppercase;
-font-size: 18px;
+font-size:  16px;
 }
 .comments_part {
     margin-bottom: 60px;
@@ -3218,7 +3223,7 @@ text-decoration: underline;
 	color: #ee1b24;
 }
 @media only screen and (max-width:480px){
-.partner_title h3 {font-size:18px;width:100%}
+.partner_title h3 {font-size: 16px;width:100%}
 }
 .partner.owl-theme .owl-controls{display: none !important;}
 /*
@@ -3981,7 +3986,7 @@ border: 2px solid #ee1b24!important;
 }
 .single_ins_content h4 {
 	font-weight: 700;
-	font-size: 18px;
+	font-size:  16px;
 	color: #ee1b24;
 	text-transform: capitalize;
 }
@@ -4073,7 +4078,7 @@ border: 2px solid #ee1b24!important;
 .range-slider .range-value{
     color: #fff;
     background: #ee1b24;
-    font-size: 18px;
+    font-size:  16px;
     font-weight: 600;
     text-align: center;
     width: 45px;
@@ -4311,7 +4316,7 @@ border: 2px solid #ee1b24!important;
 .pd_title {
 	color: #ee1b24;
 	display: block;
-	font-size: 18px;
+	font-size:  16px;
 	font-weight: 700;
 	line-height: 12px;
 	margin-bottom: 30px;
@@ -4333,7 +4338,7 @@ border: 2px solid #ee1b24!important;
 }
 .pd_price .new {
 	color: #303030;
-	font-size: 18px;
+	font-size:  16px;
 	font-weight: 700;
 	margin-right: 11px;
 }
@@ -4558,7 +4563,7 @@ border: 2px solid #ee1b24!important;
 	margin-bottom: 20px;
 }
 .pda_rtng_area h4 {
-	font-size: 18px;
+	font-size:  16px;
 	font-weight: 700;
 	line-height: 14px;
 	margin: 0 0 7px;
@@ -4631,7 +4636,7 @@ border: 2px solid #ee1b24!important;
 	padding-left: 0;
 }
 .rp_title h3 {
-	font-size: 18px;
+	font-size:  16px;
 	letter-spacing: 2px;
 	line-height: 24px;
 	margin: 0;

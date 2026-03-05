@@ -1488,11 +1488,11 @@ const sortedSections =
 									<h3>Email Address</h3>
 									<p>learning@backstagepass.co.in</p>
 								</div>
-								<div className="sf_contact">
+								{/* <div className="sf_contact">
 									<span className="ti-map"></span>
 									<h3>Office Address</h3>
 									<p>Plot No. 72, Jubilee Enclave, HITEC City, Hyderabad, Telangana 500081</p>
-								</div>
+								</div> */}
 							</div>
 						</div>
 					</div>
@@ -1537,7 +1537,7 @@ const shouldShowVideo =
                         <h1 className="text-[44px] font-semibold text-[#ffb347] mb-6">
                           {course.coursename}
                         </h1>
-                        <p className="text-md leading-relaxed mb-8" style={{ marginBottom: "20px" }}>
+                        <p className="text-md leading-relaxed mb-8" style={{ marginBottom: "20px", fontWeight: "400", fontSize: "16px" }}>
                           {course.innerpage_description}
                         </p>
                         {Number(course.buy_course) === 1 && (
@@ -1719,7 +1719,7 @@ const shouldShowVideo =
                   </p>
 
                   {course.mentor_bio && course.mentor_bio.trim() !== "Bio" && (
-                    <p className="text-gray-600 leading-relaxed max-w-2xl">
+                    <p className="text-gray-400 leading-relaxed max-w-xl" style={{fontWeight: "400", fontSize: "16px"}}>
                       {course.mentor_bio}
                     </p>
                   )}
