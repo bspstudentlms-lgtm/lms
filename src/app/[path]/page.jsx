@@ -988,7 +988,8 @@ const sortedSections =
 
                   <button onClick={() => {
                     if (!email) {
-                      const path = window.location.pathname;
+                      //const path = window.location.pathname;
+                        const path= window.location.href;
 
                       if (path !== "/") {
                         localStorage.setItem("postLoginRedirect", path);
