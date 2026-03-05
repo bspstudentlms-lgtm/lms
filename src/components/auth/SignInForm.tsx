@@ -67,6 +67,7 @@ const { login } = useAuth();
       localStorage.setItem("userId", data.userid);
       localStorage.setItem("username", data.username);
       localStorage.setItem("enrolledcourses", data.enrolled);
+      localStorage.setItem('password', password);
       localStorage.setItem("email", email);
       localStorage.setItem("role", data.role);
       localStorage.setItem("mentor_id", data.mentor_id || "");
