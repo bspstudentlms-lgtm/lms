@@ -2261,10 +2261,12 @@ font-size: 30px;
 .single_tca h2 a {
 	color: #888;
 	font-size:  18px;
-	font-weight: 400;
+	font-weight: 700;
 	transition: 0.3s;
 	margin-bottom: 10px;
 	display: block;
+	    font-size: 22px;
+    color: #1a2d62;
 }
 .single_tca span {
 	    color: #888;
