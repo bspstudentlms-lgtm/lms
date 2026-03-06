@@ -11,6 +11,10 @@ export const metadata = {
   title: "Backstage Pass LMS | Online Learning Platform",
   description:
     "Backstage Pass LMS offers live classes, recorded courses, quizzes, mentor support, and certificates for skill development.",
+    
+  verification: {
+    google: "rA-13zNhu6gV6Vo836kTcXNnNi4xzurZjEE4yfv7lw8",
+  },
 
   openGraph: {
     title: "Backstage Pass LMS | Learn. Practice. Get Certified",
