@@ -339,7 +339,7 @@ return (
             <div className="home_ps">
               <img src="assets/images/icon/user2.svg" alt="" />
               <h2>7500+</h2>
-              <span>Active student</span>
+              <span>Active students</span>
             </div>
             <div className="home_ps2">
               <img src="assets/images/icon/file2.svg" alt="" />
