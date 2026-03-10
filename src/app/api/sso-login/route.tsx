@@ -1,15 +1,27 @@
-import { NextResponse } from "next/server";
+"use client";
 
-export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url);
+import { useEffect } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-  const course = searchParams.get("course") || "dashboard";
+interface Props {
+  params: {
+    course: string;
+  };
+}
 
-  const loginUrl = `https://learning.backstagepass.co.in/api/auth/signin/google?callbackUrl=https://learning.backstagepass.co.in/${course}`;
+export default function SSOLogin({ params }: Props) {
+  const router = useRouter();
+  const course = params.course || "dashboard";
 
-  const response = NextResponse.redirect(loginUrl);
+  useEffect(() => {
+    // automatically trigger Google login
+    signIn("google", { callbackUrl: `/` + course });
+  }, [course]);
 
-  response.cookies.set("course_redirect", course);
-
-  return response;
+  return (
+    <div className="flex items-center justify-center h-screen">
+      <p>Redirecting to Google login...</p>
+    </div>
+  );
 }
