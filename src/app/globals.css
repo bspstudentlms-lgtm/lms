@@ -1533,3 +1533,34 @@ strong, b {
   }
 
 }
+.social-home{
+  display: flex;
+}
+.social-home li a{ 
+  display: flex;
+      margin-right: 20px;
+    font-size: 27px !important;
+}
+.social-home li a:before{
+  content: none !important;
+}
+
+.icon-wrapper5{
+  width:35px;
+  min-width:35px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.icon-wrapper5 img{
+  width:28px;
+  height:28px;
+  object-fit:contain;
+}
+
+.feature-text5{
+  margin-left:10px;
+  font-size: 19px;
+  line-height:1.5;
+}

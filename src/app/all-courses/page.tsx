@@ -208,6 +208,11 @@ const HomePageContent = () => {
                 <p>Building future game developers through structured, practical learning.
                   Create real projects. Build real skills. Grow your career.
                 </p>
+                <ul className="social-home">
+								<li><a href="https://www.facebook.com/profile.php?id=61588089197582" target="_blank" className="facebook-home"><i className="fa fa-facebook"></i></a></li>
+								<li><a href="https://www.youtube.com/@backstagepass_online" target="_blank" className="twitter-home"><i className="fa fa-youtube"></i></a></li>
+								<li><a href="https://www.instagram.com/backstagepassonline" target="_blank" className="instagram-home"><i className="fa fa-instagram"></i></a></li>
+							</ul>
               </div>
             </div>
             <div className="col-lg-3 col-sm-6 col-xs-12">

@@ -990,7 +990,7 @@ export default function CoursePage({ params }) {
                   </button> */}
 
 
-                  {Number(course.course_type) !== 2 && (
+                  {course.course_type !== 2 && (
                   <div className="gap-2 mb-1 mt-4">  <div className="flex items-center gap-2 mb-1">
                     <span className="line-through text-gray-300 text-3xl">₹{course.orignialpayment}</span>
                     <span className="text-3xl font-bold text-[#ee1b24]">₹{course.total_payment}</span>
@@ -1000,6 +1000,7 @@ export default function CoursePage({ params }) {
                   </div>
                     <p style={{ fontSize: "14px", fontWeight: "400" }}>*Price inclusive of all applicable taxes (GST)</p></div>)}
 
+                   
                
 
                   <button onClick={() => {
@@ -1467,6 +1468,11 @@ export default function CoursePage({ params }) {
                 <p>Building future game developers through structured, practical learning.
                   Create real projects. Build real skills. Grow your career.
                 </p>
+                <ul className="social-home">
+								<li><a href="https://www.facebook.com/profile.php?id=61588089197582" target="_blank" className="facebook-home"><i className="fa fa-facebook"></i></a></li>
+								<li><a href="https://www.youtube.com/@backstagepass_online" target="_blank" className="twitter-home"><i className="fa fa-youtube"></i></a></li>
+								<li><a href="https://www.instagram.com/backstagepassonline" target="_blank" className="instagram-home"><i className="fa fa-instagram"></i></a></li>
+							</ul>
               </div>
             </div>
             <div className="col-lg-3 col-sm-6 col-xs-12">
@@ -1915,7 +1921,10 @@ const Topics = ({ course }) => {
 
   if (!course?.topics?.length) return null;
 
+  if (course.course_type !== 2) return null;
+
   return (
+    
     <section className="max-w-6xl mx-auto px-6 py-10">
 
       <div className="section-title">
@@ -2313,19 +2322,19 @@ const CustomSection = ({ data }) => {
 
 const Feature = ({ text }) => (
   <div className="col-lg-6 col-sm-6 col-xs-12 mb-4 d-flex">
-    <div className="single_tca d-flex w-100 align-items-center">
+    <div className="single_tca d-flex align-items-center w-100">
 
-      <div className="icon-wrapper" style={{width: "50px"}}>
+      <div className="icon-wrapper5">
         <img
           src="assets/images/icon/star.svg"
-          alt=""
-          style={{ width: "32px" }}
+          alt="star"
         />
       </div>
 
-      <h5 className="feature-text">
+      <h5 className="feature-text5 mb-0">
         {text}
       </h5>
+
     </div>
   </div>
 );

@@ -336,7 +336,7 @@ const HomePageContent = () => {
 						<div className="col-lg-6 col-sm-6 col-xs-12">
 							<div className="home_content">
 								<h1>Build <span>Games</span> <span>Build</span> Skills <br />Build <span>Your Future</span></h1>
-								<p>Backstage Pass LMS helps aspiring creators master game development through structured, industry-ready courses, real projects, and expert mentorship.</p>
+								<p>Backstage Pass ONLINE helps aspiring creators master game development through structured, industry-ready courses, real projects, and expert mentorship.</p>
 							</div>
 							<div className="home_btn">
 								<a href="/all-courses" className="cta"><span>Explore Courses</span>
@@ -410,7 +410,7 @@ const HomePageContent = () => {
 						<div className="col-lg-6 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
 							<div className="ab_content">
 								<h2>Learn new skills to go  <span>ahead for your </span>  career</h2>
-								<p>Backstage Pass LMS is built for creators who want more than tutorials.</p>
+								<p>Backstage Pass ONLINE is built for creators who want more than tutorials.</p>
 							</div>
 							<div className="abmv">
 								<span className="ti-medall"></span>
@@ -420,7 +420,7 @@ const HomePageContent = () => {
 							<div className="abmv">
 								<span className="ti-wand"></span>
 								<h4>Our Vision</h4>
-								<p>Backstage Pass LMS aims to bridge the gap between learning and employment by setting the standard for job-ready courses in the gaming industry.</p>
+								<p>Backstage Pass ONLINE aims to bridge the gap between learning and employment by setting the standard for job-ready courses in the gaming industry.</p>
 							</div>
 
 						</div>
@@ -893,6 +893,11 @@ const HomePageContent = () => {
 								<p>Building future game developers through structured, practical learning.
 									Create real projects. Build real skills. Grow your career
 								</p>
+								<ul className="social-home">
+								<li><a href="https://www.facebook.com/profile.php?id=61588089197582" target="_blank" className="facebook-home"><i className="fa fa-facebook"></i></a></li>
+								<li><a href="https://www.youtube.com/@backstagepass_online" target="_blank" className="twitter-home"><i className="fa fa-youtube"></i></a></li>
+								<li><a href="https://www.instagram.com/backstagepassonline" target="_blank" className="instagram-home"><i className="fa fa-instagram"></i></a></li>
+							</ul>
 							</div>
 						</div>
 						<div className="col-lg-3 col-sm-6 col-xs-12">

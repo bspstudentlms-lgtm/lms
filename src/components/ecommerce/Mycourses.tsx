@@ -447,7 +447,7 @@ const hasRecording = Number(course.recording_available) === 1;
  
   className={`inline-flex items-center justify-center gap-2 w-[60%] rounded-lg px-6 py-1.5 text-sm font-semibold transition border ${cta.className}`}
 >
-  <span>{cta.text}</span>
+  <span style={{}}>{cta.text}</span>
   <ArrowRightIcon />
 </a>
   )}
@@ -518,7 +518,7 @@ const hasRecording = Number(course.recording_available) === 1;
       )}
 
       {/* RECOMMENDED */}
-      <h3 className="mt-12 mb-4 text-lg font-semibold">Recommended Courses</h3>
+      <h3 className="mt-12 mb-4 text-lg font-semibold">Recommended Free Webinars</h3>
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {recommendedList.map(course => (
           <CourseCard key={course.id} course={course} enrolled={false} />
