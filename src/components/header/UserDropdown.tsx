@@ -25,15 +25,18 @@ import {
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const [username, setUsername] = useState<string | null>(null);
+  const [role, setRole] = useState<string | null>(null);
   const [userid, setUserId] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   useEffect(() => {
     // Only runs on the client-side
     const storedusername = localStorage.getItem('username');
+    const storedrole = localStorage.getItem('role');
     const storedUserId = localStorage.getItem('userId');
     const storedEmail = localStorage.getItem('email');
 
     setUsername(storedusername);
+    setRole(storedrole);
     setUserId(storedUserId);
     setEmail(storedEmail);
   }, []);  // The empty array ensures this runs only once after component mounts
@@ -127,6 +130,8 @@ function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
             </DropdownItem>
           </li>
 
+          {role !== "mentor" ? 
+          <>
           <li>
             <DropdownItem
               onItemClick={closeDropdown}
@@ -176,6 +181,7 @@ function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
              Meet your mentor
             </DropdownItem>
           </li>
+          </> : null }
           
         </ul>
         <button

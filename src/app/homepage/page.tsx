@@ -904,6 +904,11 @@ return (
 									<h3>Phone number</h3>
 									<p>+91-8065912040</p>
 								</div>
+                <div className="sf_contact">
+                  <span><i className="fa fa-whatsapp"></i></span>
+                  <h3>Whatsapp</h3>
+                  <p>+91-8065912040</p>
+                </div>
 								<div className="sf_contact">
 									<span className="ti-email"></span>
 									<h3>Email Address</h3>

@@ -914,9 +914,41 @@ export default function CoursePage({ params }) {
                   <h4>{getButtonLabel()} the {course.coursename}</h4>
                   <form action="#" className="subscribe">
 
-                    
+                    {Number(course.buy_course) === 1 && (
 
-                    <button type="button" className="sub_btn" onClick={() => setOpen1(true)}>
+                  <h3 className="text-xl font-semibold mb-4" style={{
+                    fontWeight: 600,
+                    fontSize: "21px",
+                    color: "#fff"
+                  }}
+                  >Buy this Course @</h3>
+                )}
+                {/* {Number(course.course_type) !== 2 && (
+                  <div className="gap-4 mb-4">  <div className="flex items-center gap-4 mb-1">
+                    <span className="line-through text-gray-300 text-3xl">₹{course.orignialpayment}</span>
+                    <span className="text-3xl font-bold text-[#ee1b24]">₹{course.total_payment}</span>
+                    <span className="bg-white text-red-600 font-semibold px-4 py-1 rounded-full text-sm">
+                      {course.discount_value}% Disc.
+                    </span>
+                  </div>
+                    <p style={{ fontSize: "14px" }}>*Price inclusive of all applicable taxes (GST)</p></div>)} */}
+
+ {course.course_type !== 2 && (
+                  <div className="gap-2 mb-1 mt-4">  <div className="flex items-center gap-2 mb-1">
+                    <span className="line-through text-gray-300 text-3xl">₹{course.orignialpayment}</span>
+                    <span className="text-3xl font-bold text-[#ee1b24]">₹{course.total_payment}</span>
+                    <span className="bg-white text-red-600 font-semibold px-2 py-1 rounded-full text-sm">
+                      {course.discount_value}% Disc.
+                    </span>
+                  </div>
+                    <p style={{ fontSize: "14px", fontWeight: "400" }}>*Price inclusive of all applicable taxes (GST)</p></div>)}
+                {Number(course.limited_offer) === 1 && (
+                  <span className="inline-block bg-red-600 text-white px-5 py-2 rounded-full text-sm mb-8">
+                    Limited Time Offer!
+                  </span>
+                )}
+
+                    {/* <button type="button" className="sub_btn" onClick={() => setOpen1(true)}>
 
                       {getButtonLabel()} @ {course.course_type !== 2 && (
                         <>
@@ -930,7 +962,7 @@ export default function CoursePage({ params }) {
                           </span>
                         </>
                       )}
-                    </button>
+                    </button> */}
                   </form>
                 </div>
               </div>
@@ -1508,6 +1540,11 @@ export default function CoursePage({ params }) {
                   <p>+91-8065912040</p>
                 </div>
                 <div className="sf_contact">
+                  <span><i className="fa fa-whatsapp"></i></span>
+                  <h3>Whatsapp</h3>
+                  <p>+91-8065912040</p>
+                </div>
+                <div className="sf_contact">
                   <span className="ti-email"></span>
                   <h3>Email Address</h3>
                   <p>learning@backstagepass.co.in</p>
@@ -1921,7 +1958,9 @@ const Topics = ({ course }) => {
 
   if (!course?.topics?.length) return null;
 
-  if (course.course_type !== 2) return null;
+   // Show section only if category = 2
+  if (Number(course.course_category) !== 2) return null;
+
 
   return (
     
@@ -1929,7 +1968,7 @@ const Topics = ({ course }) => {
 
       <div className="section-title">
         <p>
-          Course Topics <span>You will Learn</span>
+          Course Topics <span>You will Learn</span> {course.course_category}
         </p>
       </div>
       <div className="space-y-6">
@@ -1948,7 +1987,7 @@ const Topics = ({ course }) => {
                 }
                 className="w-full flex justify-between items-center px-8 py-3 text-left"
               >
-                <span className="text-lg font-normal" style={{ color: "#888" }}>
+                <span className="text-lg font-500" style={{ color: "#888" }}>
                   {topic.title}
                 </span>
 

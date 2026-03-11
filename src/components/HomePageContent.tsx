@@ -336,7 +336,7 @@ const HomePageContent = () => {
 						<div className="col-lg-6 col-sm-6 col-xs-12">
 							<div className="home_content">
 								<h1>Build <span>Games</span> <span>Build</span> Skills <br />Build <span>Your Future</span></h1>
-								<p>Backstage Pass ONLINE helps aspiring creators master game development through structured, industry-ready courses, real projects, and expert mentorship.</p>
+								<p>Backstage Pass Online helps aspiring creators master game development through structured, industry-ready courses, real projects, and expert mentorship.</p>
 							</div>
 							<div className="home_btn">
 								<a href="/all-courses" className="cta"><span>Explore Courses</span>
@@ -353,7 +353,7 @@ const HomePageContent = () => {
 								<div className="home_ps">
 									<img src="assets/images/icon/user2.svg" alt="" />
 									<h2>300+</h2>
-									<span>Active students</span>
+									<span>Active Students</span>
 								</div>
 								<div className="home_ps2">
 									<img src="assets/images/icon/file2.svg" alt="" />
@@ -410,7 +410,7 @@ const HomePageContent = () => {
 						<div className="col-lg-6 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
 							<div className="ab_content">
 								<h2>Learn new skills to go  <span>ahead for your </span>  career</h2>
-								<p>Backstage Pass ONLINE is built for creators who want more than tutorials.</p>
+								<p>Backstage Pass Online is built for creators who want more than tutorials.</p>
 							</div>
 							<div className="abmv">
 								<span className="ti-medall"></span>
@@ -420,7 +420,7 @@ const HomePageContent = () => {
 							<div className="abmv">
 								<span className="ti-wand"></span>
 								<h4>Our Vision</h4>
-								<p>Backstage Pass ONLINE aims to bridge the gap between learning and employment by setting the standard for job-ready courses in the gaming industry.</p>
+								<p>Backstage Pass Online aims to bridge the gap between learning and employment by setting the standard for job-ready courses in the gaming industry.</p>
 							</div>
 
 						</div>
@@ -932,6 +932,11 @@ const HomePageContent = () => {
 									<h3>Phone number</h3>
 									<p>+91-8065912040</p>
 								</div>
+								<div className="sf_contact">
+                  <span><i className="fa fa-whatsapp"></i></span>
+                  <h3>Whatsapp</h3>
+                  <p>+91-8065912040</p>
+                </div>
 								<div className="sf_contact">
 									<span className="ti-email"></span>
 									<h3>Email Address</h3>
