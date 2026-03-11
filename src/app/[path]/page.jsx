@@ -281,9 +281,9 @@ export default function CoursePage({ params }) {
     const storedUserId = localStorage.getItem("userId");
     const storedEmail = localStorage.getItem("email");
 
-    // if (storedEmail) {
-    //   setOpen1(true);
-    // }
+    if (storedEmail) {
+      setOpen1(true);
+    }
     setUsername(storedusername);
     setUserId(storedUserId);
     setEmail(storedEmail);

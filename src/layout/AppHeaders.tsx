@@ -112,10 +112,13 @@ const AppHeader: React.FC = () => {
             localStorage.setItem("role", data.role);
 
             const enrolled = String(data.enrolled).trim();
+            
             localStorage.setItem("enrolledcourses", String(enrolled));
+             const loginRedirectDone = localStorage.getItem("loginRedirectDone");
 
-            if (enrolled) {
+            if (enrolled && !loginRedirectDone) {
 
+              localStorage.setItem("loginRedirectDone", "true");
               safeRedirect("/mycourses");
             } else {
 
