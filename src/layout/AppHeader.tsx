@@ -92,13 +92,14 @@ useEffect(() => {
 
   if (status === "authenticated" && session?.user?.email) {
     const email = session.user.email;
+   const username = session?.user?.name || "";
 
     const checkStudent = async () => {
       try {
-        const res = await fetch(
-          `https://www.backstagepass.co.in/reactapi/check-student.php?email=${email}`,
-          { cache: "no-store" }
-        );
+       const res = await fetch(
+  `https://www.backstagepass.co.in/reactapi/check-student.php?email=${encodeURIComponent(email)}&username=${encodeURIComponent(username)}`,
+  { cache: "no-store" }
+);
 
         const data = await res.json();
         
