@@ -753,12 +753,16 @@ const getProgressColor = (pct: number) => {
     {sortKey === "closingdate" && (sortOrder === "asc" ? " ↑" : " ↓")}
   </button>
 </TableCell> */}
+{students.length > 0 && Number(students[0].course_type) !== 2 && (
+<>
 
-            <TableCell isHeader className="py-4 px-4 font-semibold text-gray-700 text-left">Schedule</TableCell>
+<TableCell isHeader className="py-4 px-4 font-semibold text-gray-700 text-left">Schedule </TableCell>
             <TableCell isHeader className="py-4 px-4 font-semibold text-gray-700 text-left">Quiz Marks</TableCell>
             <TableCell isHeader className="py-4 px-4 font-semibold text-gray-700 text-left">Assignment</TableCell>
             <TableCell isHeader className="py-4 px-4 font-semibold text-gray-700 text-left">Assignment Closing date</TableCell>
             <TableCell isHeader className="py-4 px-4 font-semibold text-gray-700 text-left">Result</TableCell>
+          </>
+)}
           </TableRow>
         </TableHeader>
 
@@ -780,7 +784,7 @@ const getProgressColor = (pct: number) => {
                const pct = Number(student.course_per_completed ?? 0);
                const displayPct =
   Number(student.is_coursecompleted) === 1 ? 100 : pct;
-
+               const coursetype=student.course_type;
               const progressColor = getProgressColor(displayPct);
               const key = student.id ?? `${student.first_name}-${student.last_name ?? ""}-${index}`;
               const assignmentUrl = resolveAssignmentUrl(student);
@@ -822,7 +826,8 @@ const getProgressColor = (pct: number) => {
                     </TableCell>
 
                     <TableCell className="py-4 px-4 text-gray-800">{formatDate(student.closingdate)}</TableCell>
-
+{ Number(students[0].course_type) !== 2 && (
+  <>
                     <TableCell className="py-4 px-4 text-gray-800">
                       <Badge variant="light" color="primary">{student.status === "booked" ? "Yes" : "No"}</Badge>
                     </TableCell>
@@ -902,6 +907,8 @@ const getProgressColor = (pct: number) => {
                         <Button variant="secondary" size="sm" onClick={() => openModalFor(key)}>Result</Button>
                       )}
                     </TableCell>
+                    </>
+                    )}
                   </TableRow>
                 </React.Fragment>
               );

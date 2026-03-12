@@ -150,7 +150,11 @@ const isLive = (course as any).coursetype === 3;
 const liveCountdown = getLiveCountdown((course as any).live_end_time);
 
 const cta = CTA_CONFIG[course.coursetype as keyof typeof CTA_CONFIG];
-const hasAnyEnrollment = enrolledCourses.length > 0;
+const hasAnyEnrollment = courses.some(
+  (course) =>
+    enrolledCourses.includes(course.shortname) &&
+    Number(course.coursetype) === 1
+);
 
 const isPurchased = enrolledCourses.includes(course.shortname);;
 const isLivestatus = Number(course.webinar_status) === 2;
@@ -389,7 +393,7 @@ const hasRecording = Number(course.recording_available) === 1;
               )}
             </div>
 
-            {Number(course.coursetype) === 2 && (
+            {hasAnyEnrollment && Number(course.coursetype) === 2 && (
   <div className="mt-3">
     <div className="mb-1 flex justify-between text-xs font-medium text-gray-500">
       <span>Progress</span>

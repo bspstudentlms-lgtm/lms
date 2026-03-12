@@ -112,6 +112,7 @@ export default function MyCourses() {
   useEffect(() => {
     setRole(localStorage.getItem("role"));
     const enrolled = localStorage.getItem("enrolledcourses");
+    
     setEnrolledCourses(enrolled ? enrolled.split(",").map(c => c.trim()) : []);
   }, []);
 
@@ -204,7 +205,13 @@ const isLive = (course as any).coursetype === 3;
 const liveCountdown = getLiveCountdown((course as any).live_end_time);
 
 const cta = CTA_CONFIG[course.coursetype as keyof typeof CTA_CONFIG];
-const hasAnyEnrollment = enrolledCourses.length > 0;
+//  const hasAnyEnrollment = enrolledCourses.length > 0;
+
+  const hasAnyEnrollment = courses.some(
+  (course) =>
+    enrolledCourses.includes(course.shortname) &&
+    Number(course.coursetype) === 1
+);
 
 const isPurchased = enrolled;
 const isLivestatus = Number(course.webinar_status) === 2;
@@ -322,10 +329,10 @@ const hasRecording = Number(course.recording_available) === 1;
               )}
             </div>
 
-            {Number(course.coursetype) === 2 && (
+            {hasAnyEnrollment && Number(course.coursetype) === 2 && (
   <div className="mt-3">
     <div className="mb-1 flex justify-between text-xs font-medium text-gray-500">
-      <span>Progress</span>
+      <span>Progress </span>
        <span>
       {Number(course.is_coursecompleted) === 1 ? 100 : progress}%
       
