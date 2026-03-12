@@ -370,7 +370,7 @@ const hasRecording = Number(course.recording_available) === 1;
   <div className="mb-1 flex justify-between text-xs font-medium text-gray-500">
     <span>Progress</span>
     <span>
-      {Number(course.is_coursecompleted) === 1 ? 100 : progress}%
+       {Number(course.is_coursecompleted) === 1 ? 100 : progress}%
       
     </span>
   </div>
@@ -389,7 +389,23 @@ const hasRecording = Number(course.recording_available) === 1;
               )}
             </div>
 
-            
+            {Number(course.coursetype) === 2 && (
+  <div className="mt-3">
+    <div className="mb-1 flex justify-between text-xs font-medium text-gray-500">
+      <span>Progress</span>
+      <span>{Number(course.is_coursecompleted) === 1 ? 100 : progress}%</span>
+    </div>
+
+    <div className="h-2 w-full rounded-full bg-gray-200">
+      <div
+        className="h-2 rounded-full bg-purple-600 transition-all"
+        style={{
+          width: `${course.watched_topics * 20}%`,
+        }}
+      />
+    </div>
+  </div>
+)}
 
             {/* ACTION */}
             <div className="mt-3">
