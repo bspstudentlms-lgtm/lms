@@ -782,8 +782,9 @@ const getProgressColor = (pct: number) => {
           ) : (
             filteredAndSortedStudents.map((student, index) => {
                const pct = Number(student.course_per_completed ?? 0);
-               const displayPct =
-  Number(student.is_coursecompleted) === 1 ? 100 : pct;
+  //              const displayPct =
+  // Number(student.is_coursecompleted) === 1 ? 100 : pct;
+   const displayPct =pct;
                const coursetype=student.course_type;
               const progressColor = getProgressColor(displayPct);
               const key = student.id ?? `${student.first_name}-${student.last_name ?? ""}-${index}`;
