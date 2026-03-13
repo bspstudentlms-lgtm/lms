@@ -404,8 +404,10 @@ const hasRecording = Number(course.recording_available) === 1;
       <div
         className="h-2 rounded-full bg-purple-600 transition-all"
         style={{
-          width: `${course.watched_topics * 20}%`,
-        }}
+        width: `${
+           Number(course.is_coursecompleted) === 1 ? 100 : progress
+        }%`,
+      }}
       />
     </div>
   </div>
