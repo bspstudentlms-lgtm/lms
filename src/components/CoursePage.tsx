@@ -1959,7 +1959,7 @@ const Topics = ({ course }) => {
   if (!course?.topics?.length) return null;
 
    // Show section only if category = 2
-  if (Number(course.course_category) !== 2) return null;
+  if (Number(course.course_type) !== 1) return null;
 
 
   return (
@@ -1968,7 +1968,7 @@ const Topics = ({ course }) => {
 
       <div className="section-title">
         <p>
-          Course Topics <span>You will Learn</span> {course.course_category}
+          Course Topics <span>You will Learn</span>
         </p>
       </div>
       <div className="space-y-6">
