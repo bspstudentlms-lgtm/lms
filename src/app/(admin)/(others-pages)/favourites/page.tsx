@@ -95,13 +95,13 @@ export default function FavouritesPage() {
           <div className="mt-4">
             <Link
   href={
-    fav.button_action === "Know More" && fav.path
+    fav.button_action === "Enroll Now" && fav.path
       ? fav.path
       : `/coursedetails/${fav.id}`
   }
   onClick={() => {
     // ✅ set source ONLY when going to course details
-    if (fav.button_action !== "Know More") {
+    if (fav.button_action !== "Enroll Now") {
       localStorage.setItem("courseSourceMenu", "favourites");
     }
   }}

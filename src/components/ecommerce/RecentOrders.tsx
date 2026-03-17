@@ -53,7 +53,7 @@ const COURSE_TYPE_STYLES = {
 
 const CTA_CONFIG = {
   1: {
-    text: "Know More",
+    text: "Enroll Now",
     className:
       "border-red-600 text-red-600 hover:bg-red-600 hover:text-white",
   },
