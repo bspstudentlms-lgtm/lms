@@ -1010,7 +1010,7 @@ line-height:70px;
 
 .home_ps2 {
 	background: #fff;
-	width: 200px;
+	min-width: 200px;
 	padding: 20px;
 	border-radius: 30px;
 		position: absolute;
