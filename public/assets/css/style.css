@@ -990,7 +990,7 @@ line-height:70px;
 /*END HOME THREE CSS*/
 .home_ps {
 	background: #fff;
-	width: 200px;
+	min-width: 200px;
 	padding: 20px;
 	border-radius: 30px;
 	box-shadow: 0px 0 30px rgba(1, 41, 112, 0.08);
