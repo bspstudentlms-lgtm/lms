@@ -29,6 +29,8 @@ type Course = {
 
 type TypeFilter = "all" | "course" | "recorded" | "live";
 
+
+
 /* ================= COMPONENT ================= */
 export default function CourseGrid() {
   const [favourites, setFavourites] = useState<{ [key: number]: boolean }>({});

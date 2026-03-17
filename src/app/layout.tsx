@@ -8,37 +8,12 @@ import AnalyticsInit from "@/components/analytics/AnalyticsInit";
 const outfit = Outfit({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Backstage Pass LMS | Online Learning Platform",
+  title: "Backstagepass online learning | Online Gaming Courses & certificates",
   description:
-    "Backstage Pass LMS offers live classes, recorded courses, quizzes, mentor support, and certificates for skill development.",
+    "Learn with Self-Paced Online Gaming Courses from Top Industry Experts",
     
   verification: {
     google: "rA-13zNhu6gV6Vo836kTcXNnNi4xzurZjEE4yfv7lw8",
-  },
-
-  openGraph: {
-    title: "Backstage Pass LMS | Learn. Practice. Get Certified",
-    description:
-      "A complete Learning Management System with live classes, recorded videos, quizzes, mentor support, and certificates.",
-    url: "https://lms-bsp.vercel.app/",
-    siteName: "Backstage Pass LMS",
-    images: [
-      {
-        url: "https://lms-bsp.vercel.app/images/logo/bsp_logo_newupdated.png",
-        width: 1200,
-        height: 630,
-        alt: "Backstage Pass LMS",
-      },
-    ],
-    type: "website",
-  },
-
-  twitter: {
-    card: "summary_large_image",
-    title: "Backstage Pass LMS | Online Learning Platform",
-    description:
-      "Learn with expert mentors through live classes, videos, quizzes, and certifications.",
-    images: ["https://lms-bsp.vercel.app/images/logo/bsp_logo_newupdated.png"],
   },
 };
 
