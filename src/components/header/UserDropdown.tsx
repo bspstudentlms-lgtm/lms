@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { signOut } from "next-auth/react";
@@ -41,10 +41,10 @@ export default function UserDropdown() {
     setEmail(storedEmail);
   }, []);  // The empty array ensures this runs only once after component mounts
 
-function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-  e.stopPropagation();
-  setIsOpen((prev) => !prev);
-}
+  function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    e.stopPropagation();
+    setIsOpen((prev) => !prev);
+  }
 
   function closeDropdown() {
     setIsOpen(false);
@@ -52,7 +52,7 @@ function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
   return (
     <div className="relative">
       <button
-        onClick={toggleDropdown} 
+        onClick={toggleDropdown}
         className="flex items-center text-gray-700 dark:text-gray-400 dropdown-toggle"
       >
         <span className="mr-3 overflow-hidden rounded-full h-11 w-11">
@@ -67,9 +67,8 @@ function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         <span className="block mr-1 font-medium text-theme-sm">{username}</span>
 
         <svg
-          className={`stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200 ${
-            isOpen ? "rotate-180" : ""
-          }`}
+          className={`stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200 ${isOpen ? "rotate-180" : ""
+            }`}
           width="18"
           height="20"
           viewBox="0 0 18 20"
@@ -102,8 +101,91 @@ function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
 
         <ul className="flex flex-col gap-1 pt-4 pb-3 border-b border-gray-200 dark:border-gray-800">
 
-          
-          
+
+          {role === "mentor" ?
+
+            <>
+              <li>
+                <DropdownItem
+                  onItemClick={closeDropdown}
+                  tag="a"
+                  href="/mentor-dashboard"
+                  className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                >
+                  <GridIcon size={20} />
+                  Mentor Dashboard
+                </DropdownItem>
+              </li>
+
+
+
+              <li>
+                <DropdownItem
+                  onItemClick={closeDropdown}
+                  tag="a"
+                  href="/mentor-calendarList"
+                  className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                >
+                  <CalenderIcon size={20} />
+                  Mentor Calendar
+                </DropdownItem>
+              </li>
+            </> : null}
+
+
+          {role !== "mentor" ?
+            <>
+              <li>
+                <DropdownItem
+                  onItemClick={closeDropdown}
+                  tag="a"
+                  href="/mycourses"
+                  className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                >
+                  <BookOpen size={20} />
+                  My Courses
+                </DropdownItem>
+              </li>
+
+
+
+              <li>
+                <DropdownItem
+                  onItemClick={closeDropdown}
+                  tag="a"
+                  href="/favourites"
+                  className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                >
+                  <Heart size={20} />
+                  Favourites
+                </DropdownItem>
+              </li>
+
+              <li>
+                <DropdownItem
+                  onItemClick={closeDropdown}
+                  tag="a"
+                  href="/certificate"
+                  className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                >
+                  <Certificate size={20} />
+                  Certificates
+                </DropdownItem>
+              </li>
+
+              <li>
+                <DropdownItem
+                  onItemClick={closeDropdown}
+                  tag="a"
+                  href="/calendar"
+                  className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                >
+                  <Mentor size={20} />
+                  Meet your mentor
+                </DropdownItem>
+              </li>
+            </> : null}
+
           <li>
             <DropdownItem
               onItemClick={closeDropdown}
@@ -130,66 +212,13 @@ function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
             </DropdownItem>
           </li>
 
-          {role !== "mentor" ? 
-          <>
-          <li>
-            <DropdownItem
-              onItemClick={closeDropdown}
-              tag="a"
-              href="/mycourses"
-              className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-            >
-             <BookOpen size={20} />
-             My Courses
-            </DropdownItem>
-          </li>
-
-
-
-          <li>
-            <DropdownItem
-              onItemClick={closeDropdown}
-              tag="a"
-              href="/favourites"
-              className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-            >
-             <Heart size={20} />
-             Favourites
-            </DropdownItem>
-          </li>
-
-          <li>
-            <DropdownItem
-              onItemClick={closeDropdown}
-              tag="a"
-              href="/certificate"
-              className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-            >
-             <Certificate size={20} />
-              Certificates
-            </DropdownItem>
-          </li>
-
-          <li>
-            <DropdownItem
-              onItemClick={closeDropdown}
-              tag="a"
-              href="/calendar"
-              className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
-            >
-             <Mentor size={20} />
-             Meet your mentor
-            </DropdownItem>
-          </li>
-          </> : null }
-          
         </ul>
         <button
           onClick={() => {
-    localStorage.clear();
-    sessionStorage.clear();
-    signOut({ callbackUrl: "/" }); // Redirects to home page after logout
-  }}
+            localStorage.clear();
+            sessionStorage.clear();
+            signOut({ callbackUrl: "/" }); // Redirects to home page after logout
+          }}
           className="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
         >
           <svg

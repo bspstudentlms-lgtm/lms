@@ -1535,19 +1535,31 @@ export default function CoursePage({ params }) {
               <div className="single_footer">
                 <h4>Contact Info</h4>
                 <div className="sf_contact">
-                  <span className="ti-mobile"></span>
-                  <h3>Phone number</h3>
-                  <p>+91-8065912040</p>
-                </div>
+  <span className="ti-mobile"></span>
+  <h3>Phone number</h3>
+  <p>
+    <a href="tel:+918065912040">
+      +91-8065912040
+    </a>
+  </p>
+</div>
                 <div className="sf_contact">
                   <span><i className="fa fa-whatsapp"></i></span>
                   <h3>Whatsapp</h3>
-                  <p>+91-8065912040</p>
+                 <p><a
+      href="https://wa.me/919985677746"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      +91-9985677746
+    </a></p>
                 </div>
                 <div className="sf_contact">
                   <span className="ti-email"></span>
                   <h3>Email Address</h3>
-                  <p>learning@backstagepass.co.in</p>
+                  <p><a href="mailto:learning@backstagepass.co.in?subject=Course Inquiry&body=Hi, I am interested in your courses">
+  learning@backstagepass.co.in
+</a></p>
                 </div>
                 {/* <div className="sf_contact">
                   <span className="ti-map"></span>
@@ -1987,7 +1999,7 @@ const Topics = ({ course }) => {
                 }
                 className="w-full flex justify-between items-center px-8 py-3 text-left"
               >
-                <span className="text-lg font-500" style={{ color: "#888" }}>
+                <span className="text-lg font-500" style={{ color: "#1a2d62" }}>
                   {topic.title}
                 </span>
 
