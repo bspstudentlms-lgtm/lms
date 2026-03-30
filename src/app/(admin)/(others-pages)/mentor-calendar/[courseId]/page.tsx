@@ -17,7 +17,7 @@ export default function MentorCalendar() {
     : params.courseId;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 p-0 md:p-6">
       {/* Page Title */}
       <div className="mb-6">
         <h1 className="text-3xl font-semibold text-gray-800 flex items-center gap-2">
@@ -73,7 +73,7 @@ export default function MentorCalendar() {
 
           {/* RIGHT – TIME SLOTS */}
           <div>
-            <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+            <h2 className="mt-5 md:mt-0 text-base md:text-lg font-semibold text-gray-800 mb-3 md:mb-4 flex items-center gap-2">
               ⏰ Select Time
             </h2>
 

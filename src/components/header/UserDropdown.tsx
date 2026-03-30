@@ -2,6 +2,7 @@
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
+import { useSidebar } from "@/context/SidebarContext";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { signOut } from "next-auth/react";
 import { BookOpen } from "lucide-react";
@@ -28,6 +29,7 @@ export default function UserDropdown() {
   const [role, setRole] = useState<string | null>(null);
   const [userid, setUserId] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
+  const { isMobileOpen } = useSidebar();
   useEffect(() => {
     // Only runs on the client-side
     const storedusername = localStorage.getItem('username');
@@ -63,8 +65,13 @@ export default function UserDropdown() {
             alt="User"
           />
         </span>
+        
 
-        <span className="block mr-1 font-medium text-theme-sm">{username}</span>
+     {isMobileOpen ? null : (
+  <span className="hidden md:block mr-1 font-medium text-theme-sm">
+  {username}
+</span>
+)}
 
         <svg
           className={`stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200 ${isOpen ? "rotate-180" : ""

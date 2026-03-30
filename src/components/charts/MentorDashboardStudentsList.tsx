@@ -632,7 +632,86 @@ const getProgressColor = (pct: number) => {
   </select>
 </div>
 
+{/* 📱 MOBILE VIEW */}
+<div className="block md:hidden space-y-4">
 
+  {filteredAndSortedStudents.map((student, index) => {
+    const key =
+      student.id ?? `${student.first_name}-${student.last_name ?? ""}-${index}`;
+
+    const pct = Number(student.course_per_completed ?? 0);
+    const progressColor = getProgressColor(pct);
+
+    return (
+      <div key={key} className="p-4 rounded-xl border bg-white shadow-sm">
+
+        {/* NAME */}
+        <h3 className="font-semibold text-gray-800 text-sm">
+          {student.first_name} {student.last_name}
+        </h3>
+
+        {/* PROGRESS */}
+        <div className="flex items-center justify-between mt-3">
+          <span className="text-xs text-gray-500">Progress</span>
+          <span className="text-xs font-semibold" style={{ color: progressColor }}>
+            {pct}%
+          </span>
+        </div>
+
+        <div className="w-full h-2 bg-gray-200 rounded mt-1">
+          <div
+            className="h-2 rounded"
+            style={{ width: `${pct}%`, backgroundColor: progressColor }}
+          />
+        </div>
+
+        {/* DETAILS */}
+        <div className="grid grid-cols-2 gap-2 mt-3 text-xs text-gray-600">
+
+          <div>
+            <p className="text-gray-400">Closing</p>
+            <p>{formatDate(student.closingdate)}</p>
+          </div>
+
+          <div>
+            <p className="text-gray-400">Schedule</p>
+            <p>{student.status === "booked" ? "Yes" : "No"}</p>
+          </div>
+
+        </div>
+
+        {/* ACTIONS */}
+        <div className="flex justify-between mt-4">
+
+          <button
+            onClick={() => openQuizModal(student)}
+            className="text-xs px-3 py-1 rounded-full bg-gray-200"
+          >
+            Quiz
+          </button>
+
+          <button
+            onClick={() => downloadAssignment(student, key)}
+            className="text-xs px-3 py-1 rounded-full bg-blue-600 text-white"
+          >
+            Assignment
+          </button>
+
+          <button
+            onClick={() => openModalFor(key)}
+            className="text-xs px-3 py-1 rounded-full bg-green-600 text-white"
+          >
+            Result
+          </button>
+
+        </div>
+
+      </div>
+    );
+  })}
+</div>
+
+<div className="hidden md:block">
       <Table>
         <TableHeader className="border-gray-200 border-y bg-gray-50">
           <TableRow>
@@ -917,6 +996,8 @@ const getProgressColor = (pct: number) => {
           )}
         </TableBody>
       </Table>
+
+      </div>
 
       {isQuizOpen && selectedStudent && (
   <Modal

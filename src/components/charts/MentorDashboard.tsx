@@ -230,7 +230,7 @@ const SortArrow = ({ column }) => {
 </button> */}
 
 
-          <div className="hidden lg:block">
+          <div className="w-full lg:w-auto">
             <form onSubmit={(e) => {
               e.preventDefault(); // prevent page refresh on enter
             }}>
@@ -269,7 +269,58 @@ const SortArrow = ({ column }) => {
           </div>
         </div>
       </div>
-      <div className="max-w-full overflow-x-auto">
+
+      {/* 📱 MOBILE VIEW */}
+<div className="block md:hidden space-y-4">
+  {sortedCourses.map((course, index) => (
+    <div
+      key={index}
+      className="flex gap-3 p-3 rounded-xl border bg-white shadow-sm"
+    >
+      {/* IMAGE */}
+      <div className="w-16 h-16 rounded-lg overflow-hidden">
+        <Image
+          src={course.image}
+          width={64}
+          height={64}
+          alt={course.title}
+          className="object-cover w-full h-full"
+        />
+      </div>
+
+      {/* CONTENT */}
+      <div className="flex-1">
+        <h4 className="text-sm font-semibold text-gray-800 line-clamp-2">
+          {course.title}
+        </h4>
+
+        <p className="text-xs text-gray-500 mt-1">
+          ⏱ {course.duration} Hours
+        </p>
+
+        {/* ACTIONS */}
+        <div className="flex gap-2 mt-3">
+          <a
+            href={`mentor-studentsList/${course.id}`}
+            className="text-xs px-3 py-1 rounded-full bg-gray-200"
+          >
+            View
+          </a>
+
+          <Link
+            href={`/mentor-calendar/${course.id}`}
+            className="text-xs px-3 py-1 rounded-full bg-blue-600 text-white"
+          >
+            Manage
+          </Link>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
+
+
+      <div className="hidden md:block max-w-full overflow-x-auto">
         <Table>
           {/* Table Header */}
           <TableHeader className="border-gray-100 dark:border-gray-800 border-y">

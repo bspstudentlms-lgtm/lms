@@ -48,6 +48,17 @@ export default function CourseGrid() {
 
   const [showAccessModal, setShowAccessModal] = useState(false);
   const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
+  const [showFilters, setShowFilters] = useState(false);
+
+
+const applyFilterAndClose = (callback: () => void) => {
+  callback();
+
+  // safer mobile check
+  if (typeof window !== "undefined" && window.innerWidth <= 768) {
+    setShowFilters(false);
+  }
+};
 
 
   /* ---------- FETCH ---------- */
@@ -77,24 +88,35 @@ export default function CourseGrid() {
   }, []);
 
   /* ---------- FILTER LOGIC ---------- */
-  const filteredCourses = useMemo(() => {
-    return courses.filter((c) => {
-      const text =
-        (c.title + c.description + c.category + c.level).toLowerCase();
+ const filteredCourses = useMemo(() => {
+  return courses.filter((c) => {
+    const text = [
+      c.title,
+      c.description,
+      c.category,
+      c.level,
+    ]
+      .filter(Boolean) // remove undefined/null
+      .join(" ")
+      .toLowerCase();
 
-      if (search && !text.includes(search.toLowerCase())) return false;
+    const searchText = search.trim().toLowerCase();
 
-      if (typeFilter === "course" && c.coursetype !== 1) return false;
-      if (typeFilter === "recorded" && c.coursetype !== 2) return false;
-      if (typeFilter === "live" && c.coursetype !== 3) return false;
+    if (searchText && !text.includes(searchText)) return false;
 
-      if (categoryFilter !== "all" && c.category !== categoryFilter)
-        return false;
-      if (levelFilter !== "all" && c.level !== levelFilter) return false;
+    if (typeFilter === "course" && c.coursetype !== 1) return false;
+    if (typeFilter === "recorded" && c.coursetype !== 2) return false;
+    if (typeFilter === "live" && c.coursetype !== 3) return false;
 
-      return true;
-    });
-  }, [courses, search, typeFilter, categoryFilter, levelFilter]);
+    if (categoryFilter !== "all" && c.category !== categoryFilter)
+      return false;
+
+    if (levelFilter !== "all" && c.level !== levelFilter)
+      return false;
+
+    return true;
+  });
+}, [courses, search, typeFilter, categoryFilter, levelFilter]);
 
   const handleFavouriteClick = (course: Course) => {
     setSelectedCourse(course);
@@ -193,25 +215,51 @@ export default function CourseGrid() {
     <div>
       <div>
 
+        <div className="mobile-filter-btn">
+  <button onClick={() => setShowFilters(true)}>
+    Filters ⚙️
+  </button>
+</div>
+
+<div className={`filters-wrapper ${showFilters ? "show" : ""}`}>
+  
+  {/* CLOSE BUTTON */}
+  <div className="filter-header">
+    <h4>Filters</h4>
+    <button onClick={() => setShowFilters(false)}>✕</button>
+  </div>
+
+
+
         {/* ================= SEARCH SECTION ================= */}
         <div className="bg-white rounded-2xl shadow-md p-6 mb-10 space-y-4" style={{ boxShadow: "0 0 10px #cdcdcd", paddingTop: "40px" }}>
 
 
           <input
-            type="text"
-            placeholder="Search courses, webinars, skills..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full border border-gray-200 rounded-xl px-5 py-3 text-sm 
-               focus:outline-none focus:ring-2 focus:ring-red-500"
-          />
+  type="text"
+  placeholder="Search courses, webinars, skills..."
+  value={search}
+  onChange={(e) => {
+    setSearch(e.target.value);
+  }}
+  onKeyDown={(e) => {
+    if (e.key === "Enter") {
+      // close filters on mobile
+      if (typeof window !== "undefined" && window.innerWidth <= 768) {
+        setShowFilters(false);
+      }
+    }
+  }}
+  className="w-full border border-gray-200 rounded-xl px-5 py-3 text-sm 
+  focus:outline-none focus:ring-2 focus:ring-red-500"
+/>
 
           {/* FILTER ROW */}
           <div className="flex flex-wrap items-center justify-between gap-4" style={{ marginTop: "20px" }}>
 
 
             <div className="product_filter">
-              <ul  className="flex flex-wrap gap-3" style={{ marginBottom: "0px" }}>
+              <ul className="flex flex-wrap gap-3" style={{ marginBottom: "0px" }}>
                 {[
                   ["all", "All"],
                   ["course", "Course"],
@@ -220,7 +268,9 @@ export default function CourseGrid() {
                 ].map(([key, label]) => (
                   <li
                     key={key}
-                    onClick={() => setTypeFilter(key as any)}
+                    onClick={() =>
+  applyFilterAndClose(() => setTypeFilter(key as any))
+}
                     className={`filter
             ${typeFilter === key
                         ? "active"
@@ -238,7 +288,9 @@ export default function CourseGrid() {
             <div className="flex gap-3 mobileflexDirection">
               <select
                 value={categoryFilter}
-                onChange={(e) => setCategoryFilter(e.target.value)}
+                onChange={(e) =>
+  applyFilterAndClose(() => setCategoryFilter(e.target.value))
+}
                 className="border border-gray-200 rounded-lg px-4 py-2 text-sm bg-white"
               >
                 <option value="all">All Categories</option>
@@ -249,7 +301,9 @@ export default function CourseGrid() {
 
               <select
                 value={levelFilter}
-                onChange={(e) => setLevelFilter(e.target.value)}
+                onChange={(e) =>
+  applyFilterAndClose(() => setLevelFilter(e.target.value))
+}
                 className="border border-gray-200 rounded-lg px-4 py-2 text-sm bg-white"
               >
                 <option value="all">All Levels</option>
@@ -260,7 +314,10 @@ export default function CourseGrid() {
             </div>
           </div>
         </div>
+  {/* YOUR EXISTING FILTER CODE */}
+  {/* All, Course, Webinar, Dropdowns etc */}
 
+</div>
 
         {/* ================= CARDS GRID ================= */}
         {loading ? (
@@ -337,12 +394,12 @@ export default function CourseGrid() {
                     <div className="course-slide">
                       <div className="course-img">
                         <a target="_blank" href={course.urlpath}>
-                        <img src="assets/images/all-img/c1.png" alt="" />
-                        <Image
-                          src={course.image}
-                          alt={course.title}
-                          fill
-                        />
+                          <img src="assets/images/all-img/c1.png" alt="" />
+                          <Image
+                            src={course.image}
+                            alt={course.title}
+                            fill
+                          />
                         </a>
                         <div className="course-date">
                           <span className="month bg-blue-600">📘 COURSE</span>
@@ -357,7 +414,7 @@ export default function CourseGrid() {
                             )}
                           </button>
                         </div>
-                        
+
                       </div>
                       <div className="course-content" style={{ minHeight: "340px" }}><a className="c_btn" target="_blank" href={course.urlpath}>{course.category}</a>
                         <h3><a href={course.urlpath} target="_blank"> {course.title}</a></h3>
@@ -382,12 +439,12 @@ export default function CourseGrid() {
                     <div className="course-slide">
                       <div className="course-img">
                         <a target="_blank" href={course.urlpath}>
-                        <img src="assets/images/all-img/c1.png" alt="" />
-                        <Image
-                          src={course.image}
-                          alt={course.title}
-                          fill
-                        />
+                          <img src="assets/images/all-img/c1.png" alt="" />
+                          <Image
+                            src={course.image}
+                            alt={course.title}
+                            fill
+                          />
                         </a>
                         <div className="course-date">
                           <span className="month bg-purple-600">🎥 RECORDED WEBINAR</span>
@@ -402,7 +459,7 @@ export default function CourseGrid() {
                             )}
                           </button>
                         </div>
-                        
+
                       </div>
                       <div className="course-content" style={{ minHeight: "340px" }}><a className="c_btn" href={course.urlpath} target="_blank">{course.category}</a>
                         <h3><a href={course.urlpath} target="_blank"> {course.title}</a></h3>
@@ -553,14 +610,14 @@ export default function CourseGrid() {
                 <div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
                   <div className="course-slide">
                     <div className="course-img">
-                       <a target="_blank" href={course.urlpath}>
-                      <img src="assets/images/all-img/c1.png" alt="" />
-                      <Image
-                        src={course.image}
-                        alt={course.title}
-                        fill
-                      />
-                       </a>
+                      <a target="_blank" href={course.urlpath}>
+                        <img src="assets/images/all-img/c1.png" alt="" />
+                        <Image
+                          src={course.image}
+                          alt={course.title}
+                          fill
+                        />
+                      </a>
                       <div className="course-date">
                         <span className="month bg-green-600">🎥 LIVE WEBINAR</span>
                         <button
@@ -574,7 +631,7 @@ export default function CourseGrid() {
                           )}
                         </button>
                       </div>
-                     
+
                     </div>
                     <div className="course-content" style={{ minHeight: "340px" }}><a className="c_btn" target="_blank" href={course.urlpath}>{course.category}</a>
                       <h3><a href={course.urlpath} target="_blank"> {course.title}</a></h3>

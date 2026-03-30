@@ -225,7 +225,7 @@ const hasRecording = Number(course.recording_available) === 1;
   className={`relative rounded-2xl border-l-4 p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg
   ${style.border} ${style.bg}`}
 >
-        <div className="flex gap-5">
+        <div className="course-flex flex items-start gap-3">
 
         
           {/* IMAGE */}
@@ -378,7 +378,7 @@ const hasRecording = Number(course.recording_available) === 1;
       localStorage.setItem("courseSourceMenu", "mycourses");
     
   }}
-        className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-1.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
+        className="inline-flex items-center justify-center w-full gap-2 rounded-lg bg-[#E11D2E] px-6 py-1.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
       >
         Start Course
         <ArrowRightIcon />
@@ -392,7 +392,7 @@ const hasRecording = Number(course.recording_available) === 1;
       localStorage.setItem("courseSourceMenu", "mycourses");
     
   }}
-        className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-1.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
+        className="inline-flex items-center justify-center w-full gap-2 rounded-lg bg-[#E11D2E] px-6 py-1.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
       >
         Continue Learning
         <ArrowRightIcon />
@@ -415,7 +415,7 @@ const hasRecording = Number(course.recording_available) === 1;
     // 🟢 LIVE WEBINAR
     <Link
       href={course.zoom_link}
-      className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-1.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
+      className="inline-flex items-center justify-center w-full gap-2 rounded-lg bg-[#E11D2E] px-6 py-1.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
     >
       Join Webinar
     </Link>
@@ -425,7 +425,7 @@ const hasRecording = Number(course.recording_available) === 1;
       // 🎥 WATCH RECORDING
       <Link
         href={`/coursedetails/${course.id}`}
-        className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-green-700 transition"
+        className="inline-flex items-center justify-center w-full gap-2 rounded-lg bg-green-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-green-700 transition"
       >
         ▶ Watch Recording
       </Link>
@@ -486,7 +486,7 @@ const hasRecording = Number(course.recording_available) === 1;
         </div>
 
         {/* MOBILE STICKY CTA */}
-        {enrolled && !isCompleted && (
+        {/* {enrolled && !isCompleted && (
           <div className="fixed bottom-0 left-0 right-0 z-40 border-t bg-white p-4 sm:hidden">
             <Link
               href={`/coursedetails/${course.id}`}
@@ -502,7 +502,7 @@ const hasRecording = Number(course.recording_available) === 1;
               <ArrowRightIcon />
             </Link>
           </div>
-        )}
+        )} */}
       </div>
     );
   };

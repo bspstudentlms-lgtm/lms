@@ -110,6 +110,7 @@ export default function CoursePage({ params }) {
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
 
   const [showVideoModal, setShowVideoModal] = useState(false);
+ 
 
   // Example: use slug to load course data
 
@@ -1503,7 +1504,7 @@ export default function CoursePage({ params }) {
                 <ul className="social-home">
                 <li><a href="https://www.facebook.com/profile.php?id=61588089197582" target="_blank" className="facebook-home"><i className="fa fa-facebook"></i></a></li>
                 <li><a href="https://www.youtube.com/@backstagepass_online" target="_blank" className="twitter-home"><i className="fa fa-youtube"></i></a></li>
-                <li><a href="https://www.instagram.com/backstagepassonline" target="_blank" className="instagram-home"><i className="fa fa-instagram"></i></a></li>
+                <li><a href="https://www.instagram.com/onlinebackstagepass/" target="_blank" className="instagram-home"><i className="fa fa-instagram"></i></a></li>
               </ul>
               </div>
             </div>

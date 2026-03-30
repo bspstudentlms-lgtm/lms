@@ -7,6 +7,7 @@ import Muxvideo from "@/components/MuxVideoplayer";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import QuizPanel from "./components/QuizPanel";
+import { useSidebar } from "@/context/SidebarContext";
 import AssignmentPanel from "./components/AssignmentPanel";
 import FinalQuizPanel from "./components/FinalQuizPanel";
 
@@ -142,6 +143,8 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
   const [Courseassignmenttype, setCourseassignmenttype] = useState("");
   const [Assignmentfile, setCourseassignmentfile] = useState<string>("");
   const [isAssignmentenabled, setCourseassignmentenable] = useState<string>("");
+
+   const [showContent, setShowContent] = useState(false);
 
   // const [openModule, setOpenModule] = useState<number>(0);
   const [currentPointIndex, setCurrentPointIndex] = useState<number>(0);
@@ -1179,7 +1182,7 @@ const openModuleAndLoadTopics = async (moduleIndex: number) => {
     setIsResources(true);
   };
 
-  
+const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
 const isCurrentWatched =
   currentTopic && lastEndedTopicId === Number(currentTopic.id);
 
@@ -1187,26 +1190,27 @@ const isCurrentWatched =
   return (
     <div className="min-h-screen px-4 md:px-2 py-6 bg-white-50">
       <div className="max-w-9xl mx-auto">
-        <div className="flex items-center justify-between mb-6 gap-4">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 md:mb-6 gap-2 md:gap-4">
           <div>
-            <h1 className="text-3xl font-extrabold leading-tight">
+            <h1 className="text-lg md:text-3xl font-extrabold leading-snug md:leading-tight">
               {courseName}</h1>
             <div className="mt-2 flex items-center gap-3">
             </div>
           </div>
 
-          <div className="flex items-center gap-6">
-            <div className="w-12 h-12">
+          <div className="flex items-center justify-between md:justify-end gap-3 md:gap-6">
+            <div className="w-8 h-8 md:w-12 md:h-12">
               <CircularProgressbar
                 value={progressPercentage}
                 text={`${progressPercentage}%`}
                 styles={buildStyles({ textColor: "#2563eb", pathColor: "#2563eb", trailColor: "#e5e7eb", strokeLinecap: "round" })}
               />
             </div>
-            <div className="text-right">
+            {!isMobileOpen ? <>
+            <div className="text-left md:text-right">
               <h3 className="text-sm font-semibold">📊 Module Video Progress</h3>
-              <p className="text-xs text-gray-500">{completedVideoCount} of {totalVideoPoints} videos completed</p>
-            </div>
+              <p className="text-xs md:text-sm text-gray-500">{completedVideoCount} of {totalVideoPoints} videos completed</p>
+            </div></> : null }
           </div>
         </div>
 
@@ -1411,7 +1415,18 @@ const isCurrentWatched =
             </div>
           </div>
 
-          <aside className="p-4 rounded-lg bg-white shadow-sm border border-gray-100 sticky top-6 max-h-[100vh] overflow-y-auto">
+          <div className="md:hidden mb-3">
+  <button
+    onClick={() => setShowContent(!showContent)}
+    className="w-full bg-gray-100 py-2 rounded-lg text-sm font-medium"
+  >
+    📚 Course Content {showContent ? "▲" : "▼"}
+  </button>
+</div>
+
+          <aside className={` transition-all duration-300 
+    ${showContent ? "block" : "hidden"}
+    md:block p-4 rounded-lg bg-white shadow-sm border border-gray-100 sticky top-6 max-h-[100vh] overflow-y-auto`}>
             <h2 className="text-lg font-semibold mb-4">📘 Course Material</h2>
 
 
@@ -1743,129 +1758,235 @@ const isCurrentWatched =
           </aside>
         </div>
 {!isQuizActive && activeView !== "assignment" && (
-        <div className="max-w-5xl pl-5 pt-5 bg-white overflow-hidden grid">
-          {/* TAB HEADER */}
-          <div className="border-b border-gray-200">
-            <nav className="flex space-x-6">
-              
-              {currentTopic?.description && (
+  <div className="max-w-5xl pl-5 pt-5 bg-white">
+
+    {/* 📱 MOBILE + 💻 DESKTOP */}
+    <div className="flex flex-col md:block">
+
+      {/* ================= MOBILE VIEW ================= */}
+      <div className="flex md:hidden">
+
+        {/* LEFT SIDE TABS */}
+        <div className="w-24 sm:w-24 border-r pr-2 flex flex-col">
+
+          {currentTopic?.description && (
+            <button
+              onClick={() => setActiveTab("overview")}
+              className={`text-left py-2 px-2 text-sm rounded ${
+                activeTab === "overview"
+                  ? "bg-blue-100 text-blue-600 font-semibold border-l-4 border-blue-600"
+                  : "text-gray-600"
+              }`}
+            >
+              Overview
+            </button>
+          )}
+
+          {Number(courseType) === 1 && (
+            <button
+              onClick={() => setActiveTab("contact")}
+              className={`text-left py-2 px-2 text-sm rounded ${
+                activeTab === "contact"
+                  ? "bg-blue-100 text-blue-600 font-semibold border-l-4 border-blue-600"
+                  : "text-gray-600"
+              }`}
+            >
+              Mentor
+            </button>
+          )}
+
+          {courseWhomFor && (
+            <button
+              onClick={() => setActiveTab("whomfor")}
+              className={`text-left py-2 px-2 text-sm rounded ${
+                activeTab === "whomfor"
+                  ? "bg-blue-100 text-blue-600 font-semibold border-l-4 border-blue-600"
+                  : "text-gray-600"
+              }`}
+            >
+              Whom For
+            </button>
+          )}
+
+          {courseOutcome && (
+            <button
+              onClick={() => setActiveTab("outcome")}
+              className={`text-left py-2 px-2 text-sm rounded ${
+                activeTab === "outcome"
+                  ? "bg-blue-100 text-blue-600 font-semibold border-l-4 border-blue-600"
+                  : "text-gray-600"
+              }`}
+            >
+              Outcome
+            </button>
+          )}
+
+          {activeModule?.resourceslink && (
+            <button
+              onClick={() => setActiveTab("resources")}
+              className={`text-left py-2 px-2 text-sm rounded ${
+                activeTab === "resources"
+                  ? "bg-blue-100 text-blue-600 font-semibold border-l-4 border-blue-600"
+                  : "text-gray-600"
+              }`}
+            >
+              Resources
+            </button>
+          )}
+        </div>
+
+        {/* RIGHT SIDE CONTENT */}
+        <div className="flex-1 pl-3 text-sm text-gray-700">
+
+          {currentTopic?.description && activeTab === "overview" && (
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Topic Overview</h3>
+              <p>{currentTopic?.description || "Overview will be updated soon."}</p>
+            </div>
+          )}
+
+          {activeTab === "contact" && (
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Connect with Mentor</h3>
+              <Calendar id={id} />
+            </div>
+          )}
+
+          {activeTab === "whomfor" && (
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Whom is this course for?</h3>
+              <p>{courseWhomFor}</p>
+            </div>
+          )}
+
+          {activeTab === "outcome" && (
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Course Outcome</h3>
+              <p>{courseOutcome}</p>
+            </div>
+          )}
+
+          {activeTab === "resources" && (
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Resources</h3>
+              {activeModule?.resourceslink ? (
+                <a
+                  href={activeModule.resourceslink}
+                  target="_blank"
+                  className="text-blue-600 underline break-all"
+                >
+                  Download Resources
+                </a>
+              ) : (
+                <p className="text-sm text-gray-500">
+                  No resources available
+                </p>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ================= DESKTOP VIEW ================= */}
+      <div className="hidden md:block">
+
+        {/* TAB HEADER */}
+        <div className="border-b border-gray-200">
+          <nav className="flex space-x-6">
+
+            {currentTopic?.description && (
               <button
                 onClick={() => setActiveTab("overview")}
-                className={`pb-2 text-sm font-medium border-b-2 ${activeTab === "overview"
-                  ? "border-blue-600 text-blue-600"
-                  : "border-transparent text-gray-600 hover:text-blue-600"
-                  }`}
+                className={`pb-2 text-sm font-medium border-b-2 ${
+                  activeTab === "overview"
+                    ? "border-blue-600 text-blue-600"
+                    : "border-transparent text-gray-600"
+                }`}
               >
                 Overview
               </button>
-)}
-              {Number(courseType) === 1 && (
+            )}
+
+            {Number(courseType) === 1 && (
               <button
                 onClick={() => setActiveTab("contact")}
-                className={`pb-2 text-sm font-medium border-b-2 ${activeTab === "contact"
-                  ? "border-blue-600 text-blue-600"
-                  : "border-transparent text-gray-600 hover:text-blue-600"
-                  }`}
+                className={`pb-2 text-sm font-medium border-b-2 ${
+                  activeTab === "contact"
+                    ? "border-blue-600 text-blue-600"
+                    : "border-transparent text-gray-600"
+                }`}
               >
                 Connect with Mentor
-              </button> )}
+              </button>
+            )}
 
-{courseWhomFor && (
+            {courseWhomFor && (
               <button
-        onClick={() => setActiveTab("whomfor")}
-        className={`pb-2 text-sm font-medium border-b-2 ${
-          activeTab === "whomfor"
-            ? "border-blue-600 text-blue-600"
-            : "border-transparent text-gray-600 hover:text-blue-600"
-        }`}
-      >
-        Whom For
-      </button>
-      )}
-{courseOutcome && (
+                onClick={() => setActiveTab("whomfor")}
+                className={`pb-2 text-sm font-medium border-b-2 ${
+                  activeTab === "whomfor"
+                    ? "border-blue-600 text-blue-600"
+                    : "border-transparent text-gray-600"
+                }`}
+              >
+                Whom For
+              </button>
+            )}
+
+            {courseOutcome && (
               <button
                 onClick={() => setActiveTab("outcome")}
-                className={`pb-2 text-sm font-medium border-b-2 ${activeTab === "outcome"
-                  ? "border-blue-600 text-blue-600"
-                  : "border-transparent text-gray-600 hover:text-blue-600"
-                  }`}
+                className={`pb-2 text-sm font-medium border-b-2 ${
+                  activeTab === "outcome"
+                    ? "border-blue-600 text-blue-600"
+                    : "border-transparent text-gray-600"
+                }`}
               >
                 Outcome
-              </button>)}
-                {activeModule?.resourceslink && (
+              </button>
+            )}
+
+            {activeModule?.resourceslink && (
               <button
                 onClick={() => setActiveTab("resources")}
-                className={`pb-2 text-sm font-medium border-b-2 ${activeTab === "resources"
-                  ? "border-blue-600 text-blue-600"
-                  : "border-transparent text-gray-600 hover:text-blue-600"
-                  }`}
+                className={`pb-2 text-sm font-medium border-b-2 ${
+                  activeTab === "resources"
+                    ? "border-blue-600 text-blue-600"
+                    : "border-transparent text-gray-600"
+                }`}
               >
                 Resources
               </button>
-                )}
-            </nav>
-          </div>
-
-          {/* TAB CONTENT */}
-          <div className="mt-4 text-sm text-gray-700">
-           {currentTopic?.description && activeTab === "overview" && (
-              <div>
-                <h3 className="text-lg font-semibold mb-2">Topic Overview</h3>
-                {/* <p>{courseOverview || "Overview will be updated soon."}</p> */}
-
-                <p>{currentTopic?.description || "Overview will be updated soon."} </p>
-              </div>
             )}
-
-            {activeTab === "contact" && (
-              <div>
-                <h3 className="text-lg font-semibold mb-2">Connect with Mentor</h3>
-                <Calendar id={id} />
-              </div>
-            )}
-
-            {activeTab === "whomfor" && (
-      <div>
-        <h3 className="text-lg font-semibold mb-2">Whom is this course for?</h3>
-        <p>
-          {courseWhomFor ||
-            "This section will describe who should take this course (beginners, intermediate learners, etc.)."}
-        </p>
-      </div>
-    )}
-
-            {activeTab === "outcome" && (
-              <div>
-                <h3 className="text-lg font-semibold mb-2">Course Outcome</h3>
-                <p>
-                  {courseOutcome ||
-                    "This section will list the learning outcomes and skills you will gain after completing the course."}
-                </p>
-              </div>
-            )}
-
-            {activeTab === "resources" && (
-              <div className="mt-4">
-                <h3 className="text-lg font-semibold mb-2">Resources</h3>
-
-                {activeModule?.resourceslink ? (
-                  <a
-                    href={activeModule.resourceslink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 underline break-all"
-                  >
-                    Download Resources 
-                  </a>
-                ) : (
-                  <p className="text-sm text-gray-500">
-                    No resources available for this module
-                  </p>
-                )}
-              </div>
-            )}
-          </div>
+          </nav>
         </div>
+
+        {/* TAB CONTENT */}
+        <div className="mt-4 text-sm text-gray-700">
+          {currentTopic?.description && activeTab === "overview" && (
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Topic Overview</h3>
+              <p>{currentTopic?.description}</p>
+            </div>
+          )}
+
+          {activeTab === "contact" && (
+            <Calendar id={id} />
+          )}
+
+          {activeTab === "whomfor" && <p>{courseWhomFor}</p>}
+          {activeTab === "outcome" && <p>{courseOutcome}</p>}
+
+          {activeTab === "resources" && (
+            <a href={activeModule?.resourceslink} className="text-blue-600 underline">
+              Download Resources
+            </a>
+          )}
+        </div>
+      </div>
+
+    </div>
+  </div>
 )}
 
         {pageNotice && <div className="mt-4 px-4 py-2 bg-yellow-50 text-yellow-700 rounded">{pageNotice}</div>}

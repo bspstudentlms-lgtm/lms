@@ -64,9 +64,9 @@ export default function FavouritesPage() {
   /* ================= CARD ================= */
   const FavouriteCard = ({ fav }: { fav: Favourite }) => (
     <div className="rounded-xl border bg-white p-5 shadow-sm hover:shadow-md transition">
-      <div className="flex gap-4">
+      <div className="flex flex-col sm:flex-row gap-4">
         {/* IMAGE */}
-        <div className="relative h-28 w-28 shrink-0 overflow-hidden rounded-lg bg-gray-100">
+        <div className="relative w-full h-48 sm:h-28 sm:w-28 shrink-0 overflow-hidden rounded-lg bg-gray-100">
           <Image
             src={
               fav.image

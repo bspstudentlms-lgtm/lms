@@ -1524,7 +1524,8 @@ strong, b {
     padding: 0px !important;
 }
   .site-logo img {
-    height: 32px;
+    height: 32px !important;
+    width: auto !important;
   }
 
   .call_to_action .btn_one {
@@ -1563,4 +1564,160 @@ strong, b {
   margin-left:10px;
   font-size: 19px;
   line-height:1.5;
+}
+
+
+
+/* Hide button on desktop */
+.mobile-filter-btn {
+  display: none;
+}
+
+/* MOBILE ONLY */
+@media (max-width: 768px) {
+
+  .mobile-filter-btn {
+    display: block;
+    margin: 10px 0 25px 0;
+  }
+
+  .mobile-filter-btn button {
+    width: 100%;
+    padding: 10px;
+    background: #e53935;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+  }
+
+  /* FILTER DRAWER STYLE */
+  .filters-wrapper {
+    position: fixed;
+    bottom: -100%;
+    left: 0;
+    width: 100%;
+    height: 80%;
+    background: #fff;
+    z-index: 9999;
+    border-radius: 16px 16px 0 0;
+    padding: 16px;
+    transition: 0.3s ease;
+    overflow-y: auto;
+  }
+
+  .filters-wrapper.show {
+    bottom: 0;
+  }
+
+  .filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .filter-header button {
+    font-size: 18px;
+    background: none;
+    border: none;
+  }
+}
+
+/* Hide filter header on desktop */
+.filter-header {
+  display: none;
+}
+
+/* Show only in mobile */
+@media (max-width: 768px) {
+  .filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* STACK CARD */
+  .course-card > div,
+  .course-slide > div,
+  .flex.gap-5 {
+    flex-direction: column !important;
+  }
+
+  /* IMAGE FULL WIDTH */
+  .course-img,
+  .card-img {
+    width: 100% !important;
+    height: 300px !important;
+    border-radius: 12px;
+  }
+
+  .course-img img,
+  .card-img img {
+    object-fit: cover !important;
+  }
+
+  /* CONTENT FULL WIDTH */
+  .course-content,
+  .card-info {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  /* TITLE */
+  .course-content h3,
+  .card-info h3 {
+    font-size: 16px;
+    line-height: 1.4;
+  }
+
+  /* BADGES ALIGN */
+  .course-date,
+  .badges {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+  }
+
+  /* PROGRESS */
+  .progress-bar {
+    height: 6px;
+  }
+
+  /* BUTTON FULL WIDTH */
+  .course-content a,
+  .course-content button,
+  .btn-primary {
+    width: auto !important;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .course-flex {
+    flex-direction: column !important;
+  }
+
+  /* IMAGE FULL WIDTH */
+  .course-flex > div:first-child {
+    width: 100% !important;
+    height: 180px !important;
+  }
+
+  .course-flex > div:first-child img {
+    object-fit: cover !important;
+  }
+
+  /* CONTENT FULL WIDTH */
+  .course-flex > div:last-child {
+    width: 100% !important;
+  }
+
 }

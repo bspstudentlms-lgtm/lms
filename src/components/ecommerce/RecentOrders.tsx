@@ -289,11 +289,11 @@ const hasRecording = Number(course.recording_available) === 1;
   className={`relative rounded-2xl border-l-4 p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-lg
   ${style.border} ${style.bg}`}
 >
-        <div className="flex gap-5">
+        <div className="flex flex-col sm:flex-row gap-5">
 
         
           {/* IMAGE */}
-          <div className="relative h-28 w-28 shrink-0 overflow-hidden rounded-xl bg-gray-100">
+          <div className="relative w-full h-48 sm:h-28 sm:w-28 shrink-0 overflow-hidden rounded-xl bg-gray-100">
             <Image
               src={course.image}
               alt={course.title}
@@ -545,7 +545,7 @@ const hasRecording = Number(course.recording_available) === 1;
         </div>
 
         {/* MOBILE STICKY CTA */}
-        {isPurchased && !isCompleted && (
+        {/* {isPurchased && !isCompleted && (
           <div className="fixed bottom-0 left-0 right-0 z-40 border-t bg-white p-4 sm:hidden">
             <Link
               href={`/coursedetails/${course.id}`}
@@ -561,7 +561,7 @@ const hasRecording = Number(course.recording_available) === 1;
               <ArrowRightIcon />
             </Link>
           </div>
-        )}
+        )} */}
       </div>
     );
   };
@@ -569,13 +569,13 @@ const hasRecording = Number(course.recording_available) === 1;
   return (
     <div className="min-h-screen bg-white p-6">
       {/* HEADER */}
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <h2 className="text-2xl font-bold">All Courses</h2>
         <input
           type="text"
           placeholder="Search courses..."
           onChange={e => setSearchTerm(e.target.value)}
-          className="h-10 w-72 rounded-lg border px-3 text-sm"
+          className="h-10 w-full sm:w-72 rounded-lg border px-3 text-sm"
         />
       </div>
 
