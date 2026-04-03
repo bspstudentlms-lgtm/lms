@@ -861,7 +861,7 @@ return (
 					<div className="row">
 						<div className="col-lg-3 col-sm-6 col-xs-12">
 							<div className="single_footer">
-								<a href="#"><img src="images/Bsp_White.png" alt="" /></a>
+								<a><img src="images/Bsp_White.png" alt="" /></a>
 								<p>Building future game developers through structured, practical learning.
 									Create real projects. Build real skills. Grow your career.
 								</p>

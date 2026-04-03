@@ -567,7 +567,7 @@ const HomePageContent = () => {
 							<div className="single_feature_one">
 								<div className="sf_top">
 									<span className="ti-book ss_five"></span>
-									<h2><a href="#" target="_blank">Learn by Building</a></h2>
+									<h2><a target="_blank">Learn by Building</a></h2>
 								</div>
 								<p>Every course revolves around real production workflows used in studios.</p>
 							</div>
@@ -576,7 +576,7 @@ const HomePageContent = () => {
 							<div className="single_feature_one">
 								<div className="sf_top">
 									<span className="ti-user ss_five"></span>
-									<h2><a href="#" target="_blank">Industry Mentors</a></h2>
+									<h2><a target="_blank">Industry Mentors</a></h2>
 								</div>
 								<p>Train with professionals who ship games, not just teach theory.</p>
 							</div>
@@ -585,7 +585,7 @@ const HomePageContent = () => {
 							<div className="single_feature_one">
 								<div className="sf_top">
 									<span className="ti-direction   ss_five"></span>
-									<h2><a href="#" target="_blank">Beginner to Pro Path</a></h2>
+									<h2><a target="_blank">Beginner to Pro Path</a></h2>
 								</div>
 								<p>Clear roadmaps guiding you from fundamentals to advanced pipelines.</p>
 							</div>
@@ -594,7 +594,7 @@ const HomePageContent = () => {
 							<div className="single_feature_one">
 								<div className="sf_top">
 									<span className="ti-clipboard ss_five"></span>
-									<h2><a href="#" target="_blank">Project-Based Curriculum</a></h2>
+									<h2><a target="_blank">Project-Based Curriculum</a></h2>
 								</div>
 								<p>Create portfolio-ready assets, mechanics, and complete games.</p>
 							</div>
@@ -603,7 +603,7 @@ const HomePageContent = () => {
 							<div className="single_feature_one">
 								<div className="sf_top">
 									<span className="ti-time  ss_five"></span>
-									<h2><a href="#" target="_blank">Flexible Learning</a></h2>
+									<h2><a target="_blank">Flexible Learning</a></h2>
 								</div>
 								<p>Learn anytime with lifetime access and updates.</p>
 							</div>
@@ -612,7 +612,7 @@ const HomePageContent = () => {
 							<div className="single_feature_one">
 								<div className="sf_top">
 									<span className="ti-briefcase ss_five"></span>
-									<h2><a href="#" target="_blank">Career Focused</a></h2>
+									<h2><a target="_blank">Career Focused</a></h2>
 								</div>
 								<p>Prepare for internships, freelance, or studio roles.</p>
 							</div>
@@ -702,7 +702,7 @@ const HomePageContent = () => {
 							<div key={index} className="col-lg-4 col-sm-6 col-xs-12">
 							<div className="single_tca">
 								<h2>
-								<a href="#">{topic.title}</a>
+								<a>{topic.title}</a>
 								</h2>
 								<span>{topic.desc}</span>
 							</div>
@@ -831,9 +831,9 @@ const HomePageContent = () => {
 							<p>Developer</p>
 							
 							<ul className="social-home">
-								<li><a href="#" className="facebook-home"><i className="fa fa-facebook"></i></a></li>
-								<li><a href="#" className="twitter-home"><i className="fa fa-twitter"></i></a></li>
-								<li><a href="#" className="instagram-home"><i className="fa fa-instagram"></i></a></li>
+								<li><a className="facebook-home"><i className="fa fa-facebook"></i></a></li>
+								<li><a className="twitter-home"><i className="fa fa-twitter"></i></a></li>
+								<li><a className="instagram-home"><i className="fa fa-instagram"></i></a></li>
 							</ul>
 						</div>
 					</div>
@@ -845,9 +845,9 @@ const HomePageContent = () => {
 							<h3>Ayoub Fennouni</h3>
 							<p>Logo Expert</p>
 							<ul className="social-home">
-								<li><a href="#" className="facebook-home"><i className="fa fa-facebook"></i></a></li>
-								<li><a href="#" className="twitter-home"><i className="fa fa-twitter"></i></a></li>
-								<li><a href="#" className="instagram-home"><i className="fa fa-instagram"></i></a></li>
+								<li><a className="facebook-home"><i className="fa fa-facebook"></i></a></li>
+								<li><a className="twitter-home"><i className="fa fa-twitter"></i></a></li>
+								<li><a className="instagram-home"><i className="fa fa-instagram"></i></a></li>
 							</ul>
 						</div>
 					</div>
@@ -859,9 +859,9 @@ const HomePageContent = () => {
 							<h3>Mark Linomi</h3>
 							<p>Marketer</p>
 							<ul className="social-home">
-								<li><a href="#" className="facebook-home"><i className="fa fa-facebook"></i></a></li>
-								<li><a href="#" className="twitter-home"><i className="fa fa-twitter"></i></a></li>
-								<li><a href="#" className="instagram-home"><i className="fa fa-instagram"></i></a></li>
+								<li><a className="facebook-home"><i className="fa fa-facebook"></i></a></li>
+								<li><a className="twitter-home"><i className="fa fa-twitter"></i></a></li>
+								<li><a className="instagram-home"><i className="fa fa-instagram"></i></a></li>
 							</ul>
 						</div>
 					</div>
@@ -873,9 +873,9 @@ const HomePageContent = () => {
 							<h3>Amira Yerden</h3>
 							<p>UI/UX Designer</p>
 							<ul className="social-home">
-								<li><a href="#" className="facebook-home"><i className="fa fa-facebook"></i></a></li>
-								<li><a href="#" className="twitter-home"><i className="fa fa-twitter"></i></a></li>
-								<li><a href="#" className="instagram-home"><i className="fa fa-instagram"></i></a></li>
+								<li><a className="facebook-home"><i className="fa fa-facebook"></i></a></li>
+								<li><a className="twitter-home"><i className="fa fa-twitter"></i></a></li>
+								<li><a className="instagram-home"><i className="fa fa-instagram"></i></a></li>
 							</ul>
 						</div>
 					</div>
@@ -889,9 +889,9 @@ const HomePageContent = () => {
 					<div className="row">
 						<div className="col-lg-3 col-sm-6 col-xs-12">
 							<div className="single_footer">
-								<a href="#"><img src="images/Bsp_White.png" alt="" /></a>
+								<a><img src="images/Bsp_White.png" alt="" /></a>
 								<p>Building future game developers through structured, practical learning.
-									Create real projects. Build real skills. Grow your career
+									Create real projects. Build real skills. Grow your career.
 								</p>
 								<ul className="social-home">
 								<li><a href="https://www.facebook.com/profile.php?id=61588089197582" target="_blank" className="facebook-home"><i className="fa fa-facebook"></i></a></li>
@@ -905,11 +905,11 @@ const HomePageContent = () => {
 								<h4>Courses</h4>
 								<ul>
 									<li><a target="_blank" href="/basics-of-maya-for-beginners">Basics of Maya for Beginners</a></li>
-									{/* <li><a href="#">Digital Marketing</a></li>
-									<li><a href="#">SEO Business</a></li>
-									<li><a href="#">Social Marketing</a></li>
-									<li><a href="#">Graphic Design</a></li>
-									<li><a href="#">Website Development</a></li> */}
+									{/* <li><a>Digital Marketing</a></li>
+									<li><a>SEO Business</a></li>
+									<li><a>Social Marketing</a></li>
+									<li><a>Graphic Design</a></li>
+									<li><a>Website Development</a></li> */}
 								</ul>
 							</div>
 						</div>
@@ -971,8 +971,8 @@ const HomePageContent = () => {
 						<div className="col-lg-6 col-sm-6 col-xs-12">
 							<div className="footer_menu">
 								<ul>
-									<li><a href="#">Terms of use</a></li>
-									<li><a href="#">Privacy Policy</a></li>
+									<li><a>Terms of use</a></li>
+									<li><a>Privacy Policy</a></li>
 								</ul>
 							</div>
 						</div>

@@ -1143,7 +1143,15 @@ strong, b {
   max-height: calc(1.6em * 4);
 }
 
-
+@media (max-width: 768px) {
+  .course-desc {
+    display: block;
+    -webkit-line-clamp: unset;
+    -webkit-box-orient: unset;
+    overflow: visible;
+    max-height: none;
+  }
+}
 .course-details {
   background: #f9fafb;
 }
