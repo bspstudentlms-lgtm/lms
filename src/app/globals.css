@@ -1152,6 +1152,12 @@ strong, b {
     max-height: none;
   }
 }
+
+@media (max-width: 768px) {
+  .cp_content ul li br {
+    display: none;
+  }
+}
 .course-details {
   background: #f9fafb;
 }
@@ -1649,11 +1655,11 @@ strong, b {
 @media (max-width: 768px) {
 
   /* STACK CARD */
-  .course-card > div,
+  /* .course-card > div,
   .course-slide > div,
   .flex.gap-5 {
     flex-direction: column !important;
-  }
+  } */
 
   /* IMAGE FULL WIDTH */
   .course-img,

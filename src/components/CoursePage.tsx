@@ -2188,13 +2188,20 @@ const Career = ({ course }) => {
     course.didyouknow_image !== "" &&
     course.didyouknow_image !== "0";
 
+    const title = course.career_main_title;
+
+    const parts = title.split("begin");
+
   return (
     <>
       <section className="topic_content_p2 section-padding">
         <div className="container">
           <div className="section-title">
             <h2>Career Opportunities </h2>
-            <p>{course.career_main_title}</p>
+           <p>
+    {parts[0]} for{" "}
+    <span className="highlight">Being {parts[1]}</span>
+  </p>
           </div>
           <div className="row">
 

@@ -368,8 +368,8 @@ const HomePageContent = () => {
 
 
 
-			<section className="tp_feature">
-				<div className="container-fluid">
+			<section className="tp_feature section-padding">
+				<div className="container">
 					<div className="row">
 						<div className="col-lg-4 col-sm-4 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.2s" data-wow-offset="0">
 							<div className="single_tp">
