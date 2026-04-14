@@ -2199,7 +2199,7 @@ const Career = ({ course }) => {
           <div className="section-title">
             <h2>Career Opportunities </h2>
            <p>
-    {parts[0]} for{" "}
+    {parts[0]} {" "}
     <span className="highlight">Being {parts[1]}</span>
   </p>
           </div>
