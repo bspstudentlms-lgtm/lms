@@ -33,18 +33,18 @@ const slides = [
   { id: 3, src: "/images/carousel/carousel-03.webp", alt: "Slide 3" },
 ];
 
-const companies = [
-  "https://www.guvi.in/assets/BeM-RDUa-amazon.webp",
-  "https://www.guvi.in/assets/fQGtF5GR-siemens.webp",
-  "https://www.guvi.in/assets/Cjsm_-LY-aspire.webp",
-  "https://www.guvi.in/assets/BT5qwU2l-ideas.webp",
-  "https://www.guvi.in/assets/C7IirAO9-cartoon-mango.webp",
-  "https://www.guvi.in/assets/daYTQfl9-larsen.webp",
-  "https://www.guvi.in/assets/BCqZ5u0O-lenovo.webp",
-  "https://www.guvi.in/assets/cZULMhV6-just-dial.webp",
-  "https://www.guvi.in/assets/C7gjAANj-thoughtworks.webp",
-  "https://www.guvi.in/assets/BeM-RDUa-amazon.webp",
-];
+// const companies = [
+//   "https://www.guvi.in/assets/BeM-RDUa-amazon.webp",
+//   "https://www.guvi.in/assets/fQGtF5GR-siemens.webp",
+//   "https://www.guvi.in/assets/Cjsm_-LY-aspire.webp",
+//   "https://www.guvi.in/assets/BT5qwU2l-ideas.webp",
+//   "https://www.guvi.in/assets/C7IirAO9-cartoon-mango.webp",
+//   "https://www.guvi.in/assets/daYTQfl9-larsen.webp",
+//   "https://www.guvi.in/assets/BCqZ5u0O-lenovo.webp",
+//   "https://www.guvi.in/assets/cZULMhV6-just-dial.webp",
+//   "https://www.guvi.in/assets/C7gjAANj-thoughtworks.webp",
+//   "https://www.guvi.in/assets/BeM-RDUa-amazon.webp",
+// ];
 
 const awards = [
   {
@@ -2064,9 +2064,9 @@ const handlePreview = async (topicId: number) => {
                     }`}
                 />
               </button>
-
+{/* 
                     <div className="flex items-center gap-4" style={{marginRight: "30px"}}>
-        {/* Preview Button */}
+        
         <button  
          onClick={() =>
                   setActiveIndex(isOpen ? null : index)
@@ -2077,11 +2077,11 @@ const handlePreview = async (topicId: number) => {
       <PlayCircle className="w-4 h-4 " style={{marginRight: "7px"}} />  <span className="hidden md:inline">Preview</span>
         </button>
 
-        {/* Duration (static for now) */}
+       
         <span className="text-gray-400 text-sm">
           6:54
         </span>
-      </div>
+      </div> */}
 
                     </div>
 
@@ -2174,8 +2174,10 @@ const handlePreview = async (topicId: number) => {
     setVideoList(sampleVideos);
     setCurrentVideo(sampleVideos[0]);
     setPreviewOpen(true);
-  }} className="flex justify-between items-center gap-0">{point}   <div className="flex items-center gap-4" style={{marginRight: "0px"}}>
-        {/* Preview Button */}
+  }} className="flex justify-between items-center gap-0">{point}   
+  
+  {/* <div className="flex items-center gap-4" style={{marginRight: "0px"}}>
+      
         <button  
          onClick={() =>
                   setActiveIndex(isOpen ? null : index)
@@ -2186,18 +2188,20 @@ const handlePreview = async (topicId: number) => {
       <PlayCircle className="w-4 h-4 " style={{marginRight: "7px"}} />  <span className="hidden md:inline">Preview</span>
         </button>
 
-         {/* <button
+        <button
                       onClick={() => handlePreview(point.topic_id)}
                       style={{ marginLeft: "10px", color: "blue" }}
                     >
                       Preview
-                    </button> */}
+                    </button>
 
-        {/* Duration (static for now) */}
+       
         <span className="text-gray-400 text-sm">
           6:54
         </span>
-      </div></li>
+      </div> */}
+      
+      </li>
                   ))}
                 </ul>
               </div>
