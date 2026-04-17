@@ -14,6 +14,7 @@ import {
   Globe,
   Star,
   Phone,
+  PlayCircle,
   MessageCircle,
 } from "lucide-react";
 import EnrollModal from "@/components/EnrollModal";
@@ -260,7 +261,7 @@ export default function CoursePage({ params }) {
     if (!params?.path) return;
 
     fetch(
-      `https://backstagepass.co.in/reactapi/api/course_innerpage.php?path=${params.path}`
+      `https://www.backstagepass.co.in/reactapi/api/course_innerpage.php?path=${params.path}`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -1974,6 +1975,59 @@ const Topics = ({ course }) => {
    // Show section only if category = 2
   if (Number(course.course_type) !== 1) return null;
 
+  const [previewOpen, setPreviewOpen] = useState(false);
+const [currentVideo, setCurrentVideo] = useState(null);
+const [videoList, setVideoList] = useState([]);
+
+const sampleVideos = [
+  {
+    title: "Day 1 - Welcome to the Course",
+    duration: "10:13",
+    videoUrl: "/videos/sample1.mp4",
+    thumbnail: "/images/thumb1.jpg",
+  },
+  {
+    title: "Day 1 - FPS Game",
+    duration: "6:54",
+    videoUrl: "/videos/sample2.mp4",
+    thumbnail: "/images/thumb2.jpg",
+  },
+  {
+    title: "Day 1 - Agentic AI Coding",
+    duration: "6:55",
+    videoUrl: "/videos/sample3.mp4",
+    thumbnail: "/images/thumb3.jpg",
+  },
+];
+
+const { isMobileOpen } = useSidebar();
+
+const handlePreview = async (topicId: number) => {
+  try {
+   
+
+    const res = await fetch(
+      `https://backstagepass.co.in/reactapi/api/get_playback_id.php?topic_id=${topicId}`
+    );
+
+    const data = await res.json();
+
+    if (data.status && data.playback_id) {
+      console.log("Playback ID:", data.playback_id);
+      if (data.playback_id) {
+  setVideoUrl(`https://stream.mux.com/${data.playback_id}.m3u8`);
+}
+
+      
+    } else {
+      alert("No video found");
+    }
+  } catch (error) {
+    console.error(error);
+    alert("Something went wrong");
+  }
+};
+
 
   return (
     
@@ -1994,29 +2048,156 @@ const Topics = ({ course }) => {
               key={index}
               className="bg-white rounded-xl shadow-md overflow-hidden"
             >
+              <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
               <button
                 onClick={() =>
                   setActiveIndex(isOpen ? null : index)
                 }
-                className="w-full flex justify-between items-center px-8 py-3 text-left"
+                className="w-auto flex justify-between items-center px-8 py-3 text-left"
               >
                 <span className="text-lg font-500" style={{ color: "#1a2d62" }}>
                   {topic.title}
                 </span>
 
                 <ChevronDown
-                  className={`text-red-600 transition-transform duration-300 ${isOpen ? "rotate-180" : ""
+                  style={{ color: "#1a2d62" }} className={`text-red-300 transition-transform duration-300 ${isOpen ? "rotate-180" : ""
                     }`}
                 />
               </button>
 
+                    <div className="flex items-center gap-4" style={{marginRight: "30px"}}>
+        {/* Preview Button */}
+        <button  
+         onClick={() =>
+                  setActiveIndex(isOpen ? null : index)
+                }
+          
+          className="text-purple-600 font-medium hover:underline flex items-center justify-between w-auto md:w-[80px]"
+        >
+      <PlayCircle className="w-4 h-4 " style={{marginRight: "7px"}} />  <span className="hidden md:inline">Preview</span>
+        </button>
+
+        {/* Duration (static for now) */}
+        <span className="text-gray-400 text-sm">
+          6:54
+        </span>
+      </div>
+
+                    </div>
+
+{/* {topic.title}---{topic.module_preview} */}
+
+{/* {point.title}  ---{point.topic_preview} */}
+
+                    {previewOpen && (
+  <div className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm flex justify-center items-center">
+    
+    <div className="bg-[#0b1a2b] text-white w-[900px] rounded-xl overflow-hidden shadow-2xl">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center p-4 border-b border-gray-700">
+        <div>
+          <p className="text-sm text-gray-400">Course Preview</p>
+          <h2 className="text-xl font-semibold text-blue-400">
+            {course?.coursename}
+          </h2>
+        </div>
+
+        <button
+          onClick={() => setPreviewOpen(false)}
+          className="text-xl hover:text-red-400"
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* VIDEO */}
+      <div className="p-4">
+        <video
+          key={currentVideo?.videoUrl}
+          src={currentVideo?.videoUrl}
+          controls
+          autoPlay
+          className="w-full rounded-lg bg-black"
+        />
+      </div>
+
+      {/* TITLE */}
+      {/* <div className="px-4 pb-2 text-sm text-gray-300">
+        Free Sample Videos:
+      </div> */}
+
+      {/* LIST */}
+      {/* <div className="max-h-[300px] overflow-y-auto">
+        {videoList.map((video, i) => (
+          <div
+            key={i}
+            onClick={() => setCurrentVideo(video)}
+            className={`flex items-center justify-between px-4 py-3 cursor-pointer transition ${
+              currentVideo?.videoUrl === video.videoUrl
+                ? "bg-[#1e293b]"
+                : "hover:bg-[#1e293b]"
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              
+             
+              <img
+                src={
+                  video.thumbnail ||
+                  `https://backstagepass.co.in/studentlms/uploads/featuredcourses/${course.courses_image}`
+                }
+                className="w-16 h-10 object-cover rounded"
+              />
+
+              <p className="text-sm">{video.title}</p>
+            </div>
+
+            <span className="text-xs text-gray-400">
+              {video.duration}
+            </span>
+          </div>
+        ))}
+      </div> */}
+    </div>
+  </div>
+)}
+
+                   
               <div
                 className={`px-8 transition-all duration-300 ease-in-out ${isOpen ? "max-h-[600px] pb-6" : "max-h-0"
                   } overflow-hidden`}
               >
                 <ul className="list-disc pl-5 space-y-2 text-gray-400">
                   {topic.points.map((point, i) => (
-                    <li style={{ marginBottom: "8px", fontWeight: "400" }} key={i}>{point}</li>
+                    <li style={{ marginBottom: "8px", fontWeight: "400" }} key={i} onClick={() => {
+    setVideoList(sampleVideos);
+    setCurrentVideo(sampleVideos[0]);
+    setPreviewOpen(true);
+  }} className="flex justify-between items-center gap-0">{point}   <div className="flex items-center gap-4" style={{marginRight: "0px"}}>
+        {/* Preview Button */}
+        <button  
+         onClick={() =>
+                  setActiveIndex(isOpen ? null : index)
+                }
+          
+          className="text-purple-600 font-medium hover:underline flex items-center justify-between w-auto md:w-[80px]"
+        >
+      <PlayCircle className="w-4 h-4 " style={{marginRight: "7px"}} />  <span className="hidden md:inline">Preview</span>
+        </button>
+
+         {/* <button
+                      onClick={() => handlePreview(point.topic_id)}
+                      style={{ marginLeft: "10px", color: "blue" }}
+                    >
+                      Preview
+                    </button> */}
+
+        {/* Duration (static for now) */}
+        <span className="text-gray-400 text-sm">
+          6:54
+        </span>
+      </div></li>
                   ))}
                 </ul>
               </div>
