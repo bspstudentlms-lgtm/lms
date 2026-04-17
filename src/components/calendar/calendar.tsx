@@ -77,7 +77,7 @@ export default function MentorCalendar() {
   if (!userId || !role) return;
 
   fetch(
-    `https://backstagepass.co.in/reactapi/get_events.php?userId=${userId}&role=${role}&_=${Date.now()}`
+    `https://www.backstagepass.co.in/reactapi/get_events.php?userId=${userId}&role=${role}&_=${Date.now()}`
   )
     .then((res) => res.json())
     .then(setEvents)

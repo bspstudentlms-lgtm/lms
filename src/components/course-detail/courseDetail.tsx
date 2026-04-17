@@ -253,7 +253,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
            1️⃣ FETCH LAST WATCHED PROGRESS
         =============================== */
         const progressRes = await fetch(
-          `https://backstagepass.co.in/reactapi/api/getdetails.php?student_id=${userId}&course_main_id=${id}`,
+          `https://www.backstagepass.co.in/reactapi/api/getdetails.php?student_id=${userId}&course_main_id=${id}`,
           { cache: "no-store" }
         );
 
@@ -299,7 +299,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
         setLoading(true);
 
         const moduleRes = await fetch(
-          `https://backstagepass.co.in/reactapi/api/getmodules.php?course_id=${encodeURIComponent(
+          `https://www.backstagepass.co.in/reactapi/api/getmodules.php?course_id=${encodeURIComponent(
             id
           )}&user_id=${encodeURIComponent(userId)}`,
           { cache: "no-store" }
@@ -392,7 +392,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
       setLoadingTopics((prev) => ({ ...prev, [index]: true }));
 
       const res = await fetch(
-        `https://backstagepass.co.in/reactapi/api/gettopicapi.php?module_id=${encodeURIComponent(
+        `https://www.backstagepass.co.in/reactapi/api/gettopicapi.php?module_id=${encodeURIComponent(
           moduleId
         )}`,
         { cache: "no-store" }
@@ -509,7 +509,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
 
     try {
       const resp = await fetch(
-        `https://backstagepass.co.in/reactapi/fetch_watched.php?user_id=${encodeURIComponent(
+        `https://www.backstagepass.co.in/reactapi/fetch_watched.php?user_id=${encodeURIComponent(
           uid
         )}&status=watched`,
         {
@@ -555,7 +555,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
     (async () => {
       try {
         const res = await fetch(
-          `https://backstagepass.co.in/reactapi/get_user_progress.php?user_id=${encodeURIComponent(userId)}`
+          `https://www.backstagepass.co.in/reactapi/get_user_progress.php?user_id=${encodeURIComponent(userId)}`
         );
         const data = await res.json();
         if (!mounted) return;
@@ -664,7 +664,7 @@ const autoOpenModuleRef = useRef<number | null>(null);
 
   // mark watched
   if (userId) {
-    fetch("https://backstagepass.co.in/reactapi/mark_watched.php", {
+    fetch("https://www.backstagepass.co.in/reactapi/mark_watched.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ user_id: userId, topic_id: topicId }),
@@ -835,7 +835,7 @@ const openModuleAndLoadTopics = async (moduleIndex: number) => {
     });
 
     try {
-      await fetch("https://backstagepass.co.in/reactapi/submit_quiz.php", {
+      await fetch("https://www.backstagepass.co.in/reactapi/submit_quiz.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1010,7 +1010,7 @@ const openModuleAndLoadTopics = async (moduleIndex: number) => {
       setIsPlaying({});
 
       const res = await fetch(
-        `https://backstagepass.co.in/reactapi/api/getquizquestions.php?module_id=${module.id}&limit=${module.questions_limit}`,
+        `https://www.backstagepass.co.in/reactapi/api/getquizquestions.php?module_id=${module.id}&limit=${module.questions_limit}`,
         { cache: "no-store" }
       );
 

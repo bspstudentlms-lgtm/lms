@@ -66,7 +66,7 @@ const MentorDashboard = () => {
     const ts = Date.now(); // 🔥 cache buster
 
     fetch(
-      `https://backstagepass.co.in/reactapi/get_upcoming_sessions.php?mentorid=${mentorId}&type=upcoming&_=${ts}`,
+      `https://www.backstagepass.co.in/reactapi/get_upcoming_sessions.php?mentorid=${mentorId}&type=upcoming&_=${ts}`,
       { cache: "no-store" }
     )
       .then(res => res.json())
@@ -74,7 +74,7 @@ const MentorDashboard = () => {
       .catch(console.error);
 
     fetch(
-      `https://backstagepass.co.in/reactapi/get_upcoming_sessions.php?mentorid=${mentorId}&type=total&_=${ts}`,
+      `https://www.backstagepass.co.in/reactapi/get_upcoming_sessions.php?mentorid=${mentorId}&type=total&_=${ts}`,
       { cache: "no-store" }
     )
       .then(res => res.json())
@@ -82,7 +82,7 @@ const MentorDashboard = () => {
       .catch(console.error);
 
     fetch(
-      `https://backstagepass.co.in/reactapi/get_sessions.php?mentorid=${mentorId}&_=${ts}`,
+      `https://www.backstagepass.co.in/reactapi/get_sessions.php?mentorid=${mentorId}&_=${ts}`,
       { cache: "no-store" }
     )
       .then(res => res.json())
@@ -97,7 +97,7 @@ const MentorDashboard = () => {
   ) => {
     try {
       const res = await fetch(
-        "https://backstagepass.co.in/reactapi/update_session_status.php",
+        "https://www.backstagepass.co.in/reactapi/update_session_status.php",
         {
           method: "POST",
           headers: {
@@ -126,7 +126,7 @@ const MentorDashboard = () => {
 
       // 🔥 Cache-busted GET
       const listRes = await fetch(
-        `https://backstagepass.co.in/reactapi/get_sessions.php?mentorid=${mentorId}&_=${Date.now()}`,
+        `https://www.backstagepass.co.in/reactapi/get_sessions.php?mentorid=${mentorId}&_=${Date.now()}`,
         {
           cache: "no-store",
         }

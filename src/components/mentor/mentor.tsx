@@ -47,7 +47,7 @@ const Calendar: React.FC<CalendarProps> = ({ id }) => {
   async function loadDateData() {
     try {
       const res = await fetch(
-        `https://backstagepass.co.in/reactapi/get-available-dates.php?courseid=${id}`,
+        `https://www.backstagepass.co.in/reactapi/get-available-dates.php?courseid=${id}`,
         {
           method: "GET",
           cache: "no-store",
@@ -93,7 +93,7 @@ const Calendar: React.FC<CalendarProps> = ({ id }) => {
   const handleBooking = async () => {
     try {
       const res = await fetch(
-        `https://backstagepass.co.in/reactapi/insert_mentorbook.php?id=${id}`,
+        `https://www.backstagepass.co.in/reactapi/insert_mentorbook.php?id=${id}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

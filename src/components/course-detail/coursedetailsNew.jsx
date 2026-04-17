@@ -157,7 +157,7 @@ function AssignmentPanel({
     setNotice("Starting download...");
 
     try {
-      const response = await fetch("https://backstagepass.co.in/reactapi/save_assignment_download.php", {
+      const response = await fetch("https://www.backstagepass.co.in/reactapi/save_assignment_download.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -195,7 +195,7 @@ function AssignmentPanel({
 
     setNotice("Uploading file...");
     try {
-      const response = await fetch("https://backstagepass.co.in/reactapi/submit_assignment.php", {
+      const response = await fetch("https://www.backstagepass.co.in/reactapi/submit_assignment.php", {
         method: "POST",
         body: formData,
       });
@@ -566,7 +566,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
       try {
         setLoading(true);
         const resp = await fetch(
-          `https://backstagepass.co.in/reactapi/video_api.php?id=${encodeURIComponent(id)}&user_id=${encodeURIComponent(userId)}`,
+          `https://www.backstagepass.co.in/reactapi/video_api.php?id=${encodeURIComponent(id)}&user_id=${encodeURIComponent(userId)}`,
           { signal: ac.signal }
         );
         if (!resp.ok) throw new Error("Failed to fetch modules");
@@ -658,7 +658,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
     if (!uid) return;
     try {
       const resp = await fetch(
-        `https://backstagepass.co.in/reactapi/fetch_watched.php?user_id=${encodeURIComponent(uid)}&status=watched`
+        `https://www.backstagepass.co.in/reactapi/fetch_watched.php?user_id=${encodeURIComponent(uid)}&status=watched`
       );
       if (!resp.ok) throw new Error("failed");
       const json = await resp.json();
@@ -677,7 +677,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
     (async () => {
       try {
         const res = await fetch(
-          `https://backstagepass.co.in/reactapi/get_user_progress.php?user_id=${encodeURIComponent(userId)}`
+          `https://www.backstagepass.co.in/reactapi/get_user_progress.php?user_id=${encodeURIComponent(userId)}`
         );
         const data = await res.json();
         if (!mounted) return;
@@ -734,7 +734,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
     const topicId = topic.id;
     try {
       if (userId) {
-        fetch("https://backstagepass.co.in/reactapi/mark_watched.php", {
+        fetch("https://www.backstagepass.co.in/reactapi/mark_watched.php", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ user_id: userId, topic_id: topicId }),
@@ -839,7 +839,7 @@ const CourseDetailsPage: React.FC<CourseClientProps> = ({ id }) => {
     });
 
     try {
-      await fetch("https://backstagepass.co.in/reactapi/submit_quiz.php", {
+      await fetch("https://www.backstagepass.co.in/reactapi/submit_quiz.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

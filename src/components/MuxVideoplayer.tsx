@@ -83,7 +83,7 @@ const handleEnded = () => {
     playback_id: video.playback_id,
   });
 
-  fetch('https://backstagepass.co.in/reactapi/mark_watched.php', {
+  fetch('https://www.backstagepass.co.in/reactapi/mark_watched.php', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -123,7 +123,7 @@ const handleEnded = () => {
       console.log('Current time:', ct);  // Debugging log
 
       // Send progress data to your API
-      fetch('https://backstagepass.co.in/reactapi/mark_watched.php', {
+      fetch('https://www.backstagepass.co.in/reactapi/mark_watched.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

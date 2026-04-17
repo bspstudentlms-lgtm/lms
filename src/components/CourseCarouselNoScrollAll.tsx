@@ -128,7 +128,7 @@ const applyFilterAndClose = (callback: () => void) => {
 
     try {
       const response = await fetch(
-        "https://backstagepass.co.in/reactapi/save_favourite_course.php",
+        "https://www.backstagepass.co.in/reactapi/save_favourite_course.php",
         {
           method: "POST",
           headers: {

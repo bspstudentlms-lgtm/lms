@@ -23,7 +23,7 @@ export default function ResourcesCard() {
       setUserId(storedUserId);
     const fetchModules = async () => {
       try {
-        const response = await fetch(`https://backstagepass.co.in/reactapi/course_documentsapi.php?courseid=7&user_id=${storedUserId}&status=documents`);
+        const response = await fetch(`https://www.backstagepass.co.in/reactapi/course_documentsapi.php?courseid=7&user_id=${storedUserId}&status=documents`);
         const data = await response.json();
         console.log('fetchdata'+ data);
          if (Array.isArray(data) && data.length > 0) {

@@ -19,7 +19,7 @@ setEnrolledcoursecount(enrolledCoursesCount);
       if (!userId) return;
 
       try {
-        const response = await fetch(`https://backstagepass.co.in/reactapi/completed_courses.php?user_id=${userId}`);
+        const response = await fetch(`https://www.backstagepass.co.in/reactapi/completed_courses.php?user_id=${userId}`);
         const data = await response.json();
 
         // Expecting response like: { completed_courses: [1, 2, 3] }

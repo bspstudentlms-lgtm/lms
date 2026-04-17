@@ -135,7 +135,7 @@ useEffect(() => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const res = await fetch("https://backstagepass.co.in/reactapi/featured_courses_api.php");
+        const res = await fetch("https://www.backstagepass.co.in/reactapi/featured_courses_api.php");
         const data = await res.json();
         setCourses(data);
       } catch (err) {

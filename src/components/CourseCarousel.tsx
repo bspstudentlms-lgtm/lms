@@ -187,7 +187,7 @@ const handleFavouriteClick = (index: number) => {
   if (!email || !selectedCourse) return;
 
   try {
-    const response = await fetch('https://backstagepass.co.in/reactapi/save_favourite_course.php', {
+    const response = await fetch('https://www.backstagepass.co.in/reactapi/save_favourite_course.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

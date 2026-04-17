@@ -106,7 +106,7 @@ export default async function handler(
         .json({ error: "user_id and course_id are required" });
     }
 
-    const apiUrl = `https://backstagepass.co.in/reactapi/getcertificatedata.php?user_id=${user_id}&course_id=${course_id}`;
+    const apiUrl = `https://www.backstagepass.co.in/reactapi/getcertificatedata.php?user_id=${user_id}&course_id=${course_id}`;
     const response = await fetch(apiUrl);
 
     if (!response.ok) {

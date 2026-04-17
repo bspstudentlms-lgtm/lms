@@ -30,7 +30,7 @@ export const SlotGrid: React.FC<SlotGridProps> = ({ selectedDate, courseId }) =>
     async function fetchBookedSlots() {
       try {
         const res = await fetch(
-          `https://backstagepass.co.in/reactapi/available-slots.php?courseid=${courseId}`
+          `https://www.backstagepass.co.in/reactapi/available-slots.php?courseid=${courseId}`
         );
         const data = await res.json();
         setBookedSlots(new Set(data.bookedSlots || []));
@@ -80,7 +80,7 @@ export const SlotGrid: React.FC<SlotGridProps> = ({ selectedDate, courseId }) =>
     };
 
     const res = await fetch(
-      "https://backstagepass.co.in/reactapi/insert_availability.php",
+      "https://www.backstagepass.co.in/reactapi/insert_availability.php",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

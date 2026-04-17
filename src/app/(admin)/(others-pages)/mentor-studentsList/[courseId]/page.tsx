@@ -44,7 +44,7 @@ const mentor_id = typeof window !== 'undefined' ? localStorage.getItem('mentor_i
 useEffect(() => {
   if (!mentor_id) return;
 
-  fetch(`https://backstagepass.co.in/reactapi/get_upcoming_sessions.php?mentorid=${mentor_id}&type=upcoming`)
+  fetch(`https://www.backstagepass.co.in/reactapi/get_upcoming_sessions.php?mentorid=${mentor_id}&type=upcoming`)
     .then((res) => res.json())
     .then((data) => setUpcoming(data))
     .catch((err) => console.error("Error fetching upcoming sessions:", err));
@@ -53,7 +53,7 @@ useEffect(() => {
 useEffect(() => {
   if (!mentor_id) return;
 
-  fetch(`https://backstagepass.co.in/reactapi/get_upcoming_sessions.php?mentorid=${mentor_id}&type=total`)
+  fetch(`https://www.backstagepass.co.in/reactapi/get_upcoming_sessions.php?mentorid=${mentor_id}&type=total`)
   .then(res => res.json())
   .then(data => setTotalSessionCount(data.total));
    
@@ -61,7 +61,7 @@ useEffect(() => {
 
     const fetchSessions = () => {
     
-    fetch(`https://backstagepass.co.in/reactapi/get_sessions.php?mentorid=${mentor_id}`)
+    fetch(`https://www.backstagepass.co.in/reactapi/get_sessions.php?mentorid=${mentor_id}`)
       .then((res) => res.json())
       .then((data) => setSessions(data))
       .catch((err) => console.error("Error fetching sessions:", err));
@@ -71,7 +71,7 @@ useEffect(() => {
     fetchSessions();
   }, [mentor_id]);
  const updateStatus = (session_id: number, status: "accepted" | "declined") => {
-    fetch("https://backstagepass.co.in/reactapi/update_session_status.php", {
+    fetch("https://www.backstagepass.co.in/reactapi/update_session_status.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

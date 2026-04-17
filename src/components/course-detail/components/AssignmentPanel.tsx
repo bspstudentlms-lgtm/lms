@@ -172,7 +172,7 @@ const fileName =assignmentFile;
 
     try {
       await fetch(
-        "https://backstagepass.co.in/reactapi/save_assignment_download.php",
+        "https://www.backstagepass.co.in/reactapi/save_assignment_download.php",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -202,7 +202,7 @@ const fileName =assignmentFile;
         const userId = localStorage.getItem("userId");
 
         const res = await fetch(
-          `https://backstagepass.co.in/reactapi/get_assignment_status.php?userId=${userId}&courseId=${courseId}&_t=${Date.now()}`,
+          `https://www.backstagepass.co.in/reactapi/get_assignment_status.php?userId=${userId}&courseId=${courseId}&_t=${Date.now()}`,
           { cache: "no-store" }
         );
 
@@ -261,7 +261,7 @@ const fileName =assignmentFile;
 
   try {
     await fetch(
-      "https://backstagepass.co.in/reactapi/submit_assignment.php",
+      "https://www.backstagepass.co.in/reactapi/submit_assignment.php",
       {
         method: "POST",
         body: formData,

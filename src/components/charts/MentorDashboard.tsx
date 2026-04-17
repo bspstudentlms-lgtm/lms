@@ -145,7 +145,7 @@ const SortArrow = ({ column }) => {
 
   useEffect(() => {
     if (selectedCourse) {
-      fetch(`https://backstagepass.co.in/reactapi/get_students_by_course_and_mentor.php?course_id=${selectedCourse.id}&mentor_id=${userId}`)
+      fetch(`https://www.backstagepass.co.in/reactapi/get_students_by_course_and_mentor.php?course_id=${selectedCourse.id}&mentor_id=${userId}`)
         .then(res => res.json())
         .then(data => {
           setStudents(data);

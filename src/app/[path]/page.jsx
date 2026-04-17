@@ -3,7 +3,7 @@ import CoursePage from "@/components/CoursePage";
 export async function generateMetadata({ params }) {
   try {
     const res = await fetch(
-      `https://backstagepass.co.in/reactapi/api/course_innerpage.php?path=${params.path}`,
+      `https://www.backstagepass.co.in/reactapi/api/course_innerpage.php?path=${params.path}`,
       { cache: "no-store" } // important if content changes
     );
 

@@ -220,7 +220,7 @@ const openQuizModal = async (student: Student) => {
 
   try {
     const res = await fetch(
-      `https://backstagepass.co.in/reactapi/module_quiz-results.php?user_id=${student.id}&course_id=${finalCourseId}&_=${Date.now()}`
+      `https://www.backstagepass.co.in/reactapi/module_quiz-results.php?user_id=${student.id}&course_id=${finalCourseId}&_=${Date.now()}`
     );
 
     const data = await res.json();
@@ -352,7 +352,7 @@ const openQuizModal = async (student: Student) => {
     setError(null);
 
     try {
-      const url = `https://backstagepass.co.in/reactapi/get_students_by_course_and_mentor.php?course_id=${encodeURIComponent(
+      const url = `https://www.backstagepass.co.in/reactapi/get_students_by_course_and_mentor.php?course_id=${encodeURIComponent(
         String(finalCourseId)
       )}&mentor_id=${encodeURIComponent(String(userId))}`;
 
@@ -419,7 +419,7 @@ const openQuizModal = async (student: Student) => {
 
     if (student.assignment_id != null && String(student.assignment_id).trim() !== "") {
       const id = encodeURIComponent(String(student.assignment_id));
-      return `https://backstagepass.co.in/reactapi/get_assignment_by_id.php?id=${id}`;
+      return `https://www.backstagepass.co.in/reactapi/get_assignment_by_id.php?id=${id}`;
     }
 
     return null;
@@ -547,7 +547,7 @@ const openQuizModal = async (student: Student) => {
     );
 
     try {
-      await fetch("https://backstagepass.co.in/reactapi/save_assignment_result.php", {
+      await fetch("https://www.backstagepass.co.in/reactapi/save_assignment_result.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

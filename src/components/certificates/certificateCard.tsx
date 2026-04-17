@@ -29,7 +29,7 @@ export default function CertificateCard() {
 
  try {
   const response = await fetch(
-    `https://backstagepass.co.in/reactapi/completed_courses.php?user_id=${userId}`,
+    `https://www.backstagepass.co.in/reactapi/completed_courses.php?user_id=${userId}`,
     {
       cache: "no-store",
     }

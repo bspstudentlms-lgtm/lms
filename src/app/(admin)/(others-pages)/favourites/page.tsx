@@ -35,7 +35,7 @@ export default function FavouritesPage() {
   const fetchFavourites = async (userEmail: string) => {
   try {
     const res = await axios.get(
-      `https://backstagepass.co.in/reactapi/get_favourite_course.php`,
+      `https://www.backstagepass.co.in/reactapi/get_favourite_course.php`,
       {
         params: {
           email: userEmail,

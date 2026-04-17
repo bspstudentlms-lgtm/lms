@@ -2007,7 +2007,7 @@ const handlePreview = async (topicId: number) => {
    
 
     const res = await fetch(
-      `https://backstagepass.co.in/reactapi/api/get_playback_id.php?topic_id=${topicId}`
+      `https://www.backstagepass.co.in/reactapi/api/get_playback_id.php?topic_id=${topicId}`
     );
 
     const data = await res.json();
