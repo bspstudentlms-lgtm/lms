@@ -22,6 +22,7 @@ const AppHeader: React.FC = () => {
 
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
+  const [selectedTopic, setSelectedTopic] = useState(null);
 
   const handleToggle = () => {
     if (window.innerWidth >= 1024) {
@@ -94,6 +95,7 @@ const AppHeader: React.FC = () => {
     // console.log("SESSION:", session);
 
     if (status === "authenticated" && session?.user?.email) {
+     
       const email = session.user.email;
       const username = session?.user?.name || "";
 
@@ -116,15 +118,30 @@ const AppHeader: React.FC = () => {
             
             localStorage.setItem("enrolledcourses", String(enrolled));
              const loginRedirectDone = localStorage.getItem("loginRedirectDone");
+              const previewTopicId = localStorage.getItem("previewTopicId");
 
-            if (enrolled && !loginRedirectDone) {
+               
+                 if (previewTopicId) {
+                   safeRedirect(redirectPath);
+                } else {
+                  // normal flow
+                  if (enrolled && !loginRedirectDone) {
+                    localStorage.setItem("loginRedirectDone", "true");
+                    safeRedirect("/mycourses");
+                  } else {
+                    safeRedirect(redirectPath);
+                  }
+                }
+// Preview
 
-              localStorage.setItem("loginRedirectDone", "true");
-              safeRedirect("/mycourses");
-            } else {
+            // if (enrolled && !loginRedirectDone) {
 
-              safeRedirect(redirectPath);
-            }
+            //   localStorage.setItem("loginRedirectDone", "true");
+            //   safeRedirect("/mycourses");
+            // } else {
+
+            //   safeRedirect(redirectPath);
+            // }
           } else {
             const user = session.user;
             if (!user) return;

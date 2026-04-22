@@ -261,7 +261,7 @@ export default function CoursePage({ params }) {
     if (!params?.path) return;
 
     fetch(
-      `https://www.backstagepass.co.in/reactapi/api/course_innerpage.php?path=${params.path}`
+      `https://www.backstagepass.co.in/reactapi/api/course_innerpage_local.php?path=${params.path}`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -283,9 +283,16 @@ export default function CoursePage({ params }) {
     const storedUserId = localStorage.getItem("userId");
     const storedEmail = localStorage.getItem("email");
 
-    if (storedEmail) {
-      setOpen1(true);
-    }
+    //  const storedTopicId = localStorage.getItem("previewTopicId");
+
+    // if (storedEmail) {
+    //   setOpen1(true);
+    // }
+    const storedTopicId = localStorage.getItem("previewTopicId");
+
+if (storedEmail && !storedTopicId) {
+  setOpen1(true);
+}
     setUsername(storedusername);
     setUserId(storedUserId);
     setEmail(storedEmail);
@@ -1965,19 +1972,53 @@ const Outcomes = ({ course }) => {
 
 
 
-
 const Topics = ({ course }) => {
 
   const [activeIndex, setActiveIndex] = useState(null);
-
+  
   if (!course?.topics?.length) return null;
 
    // Show section only if category = 2
   if (Number(course.course_type) !== 1) return null;
-
+const [playbackId, setPlaybackId] = useState("");
   const [previewOpen, setPreviewOpen] = useState(false);
 const [currentVideo, setCurrentVideo] = useState(null);
 const [videoList, setVideoList] = useState([]);
+
+
+useEffect(() => {
+  const storedTopicId = localStorage.getItem("previewTopicId");
+  const email = localStorage.getItem("email");
+
+  const trackPreview = async () => {
+    if (storedTopicId && email) {
+      try {
+        await fetch("https://www.backstagepass.co.in/reactapi/api/track-preview.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            topicId: storedTopicId,
+            email: email,
+          }),
+        });
+
+        // ✅ IMPORTANT: remove so it doesn't repeat on refresh
+        localStorage.removeItem("previewTopicId");
+
+      } catch (err) {
+        console.error("Preview tracking failed:", err);
+      }
+    }
+
+    if (storedTopicId) {
+      handlePreview(Number(storedTopicId));
+    }
+  };
+
+  trackPreview();
+}, []);
 
 const sampleVideos = [
   {
@@ -2002,10 +2043,29 @@ const sampleVideos = [
 
 const { isMobileOpen } = useSidebar();
 
-const handlePreview = async (topicId: number) => {
-  try {
-   
 
+const handlePreview = async (topicId: number) => {
+  const storedEmail = localStorage.getItem("email");
+
+  // ❌ Not logged in → redirect to login
+  if (!storedEmail) {
+    const path = window.location.href;
+
+    if (path !== "/") {
+      localStorage.setItem("postLoginRedirect", path);
+    }
+
+    localStorage.setItem("previewTopicId", String(topicId));
+
+    signIn("google", {
+      callbackUrl: window.location.href,
+    });
+
+    return; // ⛔ stop further execution
+  }
+
+  // ✅ Logged in → fetch and play video
+  try {
     const res = await fetch(
       `https://www.backstagepass.co.in/reactapi/api/get_playback_id.php?topic_id=${topicId}`
     );
@@ -2013,22 +2073,13 @@ const handlePreview = async (topicId: number) => {
     const data = await res.json();
 
     if (data.status && data.playback_id) {
-      console.log("Playback ID:", data.playback_id);
-      if (data.playback_id) {
-  setVideoUrl(`https://stream.mux.com/${data.playback_id}.m3u8`);
-}
-
-      
-    } else {
-      alert("No video found");
+      setPlaybackId(data.playback_id);
+      setPreviewOpen(true);
     }
   } catch (error) {
-    console.error(error);
-    alert("Something went wrong");
+    console.error("Error fetching preview:", error);
   }
 };
-
-
   return (
     
     <section className="max-w-6xl mx-auto px-6 py-10">
@@ -2063,8 +2114,9 @@ const handlePreview = async (topicId: number) => {
                   style={{ color: "#1a2d62" }} className={`text-red-300 transition-transform duration-300 ${isOpen ? "rotate-180" : ""
                     }`}
                 />
-              </button>
-{/* 
+              </button> 
+              {topic.module_preview == 1 && (
+
                     <div className="flex items-center gap-4" style={{marginRight: "30px"}}>
         
         <button  
@@ -2074,14 +2126,15 @@ const handlePreview = async (topicId: number) => {
           
           className="text-purple-600 font-medium hover:underline flex items-center justify-between w-auto md:w-[80px]"
         >
-      <PlayCircle className="w-4 h-4 " style={{marginRight: "7px"}} />  <span className="hidden md:inline">Preview</span>
+      <PlayCircle className="w-4 h-4 " style={{marginRight: "7px"}} />  <span className="hidden md:inline">Preview {topic.is_open}</span>
         </button>
 
        
-        <span className="text-gray-400 text-sm">
+        {/* <span className="text-gray-400 text-sm">
           6:54
-        </span>
-      </div> */}
+        </span> */}
+      </div> 
+      )}
 
                     </div>
 
@@ -2113,14 +2166,20 @@ const handlePreview = async (topicId: number) => {
 
       {/* VIDEO */}
       <div className="p-4">
-        <video
-          key={currentVideo?.videoUrl}
-          src={currentVideo?.videoUrl}
-          controls
-          autoPlay
-          className="w-full rounded-lg bg-black"
-        />
-      </div>
+  {previewOpen && playbackId && (
+    <MuxPlayer
+      playbackId={playbackId}
+     
+      playsInline
+      controls
+      style={{
+        width: "100%",
+        borderRadius: "12px",
+        backgroundColor: "black",
+      }}
+    />
+  )}
+</div>
 
       {/* TITLE */}
       {/* <div className="px-4 pb-2 text-sm text-gray-300">
@@ -2169,41 +2228,35 @@ const handlePreview = async (topicId: number) => {
                   } overflow-hidden`}
               >
                 <ul className="list-disc pl-5 space-y-2 text-gray-400">
-                  {topic.points.map((point, i) => (
-                    <li style={{ marginBottom: "8px", fontWeight: "400" }} key={i} onClick={() => {
-    setVideoList(sampleVideos);
-    setCurrentVideo(sampleVideos[0]);
-    setPreviewOpen(true);
-  }} className="flex justify-between items-center gap-0">{point}   
-  
-  {/* <div className="flex items-center gap-4" style={{marginRight: "0px"}}>
-      
-        <button  
-         onClick={() =>
-                  setActiveIndex(isOpen ? null : index)
-                }
-          
-          className="text-purple-600 font-medium hover:underline flex items-center justify-between w-auto md:w-[80px]"
-        >
-      <PlayCircle className="w-4 h-4 " style={{marginRight: "7px"}} />  <span className="hidden md:inline">Preview</span>
-        </button>
+  {topic.points.map((point, i) => (
+    <li
+      key={point.topic_id}
+      style={{ marginBottom: "8px", fontWeight: "400" }}
+      className="flex justify-between items-center gap-0"
+    >
+      {point.title}
 
-        <button
-                      onClick={() => handlePreview(point.topic_id)}
-                      style={{ marginLeft: "10px", color: "blue" }}
-                    >
-                      Preview
-                    </button>
-
-       
-        <span className="text-gray-400 text-sm">
-          6:54
-        </span>
-      </div> */}
-      
-      </li>
-                  ))}
-                </ul>
+      {point.topic_preview == 1 && (
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => {
+             // setActiveIndex(isOpen ? null : index);
+              handlePreview(point.topic_id);
+             // setPreviewOpen(true); // ✅ open video ONLY here
+            }}
+            className="text-purple-600 font-medium hover:underline flex items-center justify-between w-auto md:w-[80px]"
+          >
+            <PlayCircle
+              className="w-4 h-4"
+              style={{ marginRight: "7px" }}
+            />
+            <span className="hidden md:inline">Preview</span>
+          </button>
+        </div>
+      )}
+    </li>
+  ))}
+</ul>
               </div>
             </div>
           );

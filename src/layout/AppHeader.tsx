@@ -110,15 +110,30 @@ useEffect(() => {
           localStorage.setItem("role", data.role);
 
           const enrolled = String(data.enrolled).trim();
+          
           localStorage.setItem("enrolledcourses", String(enrolled));
 
-          if (enrolled) {
+          const previewTopicId = localStorage.getItem("previewTopicId");
+  
+                if (previewTopicId) {
+                  safeRedirect(redirectPath);
+      } else {
+                  // normal flow
+                  if (enrolled) {
+                    safeRedirect("/mycourses");
+                  } else {
+                    safeRedirect(redirectPath);
+                  }
+                }
+// Preview
+
+          // if (enrolled) {
            
-            safeRedirect("/mycourses");
-          } else {
+          //   safeRedirect("/mycourses");
+          // } else {
            
-            safeRedirect(redirectPath);
-          }
+          //   safeRedirect(redirectPath);
+          // }
         } else {
           const user = session.user;
           if (!user) return;
