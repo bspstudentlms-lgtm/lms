@@ -1660,6 +1660,14 @@ strong, b {
   .flex.gap-5 {
     flex-direction: column !important;
   } */
+   
+
+  mux-player {
+  --controls: white;
+  --controls-backdrop-color: rgba(0,0,0,0.6);
+  --accent-color: red; /* 🔥 THIS CHANGES PLAY BUTTON */
+}
+
 
   /* IMAGE FULL WIDTH */
   .course-img,

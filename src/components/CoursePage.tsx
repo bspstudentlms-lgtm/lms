@@ -2119,7 +2119,7 @@ const Topics = ({ course }) => {
 
                       className="text-purple-600 font-medium hover:underline flex items-center justify-between w-auto md:w-[80px]"
                     >
-                      <PlayCircle className="w-4 h-4 " style={{ marginRight: "7px" }} />  <span className="hidden md:inline">Preview {topic.is_open}</span>
+                      <PlayCircle className="w-4 h-4 " style={{ marginRight: "7px" }} />  <span className="hidden md:inline">Preview </span>
                     </button>
 
 
@@ -2143,8 +2143,8 @@ const Topics = ({ course }) => {
                     {/* HEADER */}
                     <div className="flex justify-between items-center p-4 border-b border-gray-700">
                       <div>
-                        <p className="text-sm text-gray-400">Course Preview</p>
-                        <h2 className="text-xl font-semibold text-blue-400">
+                        <p className="text-sm text-white-400">Course Preview</p>
+                        <h2 className="text-xl font-semibold text-white-400" style={{color: "#fff"}}>
                           {course?.coursename}
                         </h2>
                       </div>
@@ -2159,58 +2159,19 @@ const Topics = ({ course }) => {
 
                     {/* VIDEO */}
                     <div className="p-4">
-                      {previewOpen && playbackId && (
-                        <MuxPlayer
-                          playbackId={playbackId}
+  {previewOpen && playbackId && (
+    <div className="w-full aspect-video">
+      <MuxPlayer
+        playbackId={playbackId}
+        playsInline
+        controls
+        className="w-full h-full rounded-xl"
+      />
+    </div>
+  )}
+</div>
 
-                          playsInline
-                          controls
-                          style={{
-                            width: "100%",
-                            borderRadius: "12px",
-                            backgroundColor: "black",
-                          }}
-                        />
-                      )}
-                    </div>
-
-                    {/* TITLE */}
-                    {/* <div className="px-4 pb-2 text-sm text-gray-300">
-        Free Sample Videos:
-      </div> */}
-
-                    {/* LIST */}
-                    {/* <div className="max-h-[300px] overflow-y-auto">
-        {videoList.map((video, i) => (
-          <div
-            key={i}
-            onClick={() => setCurrentVideo(video)}
-            className={`flex items-center justify-between px-4 py-3 cursor-pointer transition ${
-              currentVideo?.videoUrl === video.videoUrl
-                ? "bg-[#1e293b]"
-                : "hover:bg-[#1e293b]"
-            }`}
-          >
-            <div className="flex items-center gap-3">
-              
-             
-              <img
-                src={
-                  video.thumbnail ||
-                  `https://backstagepass.co.in/studentlms/uploads/featuredcourses/${course.courses_image}`
-                }
-                className="w-16 h-10 object-cover rounded"
-              />
-
-              <p className="text-sm">{video.title}</p>
-            </div>
-
-            <span className="text-xs text-gray-400">
-              {video.duration}
-            </span>
-          </div>
-        ))}
-      </div> */}
+                    
                   </div>
                 </div>
               )}
