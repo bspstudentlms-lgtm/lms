@@ -111,7 +111,7 @@ export default function CoursePage({ params }) {
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
 
   const [showVideoModal, setShowVideoModal] = useState(false);
- 
+
 
   // Example: use slug to load course data
 
@@ -290,9 +290,9 @@ export default function CoursePage({ params }) {
     // }
     const storedTopicId = localStorage.getItem("previewTopicId");
 
-if (storedEmail && !storedTopicId) {
-  setOpen1(true);
-}
+    if (storedEmail && !storedTopicId) {
+      setOpen1(true);
+    }
     setUsername(storedusername);
     setUserId(storedUserId);
     setEmail(storedEmail);
@@ -925,14 +925,14 @@ if (storedEmail && !storedTopicId) {
 
                     {Number(course.buy_course) === 1 && (
 
-                  <h3 className="text-xl font-semibold mb-4" style={{
-                    fontWeight: 600,
-                    fontSize: "21px",
-                    color: "#fff"
-                  }}
-                  >Buy this Course @</h3>
-                )}
-                {/* {Number(course.course_type) !== 2 && (
+                      <h3 className="text-xl font-semibold mb-4" style={{
+                        fontWeight: 600,
+                        fontSize: "21px",
+                        color: "#fff"
+                      }}
+                      >Buy this Course @</h3>
+                    )}
+                    {/* {Number(course.course_type) !== 2 && (
                   <div className="gap-4 mb-4">  <div className="flex items-center gap-4 mb-1">
                     <span className="line-through text-gray-300 text-3xl">₹{course.orignialpayment}</span>
                     <span className="text-3xl font-bold text-[#ee1b24]">₹{course.total_payment}</span>
@@ -942,20 +942,20 @@ if (storedEmail && !storedTopicId) {
                   </div>
                     <p style={{ fontSize: "14px" }}>*Price inclusive of all applicable taxes (GST)</p></div>)} */}
 
- {course.course_type !== 2 && (
-                  <div className="gap-2 mb-1 mt-4">  <div className="flex items-center gap-2 mb-1">
-                    <span className="line-through text-gray-300 text-3xl">₹{course.orignialpayment}</span>
-                    <span className="text-3xl font-bold text-[#ee1b24]">₹{course.total_payment}</span>
-                    <span className="bg-white text-red-600 font-semibold px-2 py-1 rounded-full text-sm">
-                      {course.discount_value}% Disc.
-                    </span>
-                  </div>
-                    <p style={{ fontSize: "14px", fontWeight: "400" }}>*Price inclusive of all applicable taxes (GST)</p></div>)}
-                {Number(course.limited_offer) === 1 && (
-                  <span className="inline-block bg-red-600 text-white px-5 py-2 rounded-full text-sm mb-8">
-                    Limited Time Offer!
-                  </span>
-                )}
+                    {course.course_type !== 2 && (
+                      <div className="gap-2 mb-1 mt-4">  <div className="flex items-center gap-2 mb-1">
+                        <span className="line-through text-gray-300 text-3xl">₹{course.orignialpayment}</span>
+                        <span className="text-3xl font-bold text-[#ee1b24]">₹{course.total_payment}</span>
+                        <span className="bg-white text-red-600 font-semibold px-2 py-1 rounded-full text-sm">
+                          {course.discount_value}% Disc.
+                        </span>
+                      </div>
+                        <p style={{ fontSize: "14px", fontWeight: "400" }}>*Price inclusive of all applicable taxes (GST)</p></div>)}
+                    {Number(course.limited_offer) === 1 && (
+                      <span className="inline-block bg-red-600 text-white px-5 py-2 rounded-full text-sm mb-8">
+                        Limited Time Offer!
+                      </span>
+                    )}
 
                     {/* <button type="button" className="sub_btn" onClick={() => setOpen1(true)}>
 
@@ -1032,17 +1032,17 @@ if (storedEmail && !storedTopicId) {
 
 
                   {course.course_type !== 2 && (
-                  <div className="gap-2 mb-1 mt-4">  <div className="flex items-center gap-2 mb-1">
-                    <span className="line-through text-gray-300 text-3xl">₹{course.orignialpayment}</span>
-                    <span className="text-3xl font-bold text-[#ee1b24]">₹{course.total_payment}</span>
-                    <span className="bg-white text-red-600 font-semibold px-2 py-1 rounded-full text-sm">
-                      {course.discount_value}% Disc.
-                    </span>
-                  </div>
-                    <p style={{ fontSize: "14px", fontWeight: "400" }}>*Price inclusive of all applicable taxes (GST)</p></div>)}
+                    <div className="gap-2 mb-1 mt-4">  <div className="flex items-center gap-2 mb-1">
+                      <span className="line-through text-gray-300 text-3xl">₹{course.orignialpayment}</span>
+                      <span className="text-3xl font-bold text-[#ee1b24]">₹{course.total_payment}</span>
+                      <span className="bg-white text-red-600 font-semibold px-2 py-1 rounded-full text-sm">
+                        {course.discount_value}% Disc.
+                      </span>
+                    </div>
+                      <p style={{ fontSize: "14px", fontWeight: "400" }}>*Price inclusive of all applicable taxes (GST)</p></div>)}
 
-                   
-               
+
+
 
                   <button onClick={() => {
                     if (!email) {
@@ -1065,7 +1065,7 @@ if (storedEmail && !storedTopicId) {
                     borderRadius: "26px",
                   }}
                   >
-                    {getButtonLabel()} 
+                    {getButtonLabel()}
                     {/* @ {course.course_type !== 2 && (
                       <>
 
@@ -1510,10 +1510,10 @@ if (storedEmail && !storedTopicId) {
                   Create real projects. Build real skills. Grow your career.
                 </p>
                 <ul className="social-home">
-                <li><a href="https://www.facebook.com/profile.php?id=61588089197582" target="_blank" className="facebook-home"><i className="fa fa-facebook"></i></a></li>
-                <li><a href="https://www.youtube.com/@backstagepass_online" target="_blank" className="twitter-home"><i className="fa fa-youtube"></i></a></li>
-                <li><a href="https://www.instagram.com/onlinebackstagepass/" target="_blank" className="instagram-home"><i className="fa fa-instagram"></i></a></li>
-              </ul>
+                  <li><a href="https://www.facebook.com/profile.php?id=61588089197582" target="_blank" className="facebook-home"><i className="fa fa-facebook"></i></a></li>
+                  <li><a href="https://www.youtube.com/@backstagepass_online" target="_blank" className="twitter-home"><i className="fa fa-youtube"></i></a></li>
+                  <li><a href="https://www.instagram.com/onlinebackstagepass/" target="_blank" className="instagram-home"><i className="fa fa-instagram"></i></a></li>
+                </ul>
               </div>
             </div>
             <div className="col-lg-3 col-sm-6 col-xs-12">
@@ -1544,31 +1544,31 @@ if (storedEmail && !storedTopicId) {
               <div className="single_footer">
                 <h4>Contact Info</h4>
                 <div className="sf_contact">
-  <span className="ti-mobile"></span>
-  <h3>Phone number</h3>
-  <p>
-    <a href="tel:+918065912040">
-      +91-8065912040
-    </a>
-  </p>
-</div>
+                  <span className="ti-mobile"></span>
+                  <h3>Phone number</h3>
+                  <p>
+                    <a href="tel:+918065912040">
+                      +91-8065912040
+                    </a>
+                  </p>
+                </div>
                 <div className="sf_contact">
                   <span><i className="fa fa-whatsapp"></i></span>
                   <h3>Whatsapp</h3>
-                 <p><a
-      href="https://wa.me/919985677746"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      +91-9985677746
-    </a></p>
+                  <p><a
+                    href="https://wa.me/919985677746"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    +91-9985677746
+                  </a></p>
                 </div>
                 <div className="sf_contact">
                   <span className="ti-email"></span>
                   <h3>Email Address</h3>
                   <p><a href="mailto:learning@backstagepass.co.in?subject=Course Inquiry&body=Hi, I am interested in your courses">
-  learning@backstagepass.co.in
-</a></p>
+                    learning@backstagepass.co.in
+                  </a></p>
                 </div>
                 {/* <div className="sf_contact">
                   <span className="ti-map"></span>
@@ -1712,7 +1712,7 @@ const BasicDetails = ({ course }) => {
               aspectRatio: "16/9",
               borderRadius: "12px",
               paddingTop: "56.25%", // 16:9 ratio trick
-              borderRadius:"20px",
+              borderRadius: "20px",
               border: "5px solid #fff",
               boxShadow: "0 20px 20px 5px rgba(0, 0, 0, .1), 0 10px 10px 5px rgba(0, 0, 0, .04)"
             }}
@@ -1975,113 +1975,106 @@ const Outcomes = ({ course }) => {
 const Topics = ({ course }) => {
 
   const [activeIndex, setActiveIndex] = useState(null);
-  
+
   if (!course?.topics?.length) return null;
 
-   // Show section only if category = 2
+  // Show section only if category = 2
   if (Number(course.course_type) !== 1) return null;
-const [playbackId, setPlaybackId] = useState("");
+  const [playbackId, setPlaybackId] = useState("");
   const [previewOpen, setPreviewOpen] = useState(false);
-const [currentVideo, setCurrentVideo] = useState(null);
-const [videoList, setVideoList] = useState([]);
+  const [currentVideo, setCurrentVideo] = useState(null);
+  const [videoList, setVideoList] = useState([]);
 
 
-useEffect(() => {
-  const storedTopicId = localStorage.getItem("previewTopicId");
-  const email = localStorage.getItem("email");
+  useEffect(() => {
+    const storedTopicId = localStorage.getItem("previewTopicId");
+    const email = localStorage.getItem("email");
 
-  const trackPreview = async () => {
-    if (storedTopicId && email) {
-      try {
-        await fetch("https://www.backstagepass.co.in/reactapi/api/track-preview.php", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            topicId: storedTopicId,
-            email: email,
-          }),
-        });
+    const trackPreview = async () => {
+      if (storedTopicId && email) {
+        try {
+          await fetch("https://www.backstagepass.co.in/reactapi/api/track-preview.php", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              topicId: storedTopicId,
+              email: email,
+            }),
+          });
 
-        // ✅ IMPORTANT: remove so it doesn't repeat on refresh
-        localStorage.removeItem("previewTopicId");
+          // ✅ IMPORTANT: remove so it doesn't repeat on refresh
+          localStorage.removeItem("previewTopicId");
 
-      } catch (err) {
-        console.error("Preview tracking failed:", err);
+        } catch (err) {
+          console.error("Preview tracking failed:", err);
+        }
       }
+
+      if (storedTopicId) {
+        handlePreview(Number(storedTopicId));
+      }
+    };
+
+    trackPreview();
+  }, []);
+
+  
+
+  const { isMobileOpen } = useSidebar();
+
+
+  const handlePreview = async (topicId: number) => {
+    const storedEmail = localStorage.getItem("email");
+
+    // ❌ Not logged in → redirect to login
+    if (!storedEmail) {
+      const path = window.location.href;
+
+      if (path !== "/") {
+        localStorage.setItem("postLoginRedirect", path);
+      }
+
+      localStorage.setItem("previewTopicId", String(topicId));
+
+      signIn("google", {
+        callbackUrl: window.location.href,
+      });
+
+      return; // ⛔ stop further execution
     }
 
-    if (storedTopicId) {
-      handlePreview(Number(storedTopicId));
+    // ✅ Logged in → fetch and play video
+    try {
+      const res = await fetch(
+        `https://www.backstagepass.co.in/reactapi/api/get_playback_id.php?topic_id=${topicId}`
+      );
+
+      const data = await res.json();
+
+      if (data.status && data.playback_id) {
+        setPlaybackId(data.playback_id);
+        setPreviewOpen(true);
+      }
+    } catch (error) {
+      console.error("Error fetching preview:", error);
     }
   };
 
-  trackPreview();
-}, []);
-
-const sampleVideos = [
-  {
-    title: "Day 1 - Welcome to the Course",
-    duration: "10:13",
-    videoUrl: "/videos/sample1.mp4",
-    thumbnail: "/images/thumb1.jpg",
-  },
-  {
-    title: "Day 1 - FPS Game",
-    duration: "6:54",
-    videoUrl: "/videos/sample2.mp4",
-    thumbnail: "/images/thumb2.jpg",
-  },
-  {
-    title: "Day 1 - Agentic AI Coding",
-    duration: "6:55",
-    videoUrl: "/videos/sample3.mp4",
-    thumbnail: "/images/thumb3.jpg",
-  },
-];
-
-const { isMobileOpen } = useSidebar();
-
-
-const handlePreview = async (topicId: number) => {
-  const storedEmail = localStorage.getItem("email");
-
-  // ❌ Not logged in → redirect to login
-  if (!storedEmail) {
-    const path = window.location.href;
-
-    if (path !== "/") {
-      localStorage.setItem("postLoginRedirect", path);
-    }
-
-    localStorage.setItem("previewTopicId", String(topicId));
-
-    signIn("google", {
-      callbackUrl: window.location.href,
-    });
-
-    return; // ⛔ stop further execution
-  }
-
-  // ✅ Logged in → fetch and play video
-  try {
-    const res = await fetch(
-      `https://www.backstagepass.co.in/reactapi/api/get_playback_id.php?topic_id=${topicId}`
+  useEffect(() => {
+  if (course?.topics?.length) {
+    const defaultIndex = course.topics.findIndex(
+      (topic) => Number(topic.is_open) === 1
     );
 
-    const data = await res.json();
-
-    if (data.status && data.playback_id) {
-      setPlaybackId(data.playback_id);
-      setPreviewOpen(true);
+    if (defaultIndex !== -1) {
+      setActiveIndex(defaultIndex);
     }
-  } catch (error) {
-    console.error("Error fetching preview:", error);
   }
-};
+}, [course]);
   return (
-    
+
     <section className="max-w-6xl mx-auto px-6 py-10">
 
       <div className="section-title">
@@ -2099,95 +2092,95 @@ const handlePreview = async (topicId: number) => {
               key={index}
               className="bg-white rounded-xl shadow-md overflow-hidden"
             >
-              <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
-              <button
-                onClick={() =>
-                  setActiveIndex(isOpen ? null : index)
-                }
-                className="w-auto flex justify-between items-center px-8 py-3 text-left"
-              >
-                <span className="text-lg font-500" style={{ color: "#1a2d62" }}>
-                  {topic.title}
-                </span>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <button
+                  onClick={() =>
+                    setActiveIndex(isOpen ? null : index)
+                  }
+                  className="w-auto flex justify-between items-center px-8 py-3 text-left"
+                >
+                  <span className="text-lg font-500" style={{ color: "#1a2d62" }}>
+                    {topic.title}
+                  </span>
 
-                <ChevronDown
-                  style={{ color: "#1a2d62" }} className={`text-red-300 transition-transform duration-300 ${isOpen ? "rotate-180" : ""
-                    }`}
-                />
-              </button> 
-              {topic.module_preview == 1 && (
+                  <ChevronDown
+                    style={{ color: "#1a2d62" }} className={`text-red-300 transition-transform duration-300 ${isOpen ? "rotate-180" : ""
+                      }`}
+                  />
+                </button>
+                {topic.module_preview == 1 && !isOpen && (
 
-                    <div className="flex items-center gap-4" style={{marginRight: "30px"}}>
-        
-        <button  
-         onClick={() =>
-                  setActiveIndex(isOpen ? null : index)
-                }
-          
-          className="text-purple-600 font-medium hover:underline flex items-center justify-between w-auto md:w-[80px]"
-        >
-      <PlayCircle className="w-4 h-4 " style={{marginRight: "7px"}} />  <span className="hidden md:inline">Preview {topic.is_open}</span>
-        </button>
+                  <div className="flex items-center gap-4" style={{ marginRight: "30px" }}>
 
-       
-        {/* <span className="text-gray-400 text-sm">
+                    <button
+                      onClick={() =>
+                        setActiveIndex(isOpen ? null : index)
+                      }
+
+                      className="text-purple-600 font-medium hover:underline flex items-center justify-between w-auto md:w-[80px]"
+                    >
+                      <PlayCircle className="w-4 h-4 " style={{ marginRight: "7px" }} />  <span className="hidden md:inline">Preview {topic.is_open}</span>
+                    </button>
+
+
+                    {/* <span className="text-gray-400 text-sm">
           6:54
         </span> */}
-      </div> 
-      )}
+                  </div>
+                )}
 
+              </div>
+
+              {/* {topic.title}---{topic.module_preview} */}
+
+              {/* {point.title}  ---{point.topic_preview} */}
+
+              {previewOpen && (
+                <div className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm flex justify-center items-center">
+
+                  <div className="bg-[#0b1a2b] text-white w-[900px] rounded-xl overflow-hidden shadow-2xl">
+
+                    {/* HEADER */}
+                    <div className="flex justify-between items-center p-4 border-b border-gray-700">
+                      <div>
+                        <p className="text-sm text-gray-400">Course Preview</p>
+                        <h2 className="text-xl font-semibold text-blue-400">
+                          {course?.coursename}
+                        </h2>
+                      </div>
+
+                      <button
+                        onClick={() => setPreviewOpen(false)}
+                        className="text-xl hover:text-red-400"
+                      >
+                        ✕
+                      </button>
                     </div>
 
-{/* {topic.title}---{topic.module_preview} */}
+                    {/* VIDEO */}
+                    <div className="p-4">
+                      {previewOpen && playbackId && (
+                        <MuxPlayer
+                          playbackId={playbackId}
 
-{/* {point.title}  ---{point.topic_preview} */}
+                          playsInline
+                          controls
+                          style={{
+                            width: "100%",
+                            borderRadius: "12px",
+                            backgroundColor: "black",
+                          }}
+                        />
+                      )}
+                    </div>
 
-                    {previewOpen && (
-  <div className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm flex justify-center items-center">
-    
-    <div className="bg-[#0b1a2b] text-white w-[900px] rounded-xl overflow-hidden shadow-2xl">
-
-      {/* HEADER */}
-      <div className="flex justify-between items-center p-4 border-b border-gray-700">
-        <div>
-          <p className="text-sm text-gray-400">Course Preview</p>
-          <h2 className="text-xl font-semibold text-blue-400">
-            {course?.coursename}
-          </h2>
-        </div>
-
-        <button
-          onClick={() => setPreviewOpen(false)}
-          className="text-xl hover:text-red-400"
-        >
-          ✕
-        </button>
-      </div>
-
-      {/* VIDEO */}
-      <div className="p-4">
-  {previewOpen && playbackId && (
-    <MuxPlayer
-      playbackId={playbackId}
-     
-      playsInline
-      controls
-      style={{
-        width: "100%",
-        borderRadius: "12px",
-        backgroundColor: "black",
-      }}
-    />
-  )}
-</div>
-
-      {/* TITLE */}
-      {/* <div className="px-4 pb-2 text-sm text-gray-300">
+                    {/* TITLE */}
+                    {/* <div className="px-4 pb-2 text-sm text-gray-300">
         Free Sample Videos:
       </div> */}
 
-      {/* LIST */}
-      {/* <div className="max-h-[300px] overflow-y-auto">
+                    {/* LIST */}
+                    {/* <div className="max-h-[300px] overflow-y-auto">
         {videoList.map((video, i) => (
           <div
             key={i}
@@ -2218,45 +2211,45 @@ const handlePreview = async (topicId: number) => {
           </div>
         ))}
       </div> */}
-    </div>
-  </div>
-)}
+                  </div>
+                </div>
+              )}
 
-                   
+
               <div
                 className={`px-8 transition-all duration-300 ease-in-out ${isOpen ? "max-h-[600px] pb-6" : "max-h-0"
                   } overflow-hidden`}
               >
                 <ul className="list-disc pl-5 space-y-2 text-gray-400">
-  {topic.points.map((point, i) => (
-    <li
-      key={point.topic_id}
-      style={{ marginBottom: "8px", fontWeight: "400" }}
-      className="flex justify-between items-center gap-0"
-    >
-      {point.title}
+                  {topic.points.map((point, i) => (
+                    <li
+                      key={point.topic_id}
+                      style={{ marginBottom: "5px", fontWeight: "400", borderBottom: "1px solid #f1f1f1", lineHeight: "50px" }}
+                      className="flex justify-between items-center gap-0"
+                    >
+                      {point.title}
 
-      {point.topic_preview == 1 && (
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => {
-             // setActiveIndex(isOpen ? null : index);
-              handlePreview(point.topic_id);
-             // setPreviewOpen(true); // ✅ open video ONLY here
-            }}
-            className="text-purple-600 font-medium hover:underline flex items-center justify-between w-auto md:w-[80px]"
-          >
-            <PlayCircle
-              className="w-4 h-4"
-              style={{ marginRight: "7px" }}
-            />
-            <span className="hidden md:inline">Preview</span>
-          </button>
-        </div>
-      )}
-    </li>
-  ))}
-</ul>
+                      {point.topic_preview == 1 && (
+                        <div className="flex items-center gap-4">
+                          <button
+                            onClick={() => {
+                              // setActiveIndex(isOpen ? null : index);
+                              handlePreview(point.topic_id);
+                              // setPreviewOpen(true); // ✅ open video ONLY here
+                            }}
+                            className="text-purple-600 font-medium hover:underline flex items-center justify-between w-auto md:w-[80px]"
+                          >
+                            <PlayCircle
+                              className="w-4 h-4"
+                              style={{ marginRight: "7px" }}
+                            />
+                            <span className="hidden md:inline">Preview</span>
+                          </button>
+                        </div>
+                      )}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           );
@@ -2426,9 +2419,9 @@ const Career = ({ course }) => {
     course.didyouknow_image !== "" &&
     course.didyouknow_image !== "0";
 
-    const title = course.career_main_title;
+  const title = course.career_main_title;
 
-    const parts = title.split("begin");
+  const parts = title.split("begin");
 
   return (
     <>
@@ -2436,10 +2429,10 @@ const Career = ({ course }) => {
         <div className="container">
           <div className="section-title">
             <h2>Career Opportunities </h2>
-           <p>
-    {parts[0]} {" "}
-    <span className="highlight">Being {parts[1]}</span>
-  </p>
+            <p>
+              {parts[0]} {" "}
+              <span className="highlight">Being {parts[1]}</span>
+            </p>
           </div>
           <div className="row">
 
@@ -2526,7 +2519,7 @@ const FaqSection = ({ course }) => {
 
                   {/* ANSWER */}
                   {isOpen && (
-                    <div className="px-8 pb-6 text-[16px] leading-[26px] text-[#888]" style={{fontWeight: "400"}}>
+                    <div className="px-8 pb-6 text-[16px] leading-[26px] text-[#888]" style={{ fontWeight: "400" }}>
                       {item.a}
                     </div>
                   )}
@@ -2692,7 +2685,7 @@ const Card = ({ text }) => (
     </span>
 
     {/* Text */}
-    <p className="text-[16px] leading-[28px] text-[#888]" style={{fontWeight: "400"}}>
+    <p className="text-[16px] leading-[28px] text-[#888]" style={{ fontWeight: "400" }}>
       {text}
     </p>
   </div>
