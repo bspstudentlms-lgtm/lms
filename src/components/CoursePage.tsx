@@ -2136,15 +2136,18 @@ const Topics = ({ course }) => {
               {/* {point.title}  ---{point.topic_preview} */}
 
               {previewOpen && (
-                <div className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm flex justify-center items-center" style={{ backgroundColor: "#2a2b3f" }}>
+            <div
+  className="fixed inset-0 z-[9999] flex justify-center items-center backdrop-blur-sm"
+  style={{ backgroundColor: "rgba(0, 0, 0, 0.1)" }}
+>
 
-                  <div className="bg-[#000] text-white w-[900px] rounded-xl overflow-hidden shadow-2xl" >
+                  <div className="bg-[#fff] text-white w-[900px] rounded-xl overflow-hidden shadow-2xl" >
 
                     {/* HEADER */}
                     <div className="flex justify-between items-center p-4 border-b border-gray-700">
                       <div>
-                        <p className="text-sm text-white-400" style={{ letterSpacing: "1px", fontSize: "20px", marginBottom: "5px"}}>Course Preview</p>
-                        <h2 className="text-xl font-semibold text-white-400" style={{color: "#fff", fontWeight: "700"}}>
+                        <p className="text-sm text-white-400" style={{ letterSpacing: "1px", color: "#111", fontSize: "20px", marginBottom: "5px"}}>Course Preview</p>
+                        <h2 className="text-xl font-semibold text-white-400" style={{color: "#111", fontWeight: "700"}}>
                           {course?.coursename}
                         </h2>
                       </div>
@@ -2152,6 +2155,7 @@ const Topics = ({ course }) => {
                       <button
                         onClick={() => setPreviewOpen(false)}
                         className="text-xl hover:text-red-400"
+                         style={{color: "#111", fontWeight: "700"}}
                       >
                         ✕
                       </button>
