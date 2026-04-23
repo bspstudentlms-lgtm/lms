@@ -166,8 +166,8 @@ const HomePageContent = () => {
 					autoplay: true,
 					autoplayTimeout: 4000,
 					navText: [
-						"<span class='owl-prev-icon'>&larr;</span>",
-						"<span class='owl-next-icon'>&rarr;</span>"
+						"<span className='owl-prev-icon'>&larr;</span>",
+						"<span className='owl-next-icon'>&rarr;</span>"
 					],
 					responsive: {
 						0: { items: 1 },
@@ -674,6 +674,10 @@ const HomePageContent = () => {
 
 
 
+	
+
+
+
 			{/* <section className="newsletter_area section-padding">
 		<div className="container">
 			<div className="row text-center">			
@@ -884,6 +888,86 @@ const HomePageContent = () => {
 		</div>
 	</section> */}
 
+
+	
+		
+	<section id="blog" className="blog_area section-padding" style={{display: "none"}}>
+		<div className="container">
+			<div className="section-title">
+				<h2>News</h2>
+				<p>Our Latest <span><u>Blogs</u></span></p>
+			</div>	
+			<div className="row">		
+				<div className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
+					<div className="single_blog">
+						<div className="content_box">
+							<span>August 25, 2023 | <a href="blog_single.html">Design</a></span>
+							<h2><a href="blog_single.html">Professional Mobile Painting and Sculpting</a></h2>
+							<a href="#" className="cta"><span>READ MORE</span>
+							  <svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px"}}>
+								<path d="M1,5 L11,5"></path>
+								<polyline points="8 1 12 5 8 9"></polyline>
+							  </svg>
+							</a>							
+						</div>
+					</div>
+					<div className="single_blog">
+						<div className="content_box">
+							<span>August 25, 2023 | <a href="blog_single.html">Design</a></span>
+							<h2><a href="blog_single.html">Professional Mobile Painting and Sculpting</a></h2>
+							<a href="#" className="cta"><span>READ MORE</span>
+							  <svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px"}}>
+								<path d="M1,5 L11,5"></path>
+								<polyline points="8 1 12 5 8 9"></polyline>
+							  </svg>
+							</a>							
+						</div>
+					</div>
+				</div>
+				<div className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
+					<div className="single_blog">
+						<img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
+						<div className="content_box">
+							<span>August 26, 2023 | <a href="blog_single.html">Education</a></span>
+							<h2><a href="blog_single.html">Professional Ceramic Moulding for Beginner</a></h2>
+							<a href="#" className="cta"><span>READ MORE</span>
+							  <svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px"}}>
+								<path d="M1,5 L11,5"></path>
+								<polyline points="8 1 12 5 8 9"></polyline>
+							  </svg>
+							</a>							
+						</div>
+					</div>
+				</div>
+				<div className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.3s" data-wow-offset="0">
+					<div className="single_blog">
+						<img src="assets/images/blog/3.png" className="img-fluid" alt="image" />
+						<div className="content_box">
+							<span>August 28, 2023 | <a href="blog_single.html">Programing</a></span>
+							<h2><a href="blog_single.html">Education Is About Create Leaders For Tomorrow </a></h2>
+							<a href="#" className="cta"><span>READ MORE</span>
+							  <svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px"}}>
+								<path d="M1,5 L11,5"></path>
+								<polyline points="8 1 12 5 8 9"></polyline>
+							  </svg>
+							</a>
+						</div>
+					</div>
+				</div>						
+			</div>
+			<div className="col-lg-12 text-center">
+                <div className="cc_btn">
+                  <button
+                    onClick={() => router.push("/all-courses")}
+                    className="btn_one"
+                  >
+                    View All Blogs
+                  </button>
+                </div>
+              </div>
+		</div>
+	</section>	
+
 			<div className="footer section-padding" style={{ paddingTop: "80px" }}>
 				<div className="container">
 					<div className="row">
@@ -1088,8 +1172,8 @@ const HomePageContent = () => {
       autoplay: true,
       autoplayTimeout: 4000,
       navText: [
-        "<span class='owl-prev-icon'>&larr;</span>",
-        "<span class='owl-next-icon'>&rarr;</span>"
+        "<span className='owl-prev-icon'>&larr;</span>",
+        "<span className='owl-next-icon'>&rarr;</span>"
       ],
       responsive: {
         0: { items: 1 },
