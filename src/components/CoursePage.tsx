@@ -2293,6 +2293,7 @@ localStorage.setItem("previewTopicId", String(topicId));
                   {topic.points.map((point, i) => (
                     <li
                       key={point.topic_id}
+                      id={point.topic_id}
                       style={{ marginBottom: "5px", fontWeight: "400", borderBottom: "1px solid #f1f1f1", lineHeight: "50px" }}
                       className="flex justify-between items-center gap-0"
                     >
