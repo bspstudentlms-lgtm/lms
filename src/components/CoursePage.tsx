@@ -7,6 +7,8 @@ import MuxPlayer from '@mux/mux-player-react';
 import SiteNavigation from "@/components/SiteNavigation";
 import { useSidebar } from "@/context/SidebarContext";
 import AppHeaders from "@/layout/AppHeaders";
+
+import { useSession } from "next-auth/react";
 import {
   CheckCircle,
   Clock,
@@ -278,25 +280,94 @@ export default function CoursePage({ params }) {
   }, [params?.path]);
 
 
-  useEffect(() => {
-    const storedusername = localStorage.getItem("username");
-    const storedUserId = localStorage.getItem("userId");
-    const storedEmail = localStorage.getItem("email");
+//   useEffect(() => {
+//     const storedusername = localStorage.getItem("username");
+//     const storedUserId = localStorage.getItem("userId");
+//     const storedEmail = localStorage.getItem("email");
+// alert('storedemail'+storedEmail);
+//     //  const storedTopicId = localStorage.getItem("previewTopicId");
 
-    //  const storedTopicId = localStorage.getItem("previewTopicId");
+//     // if (storedEmail) {
+//     //   setOpen1(true);
+//     // }
+    
+//     const storedTopicId = localStorage.getItem("previewTopicId");
 
-    // if (storedEmail) {
-    //   setOpen1(true);
-    // }
-    const storedTopicId = localStorage.getItem("previewTopicId");
+//     if (storedEmail && !storedTopicId) {
+     
+//       setOpen1(true);
+//     }
+//     setUsername(storedusername);
+//     setUserId(storedUserId);
+//     setEmail(storedEmail);
+//   }, []);
 
-    if (storedEmail && !storedTopicId) {
-      setOpen1(true);
+
+const { data: session, status } = useSession();
+
+// useEffect(() => {
+//   if (status !== "authenticated") return;
+
+//   const email = session?.user?.email;
+//   const username = session?.user?.name;
+
+//   const storedTopicId = localStorage.getItem("previewTopicId");
+//   const enrolled = localStorage.getItem("enrolledcourses");
+// const isNotEnrolled = enrolled === null;
+
+//   if (email && !storedTopicId && isNotEnrolled) {
+//     setOpen1(true);
+//   } else {
+//     setOpen1(false);
+//   }
+
+
+//   setEmail(email);
+//   setUsername(username);
+// }, [status, session]);
+useEffect(() => {
+  if (status !== "authenticated") return;
+
+  const email = session?.user?.email;
+  const username = session?.user?.name;
+
+  const storedTopicId = localStorage.getItem("previewTopicId");
+
+  const fetchEnrollment = async () => {
+    try {
+      const res = await fetch(
+          `https://www.backstagepass.co.in/reactapi/api/get-enrollment.php?email=${encodeURIComponent(email)}`,
+          { cache: "no-store" }
+        );
+
+        const data = await res.json();
+
+     
+
+      const enrolled = data.enrolled;
+      localStorage.setItem("enrolledcourses", enrolled ?? "");
+
+      const isNotEnrolled = !enrolled;
+
+      if (email && !storedTopicId && isNotEnrolled) {
+        setOpen1(true);
+      } else {
+        setOpen1(false);
+      }
+
+    } catch (err) {
+      console.error(err);
     }
-    setUsername(storedusername);
-    setUserId(storedUserId);
-    setEmail(storedEmail);
-  }, []);
+  };
+
+  if (email) {
+    fetchEnrollment();
+  }
+
+  setEmail(email);
+  setUsername(username);
+
+}, [status, session]);
 
   useEffect(() => {
     const section = document.getElementById("page-enroll-cta");
@@ -2005,7 +2076,7 @@ const Topics = ({ course }) => {
           });
 
           // ✅ IMPORTANT: remove so it doesn't repeat on refresh
-          localStorage.removeItem("previewTopicId");
+         // localStorage.removeItem("previewTopicId");
 
         } catch (err) {
           console.error("Preview tracking failed:", err);
@@ -2024,43 +2095,76 @@ const Topics = ({ course }) => {
 
   const { isMobileOpen } = useSidebar();
 
-
   const handlePreview = async (topicId: number) => {
-    const storedEmail = localStorage.getItem("email");
+  const storedEmail = localStorage.getItem("email");
+localStorage.setItem("previewTopicId", String(topicId));
+  if (!storedEmail) {
+    const path = window.location.href;
 
-    // ❌ Not logged in → redirect to login
-    if (!storedEmail) {
-      const path = window.location.href;
+    localStorage.setItem("postLoginRedirect", path);
+    
 
-      if (path !== "/") {
-        localStorage.setItem("postLoginRedirect", path);
-      }
+    signIn("google", {
+  callbackUrl: window.location.href,
+});
 
-      localStorage.setItem("previewTopicId", String(topicId));
+    return;
+  }
 
-      signIn("google", {
-        callbackUrl: window.location.href,
-      });
+  try {
+    const res = await fetch(
+      `https://www.backstagepass.co.in/reactapi/api/get_playback_id.php?topic_id=${topicId}`
+    );
 
-      return; // ⛔ stop further execution
+    const data = await res.json();
+
+    if (data.status && data.playback_id) {
+      setPlaybackId(data.playback_id);
+      setPreviewOpen(true);
     }
+  } catch (error) {
+    console.error("Error fetching preview:", error);
+  }
+};
 
-    // ✅ Logged in → fetch and play video
-    try {
-      const res = await fetch(
-        `https://www.backstagepass.co.in/reactapi/api/get_playback_id.php?topic_id=${topicId}`
-      );
 
-      const data = await res.json();
+  // const handlePreview = async (topicId: number) => {
+  //   const storedEmail = localStorage.getItem("email");
 
-      if (data.status && data.playback_id) {
-        setPlaybackId(data.playback_id);
-        setPreviewOpen(true);
-      }
-    } catch (error) {
-      console.error("Error fetching preview:", error);
-    }
-  };
+  //   // ❌ Not logged in → redirect to login
+  //   if (!storedEmail) {
+  //     const path = window.location.href;
+
+  //     if (path !== "/") {
+  //       localStorage.setItem("postLoginRedirect", path);
+  //     }
+
+  //     localStorage.setItem("previewTopicId", String(topicId));
+
+  //     // signIn("google", {
+  //     //   callbackUrl: window.location.href,
+  //     // });
+  //      signIn("google"); // ✅ remove callbackUrl
+
+  //     return; // ⛔ stop further execution
+  //   }
+
+  //   // ✅ Logged in → fetch and play video
+  //   try {
+  //     const res = await fetch(
+  //       `https://www.backstagepass.co.in/reactapi/api/get_playback_id.php?topic_id=${topicId}`
+  //     );
+
+  //     const data = await res.json();
+
+  //     if (data.status && data.playback_id) {
+  //       setPlaybackId(data.playback_id);
+  //       setPreviewOpen(true);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching preview:", error);
+  //   }
+  // };
 
   useEffect(() => {
   if (course?.topics?.length) {

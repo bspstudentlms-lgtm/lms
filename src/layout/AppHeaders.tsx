@@ -79,97 +79,189 @@ const AppHeader: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    const loginType = localStorage.getItem("loginType");
-    if (loginType === "manual") return;
-    if (status === "loading") return;
+//   useEffect(() => {
+//     const loginType = localStorage.getItem("loginType");
+//     if (loginType === "manual") return;
+//     if (status === "loading") return;
 
-    if (hasCheckedRef.current) return;
+//     if (hasCheckedRef.current) return;
+//     hasCheckedRef.current = true;
+
+//     const redirectPath =
+//       localStorage.getItem("postLoginRedirect") ||
+//       window.location.pathname;
+
+//     // console.log("STATUS:", status);
+//     // console.log("SESSION:", session);
+
+//     if (status === "authenticated" && session?.user?.email) {
+     
+//       const email = session.user.email;
+//       const username = session?.user?.name || "";
+
+//       const checkStudent = async () => {
+//         try {
+//            const res = await fetch(
+//   `https://www.backstagepass.co.in/reactapi/check-student.php?email=${encodeURIComponent(email)}&username=${encodeURIComponent(username)}`,
+//   { cache: "no-store" }
+// );
+
+//           const data = await res.json();
+
+//           if (data.status === 200) {
+//             localStorage.setItem("userId", data.userid);
+//             localStorage.setItem("username", data.username);
+//             localStorage.setItem("email", data.email);
+//             localStorage.setItem("role", data.role);
+
+//             const enrolled = String(data.enrolled).trim();
+            
+//             localStorage.setItem("enrolledcourses", String(enrolled));
+//              const loginRedirectDone = localStorage.getItem("loginRedirectDone");
+//               const previewTopicId = localStorage.getItem("previewTopicId");
+
+               
+//                  if (previewTopicId) {
+//                    safeRedirect(redirectPath);
+//                 } else {
+//                   // normal flow
+//                   if (enrolled && !loginRedirectDone) {
+//                     localStorage.setItem("loginRedirectDone", "true");
+//                     safeRedirect("/mycourses");
+//                   } else {
+//                     safeRedirect(redirectPath);
+//                   }
+//                 }
+// // Preview
+
+//             // if (enrolled && !loginRedirectDone) {
+
+//             //   localStorage.setItem("loginRedirectDone", "true");
+//             //   safeRedirect("/mycourses");
+//             // } else {
+
+//             //   safeRedirect(redirectPath);
+//             // }
+//           } else {
+//             const user = session.user;
+//             if (!user) return;
+
+//             localStorage.setItem("username", user.name ?? "");
+//             localStorage.setItem("email", user.email ?? "");
+//             localStorage.setItem("image", user.image ?? "");
+//             localStorage.setItem("role", "sos");
+//             if (redirectPath == '/') {
+//               if (window.location.pathname !== "/dashboard") {
+//                 window.location.replace("/dashboard");
+//               }
+//             } else {
+//               safeRedirect(redirectPath);
+//             }
+//           }
+
+//           // ✅ VERY IMPORTANT
+//           localStorage.removeItem("postLoginRedirect");
+
+//         } catch (err) {
+//           console.error("Login redirect error:", err);
+//         }
+//       };
+
+//       checkStudent();
+//     }
+//   }, [status, session]);
+
+useEffect(() => {
+  
+  const loginType = localStorage.getItem("loginType");
+  if (loginType === "manual") return;
+  if (status === "loading") return;
+
+  if (hasCheckedRef.current) return;
+
+  if (status === "authenticated" && session?.user?.email) {
     hasCheckedRef.current = true;
 
     const redirectPath =
-      localStorage.getItem("postLoginRedirect") ||
-      window.location.pathname;
+      localStorage.getItem("postLoginRedirect") || "/";
 
-    // console.log("STATUS:", status);
-    // console.log("SESSION:", session);
+    const previewTopicId = localStorage.getItem("previewTopicId");
 
-    if (status === "authenticated" && session?.user?.email) {
-     
-      const email = session.user.email;
-      const username = session?.user?.name || "";
+    const email = session.user.email;
 
-      const checkStudent = async () => {
-        try {
-           const res = await fetch(
-  `https://www.backstagepass.co.in/reactapi/check-student.php?email=${encodeURIComponent(email)}&username=${encodeURIComponent(username)}`,
-  { cache: "no-store" }
-);
+    const username = session?.user?.name || "";
 
-          const data = await res.json();
+localStorage.setItem("email", email);
+    const checkStudent = async () => {
+      try {
+        const res = await fetch(
+          `https://www.backstagepass.co.in/reactapi/check-student.php?email=${encodeURIComponent(email)}&username=${encodeURIComponent(username)}`,
+          { cache: "no-store" }
+        );
 
-          if (data.status === 200) {
-            localStorage.setItem("userId", data.userid);
-            localStorage.setItem("username", data.username);
-            localStorage.setItem("email", data.email);
-            localStorage.setItem("role", data.role);
+        const data = await res.json();
 
-            const enrolled = String(data.enrolled).trim();
-            
-            localStorage.setItem("enrolledcourses", String(enrolled));
-             const loginRedirectDone = localStorage.getItem("loginRedirectDone");
-              const previewTopicId = localStorage.getItem("previewTopicId");
+        let finalRedirect = redirectPath;
 
-               
-                 if (previewTopicId) {
-                   safeRedirect(redirectPath);
-                } else {
-                  // normal flow
-                  if (enrolled && !loginRedirectDone) {
-                    localStorage.setItem("loginRedirectDone", "true");
-                    safeRedirect("/mycourses");
-                  } else {
-                    safeRedirect(redirectPath);
-                  }
-                }
-// Preview
+        if (data.status === 200) {
+          localStorage.setItem("userId", data.userid);
+          localStorage.setItem("username", data.username);
+         // localStorage.setItem("email", data.email);
+          localStorage.setItem("role", data.role);
 
-            // if (enrolled && !loginRedirectDone) {
+          const enrolled = String(data.enrolled).trim();
+          localStorage.setItem("enrolledcourses", enrolled);
 
-            //   localStorage.setItem("loginRedirectDone", "true");
-            //   safeRedirect("/mycourses");
-            // } else {
-
-            //   safeRedirect(redirectPath);
-            // }
-          } else {
-            const user = session.user;
-            if (!user) return;
-
-            localStorage.setItem("username", user.name ?? "");
-            localStorage.setItem("email", user.email ?? "");
-            localStorage.setItem("image", user.image ?? "");
-            localStorage.setItem("role", "sos");
-            if (redirectPath == '/') {
-              if (window.location.pathname !== "/dashboard") {
-                window.location.replace("/dashboard");
-              }
-            } else {
-              safeRedirect(redirectPath);
-            }
+          // ✅ preview has highest priority
+          if (previewTopicId) {
+             //alert('1');
+            finalRedirect = redirectPath;
+          } else if (enrolled) {
+           // alert('2');
+            finalRedirect = "/mycourses";
           }
 
-          // ✅ VERY IMPORTANT
-          localStorage.removeItem("postLoginRedirect");
+        } else {
+          const user = session.user;
+          if (!user) return;
 
-        } catch (err) {
-          console.error("Login redirect error:", err);
+          localStorage.setItem("username", user.name ?? "");
+         // localStorage.setItem("email", user.email ?? "");
+          localStorage.setItem("image", user.image ?? "");
+          localStorage.setItem("role", "sos");
+
+          // ✅ preview priority even here
+          if (previewTopicId) {
+             //alert('3');
+            finalRedirect = redirectPath;
+          } else if (redirectPath === "/") {
+            finalRedirect = "/dashboard";
+          }
         }
-      };
 
-      checkStudent();
-    }
-  }, [status, session]);
+        // ✅ prevent redirect loop
+        if (
+          finalRedirect &&
+          window.location.pathname !== finalRedirect
+        ) {
+          //alert(finalRedirect);
+         safeRedirect(finalRedirect);
+          
+        }
+
+        // ✅ cleanup AFTER redirect decision
+        // localStorage.removeItem("postLoginRedirect");
+        // localStorage.removeItem("previewTopicId");
+        // localStorage.removeItem("loginRedirectDone");
+
+      } catch (err) {
+        console.error("Login redirect error:", err);
+      }
+    };
+
+    checkStudent();
+  }
+}, [status, session]);
 
 
 

@@ -11,11 +11,18 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/signin",
   },
+  // callbacks: {
+  //   async redirect({ url, baseUrl }) {
+  //     return baseUrl; // redirects to homepage after login
+  //   },
+  // },
   callbacks: {
-    async redirect({ url, baseUrl }) {
-      return baseUrl; // redirects to homepage after login
-    },
+  async redirect({ url, baseUrl }) {
+    // allow dynamic return URLs
+    if (url.startsWith(baseUrl)) return url;
+    return baseUrl;
   },
+},
 };
 
 export default NextAuth(authOptions);
