@@ -2179,7 +2179,7 @@ localStorage.setItem("previewTopicId", String(topicId));
 }, [course]);
   return (
 
-    <section className="max-w-6xl mx-auto px-6 py-10">
+    <section className="max-w-6xl mx-auto px-0 py-10">
 
       <div className="section-title">
         <p>
@@ -2223,7 +2223,7 @@ localStorage.setItem("previewTopicId", String(topicId));
 
                       className="text-purple-600 font-medium hover:underline flex items-center justify-between w-auto md:w-[80px]"
                     >
-                      <PlayCircle className="w-4 h-4 " style={{ marginRight: "7px" }} />  <span className="hidden md:inline">Preview </span>
+                      <PlayCircle className="w-4 h-4 " style={{ marginRight: "7px" }} />  Preview 
                     </button>
 
 
@@ -2312,7 +2312,7 @@ localStorage.setItem("previewTopicId", String(topicId));
                               className="w-4 h-4"
                               style={{ marginRight: "7px" }}
                             />
-                            <span className="hidden md:inline">Preview</span>
+                            Preview
                           </button>
                         </div>
                       )}
