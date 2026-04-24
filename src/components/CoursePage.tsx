@@ -2275,11 +2275,11 @@ localStorage.setItem("previewTopicId", String(topicId));
                      
   {previewOpen && playbackId && (
   <>
-    <img
+    {/* <img
       src={thumbnail}
       alt="Video Thumbnail"
       className="w-full rounded"
-    />
+    /> */}
 
     <div className="w-full aspect-video">
       <MuxPlayer
