@@ -345,7 +345,7 @@ useEffect(() => {
      
 
       const enrolled = data.enrolled;
-      localStorage.setItem("enrolledcourses", enrolled ?? "");
+      //localStorage.setItem("enrolledcourses", enrolled ?? "");
 
       const isNotEnrolled = !enrolled;
 

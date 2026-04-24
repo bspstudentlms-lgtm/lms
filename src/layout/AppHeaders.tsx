@@ -206,7 +206,7 @@ localStorage.setItem("email", email);
         if (data.status === 200) {
           localStorage.setItem("userId", data.userid);
           localStorage.setItem("username", data.username);
-         // localStorage.setItem("email", data.email);
+          localStorage.setItem("email", data.email);
           localStorage.setItem("role", data.role);
 
           const enrolled = String(data.enrolled).trim();
@@ -226,7 +226,7 @@ localStorage.setItem("email", email);
           if (!user) return;
 
           localStorage.setItem("username", user.name ?? "");
-         // localStorage.setItem("email", user.email ?? "");
+          localStorage.setItem("email", user.email ?? "");
           localStorage.setItem("image", user.image ?? "");
           localStorage.setItem("role", "sos");
 
