@@ -2052,6 +2052,7 @@ const Topics = ({ course }) => {
   // Show section only if category = 2
   if (Number(course.course_type) !== 1) return null;
   const [playbackId, setPlaybackId] = useState("");
+   const [thumbnail, setThumbnail] = useState("");
   const [previewOpen, setPreviewOpen] = useState(false);
   const [currentVideo, setCurrentVideo] = useState(null);
   const [videoList, setVideoList] = useState([]);
@@ -2099,18 +2100,21 @@ const Topics = ({ course }) => {
   const storedEmail = localStorage.getItem("email");
 localStorage.setItem("previewTopicId", String(topicId));
   if (!storedEmail) {
-    const path = window.location.href;
+    
+
+    const newUrl = window.location.href;
+    const path = `${newUrl}#${String(topicId)}`;
 
     localStorage.setItem("postLoginRedirect", path);
     
 
     signIn("google", {
-  callbackUrl: window.location.href,
+  callbackUrl: path,
 });
 
     return;
   }
-
+ window.location.hash = String(topicId);
   try {
     const res = await fetch(
       `https://www.backstagepass.co.in/reactapi/api/get_playback_id.php?topic_id=${topicId}`
@@ -2120,6 +2124,7 @@ localStorage.setItem("previewTopicId", String(topicId));
 
     if (data.status && data.playback_id) {
       setPlaybackId(data.playback_id);
+      setThumbnail(data.thumbnail);
       setPreviewOpen(true);
     }
   } catch (error) {
@@ -2267,7 +2272,15 @@ localStorage.setItem("previewTopicId", String(topicId));
 
                     {/* VIDEO */}
                     <div className="p-4">
+                     
   {previewOpen && playbackId && (
+  <>
+    <img
+      src={thumbnail}
+      alt="Video Thumbnail"
+      className="w-full rounded"
+    />
+
     <div className="w-full aspect-video">
       <MuxPlayer
         playbackId={playbackId}
@@ -2276,7 +2289,8 @@ localStorage.setItem("previewTopicId", String(topicId));
         className="w-full h-full rounded-xl"
       />
     </div>
-  )}
+  </>
+)}
 </div>
 
                     
