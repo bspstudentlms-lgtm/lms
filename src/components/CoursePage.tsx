@@ -2171,6 +2171,16 @@ localStorage.setItem("previewTopicId", String(topicId));
   //   }
   // };
 
+ const [isPlaying, setIsPlaying] = useState(false);
+const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+  if (!previewOpen) {
+    setIsPlaying(false);
+    setIsLoaded(false);
+  }
+}, [previewOpen]);
+
   useEffect(() => {
   if (course?.topics?.length) {
     const defaultIndex = course.topics.findIndex(
@@ -2255,7 +2265,7 @@ localStorage.setItem("previewTopicId", String(topicId));
                     {/* HEADER */}
                     <div className="flex justify-between items-center p-4 border-b border-gray-700">
                       <div>
-                        <p className="text-sm text-white-400" style={{ letterSpacing: "1px", color: "#111", fontSize: "20px", marginBottom: "5px"}}>Course Preview</p>
+                        <p className="text-sm text-white-400" style={{ letterSpacing: "1px", fontWeight: "600", color: "#111", fontSize: "16px", marginBottom: "5px"}}>Course Preview</p>
                         <h2 className="text-xl font-semibold text-white-400" style={{color: "#111", fontWeight: "700"}}>
                           {course?.coursename}
                         </h2>
@@ -2273,23 +2283,54 @@ localStorage.setItem("previewTopicId", String(topicId));
                     {/* VIDEO */}
                     <div className="p-4">
                      
-  {previewOpen && playbackId && (
-  <>
-    {/* <img
-      src={thumbnail}
-      alt="Video Thumbnail"
-      className="w-full rounded"
-    /> */}
+ 
+{previewOpen && playbackId && (
+  <div className="relative w-full aspect-video rounded-xl overflow-hidden">
 
-    <div className="w-full aspect-video">
+    {/* 🖼️ THUMBNAIL */}
+    {!isPlaying && (
+      <div
+        className="absolute inset-0 cursor-pointer"
+        onClick={() => {
+          setIsPlaying(true);
+          setIsLoaded(false);
+        }}
+      >
+        <img
+          src={thumbnail}
+          className="w-full h-full object-cover"
+        />
+
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center">
+            ▶
+          </div>
+        </div>
+      </div>
+    )}
+
+    {/* 🎬 VIDEO (ONLY ONE INSTANCE) */}
+    {isPlaying && (
       <MuxPlayer
+        key={playbackId} // 🔥 ensures fresh instance
         playbackId={playbackId}
         playsInline
         controls
-        className="w-full h-full rounded-xl"
+        autoPlay
+        muted={false}
+        onLoadedData={() => setIsLoaded(true)}
+        className="w-full h-full"
       />
-    </div>
-  </>
+    )}
+
+    {/* ⏳ LOADER */}
+    {isPlaying && !isLoaded && (
+      <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+        <div className="w-10 h-10 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    )}
+
+  </div>
 )}
 </div>
 
