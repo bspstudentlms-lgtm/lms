@@ -1978,7 +1978,7 @@ const isCurrentWatched =
           {activeTab === "outcome" && <p>{courseOutcome}</p>}
 
           {activeTab === "resources" && (
-            <a href={activeModule?.resourceslink} className="text-blue-600 underline">
+            <a target="_blank" href={activeModule?.resourceslink} className="text-blue-600 underline">
               Download Resources
             </a>
           )}

@@ -284,6 +284,30 @@ const InnerBlog = () => {
 							</ul>
 						</div>
 					</div>
+
+          <div className="sidebar-post">
+						<div className="sidebar_title"><h4>Related Category Posts</h4></div>
+						<div className="single_popular">
+							<a href="single_blog.html"><img src="assets/images/blog/blog-1.png" alt="" /></a>
+							<h5><a href="single_blog.html">Supercharging Your SEO Game with AI Writing Assistants</a></h5>
+						</div>
+						<div className="single_popular">
+							<a href="single_blog.html"><img src="assets/images/blog/blog-2.png" alt="" /></a>
+							<h5><a href="single_blog.html">AI Writing Assistants and the Future of Content Marketing</a></h5>
+						</div>
+						<div className="single_popular">
+							<a href="single_blog.html"><img src="assets/images/blog/blog-3.png" alt="" /></a>
+							<h5><a href="single_blog.html">Enhancing Your E-commerce Store With AI Writing Assistants.</a></h5>
+						</div>
+						<div className="single_popular">
+							<a href="single_blog.html"><img src="assets/images/blog/blog-4.png" alt="" /></a>
+							<h5><a href="single_blog.html">Building your content strategy cannot get easier than this.</a></h5>
+						</div>
+						<div className="single_popular">
+							<a href="single_blog.html"><img src="assets/images/blog/blog-5.png" alt="" /></a>
+							<h5><a href="single_blog.html">This is the only read you would need before sitting down to prepare</a></h5>
+						</div>	
+					</div>
 						
 							
 				</div>					
