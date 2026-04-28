@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-
+import { useRouter } from 'next/navigation';
 import CourseCarouselNoScroll from "@/components/CourseCarouselNoScroll";
 import SiteNavigation from "@/components/SiteNavigation";
 import AppHeaders from "@/layout/AppHeaders";
@@ -26,42 +26,42 @@ const slides = [
 ];
 
 const topics = [
-  {
-    title: "Game Development Fundamentals",
-    desc: "Understand game engines, core mechanics, physics systems, and gameplay logic."
-  },
-  {
-    title: "C# Programming for Games",
-    desc: "Master scripting, object-oriented concepts, player controls, and system architecture."
-  },
-  {
-    title: "3D Character Creation",
-    desc: "Learn sculpting, retopology, UV mapping, and game-ready asset workflows."
-  },
-  {
-    title: "Environment & Level Design",
-    desc: "Create immersive worlds with modular assets, lighting, and scene optimization."
-  },
-  {
-    title: "Texturing & Materials",
-    desc: "Build realistic materials and smart textures using industry-standard pipelines."
-  },
-  {
-    title: "Gameplay Systems & Mechanics",
-    desc: "Design combat systems, AI behaviors, UI systems, and interactive features."
-  },
-  {
-    title: "Mobile Game Development",
-    desc: "Optimize games for Android & iOS platforms with performance-focused techniques."
-  },
-  {
-    title: "Game Design Principles",
-    desc: "Learn player psychology, balancing, engagement loops, and progression systems."
-  },
-  {
-    title: "Game Optimization & Publishing",
-    desc: "Improve performance, fix bottlenecks, and deploy games to real platforms."
-  }
+	{
+		title: "Game Development Fundamentals",
+		desc: "Understand game engines, core mechanics, physics systems, and gameplay logic."
+	},
+	{
+		title: "C# Programming for Games",
+		desc: "Master scripting, object-oriented concepts, player controls, and system architecture."
+	},
+	{
+		title: "3D Character Creation",
+		desc: "Learn sculpting, retopology, UV mapping, and game-ready asset workflows."
+	},
+	{
+		title: "Environment & Level Design",
+		desc: "Create immersive worlds with modular assets, lighting, and scene optimization."
+	},
+	{
+		title: "Texturing & Materials",
+		desc: "Build realistic materials and smart textures using industry-standard pipelines."
+	},
+	{
+		title: "Gameplay Systems & Mechanics",
+		desc: "Design combat systems, AI behaviors, UI systems, and interactive features."
+	},
+	{
+		title: "Mobile Game Development",
+		desc: "Optimize games for Android & iOS platforms with performance-focused techniques."
+	},
+	{
+		title: "Game Design Principles",
+		desc: "Learn player psychology, balancing, engagement loops, and progression systems."
+	},
+	{
+		title: "Game Optimization & Publishing",
+		desc: "Improve performance, fix bottlenecks, and deploy games to real platforms."
+	}
 ];
 
 const companies = [
@@ -107,6 +107,8 @@ const HomePageContent = () => {
 	const [currents, setCurrents] = useState(0);
 
 	const [visibleTopics, setVisibleTopics] = useState(6);
+
+	const router = useRouter();
 
 	useEffect(() => {
 		const links = [
@@ -349,7 +351,7 @@ const HomePageContent = () => {
 						</div>
 						<div className="col-lg-6 col-sm-6 col-xs-12">
 							<div className="home_me_img">
-								<img src="images/home-image.png" style={{width: "85%"}} className="img-fluid" alt="" />
+								<img src="images/home-image.png" style={{ width: "85%" }} className="img-fluid" alt="" />
 								<div className="home_ps">
 									<img src="assets/images/icon/user2.svg" alt="" />
 									<h2>3000+</h2>
@@ -674,7 +676,7 @@ const HomePageContent = () => {
 
 
 
-	
+
 
 
 
@@ -704,29 +706,29 @@ const HomePageContent = () => {
 					<div className="row">
 						{topics.slice(0, visibleTopics).map((topic, index) => (
 							<div key={index} className="col-lg-4 col-sm-6 col-xs-12">
-							<div className="single_tca">
-								<h2>
-								<a>{topic.title}</a>
-								</h2>
-								<span>{topic.desc}</span>
-							</div>
+								<div className="single_tca">
+									<h2>
+										<a>{topic.title}</a>
+									</h2>
+									<span>{topic.desc}</span>
+								</div>
 							</div>
 						))}
 					</div>
 					<div className="text-center mt-4">
-  <button
-    className="btn_one"
-    onClick={() =>
-      setVisibleTopics(
-        visibleTopics === 6 ? topics.length : 6
-      )
-    }
-  >
-    <span>
-      {visibleTopics === 6 ? "View More" : "View Less"}
-    </span>
-  </button>
-</div>
+						<button
+							className="btn_one"
+							onClick={() =>
+								setVisibleTopics(
+									visibleTopics === 6 ? topics.length : 6
+								)
+							}
+						>
+							<span>
+								{visibleTopics === 6 ? "View More" : "View Less"}
+							</span>
+						</button>
+					</div>
 				</div>
 			</section>
 
@@ -889,84 +891,112 @@ const HomePageContent = () => {
 	</section> */}
 
 
-	
-		
-	<section id="blog" className="blog_area section-padding" style={{display: "none"}}>
-		<div className="container">
-			<div className="section-title">
-				<h2>News</h2>
-				<p>Our Latest <span><u>Blogs</u></span></p>
-			</div>	
-			<div className="row">		
-				<div className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
-					<div className="single_blog">
-						<div className="content_box">
-							<span>August 25, 2023 | <a href="blog_single.html">Design</a></span>
-							<h2><a href="blog_single.html">Professional Mobile Painting and Sculpting</a></h2>
-							<a href="#" className="cta"><span>READ MORE</span>
-							  <svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px"}}>
-								<path d="M1,5 L11,5"></path>
-								<polyline points="8 1 12 5 8 9"></polyline>
-							  </svg>
-							</a>							
+
+
+			<section id="blog" className="blog_area section-padding">
+				<div className="container">
+					<div className="section-title">
+						<h2>News</h2>
+						<p>Our Latest <span><u>Blogs</u></span></p>
+					</div>
+					<div className="row">
+						<div className="col-lg-3 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
+							<div className="single_blog">
+								<div className="img_wrapper">
+									<img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
+									<div className="time-badge">
+										⏱ 9 mins
+									</div>
+								</div>
+								<div className="content_box">
+									<span>Published Date : <b>17-03-2026</b></span>
+									<h2><a href="/blog-inner">Professional Ceramic Moulding for Beginner</a></h2>
+									<p>What if the most exciting tech career in India isnt about building another SaaS.....</p>
+									<a href="/blog-inner" className="cta"><span>READ MORE</span>
+										<svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px" }}>
+											<path d="M1,5 L11,5"></path>
+											<polyline points="8 1 12 5 8 9"></polyline>
+										</svg>
+									</a>
+								</div>
+							</div>
+						</div>
+						<div className="col-lg-3 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
+							<div className="single_blog">
+								<div className="img_wrapper">
+									<img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
+									<div className="time-badge">
+										⏱ 9 mins
+									</div>
+								</div>
+								<div className="content_box">
+									<span>Published Date : <b>17-03-2026</b></span>
+									<h2><a href="/blog-inner">Professional Ceramic Moulding for Beginner</a></h2>
+									<p>What if the most exciting tech career in India isnt about building another SaaS.....</p>
+									<a href="/blog-inner" className="cta"><span>READ MORE</span>
+										<svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px" }}>
+											<path d="M1,5 L11,5"></path>
+											<polyline points="8 1 12 5 8 9"></polyline>
+										</svg>
+									</a>
+								</div>
+							</div>
+						</div>
+						<div className="col-lg-3 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
+							<div className="single_blog">
+								<div className="img_wrapper">
+									<img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
+									<div className="time-badge">
+										⏱ 9 mins
+									</div>
+								</div>
+								<div className="content_box">
+									<span>Published Date : <b>17-03-2026</b></span>
+									<h2><a href="/blog-inner">Professional Ceramic Moulding for Beginner</a></h2>
+									<p>What if the most exciting tech career in India isnt about building another SaaS.....</p>
+									<a href="/blog-inner" className="cta"><span>READ MORE</span>
+										<svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px" }}>
+											<path d="M1,5 L11,5"></path>
+											<polyline points="8 1 12 5 8 9"></polyline>
+										</svg>
+									</a>
+								</div>
+							</div>
+						</div>
+						<div className="col-lg-3 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
+							<div className="single_blog">
+								<div className="img_wrapper">
+									<img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
+									<div className="time-badge">
+										⏱ 9 mins
+									</div>
+								</div>
+								<div className="content_box">
+									<span>Published Date : <b>17-03-2026</b></span>
+									<h2><a href="/blog-inner">Professional Ceramic Moulding for Beginner</a></h2>
+									<p>What if the most exciting tech career in India isnt about building another SaaS.....</p>
+									<a href="/blog-inner" className="cta"><span>READ MORE</span>
+										<svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px" }}>
+											<path d="M1,5 L11,5"></path>
+											<polyline points="8 1 12 5 8 9"></polyline>
+										</svg>
+									</a>
+								</div>
+							</div>
 						</div>
 					</div>
-					<div className="single_blog">
-						<div className="content_box">
-							<span>August 25, 2023 | <a href="blog_single.html">Design</a></span>
-							<h2><a href="blog_single.html">Professional Mobile Painting and Sculpting</a></h2>
-							<a href="#" className="cta"><span>READ MORE</span>
-							  <svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px"}}>
-								<path d="M1,5 L11,5"></path>
-								<polyline points="8 1 12 5 8 9"></polyline>
-							  </svg>
-							</a>							
+					<div className="col-lg-12 text-center">
+						<div className="cc_btn">
+							<button
+								onClick={() => router.push("/blogs")}
+								className="btn_one"
+							>
+								View All Blogs
+							</button>
 						</div>
 					</div>
 				</div>
-				<div className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
-					<div className="single_blog">
-						<img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
-						<div className="content_box">
-							<span>August 26, 2023 | <a href="blog_single.html">Education</a></span>
-							<h2><a href="blog_single.html">Professional Ceramic Moulding for Beginner</a></h2>
-							<a href="#" className="cta"><span>READ MORE</span>
-							  <svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px"}}>
-								<path d="M1,5 L11,5"></path>
-								<polyline points="8 1 12 5 8 9"></polyline>
-							  </svg>
-							</a>							
-						</div>
-					</div>
-				</div>
-				<div className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.3s" data-wow-offset="0">
-					<div className="single_blog">
-						<img src="assets/images/blog/3.png" className="img-fluid" alt="image" />
-						<div className="content_box">
-							<span>August 28, 2023 | <a href="blog_single.html">Programing</a></span>
-							<h2><a href="blog_single.html">Education Is About Create Leaders For Tomorrow </a></h2>
-							<a href="#" className="cta"><span>READ MORE</span>
-							  <svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px"}}>
-								<path d="M1,5 L11,5"></path>
-								<polyline points="8 1 12 5 8 9"></polyline>
-							  </svg>
-							</a>
-						</div>
-					</div>
-				</div>						
-			</div>
-			<div className="col-lg-12 text-center">
-                <div className="cc_btn">
-                  <button
-                    onClick={() => router.push("/all-courses")}
-                    className="btn_one"
-                  >
-                    View All Blogs
-                  </button>
-                </div>
-              </div>
-		</div>
-	</section>	
+			</section>
 
 			<div className="footer section-padding" style={{ paddingTop: "80px" }}>
 				<div className="container">
@@ -978,10 +1008,10 @@ const HomePageContent = () => {
 									Create real projects. Build real skills. Grow your career.
 								</p>
 								<ul className="social-home">
-								<li><a href="https://www.facebook.com/profile.php?id=61588089197582" target="_blank" className="facebook-home"><i className="fa fa-facebook"></i></a></li>
-								<li><a href="https://www.youtube.com/@backstagepass_online" target="_blank" className="twitter-home"><i className="fa fa-youtube"></i></a></li>
-								<li><a href="https://www.instagram.com/onlinebackstagepass/" target="_blank" className="instagram-home"><i className="fa fa-instagram"></i></a></li>
-							</ul>
+									<li><a href="https://www.facebook.com/profile.php?id=61588089197582" target="_blank" className="facebook-home"><i className="fa fa-facebook"></i></a></li>
+									<li><a href="https://www.youtube.com/@backstagepass_online" target="_blank" className="twitter-home"><i className="fa fa-youtube"></i></a></li>
+									<li><a href="https://www.instagram.com/onlinebackstagepass/" target="_blank" className="instagram-home"><i className="fa fa-instagram"></i></a></li>
+								</ul>
 							</div>
 						</div>
 						<div className="col-lg-3 col-sm-6 col-xs-12">
@@ -1012,31 +1042,31 @@ const HomePageContent = () => {
 							<div className="single_footer">
 								<h4>Contact Info</h4>
 								<div className="sf_contact">
-  <span className="ti-mobile"></span>
-  <h3>Phone number</h3>
-  <p>
-    <a href="tel:+918065912040">
-      +91-8065912040
-    </a>
-  </p>
-</div>
+									<span className="ti-mobile"></span>
+									<h3>Phone number</h3>
+									<p>
+										<a href="tel:+918065912040">
+											+91-8065912040
+										</a>
+									</p>
+								</div>
 								<div className="sf_contact">
-                  <span><i className="fa fa-whatsapp"></i></span>
-                  <h3>Whatsapp</h3>
-                  <p><a
-      href="https://wa.me/919985677746"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      +91-9985677746
-    </a></p>
-                </div>
+									<span><i className="fa fa-whatsapp"></i></span>
+									<h3>Whatsapp</h3>
+									<p><a
+										href="https://wa.me/919985677746"
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										+91-9985677746
+									</a></p>
+								</div>
 								<div className="sf_contact">
 									<span className="ti-email"></span>
 									<h3>Email Address</h3>
 									<p><a href="mailto:learning@backstagepass.co.in?subject=Course Inquiry&body=Hi, I am interested in your courses">
-  learning@backstagepass.co.in
-</a></p>
+										learning@backstagepass.co.in
+									</a></p>
 								</div>
 								{/* <div className="sf_contact">
 									<span className="ti-map"></span>

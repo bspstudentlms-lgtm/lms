@@ -226,11 +226,17 @@ export default function CourseGrid() {
 
                 <div className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
                   <div className="single_blog">
+                    <div className="img_wrapper">
                     <img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
+                    <div className="time-badge">
+                      ⏱ 5 mins
+                    </div>
+                    </div>
                     <div className="content_box">
-                      <span>August 26, 2023 | <a href="blog_single.html">Education</a></span>
-                      <h2><a href="blog_single.html">Professional Ceramic Moulding for Beginner</a></h2>
-                      <a href="#" className="cta"><span>READ MORE</span>
+                      <span>Published Date : <b>17-03-2026</b></span>
+                      <h2><a href="/blog-inner">Professional Ceramic Moulding for Beginner</a></h2>
+                      <p>What if the most exciting tech career in India isnt about building another SaaS.....</p>
+                      <a href="/blog-inner" className="cta"><span>READ MORE</span>
                         <svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px" }}>
                           <path d="M1,5 L11,5"></path>
                           <polyline points="8 1 12 5 8 9"></polyline>
@@ -241,11 +247,17 @@ export default function CourseGrid() {
                 </div>
                 <div className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.3s" data-wow-offset="0">
                   <div className="single_blog">
-                    <img src="assets/images/blog/3.png" className="img-fluid" alt="image" />
+                    <div className="img_wrapper">
+                    <img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
+                    <div className="time-badge">
+                      ⏱ 4 mins
+                    </div>
+                    </div>
                     <div className="content_box">
-                      <span>August 28, 2023 | <a href="blog_single.html">Programing</a></span>
-                      <h2><a href="blog_single.html">Education Is About Create Leaders For Tomorrow </a></h2>
-                      <a href="#" className="cta"><span>READ MORE</span>
+                      <span>Published Date : <b>17-03-2026</b></span>
+                      <h2><a href="/blog-inner">Education Is About Create Leaders For Tomorrow </a></h2>
+                      <p>What if the most exciting tech career in India isnt about building another SaaS.....</p>
+                      <a href="/blog-inner" className="cta"><span>READ MORE</span>
                         <svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px" }}>
                           <path d="M1,5 L11,5"></path>
                           <polyline points="8 1 12 5 8 9"></polyline>
@@ -256,11 +268,17 @@ export default function CourseGrid() {
                 </div>
                 <div className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
                   <div className="single_blog">
+                    <div className="img_wrapper">
                     <img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
+                    <div className="time-badge">
+                      ⏱ 3 mins
+                    </div>
+                    </div>
                     <div className="content_box">
-                      <span>August 26, 2023 | <a href="blog_single.html">Education</a></span>
-                      <h2><a href="blog_single.html">Professional Ceramic Moulding for Beginner</a></h2>
-                      <a href="#" className="cta"><span>READ MORE</span>
+                      <span>Published Date : <b>17-03-2026</b></span>
+                      <h2><a href="/blog-inner">Professional Ceramic Moulding for Beginner</a></h2>
+                      <p>What if the most exciting tech career in India isnt about building another SaaS.....</p>
+                      <a href="/blog-inner" className="cta"><span>READ MORE</span>
                         <svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px" }}>
                           <path d="M1,5 L11,5"></path>
                           <polyline points="8 1 12 5 8 9"></polyline>
@@ -271,11 +289,17 @@ export default function CourseGrid() {
                 </div>
                 <div className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
                   <div className="single_blog">
+                    <div className="img_wrapper">
                     <img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
+                    <div className="time-badge">
+                      ⏱ 9 mins
+                    </div>
+                    </div>
                     <div className="content_box">
-                      <span>August 26, 2023 | <a href="blog_single.html">Education</a></span>
-                      <h2><a href="blog_single.html">Professional Ceramic Moulding for Beginner</a></h2>
-                      <a href="#" className="cta"><span>READ MORE</span>
+                      <span>Published Date : <b>17-03-2026</b></span>
+                      <h2><a href="/blog-inner">Professional Ceramic Moulding for Beginner</a></h2>
+                      <p>What if the most exciting tech career in India isnt about building another SaaS.....</p>
+                      <a href="/blog-inner" className="cta"><span>READ MORE</span>
                         <svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px" }}>
                           <path d="M1,5 L11,5"></path>
                           <polyline points="8 1 12 5 8 9"></polyline>
@@ -286,11 +310,17 @@ export default function CourseGrid() {
                 </div>
                 <div className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
                   <div className="single_blog">
+                    <div className="img_wrapper">
                     <img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
+                    <div className="time-badge">
+                      ⏱ 8 mins
+                    </div>
+                    </div>
                     <div className="content_box">
-                      <span>August 26, 2023 | <a href="blog_single.html">Education</a></span>
-                      <h2><a href="blog_single.html">Professional Ceramic Moulding for Beginner</a></h2>
-                      <a href="#" className="cta"><span>READ MORE</span>
+                      <span>Published Date : <b>17-03-2026</b></span>
+                      <h2><a href="/blog-inner">Professional Ceramic Moulding for Beginner</a></h2>
+                      <p>What if the most exciting tech career in India isnt about building another SaaS.....</p>
+                      <a href="/blog-inner" className="cta"><span>READ MORE</span>
                         <svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px" }}>
                           <path d="M1,5 L11,5"></path>
                           <polyline points="8 1 12 5 8 9"></polyline>
@@ -301,11 +331,17 @@ export default function CourseGrid() {
                 </div>
                 <div className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
                   <div className="single_blog">
+                    <div className="img_wrapper">
                     <img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
+                    <div className="time-badge">
+                      ⏱ 5 mins
+                    </div>
+                    </div>
                     <div className="content_box">
-                      <span>August 26, 2023 | <a href="blog_single.html">Education</a></span>
-                      <h2><a href="blog_single.html">Professional Ceramic Moulding for Beginner</a></h2>
-                      <a href="#" className="cta"><span>READ MORE</span>
+                      <span>Published Date : <b>17-03-2026</b></span>
+                      <h2><a href="/blog-inner">Professional Ceramic Moulding for Beginner</a></h2>
+                      <p>What if the most exciting tech career in India isnt about building another SaaS.....</p>
+                      <a href="/blog-inner" className="cta"><span>READ MORE</span>
                         <svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px" }}>
                           <path d="M1,5 L11,5"></path>
                           <polyline points="8 1 12 5 8 9"></polyline>
@@ -316,11 +352,17 @@ export default function CourseGrid() {
                 </div>
                 <div className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
                   <div className="single_blog">
+                    <div className="img_wrapper">
                     <img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
+                    <div className="time-badge">
+                      ⏱ 6 mins
+                    </div>
+                    </div>
                     <div className="content_box">
-                      <span>August 26, 2023 | <a href="blog_single.html">Education</a></span>
-                      <h2><a href="blog_single.html">Professional Ceramic Moulding for Beginner</a></h2>
-                      <a href="#" className="cta"><span>READ MORE</span>
+                      <span>Published Date : <b>17-03-2026</b></span>
+                      <h2><a href="/blog-inner">Professional Ceramic Moulding for Beginner</a></h2>
+                      <p>What if the most exciting tech career in India isnt about building another SaaS.....</p>
+                      <a href="/blog-inner" className="cta"><span>READ MORE</span>
                         <svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px" }}>
                           <path d="M1,5 L11,5"></path>
                           <polyline points="8 1 12 5 8 9"></polyline>
@@ -331,11 +373,17 @@ export default function CourseGrid() {
                 </div>
                 <div className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
                   <div className="single_blog">
+                    <div className="img_wrapper">
                     <img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
+                    <div className="time-badge">
+                      ⏱ 7 mins
+                    </div>
+                    </div>
                     <div className="content_box">
-                      <span>August 26, 2023 | <a href="blog_single.html">Education</a></span>
-                      <h2><a href="blog_single.html">Professional Ceramic Moulding for Beginner</a></h2>
-                      <a href="#" className="cta"><span>READ MORE</span>
+                      <span>Published Date : <b>17-03-2026</b></span>
+                      <h2><a href="/blog-inner">Professional Ceramic Moulding for Beginner</a></h2>
+                      <p>What if the most exciting tech career in India isnt about building another SaaS.....</p>
+                      <a href="/blog-inner" className="cta"><span>READ MORE</span>
                         <svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px" }}>
                           <path d="M1,5 L11,5"></path>
                           <polyline points="8 1 12 5 8 9"></polyline>
@@ -346,11 +394,17 @@ export default function CourseGrid() {
                 </div>
                 <div className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
                   <div className="single_blog">
+                    <div className="img_wrapper">
                     <img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
+                    <div className="time-badge">
+                      ⏱ 9 mins
+                    </div>
+                    </div>
                     <div className="content_box">
-                      <span>August 26, 2023 | <a href="blog_single.html">Education</a></span>
-                      <h2><a href="blog_single.html">Professional Ceramic Moulding for Beginner</a></h2>
-                      <a href="#" className="cta"><span>READ MORE</span>
+                      <span>Published Date : <b>17-03-2026</b></span>
+                      <h2><a href="/blog-inner">Professional Ceramic Moulding for Beginner</a></h2>
+                      <p>What if the most exciting tech career in India isnt about building another SaaS.....</p>
+                      <a href="/blog-inner" className="cta"><span>READ MORE</span>
                         <svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px" }}>
                           <path d="M1,5 L11,5"></path>
                           <polyline points="8 1 12 5 8 9"></polyline>
@@ -367,7 +421,8 @@ export default function CourseGrid() {
   <div className="category_header">CATEGORIES</div>
 
   <ul className="category_list">
-    <li className="active">Game Development</li>
+    <li className="active">All</li>
+    <li>Game Development</li>
     <li>Game Design</li>
     <li>Industry Trends</li>
     <li>AR / VR</li>
