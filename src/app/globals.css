@@ -1789,7 +1789,7 @@ strong, b {
   color: #e60000;
 }
 
-
+/* 
 .course-slide{
     position:relative;
     background:#fff;
@@ -1852,7 +1852,7 @@ margin-right:8px;
 	font-weight: 400;
 }
 .course-slide .course-content span strong{font-weight:700;}
-/*START COURSE STYLR TWO*/
+
 .course-slide2{
     position:relative;
     background:#fff;
@@ -1937,9 +1937,8 @@ margin-right:8px;
 	border-radius: 100px;
 	font-weight: 800;
 }
-/*END COURSE STYLR TWO*/
-/*START COURSE THREE*/
-.course-slide3{margin-bottom:30px;}
+
+.course-slide3{margin-bottom:30px;} */
 
 /* Active */
 .category_list li.active {
