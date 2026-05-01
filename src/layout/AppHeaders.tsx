@@ -171,16 +171,111 @@ const AppHeader: React.FC = () => {
 //     }
 //   }, [status, session]);
 
-useEffect(() => {
+// useEffect(() => {
   
+//   const loginType = localStorage.getItem("loginType");
+//   if (loginType === "manual") return;
+//   if (status === "loading") return;
+
+//   if (hasCheckedRef.current) return;
+
+//   if (status === "authenticated" && session?.user?.email) {
+//     hasCheckedRef.current = true;
+
+//     const redirectPath =
+//       localStorage.getItem("postLoginRedirect") || "/";
+
+//     const previewTopicId = localStorage.getItem("previewTopicId");
+
+//     const email = session.user.email;
+
+//     const username = session?.user?.name || "";
+
+// localStorage.setItem("email", email);
+//     const checkStudent = async () => {
+//       try {
+//         const res = await fetch(
+//           `https://www.backstagepass.co.in/reactapi/check-student.php?email=${encodeURIComponent(email)}&username=${encodeURIComponent(username)}`,
+//           { cache: "no-store" }
+//         );
+
+//         const data = await res.json();
+
+//         let finalRedirect = redirectPath;
+
+//         if (data.status === 200) {
+//           localStorage.setItem("userId", data.userid);
+//           localStorage.setItem("username", data.username);
+//           localStorage.setItem("email", data.email);
+//           localStorage.setItem("role", data.role);
+
+//           const enrolled = String(data.enrolled).trim();
+//           localStorage.setItem("enrolledcourses", enrolled);
+
+//           // ✅ preview has highest priority
+//           if (previewTopicId) {
+//              //alert('1');
+//             finalRedirect = redirectPath;
+//           } else if (enrolled) {
+//            // alert('2');
+//             finalRedirect = "/mycourses";
+//           }
+
+//         } else {
+//           const user = session.user;
+//           if (!user) return;
+
+//           localStorage.setItem("username", user.name ?? "");
+//           localStorage.setItem("email", user.email ?? "");
+//           localStorage.setItem("image", user.image ?? "");
+//           localStorage.setItem("role", "sos");
+
+//           // ✅ preview priority even here
+//           if (previewTopicId) {
+//              //alert('3');
+//             finalRedirect = redirectPath;
+//           } else if (redirectPath === "/") {
+//             finalRedirect = "/dashboard";
+//           }
+//         }
+
+//         // ✅ prevent redirect loop
+//         if (
+//           finalRedirect &&
+//           window.location.pathname !== finalRedirect
+//         ) {
+//           //alert(finalRedirect);
+//          safeRedirect(finalRedirect);
+          
+//         }
+
+//         // ✅ cleanup AFTER redirect decision
+//         // localStorage.removeItem("postLoginRedirect");
+//         // localStorage.removeItem("previewTopicId");
+//         // localStorage.removeItem("loginRedirectDone");
+
+//       } catch (err) {
+//         console.error("Login redirect error:", err);
+//       }
+//     };
+
+//     checkStudent();
+//   }
+// }, [status, session]);
+
+
+useEffect(() => {
   const loginType = localStorage.getItem("loginType");
-  if (loginType === "manual") return;
+
   if (status === "loading") return;
 
+  // ✅ moved up to prevent multiple executions early
   if (hasCheckedRef.current) return;
 
+  if (loginType === "manual") return;
+
   if (status === "authenticated" && session?.user?.email) {
-    hasCheckedRef.current = true;
+    hasCheckedRef.current = true; // ✅ lock execution
 
     const redirectPath =
       localStorage.getItem("postLoginRedirect") || "/";
@@ -188,10 +283,10 @@ useEffect(() => {
     const previewTopicId = localStorage.getItem("previewTopicId");
 
     const email = session.user.email;
-
     const username = session?.user?.name || "";
 
-localStorage.setItem("email", email);
+    localStorage.setItem("email", email);
+
     const checkStudent = async () => {
       try {
         const res = await fetch(
@@ -201,7 +296,7 @@ localStorage.setItem("email", email);
 
         const data = await res.json();
 
-        let finalRedirect = redirectPath;
+        let finalRedirect = "/dashboard"; // ✅ default fallback
 
         if (data.status === 200) {
           localStorage.setItem("userId", data.userid);
@@ -214,10 +309,8 @@ localStorage.setItem("email", email);
 
           // ✅ preview has highest priority
           if (previewTopicId) {
-             //alert('1');
-            finalRedirect = redirectPath;
+            finalRedirect = redirectPath || "/";
           } else if (enrolled) {
-           // alert('2');
             finalRedirect = "/mycourses";
           }
 
@@ -232,27 +325,23 @@ localStorage.setItem("email", email);
 
           // ✅ preview priority even here
           if (previewTopicId) {
-             //alert('3');
+            finalRedirect = redirectPath || "/";
+          } else if (redirectPath && redirectPath !== "/") {
             finalRedirect = redirectPath;
-          } else if (redirectPath === "/") {
-            finalRedirect = "/dashboard";
           }
         }
 
-        // ✅ prevent redirect loop
+        // ✅ prevent redirect loop + double execution
         if (
           finalRedirect &&
           window.location.pathname !== finalRedirect
         ) {
-          //alert(finalRedirect);
-         safeRedirect(finalRedirect);
-          
-        }
+          safeRedirect(finalRedirect);
 
-        // ✅ cleanup AFTER redirect decision
-        // localStorage.removeItem("postLoginRedirect");
-        // localStorage.removeItem("previewTopicId");
-        // localStorage.removeItem("loginRedirectDone");
+          // ✅ IMPORTANT: clear after redirect to stop second redirect to dashboard
+          localStorage.removeItem("postLoginRedirect");
+          localStorage.removeItem("previewTopicId");
+        }
 
       } catch (err) {
         console.error("Login redirect error:", err);

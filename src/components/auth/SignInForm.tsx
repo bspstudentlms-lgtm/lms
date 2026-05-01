@@ -168,8 +168,9 @@ const { login } = useAuth();
             </p>
           </div>
           <div>
+            {/* onClick={() => signIn("google")} */}
             <div  className="grid grid-cols-1 gap-3 sm:grid-cols-1 sm:gap-5">
-              <button onClick={() => signIn("google")}  className="inline-flex items-center justify-center gap-2 py-2.5 sm:py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10">
+              <button  onClick={() => signIn("google", { callbackUrl: "/" })} className="inline-flex items-center justify-center gap-2 py-2.5 sm:py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10">
                 <svg
                   width="20"
                   height="20"

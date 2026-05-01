@@ -530,11 +530,18 @@ export default function DashboardCourses() {
                   <ArrowRightIcon />
                 </button>
               ) : (
-                <a
-                  href={`/${course.urlpath}`}
+               <a
+                href={`/${course.urlpath}`}
+                onClick={() => {
+                  localStorage.setItem(
+                    "postLoginRedirect",
+                    `/${course.urlpath}`
+                  );
 
-                  className={`inline-flex items-center justify-center gap-2 w-[60%] rounded-lg px-6 py-1.5 text-sm font-semibold transition border ${cta.className}`}
-                >
+                
+                }}
+  className={`inline-flex items-center justify-center gap-2 w-[60%] rounded-lg px-6 py-1.5 text-sm font-semibold transition border ${cta.className}`}
+>
                   <span style={{ fontSize: "13px", fontWeight: "400" }}>{cta.text}</span>
                   <ArrowRightIcon />
                 </a>
