@@ -1961,3 +1961,7 @@ margin-right:8px;
     font-weight: 700;
     transition: 0.3s;
 }
+
+.test{
+  font-size: 12px;
+}
