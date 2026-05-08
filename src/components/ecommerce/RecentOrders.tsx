@@ -330,7 +330,7 @@ export default function DashboardCourses() {
     return (
       <div
         className={`
-  ${style.border} ${style.bg}`}
+  ${style.border} ${style.bg} h-full`}
       >
 
 
@@ -382,7 +382,7 @@ export default function DashboardCourses() {
                                   </div>
           
                                 </div>
-                                <div className="course-content" style={{ minHeight: "340px" }}><a className="c_btn" target="_blank" href={`/coursedetails/${course.id}`}>{course.category}</a>
+                                <div className="course-content flex flex-col flex-1 p-6" style={{ minHeight: "430px" }}><a className="c_btn" target="_blank" href={`/coursedetails/${course.id}`}>{course.category}</a>
                       <h3><a href={`/coursedetails/${course.id}`} target="_blank"> {course.title}</a></h3>
 
                       {/* <div className="flex gap-4 text-xs mb-4 text-green-700 mt-3">

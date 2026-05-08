@@ -275,7 +275,7 @@ const hasRecording = Number(course.recording_available) === 1;
                                   </div>
           
                                 </div>
-                                <div className="course-content" style={{ minHeight: "340px" }}><a className="c_btn" target="_blank" href={`/coursedetails/${course.id}`}>{course.category}</a>
+                                <div className="course-content" style={{ minHeight: "440px" }}><a className="c_btn" target="_blank" href={`/coursedetails/${course.id}`}>{course.category}</a>
                       <h3><a href={`/coursedetails/${course.id}`} target="_blank"> {course.title}</a></h3>
 
                       {/* <div className="flex gap-4 text-xs mb-4 text-green-700 mt-3">
