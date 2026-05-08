@@ -1789,7 +1789,7 @@ strong, b {
   color: #e60000;
 }
 
-/* 
+
 .course-slide{
     position:relative;
     background:#fff;
@@ -1847,8 +1847,8 @@ margin-right:8px;
 }
 .course-slide .course-content span {
 	display: inline-block;
-	margin-right: 10px;
-	font-size: 16px;
+	margin-right: 0px;
+	font-size: 15px;
 	font-weight: 400;
 }
 .course-slide .course-content span strong{font-weight:700;}
@@ -1938,7 +1938,7 @@ margin-right:8px;
 	font-weight: 800;
 }
 
-.course-slide3{margin-bottom:30px;} */
+.course-slide3{margin-bottom:30px;} 
 
 /* Active */
 .category_list li.active {
