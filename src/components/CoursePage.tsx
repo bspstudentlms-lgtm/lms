@@ -1015,8 +1015,8 @@ useEffect(() => {
 
                     {course.course_type !== 2 && (
                       <div className="gap-2 mb-1 mt-4">  <div className="flex items-center gap-2 mb-1">
-                        <span className="line-through text-gray-300 text-3xl">₹{course.orignialpayment}</span>
-                        <span className="text-3xl font-bold text-[#ee1b24]">₹{course.total_payment}</span>
+                        <span className="line-through text-gray-300 text-3xl">₹{course.orignialpayment}/-</span>
+                        <span className="text-3xl font-bold text-[#ee1b24]">₹{course.total_payment}/-</span>
                         <span className="bg-white text-red-600 font-semibold px-2 py-1 rounded-full text-sm">
                           {course.discount_value}% Disc.
                         </span>
@@ -1104,8 +1104,8 @@ useEffect(() => {
 
                   {course.course_type !== 2 && (
                     <div className="gap-2 mb-1 mt-4">  <div className="flex items-center gap-2 mb-1">
-                      <span className="line-through text-gray-300 text-3xl">₹{course.orignialpayment}</span>
-                      <span className="text-3xl font-bold text-[#ee1b24]">₹{course.total_payment}</span>
+                      <span className="line-through text-gray-300 text-3xl">₹{course.orignialpayment}/-</span>
+                      <span className="text-3xl font-bold text-[#ee1b24]">₹{course.total_payment}/-</span>
                       <span className="bg-white text-red-600 font-semibold px-2 py-1 rounded-full text-sm">
                         {course.discount_value}% Disc.
                       </span>
@@ -1703,8 +1703,8 @@ const BasicDetails = ({ course }) => {
                 )}
                 {Number(course.course_type) !== 2 && (
                   <div className="gap-4 mb-4">  <div className="flex items-center gap-4 mb-1">
-                    <span className="line-through text-gray-300 text-3xl">₹{course.orignialpayment}</span>
-                    <span className="text-3xl font-bold text-[#ee1b24]">₹{course.total_payment}</span>
+                    <span className="line-through text-gray-300 text-3xl">₹{course.orignialpayment}/-</span>
+                    <span className="text-3xl font-bold text-[#ee1b24]">₹{course.total_payment}/-</span>
                     <span className="bg-white text-red-600 font-semibold px-4 py-1 rounded-full text-sm">
                       {course.discount_value}% Disc.
                     </span>
