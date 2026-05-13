@@ -471,7 +471,7 @@ const HomePageContent = () => {
 								<i className="ti-briefcase" style={{ color: "#bb0852" }}></i>
 								<div>
 									<span data-purecounter-start="0" className="purecounter">100%</span>
-									<p>Placement Support</p>
+									<p>Placement Support*</p>
 								</div>
 							</div>
 						</div>
@@ -1045,8 +1045,8 @@ const HomePageContent = () => {
 									<span className="ti-mobile"></span>
 									<h3>Phone number</h3>
 									<p>
-										<a href="tel:+918065912040">
-											+91-8065912040
+										<a href="tel:+919985677746">
+											+91-9985677746
 										</a>
 									</p>
 								</div>

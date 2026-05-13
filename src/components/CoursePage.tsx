@@ -1618,8 +1618,8 @@ useEffect(() => {
                   <span className="ti-mobile"></span>
                   <h3>Phone number</h3>
                   <p>
-                    <a href="tel:+918065912040">
-                      +91-8065912040
+                    <a href="tel:+919985677746">
+                      +91-9985677746
                     </a>
                   </p>
                 </div>
@@ -2098,14 +2098,14 @@ const Topics = ({ course }) => {
 
   const handlePreview = async (topicId: number) => {
   const storedEmail = localStorage.getItem("email");
-localStorage.setItem("previewTopicId", String(topicId));
+    localStorage.setItem("previewTopicId", String(topicId));
   if (!storedEmail) {
     
 
     const newUrl = window.location.href;
     const path = `${newUrl}#${String(topicId)}`;
 
-    localStorage.setItem("postLoginRedirect", path);
+      localStorage.setItem("postLoginRedirect", path);
     
 
     signIn("google", {
