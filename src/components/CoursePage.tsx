@@ -280,94 +280,94 @@ export default function CoursePage({ params }) {
   }, [params?.path]);
 
 
-//   useEffect(() => {
-//     const storedusername = localStorage.getItem("username");
-//     const storedUserId = localStorage.getItem("userId");
-//     const storedEmail = localStorage.getItem("email");
-// alert('storedemail'+storedEmail);
-//     //  const storedTopicId = localStorage.getItem("previewTopicId");
+  //   useEffect(() => {
+  //     const storedusername = localStorage.getItem("username");
+  //     const storedUserId = localStorage.getItem("userId");
+  //     const storedEmail = localStorage.getItem("email");
+  // alert('storedemail'+storedEmail);
+  //     //  const storedTopicId = localStorage.getItem("previewTopicId");
 
-//     // if (storedEmail) {
-//     //   setOpen1(true);
-//     // }
-    
-//     const storedTopicId = localStorage.getItem("previewTopicId");
+  //     // if (storedEmail) {
+  //     //   setOpen1(true);
+  //     // }
 
-//     if (storedEmail && !storedTopicId) {
-     
-//       setOpen1(true);
-//     }
-//     setUsername(storedusername);
-//     setUserId(storedUserId);
-//     setEmail(storedEmail);
-//   }, []);
+  //     const storedTopicId = localStorage.getItem("previewTopicId");
 
+  //     if (storedEmail && !storedTopicId) {
 
-const { data: session, status } = useSession();
-
-// useEffect(() => {
-//   if (status !== "authenticated") return;
-
-//   const email = session?.user?.email;
-//   const username = session?.user?.name;
-
-//   const storedTopicId = localStorage.getItem("previewTopicId");
-//   const enrolled = localStorage.getItem("enrolledcourses");
-// const isNotEnrolled = enrolled === null;
-
-//   if (email && !storedTopicId && isNotEnrolled) {
-//     setOpen1(true);
-//   } else {
-//     setOpen1(false);
-//   }
+  //       setOpen1(true);
+  //     }
+  //     setUsername(storedusername);
+  //     setUserId(storedUserId);
+  //     setEmail(storedEmail);
+  //   }, []);
 
 
-//   setEmail(email);
-//   setUsername(username);
-// }, [status, session]);
-useEffect(() => {
-  if (status !== "authenticated") return;
+  const { data: session, status } = useSession();
 
-  const email = session?.user?.email;
-  const username = session?.user?.name;
+  // useEffect(() => {
+  //   if (status !== "authenticated") return;
 
-  const storedTopicId = localStorage.getItem("previewTopicId");
+  //   const email = session?.user?.email;
+  //   const username = session?.user?.name;
 
-  const fetchEnrollment = async () => {
-    try {
-      const res = await fetch(
+  //   const storedTopicId = localStorage.getItem("previewTopicId");
+  //   const enrolled = localStorage.getItem("enrolledcourses");
+  // const isNotEnrolled = enrolled === null;
+
+  //   if (email && !storedTopicId && isNotEnrolled) {
+  //     setOpen1(true);
+  //   } else {
+  //     setOpen1(false);
+  //   }
+
+
+  //   setEmail(email);
+  //   setUsername(username);
+  // }, [status, session]);
+  useEffect(() => {
+    if (status !== "authenticated") return;
+
+    const email = session?.user?.email;
+    const username = session?.user?.name;
+
+    const storedTopicId = localStorage.getItem("previewTopicId");
+
+    const fetchEnrollment = async () => {
+      try {
+        const res = await fetch(
           `https://www.backstagepass.co.in/reactapi/api/get-enrollment.php?email=${encodeURIComponent(email)}`,
           { cache: "no-store" }
         );
 
         const data = await res.json();
 
-     
 
-      const enrolled = data.enrolled;
-      //localStorage.setItem("enrolledcourses", enrolled ?? "");
 
-      const isNotEnrolled = !enrolled;
+        const enrolled = data.enrolled;
+        //localStorage.setItem("enrolledcourses", enrolled ?? "");
 
-      if (email && !storedTopicId && isNotEnrolled) {
-        setOpen1(true);
-      } else {
-        setOpen1(false);
+        const isNotEnrolled = !enrolled;
+
+        if (email && !storedTopicId && isNotEnrolled) {
+          setOpen1(true);
+        } else {
+          setOpen1(false);
+        }
+
+      } catch (err) {
+        console.error(err);
       }
+    };
 
-    } catch (err) {
-      console.error(err);
+    if (email) {
+      fetchEnrollment();
     }
-  };
 
-  if (email) {
-    fetchEnrollment();
-  }
+    setEmail(email);
+    setUsername(username);
 
-  setEmail(email);
-  setUsername(username);
-
-}, [status, session]);
+  }, [status, session]);
 
   useEffect(() => {
     const section = document.getElementById("page-enroll-cta");
@@ -1015,8 +1015,8 @@ useEffect(() => {
 
                     {course.course_type !== 2 && (
                       <div className="gap-2 mb-1 mt-4">  <div className="flex items-center gap-2 mb-1">
-                        <span className="line-through text-gray-300 text-3xl">₹{course.orignialpayment}</span>
-                        <span className="text-3xl font-bold text-[#ee1b24]">₹{course.total_payment}</span>
+                        <span className="line-through text-gray-300 text-3xl">₹{course.orignialpayment}/-</span>
+                        <span className="text-3xl font-bold text-[#ee1b24]">₹{course.total_payment}/-</span>
                         <span className="bg-white text-red-600 font-semibold px-2 py-1 rounded-full text-sm">
                           {course.discount_value}% Disc.
                         </span>
@@ -1104,8 +1104,8 @@ useEffect(() => {
 
                   {course.course_type !== 2 && (
                     <div className="gap-2 mb-1 mt-4">  <div className="flex items-center gap-2 mb-1">
-                      <span className="line-through text-gray-300 text-3xl">₹{course.orignialpayment}</span>
-                      <span className="text-3xl font-bold text-[#ee1b24]">₹{course.total_payment}</span>
+                      <span className="line-through text-gray-300 text-3xl">₹{course.orignialpayment}/-</span>
+                      <span className="text-3xl font-bold text-[#ee1b24]">₹{course.total_payment}/-</span>
                       <span className="bg-white text-red-600 font-semibold px-2 py-1 rounded-full text-sm">
                         {course.discount_value}% Disc.
                       </span>
@@ -1618,8 +1618,8 @@ useEffect(() => {
                   <span className="ti-mobile"></span>
                   <h3>Phone number</h3>
                   <p>
-                    <a href="tel:+918065912040">
-                      +91-8065912040
+                    <a href="tel:+919985677746">
+                      +91-9985677746
                     </a>
                   </p>
                 </div>
@@ -1703,8 +1703,8 @@ const BasicDetails = ({ course }) => {
                 )}
                 {Number(course.course_type) !== 2 && (
                   <div className="gap-4 mb-4">  <div className="flex items-center gap-4 mb-1">
-                    <span className="line-through text-gray-300 text-3xl">₹{course.orignialpayment}</span>
-                    <span className="text-3xl font-bold text-[#ee1b24]">₹{course.total_payment}</span>
+                    <span className="line-through text-gray-300 text-3xl">₹{course.orignialpayment}/-</span>
+                    <span className="text-3xl font-bold text-[#ee1b24]">₹{course.total_payment}/-</span>
                     <span className="bg-white text-red-600 font-semibold px-4 py-1 rounded-full text-sm">
                       {course.discount_value}% Disc.
                     </span>
@@ -2052,7 +2052,7 @@ const Topics = ({ course }) => {
   // Show section only if category = 2
   if (Number(course.course_type) !== 1) return null;
   const [playbackId, setPlaybackId] = useState("");
-   const [thumbnail, setThumbnail] = useState("");
+  const [thumbnail, setThumbnail] = useState("");
   const [previewOpen, setPreviewOpen] = useState(false);
   const [currentVideo, setCurrentVideo] = useState(null);
   const [videoList, setVideoList] = useState([]);
@@ -2077,7 +2077,7 @@ const Topics = ({ course }) => {
           });
 
           // ✅ IMPORTANT: remove so it doesn't repeat on refresh
-         // localStorage.removeItem("previewTopicId");
+          // localStorage.removeItem("previewTopicId");
 
         } catch (err) {
           console.error("Preview tracking failed:", err);
@@ -2092,45 +2092,45 @@ const Topics = ({ course }) => {
     trackPreview();
   }, []);
 
-  
+
 
   const { isMobileOpen } = useSidebar();
 
   const handlePreview = async (topicId: number) => {
-  const storedEmail = localStorage.getItem("email");
-localStorage.setItem("previewTopicId", String(topicId));
-  if (!storedEmail) {
-    
+    const storedEmail = localStorage.getItem("email");
+    localStorage.setItem("previewTopicId", String(topicId));
+    if (!storedEmail) {
 
-    const newUrl = window.location.href;
-    const path = `${newUrl}#${String(topicId)}`;
 
-    localStorage.setItem("postLoginRedirect", path);
-    
+      const newUrl = window.location.href;
+      const path = `${newUrl}#${String(topicId)}`;
 
-    signIn("google", {
-  callbackUrl: path,
-});
+      localStorage.setItem("postLoginRedirect", path);
 
-    return;
-  }
- window.location.hash = String(topicId);
-  try {
-    const res = await fetch(
-      `https://www.backstagepass.co.in/reactapi/api/get_playback_id.php?topic_id=${topicId}`
-    );
 
-    const data = await res.json();
+      signIn("google", {
+        callbackUrl: path,
+      });
 
-    if (data.status && data.playback_id) {
-      setPlaybackId(data.playback_id);
-      setThumbnail(data.thumbnail);
-      setPreviewOpen(true);
+      return;
     }
-  } catch (error) {
-    console.error("Error fetching preview:", error);
-  }
-};
+    window.location.hash = String(topicId);
+    try {
+      const res = await fetch(
+        `https://www.backstagepass.co.in/reactapi/api/get_playback_id.php?topic_id=${topicId}`
+      );
+
+      const data = await res.json();
+
+      if (data.status && data.playback_id) {
+        setPlaybackId(data.playback_id);
+        setThumbnail(data.thumbnail);
+        setPreviewOpen(true);
+      }
+    } catch (error) {
+      console.error("Error fetching preview:", error);
+    }
+  };
 
 
   // const handlePreview = async (topicId: number) => {
@@ -2171,27 +2171,27 @@ localStorage.setItem("previewTopicId", String(topicId));
   //   }
   // };
 
- const [isPlaying, setIsPlaying] = useState(false);
-const [isLoaded, setIsLoaded] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-  if (!previewOpen) {
-    setIsPlaying(false);
-    setIsLoaded(false);
-  }
-}, [previewOpen]);
-
-  useEffect(() => {
-  if (course?.topics?.length) {
-    const defaultIndex = course.topics.findIndex(
-      (topic) => Number(topic.is_open) === 1
-    );
-
-    if (defaultIndex !== -1) {
-      setActiveIndex(defaultIndex);
+    if (!previewOpen) {
+      setIsPlaying(false);
+      setIsLoaded(false);
     }
-  }
-}, [course]);
+  }, [previewOpen]);
+
+  useEffect(() => {
+    if (course?.topics?.length) {
+      const defaultIndex = course.topics.findIndex(
+        (topic) => Number(topic.is_open) === 1
+      );
+
+      if (defaultIndex !== -1) {
+        setActiveIndex(defaultIndex);
+      }
+    }
+  }, [course]);
   return (
 
     <section className="max-w-6xl mx-auto px-0 py-10">
@@ -2238,7 +2238,7 @@ const [isLoaded, setIsLoaded] = useState(false);
 
                       className="text-purple-600 font-medium hover:underline flex items-center justify-between w-auto md:w-[80px]"
                     >
-                      <PlayCircle className="w-4 h-4 " style={{ marginRight: "7px" }} />  Preview 
+                      <PlayCircle className="w-4 h-4 " style={{ marginRight: "7px" }} />  Preview
                     </button>
 
 
@@ -2254,90 +2254,7 @@ const [isLoaded, setIsLoaded] = useState(false);
 
               {/* {point.title}  ---{point.topic_preview} */}
 
-              {previewOpen && (
-            <div
-  className="fixed inset-0 z-[9999] flex justify-center items-center backdrop-blur-sm"
-  style={{ backgroundColor: "rgba(0, 0, 0, 0.1)" }}
->
-
-                  <div className="bg-[#fff] text-white w-[900px] rounded-xl overflow-hidden shadow-2xl" >
-
-                    {/* HEADER */}
-                    <div className="flex justify-between items-center p-4 border-b border-gray-700">
-                      <div>
-                        <p className="text-sm text-white-400" style={{ letterSpacing: "1px", fontWeight: "600", color: "#111", fontSize: "16px", marginBottom: "5px"}}>Course Preview</p>
-                        <h2 className="text-xl font-semibold text-white-400" style={{color: "#111", fontWeight: "700"}}>
-                          {course?.coursename}
-                        </h2>
-                      </div>
-
-                      <button
-                        onClick={() => setPreviewOpen(false)}
-                        className="text-xl hover:text-red-400"
-                         style={{color: "#111", fontWeight: "700"}}
-                      >
-                        ✕
-                      </button>
-                    </div>
-
-                    {/* VIDEO */}
-                    <div className="p-4">
-                     
- 
-{previewOpen && playbackId && (
-  <div className="relative w-full aspect-video rounded-xl overflow-hidden">
-
-    {/* 🖼️ THUMBNAIL */}
-    {!isPlaying && (
-      <div
-        className="absolute inset-0 cursor-pointer"
-        onClick={() => {
-          setIsPlaying(true);
-          setIsLoaded(false);
-        }}
-      >
-        <img
-          src={thumbnail}
-          className="w-full h-full object-cover"
-        />
-
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center">
-            ▶
-          </div>
-        </div>
-      </div>
-    )}
-
-    {/* 🎬 VIDEO (ONLY ONE INSTANCE) */}
-    {isPlaying && (
-      <MuxPlayer
-        key={playbackId} // 🔥 ensures fresh instance
-        playbackId={playbackId}
-        playsInline
-        controls
-        autoPlay
-        muted={false}
-        onLoadedData={() => setIsLoaded(true)}
-        className="w-full h-full"
-      />
-    )}
-
-    {/* ⏳ LOADER */}
-    {isPlaying && !isLoaded && (
-      <div className="absolute inset-0 flex items-center justify-center bg-black/40">
-        <div className="w-10 h-10 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
-      </div>
-    )}
-
-  </div>
-)}
-</div>
-
-                    
-                  </div>
-                </div>
-              )}
+              
 
 
               <div
@@ -2380,6 +2297,91 @@ const [isLoaded, setIsLoaded] = useState(false);
           );
         })}
       </div>
+
+      {previewOpen && (
+                <div
+                  className="fixed inset-0 z-[9999] flex justify-center items-center backdrop-blur-sm"
+                  style={{ backgroundColor: "rgba(0, 0, 0, 0.1)" }}
+                >
+
+                  <div className="bg-[#fff] text-white w-[900px] rounded-xl overflow-hidden shadow-2xl" >
+
+                    {/* HEADER */}
+                    <div className="flex justify-between items-center p-4 border-b border-gray-700">
+                      <div>
+                        <p className="text-sm text-white-400" style={{ letterSpacing: "1px", fontWeight: "600", color: "#111", fontSize: "16px", marginBottom: "5px" }}>Course Preview</p>
+                        <h2 className="text-xl font-semibold text-white-400" style={{ color: "#111", fontWeight: "700" }}>
+                          {course?.coursename}
+                        </h2>
+                      </div>
+
+                      <button
+                        onClick={() => setPreviewOpen(false)}
+                        className="text-xl hover:text-red-400"
+                        style={{ color: "#111", fontWeight: "700" }}
+                      >
+                        ✕
+                      </button>
+                    </div>
+
+                    {/* VIDEO */}
+                    <div className="p-4">
+
+
+                      {previewOpen && playbackId && (
+                        <div className="relative w-full aspect-video rounded-xl overflow-hidden">
+
+                          {/* 🖼️ THUMBNAIL */}
+                          {!isPlaying && (
+                            <div
+                              className="absolute inset-0 cursor-pointer"
+                              onClick={() => {
+                                setIsPlaying(true);
+                                setIsLoaded(false);
+                              }}
+                            >
+                              <img
+                                src={thumbnail}
+                                className="w-full h-full object-cover"
+                              />
+
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center">
+                                  ▶
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* 🎬 VIDEO (ONLY ONE INSTANCE) */}
+                          {isPlaying && (
+                            <MuxPlayer
+                              key={playbackId} // 🔥 ensures fresh instance
+                              playbackId={playbackId}
+                              playsInline
+                              controls
+                              autoPlay
+                              muted={false}
+                              onLoadedData={() => setIsLoaded(true)}
+                              className="w-full h-full"
+                            />
+                          )}
+
+                          {/* ⏳ LOADER */}
+                          {isPlaying && !isLoaded && (
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                              <div className="w-10 h-10 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                            </div>
+                          )}
+
+                        </div>
+                      )}
+                    </div>
+
+
+                  </div>
+                </div>
+              )}
     </section>
   );
 };

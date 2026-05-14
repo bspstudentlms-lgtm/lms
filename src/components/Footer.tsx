@@ -39,7 +39,7 @@ export default function Footer() {
             </h4>
             <ul className="space-y-4 text-sm text-gray-700">
               <li className="flex items-center gap-3">
-                <Phone size={18} /> +91-8065912040
+                <Phone size={18} /> +91-9985677746
               </li>
               <li className="flex items-center gap-3">
                 <Phone size={18} /> +91-8008002795
