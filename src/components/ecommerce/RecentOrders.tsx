@@ -4,8 +4,8 @@ import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightIcon } from "@/icons";
-import { CircleUserRound , Lock, PlayCircle, ShoppingCart } from "lucide-react";
-
+import { CircleUserRound, Lock, PlayCircle, ShoppingCart } from "lucide-react";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 interface Course {
   course_per_completed: number;
@@ -294,37 +294,37 @@ export default function DashboardCourses() {
     //   };
 
     const formatWebinar = (dateString?: string) => {
-    if (!dateString) {
+      if (!dateString) {
+        return {
+          date: "Coming Soon",
+          time: "",
+        };
+      }
+
+      // Fix for Safari parsing issue
+      const dateObj = new Date(dateString.replace(" ", "T"));
+
+      if (isNaN(dateObj.getTime())) {
+        return {
+          date: "Coming Soon",
+          time: "",
+        };
+      }
+
       return {
-        date: "Coming Soon",
-        time: "",
+        date: dateObj.toLocaleDateString("en-IN", {
+          weekday: "long",
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+        }),
+        time: dateObj.toLocaleTimeString("en-IN", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        }),
       };
-    }
-
-    // Fix for Safari parsing issue
-    const dateObj = new Date(dateString.replace(" ", "T"));
-
-    if (isNaN(dateObj.getTime())) {
-      return {
-        date: "Coming Soon",
-        time: "",
-      };
-    }
-
-    return {
-      date: dateObj.toLocaleDateString("en-IN", {
-        weekday: "long",
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      }),
-      time: dateObj.toLocaleTimeString("en-IN", {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      }),
     };
-  };
 
 
     return (
@@ -337,55 +337,55 @@ export default function DashboardCourses() {
         <div className="row">
 
           <div className="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
-                              <div className="course-slide">
-                                <div className="course-img">
-                                  <a target="_blank" href={`/coursedetails/${course.id}`}>
-                                    <img src="assets/images/all-img/c1.png" alt="" />
-                                    <Image
-                                      src={course.image}
-                                      alt={course.title}
-                                      fill
-                                    />
-                                  </a>
-                                  <div className="course-date">
-                                    <span style={{ marginRight: "10px" }}
-                className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${style.badge}`}
-              >
-                {style.label}
-              </span>
-              {isCompleted && (
-              <div className="absolute top-8 left-[20px] rotate-[360deg] bg-green-600 px-10 py-1 text-xs font-semibold text-white shadow">
-                COMPLETED
+            <div className="course-slide">
+              <div className="course-img">
+                <a target="_blank" href={`/coursedetails/${course.id}`}>
+                  <img src="assets/images/all-img/c1.png" alt="" />
+                  <Image
+                    src={course.image}
+                    alt={course.title}
+                    fill
+                  />
+                </a>
+                <div className="course-date">
+                  <span style={{ marginRight: "10px" }}
+                    className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${style.badge}`}
+                  >
+                    {style.label}
+                  </span>
+                  {isCompleted && (
+                    <div className="absolute top-8 left-[20px] rotate-[360deg] bg-green-600 px-10 py-1 text-xs font-semibold text-white shadow">
+                      COMPLETED
+                    </div>
+                  )}
+
+                  {Number(course.coursetype) !== 2 && (
+                    isPurchased ? (
+                      <span className="rounded-full bg-green-100 px-4 py-1.5 text-[10px] font-semibold text-green-700">
+                        Enrolled
+                      </span>
+                    ) : (
+                      <span className="rounded-full bg-orange-100 px-4 py-1.5 text-[10px] font-semibold text-orange-600">
+                        Not Enrolled
+                      </span>
+                    )
+                  )}
+
+                  {isLive && (
+                    <span className="mt-3 inline-flex items-center gap-2 rounded-lg bg-green-100 px-3 py-1 text-sm font-semibold text-green-700">
+                      ⏰ {liveCountdown}
+                    </span>
+
+
+                  )}
+
+                </div>
+
               </div>
-            )}
-            
-              {Number(course.coursetype) !== 2 && (
-                isPurchased ? (
-                  <span className="rounded-full bg-green-100 px-4 py-1.5 text-[10px] font-semibold text-green-700">
-                    Enrolled
-                  </span>
-                ) : (
-                  <span className="rounded-full bg-orange-100 px-4 py-1.5 text-[10px] font-semibold text-orange-600">
-                    Not Enrolled
-                  </span>
-                )
-              )}
+              {/* <div className="course-content flex flex-col flex-1 p-6" style={{ minHeight: "430px" }}><a className="c_btn" target="_blank" href={`/coursedetails/${course.id}`}>{course.category}</a>
+                <h3><a href={`/coursedetails/${course.id}`} target="_blank"> {course.title}</a></h3> */}
 
-              {isLive && (
-                <span className="mt-3 inline-flex items-center gap-2 rounded-lg bg-green-100 px-3 py-1 text-sm font-semibold text-green-700">
-                  ⏰ {liveCountdown}
-                </span>
-
-
-              )}
-                                    
-                                  </div>
-          
-                                </div>
-                                <div className="course-content flex flex-col flex-1 p-6" style={{ minHeight: "430px" }}><a className="c_btn" target="_blank" href={`/coursedetails/${course.id}`}>{course.category}</a>
-                      <h3><a href={`/coursedetails/${course.id}`} target="_blank"> {course.title}</a></h3>
-
-                      {/* <div className="flex gap-4 text-xs mb-4 text-green-700 mt-3">
+                {/* <div className="flex gap-4 text-xs mb-4 text-green-700 mt-3">
                 {course.webinarstatus ? <span className="flex items-center gap-1">{course.webinarstatus} </span> : null}
 
                 {(course.webinar_status != 2) && (
@@ -398,198 +398,211 @@ export default function DashboardCourses() {
                 </span>
               </div> */}
 
-                      {/* <span><i className="fa fa-graduation-cap"></i>{course.level}</span> */}
-                     <span className="flex items-center gap-1 mb-2">
-                  ⏰ {course.duration ? `${course.duration} Hours` : "To be announced"}
-                </span>
-                      {/* <span style={{display: "flex"}}><CircleUserRound />{course.mentor_name ? course.mentor_name : "Mentor"}</span> */}
-                      {/* <span className="course-desc">{course.description}</span> */}
+                <div className="course-content" style={{ minHeight: "430px" }}><a className="c_btn" target="_blank" href={course.urlpath}>{course.category}</a>
+                  <h3><a href={course.urlpath} target="_blank"> {course.title}</a></h3>
+                  <span style={{marginRight:"5px", marginBottom: "10px"}}><i className="fa fa-graduation-cap"></i>{course.level}</span>
+                  <span style={{marginRight:"5px"}}><i className="fa fa-clock"></i>{course.duration} hours</span>
+                  <span><i className="fa fa-user"></i>{course.mentor_name ? course.mentor_name : "Mentor"}</span>
+                  <span className="course-desc">{course.description}</span>
 
-                      <span className="course-desc">{course.description}</span>
-{isPurchased && Number(course.coursetype) === 1 && (
-                <div className="mt-4">
-                  <div className="mb-1 flex justify-between text-xs font-medium text-gray-500">
-                    <span>Progress</span>
-                    <span>
-                      {Number(course.is_coursecompleted) === 1 ? 100 : progress}%
 
-                    </span>
-                  </div>
+                
 
-                  <div className="h-2 w-full rounded-full bg-gray-200">
-                    <div
-                      className="h-2 rounded-full bg-[#E11D2E] transition-all"
-                      style={{
-                        width: `${Number(course.is_coursecompleted) === 1 ? 100 : progress
-                          }%`,
-                      }}
-                    />
-                  </div>
-                </div>
-              )}
 
-              {hasAnyEnrollment && Number(course.coursetype) === 2 && (
-              <div className="mt-3">
-                <div className="mb-1 flex justify-between text-xs font-medium text-gray-500">
-                  <span>Progress</span>
-                  <span>{Number(course.is_coursecompleted) === 1 ? 100 : progress}%</span>
-                </div>
-
-                <div className="h-2 w-full rounded-full bg-gray-200">
-                  <div
-                    className="h-2 rounded-full bg-purple-600 transition-all"
-                    style={{
-                      width: `${Number(course.is_coursecompleted) === 1 ? 100 : progress
-                        }%`,
-                    }}
-                  />
-                </div>
-              </div>
-            )}
-            <br/>
-
-              <div className="mt-3">
-              {isPurchased && Number(course.coursetype) === 1 ? (
-                course.is_coursecompleted == 1 ? (
-                  <span className="inline-flex items-center rounded-full bg-green-100 px-4 py-2 text-sm font-semibold text-green-700">
-                    <Link
-                      href={`/coursedetails/${course.id}`}
-                      onClick={() => {
-                        // ✅ set source ONLY when going to course details
-
-                        localStorage.setItem("courseSourceMenu", "mycourses");
-
-                      }}
-                    >
-                      Completed ✓
-                    </Link>
+                {/* <div className="flex gap-4 text-xs mb-4 text-green-700 mt-3">
+                  <span><i className="fa fa-graduation-cap"></i>{course.level}</span>
+                  <span className="flex items-center gap-1 mb-2">
+                    ⏰ {course.duration ? `${course.duration} Hours` : "To be announced"}
                   </span>
-                ) : course.last_watched_topic_id == 0 ? (
-                  <Link
-                    href={`/coursedetails/${course.id}`}
-                    onClick={() => {
-                      // ✅ set source ONLY when going to course details
+                  <span style={{ display: "flex" }}><CircleUserRound />{course.mentor_name ? course.mentor_name : "Mentor"}</span>
+                </div> */}
+                {/* <span className="course-desc">{course.description}</span> */}
 
-                      localStorage.setItem("courseSourceMenu", "mycourses");
+                {/* <span className="course-desc">{course.description}</span> */}
+                {isPurchased && Number(course.coursetype) === 1 && (
+                  <div className="mt-4">
+                    <div className="mb-1 flex justify-between text-xs font-medium text-gray-500">
+                      <span>Progress</span>
+                      <span>
+                        {Number(course.is_coursecompleted) === 1 ? 100 : progress}%
 
-                    }}
-                    className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-1.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
-                  >
-                    Start Course
-                    <ArrowRightIcon />
-                  </Link>
-                ) : (
-                  <Link
-                    href={`/coursedetails/${course.id}`}
-                    onClick={() => {
-                      // ✅ set source ONLY when going to course details
+                      </span>
+                    </div>
 
-                      localStorage.setItem("courseSourceMenu", "mycourses");
+                    <div className="h-2 w-full rounded-full bg-gray-200">
+                      <div
+                        className="h-2 rounded-full bg-[#E11D2E] transition-all"
+                        style={{
+                          width: `${Number(course.is_coursecompleted) === 1 ? 100 : progress
+                            }%`,
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
 
-                    }}
-                    className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-1.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition" style={{ fontSize: "13px", fontWeight: "400" }}
-                  >
-                    Continue Learning
-                    <ArrowRightIcon />
-                  </Link>
-                )
+                {hasAnyEnrollment && Number(course.coursetype) === 2 && (
+                  <div className="mt-3">
+                    <div className="mb-1 flex justify-between text-xs font-medium text-gray-500">
+                      <span>Progress</span>
+                      <span>{Number(course.is_coursecompleted) === 1 ? 100 : progress}%</span>
+                    </div>
 
-                // ) : enrolled &&  Number(course.coursetype) === 3  && course.webinar_status==2 ?  (
-                //   <Link
-                //       href={course.zoom_link}
+                    <div className="h-2 w-full rounded-full bg-gray-200">
+                      <div
+                        className="h-2 rounded-full bg-purple-600 transition-all"
+                        style={{
+                          width: `${Number(course.is_coursecompleted) === 1 ? 100 : progress
+                            }%`,
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
+                <br />
 
-                //       className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
-                //     >
-                //       Join Webinar
+                <div className="mt-3">
+                  {isPurchased && Number(course.coursetype) === 1 ? (
+                    course.is_coursecompleted == 1 ? (
+                      <span className="inline-flex items-center rounded-full bg-green-100 px-4 py-2 text-sm font-semibold text-green-700">
+                        <Link
+                          href={`/coursedetails/${course.id}`}
+                          onClick={() => {
+                            // ✅ set source ONLY when going to course details
 
-                //     </Link>
+                            localStorage.setItem("courseSourceMenu", "mycourses");
 
-              ) : isPurchased && Number(course.coursetype) === 3 && course.webinar_status == 2 ? (
+                          }}
+                        >
+                          Completed ✓
+                        </Link>
+                      </span>
+                    ) : course.last_watched_topic_id == 0 ? (
+                      <Link
+                        href={`/coursedetails/${course.id}`}
+                        onClick={() => {
+                          // ✅ set source ONLY when going to course details
 
-                !isEnded ? (
-                  // 🟢 LIVE WEBINAR
-                  <Link
-                    href={course.zoom_link}
-                    className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-1.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
-                  >
-                    Join Webinar
-                  </Link>
-                ) : (
+                          localStorage.setItem("courseSourceMenu", "mycourses");
 
-                  hasRecording ? (
-                    // 🎥 WATCH RECORDING
+                        }}
+                        className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-1.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
+                      >
+                        Start Course
+                        <ArrowRightIcon />
+                      </Link>
+                    ) : (
+                      <Link
+                        href={`/coursedetails/${course.id}`}
+                        onClick={() => {
+                          // ✅ set source ONLY when going to course details
+
+                          localStorage.setItem("courseSourceMenu", "mycourses");
+
+                        }}
+                        className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-1.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition" style={{ fontSize: "13px", fontWeight: "400" }}
+                      >
+                        Continue Learning
+                        <ArrowRightIcon />
+                      </Link>
+                    )
+
+                    // ) : enrolled &&  Number(course.coursetype) === 3  && course.webinar_status==2 ?  (
+                    //   <Link
+                    //       href={course.zoom_link}
+
+                    //       className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
+                    //     >
+                    //       Join Webinar
+
+                    //     </Link>
+
+                  ) : isPurchased && Number(course.coursetype) === 3 && course.webinar_status == 2 ? (
+
+                    !isEnded ? (
+                      // 🟢 LIVE WEBINAR
+                      <Link
+                        href={course.zoom_link}
+                        className="inline-flex items-center gap-2 rounded-lg bg-[#E11D2E] px-6 py-1.5 text-sm font-semibold text-white hover:bg-[#B91C1C] transition"
+                      >
+                        Join Webinar
+                      </Link>
+                    ) : (
+
+                      hasRecording ? (
+                        // 🎥 WATCH RECORDING
+                        <Link
+                          href={`/coursedetails/${course.id}`}
+                          className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-6 py-1.5 text-sm font-semibold text-white hover:bg-green-700 transition"
+                        >
+                          ▶ Watch Recording
+                        </Link>
+                      ) : (
+                        <span className="text-sm text-gray-500">
+                          Recording will be available soon
+                        </span>
+                      )
+
+                    )
+
+
+
+                  ) : (hasAnyEnrollment && Number(course.coursetype) === 2) ? (
+
                     <Link
                       href={`/coursedetails/${course.id}`}
-                      className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-6 py-1.5 text-sm font-semibold text-white hover:bg-green-700 transition"
+                      onClick={() =>
+                        localStorage.setItem("courseSourceMenu", "mycourses")
+                      }
+                      className={`inline-flex items-center justify-center gap-2 w-[70%] rounded-lg px-6 py-1.5 text-sm font-semibold transition border ${cta.className}`}
                     >
-                      ▶ Watch Recording
+                      <span style={{ fontSize: "13px", fontWeight: "400" }}> {
+                        course.is_coursecompleted
+                          ? "Completed ✓"
+                          : course.watched_topics > 0
+                            ? "Continue Learning"
+                            : cta.text
+                      } </span>
+                      <ArrowRightIcon />
                     </Link>
+                  ) : Number(course.coursetype) === 3 ? (
+                    <button
+                      onClick={() =>
+                        alert(
+                          "Please purchase this live webinar to attend"
+                        )
+                      }
+                      className={`inline-flex items-center justify-center gap-2 w-[60%] rounded-lg px-6 py-1.5 text-sm font-semibold transition border ${cta.className}`}
+                    >
+                      <span style={{ fontSize: "13px", fontWeight: "400" }}>{cta.text} </span>
+                      <ArrowRightIcon />
+                    </button>
                   ) : (
-                    <span className="text-sm text-gray-500">
-                      Recording will be available soon
-                    </span>
-                  )
+                    <a
+                      href={`/${course.urlpath}`}
+                      onClick={() => {
+                        localStorage.setItem(
+                          "postLoginRedirect",
+                          `/${course.urlpath}`
+                        );
+                      }}
 
-                )
+                      className={`inline-flex items-center justify-center gap-2 w-[60%] rounded-lg px-6 py-1.5 text-sm font-semibold transition border ${cta.className}`}
+                    >
+                      <span style={{ fontSize: "13px", fontWeight: "400" }}>{cta.text}</span>
+                      <ArrowRightIcon />
+                    </a>
+                  )}
+                </div>
 
-
-
-              ) : (hasAnyEnrollment && Number(course.coursetype) === 2) ? (
-
-                <Link
-                  href={`/coursedetails/${course.id}`}
-                  onClick={() =>
-                    localStorage.setItem("courseSourceMenu", "mycourses")
-                  }
-                  className={`inline-flex items-center justify-center gap-2 w-[70%] rounded-lg px-6 py-1.5 text-sm font-semibold transition border ${cta.className}`}
-                >
-                  <span style={{ fontSize: "13px", fontWeight: "400" }}> {
-                    course.is_coursecompleted
-                      ? "Completed ✓"
-                      : course.watched_topics > 0
-                        ? "Continue Learning"
-                        : cta.text
-                  } </span>
-                  <ArrowRightIcon />
-                </Link>
-              ) : Number(course.coursetype) === 3 ? (
-                <button
-                  onClick={() =>
-                    alert(
-                      "Please purchase this live webinar to attend"
-                    )
-                  }
-                  className={`inline-flex items-center justify-center gap-2 w-[60%] rounded-lg px-6 py-1.5 text-sm font-semibold transition border ${cta.className}`}
-                >
-                  <span style={{ fontSize: "13px", fontWeight: "400" }}>{cta.text} </span>
-                  <ArrowRightIcon />
-                </button>
-              ) : (
-                <a
-                  href={`/${course.urlpath}`}
-                  onClick={() => {
-                  localStorage.setItem(
-                    "postLoginRedirect",
-                    `/${course.urlpath}`
-                  );
-                }}
-
-                  className={`inline-flex items-center justify-center gap-2 w-[60%] rounded-lg px-6 py-1.5 text-sm font-semibold transition border ${cta.className}`}
-                >
-                  <span style={{ fontSize: "13px", fontWeight: "400" }}>{cta.text}</span>
-                  <ArrowRightIcon />
-                </a>
-              )}
+              </div>
             </div>
+          </div>
 
-                    </div>
-                              </div>
-                            </div>
+        </div>
 
- </div>
-        
-        
-        <div className="flex flex-col sm:flex-row gap-5" style={{display: "none"}}>
+
+        <div className="flex flex-col sm:flex-row gap-5" style={{ display: "none" }}>
 
 
           {/* IMAGE */}
@@ -833,11 +846,11 @@ export default function DashboardCourses() {
                   href={`/${course.urlpath}`}
 
                   onClick={() => {
-                  localStorage.setItem(
-                    "postLoginRedirect",
-                    `/${course.urlpath}`
-                  );
-                }}
+                    localStorage.setItem(
+                      "postLoginRedirect",
+                      `/${course.urlpath}`
+                    );
+                  }}
 
                   className={`inline-flex items-center justify-center gap-2 w-[60%] rounded-lg px-6 py-1.5 text-sm font-semibold transition border ${cta.className}`}
                 >
@@ -849,15 +862,15 @@ export default function DashboardCourses() {
           </div>
         </div>
 
-        
+
       </div>
     );
   };
   /* ================= UI ================= */
   return (
     <div className="min-h-screen bg-white p-6">
-      <div><img src="/InsideLMSBanner.png" /></div>
-      <br/>
+      <div><img src="/InsideLMSBanner.png" className="w-full h-auto object-cover rounded-lg" /></div>
+      <br />
       {/* HEADER */}
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <h2 className="text-2xl font-bold">All Courses</h2>

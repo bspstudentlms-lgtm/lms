@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightIcon } from "@/icons";
 import EnrollModal from "@/components/EnrollModal";
-
+import "@fortawesome/fontawesome-free/css/all.min.css";
 /* ================= TYPES ================= */
 interface Course {
   islivesession_missed(islivesession_missed: any): unknown;
@@ -27,7 +27,7 @@ interface Course {
   description: string;
   shortname: string;
   urlpath: string;
-
+  mentor_name: string;
   last_watched_topic_id: number;
   is_coursecompleted: number;
   course_per_completed: number;
@@ -275,8 +275,8 @@ const hasRecording = Number(course.recording_available) === 1;
                                   </div>
           
                                 </div>
-                                <div className="course-content" style={{ minHeight: "440px" }}><a className="c_btn" target="_blank" href={`/coursedetails/${course.id}`}>{course.category}</a>
-                      <h3><a href={`/coursedetails/${course.id}`} target="_blank"> {course.title}</a></h3>
+                                {/* <div className="course-content" style={{ minHeight: "440px" }}><a className="c_btn" target="_blank" href={`/coursedetails/${course.id}`}>{course.category}</a>
+                      <h3><a href={`/coursedetails/${course.id}`} target="_blank"> {course.title}</a></h3> */}
 
                       {/* <div className="flex gap-4 text-xs mb-4 text-green-700 mt-3">
                 {course.webinarstatus ? <span className="flex items-center gap-1">{course.webinarstatus} </span> : null}
@@ -292,12 +292,19 @@ const hasRecording = Number(course.recording_available) === 1;
               </div> */}
 
                       {/* <span><i className="fa fa-graduation-cap"></i>{course.level}</span> */}
-                     <span className="flex items-center gap-1 mb-2">
+                     {/* <span className="flex items-center gap-1 mb-2">
                   ⏰ {course.duration ? `${course.duration} Hours` : "To be announced"}
-                </span>
+                </span> */}
                       {/* <span style={{display: "flex"}}><CircleUserRound />{course.mentor_name ? course.mentor_name : "Mentor"}</span> */}
                       {/* <span className="course-desc">{course.description}</span> */}
-                      <span className="course-desc">{course.description}</span>
+                      {/* <span className="course-desc">{course.description}</span> */}
+
+                       <div className="course-content" style={{ minHeight: "430px" }}><a className="c_btn" target="_blank" href={course.urlpath}>{course.category}</a>
+                  <h3><a href={course.urlpath} target="_blank"> {course.title}</a></h3>
+                  <span style={{marginRight:"5px", marginBottom: "10px"}}><i className="fa fa-graduation-cap"></i>{course.level}</span>
+                  <span style={{marginRight:"5px"}}><i className="fa fa-clock"></i>{course.duration} hours</span>
+                  <span><i className="fa fa-user"></i>{course.mentor_name ? course.mentor_name : "Mentor"}</span>
+                  <span className="course-desc">{course.description}</span>
 {isPurchased && Number(course.coursetype) === 1 && (
                 <div className="mt-4">
                   <div className="mb-1 flex justify-between text-xs font-medium text-gray-500">
