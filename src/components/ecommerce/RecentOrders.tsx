@@ -856,7 +856,7 @@ export default function DashboardCourses() {
   /* ================= UI ================= */
   return (
     <div className="min-h-screen bg-white p-6">
-      <div><img src="https://www.backstagepass.co.in/Collage-Desktop-Banner-505bae24.webp" /></div>
+      <div><img src="/InsideLMSBanner.png" /></div>
       <br/>
       {/* HEADER */}
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
