@@ -113,7 +113,7 @@ export default function CourseGrid() {
   {
     id: 3,
     title: "Top 10 Skills Every Game Developer Needs",
-    description: "Master coding, creativity, teamwork, and problem solving in gaming.",
+    description: "Master coding, creativity, teamwork, and problem solving in gaming problem solving in gaming.",
     date: "22-03-2026",
     time: "6 mins",
     image: "/assets/images/blog/3.png",
