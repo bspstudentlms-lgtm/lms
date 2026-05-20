@@ -88,6 +88,128 @@ export default function CourseGrid() {
   }, []);
 
   /* ---------- FILTER LOGIC ---------- */
+
+  const [blogs, setBlogs] = useState([
+  {
+    id: 1,
+    title: "Professional Ceramic Moulding for Beginner",
+    description: "What if the most exciting tech career in India isn’t about building another SaaS product?",
+    date: "17-03-2026",
+    time: "5 mins",
+    image: "/assets/images/blog/1.png",
+    url: "/blog-inner",
+    category: "Game Development",
+  },
+  {
+    id: 2,
+    title: "Education Is About Create Leaders For Tomorrow",
+    description: "Learn how modern education is changing the future of creative industries.",
+    date: "20-03-2026",
+    time: "4 mins",
+    image: "/assets/images/blog/2.png",
+    url: "/blog-inner",
+    category: "Industry Trends",
+  },
+  {
+    id: 3,
+    title: "Top 10 Skills Every Game Developer Needs",
+    description: "Master coding, creativity, teamwork, and problem solving in gaming.",
+    date: "22-03-2026",
+    time: "6 mins",
+    image: "/assets/images/blog/3.png",
+    url: "/blog-inner",
+    category: "Game Development",
+  },
+  {
+    id: 4,
+    title: "How AR and VR Are Changing Gaming",
+    description: "Explore immersive gaming experiences using AR and VR technologies.",
+    date: "25-03-2026",
+    time: "8 mins",
+    image: "/assets/images/blog/3.png",
+    url: "/blog-inner",
+    category: "AR / VR",
+  },
+  {
+    id: 5,
+    title: "Beginner Guide to Game Art Design",
+    description: "Understand textures, characters, environments, and visual storytelling.",
+    date: "27-03-2026",
+    time: "7 mins",
+    image: "/assets/images/blog/3.png",
+    url: "/blog-inner",
+    category: "Game Art",
+  },
+  {
+    id: 6,
+    title: "Why Unreal Engine Is Popular in 2026",
+    description: "Discover the features that make Unreal Engine the top choice.",
+    date: "29-03-2026",
+    time: "5 mins",
+    image: "/assets/images/blog/3.png",
+    url: "/blog-inner",
+    category: "Game Development",
+  },
+  {
+    id: 7,
+    title: "Career Opportunities in Esports Industry",
+    description: "Gaming is no longer just entertainment — it’s a massive industry.",
+    date: "01-04-2026",
+    time: "9 mins",
+    image: "/assets/images/blog/3.png",
+    url: "/blog-inner",
+    category: "Industry Trends",
+  },
+  {
+    id: 8,
+    title: "Unity vs Unreal Engine Comparison",
+    description: "Which engine should beginners choose for game development?",
+    date: "03-04-2026",
+    time: "6 mins",
+    image: "/assets/images/blog/3.png",
+    url: "/blog-inner",
+    category: "Game Development",
+  },
+  {
+    id: 9,
+    title: "How to Start a Career in Game Design",
+    description: "Build your portfolio and enter the exciting world of game design.",
+    date: "05-04-2026",
+    time: "5 mins",
+    image: "/assets/images/blog/3.png",
+    url: "/blog-inner",
+    category: "Game Design",
+  },
+  {
+    id: 10,
+    title: "Future of Metaverse Gaming",
+    description: "The metaverse is opening new possibilities for players and creators.",
+    date: "08-04-2026",
+    time: "10 mins",
+    image: "/assets/images/blog/3.png",
+    url: "/blog-inner",
+    category: "AR / VR",
+  },
+]);
+
+  const filteredBlogs = useMemo(() => {
+  return blogs.filter((blog) => {
+    const searchText = search.trim().toLowerCase();
+
+    const text = [
+      blog.title,
+      blog.description,
+      blog.date,
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+
+    return text.includes(searchText);
+  });
+}, [blogs, search]);
+
+
   const filteredCourses = useMemo(() => {
     return courses.filter((c) => {
       const text = [
@@ -214,7 +336,37 @@ export default function CourseGrid() {
   return (
     <div>
       <div>
+<div className="bg-white rounded-2xl shadow-md p-6 mb-10 space-y-4" style={{ boxShadow: "0 0 10px #cdcdcd", paddingTop: "40px" }}>
 
+
+            <input
+              type="text"
+              placeholder="Search blogs by title, date, category..."
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  // close filters on mobile
+                  if (typeof window !== "undefined" && window.innerWidth <= 768) {
+                    setShowFilters(false);
+                  }
+                }
+              }}
+              className="w-full border border-gray-200 rounded-xl px-5 py-3 text-sm 
+  focus:outline-none focus:ring-2 focus:ring-red-500"
+            />
+
+            {/* FILTER ROW */}
+            <div className="flex flex-wrap items-center justify-between gap-4" style={{ marginTop: "20px" }}>
+
+
+              
+              {/* SECONDARY FILTERS */}
+              
+            </div>
+          </div>
 
         <div className="container">
           <div className="row">
@@ -222,198 +374,43 @@ export default function CourseGrid() {
 
             <div className="col-lg-9">
               <div className="row">
+  {filteredBlogs.map((blog) => (
+    <div
+      key={blog.id}
+      className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp"
+    >
+      <div className="single_blog">
+        <div className="img_wrapper">
+          <img
+            src={blog.image}
+            className="img-fluid"
+            alt={blog.title}
+          />
 
+          <div className="time-badge">
+            ⏱ {blog.time}
+          </div>
+        </div>
 
-                <div className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
-                  <div className="single_blog">
-                    <div className="img_wrapper">
-                    <img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
-                    <div className="time-badge">
-                      ⏱ 5 mins
-                    </div>
-                    </div>
-                    <div className="content_box">
-                      <span>Published Date : <b>17-03-2026</b></span>
-                      <h2><a href="/blog-inner">Professional Ceramic Moulding for Beginner</a></h2>
-                      <p>What if the most exciting tech career in India isnt about building another SaaS.....</p>
-                      <a href="/blog-inner" className="cta"><span>READ MORE</span>
-                        <svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px" }}>
-                          <path d="M1,5 L11,5"></path>
-                          <polyline points="8 1 12 5 8 9"></polyline>
-                        </svg>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.3s" data-wow-offset="0">
-                  <div className="single_blog">
-                    <div className="img_wrapper">
-                    <img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
-                    <div className="time-badge">
-                      ⏱ 4 mins
-                    </div>
-                    </div>
-                    <div className="content_box">
-                      <span>Published Date : <b>17-03-2026</b></span>
-                      <h2><a href="/blog-inner">Education Is About Create Leaders For Tomorrow </a></h2>
-                      <p>What if the most exciting tech career in India isnt about building another SaaS.....</p>
-                      <a href="/blog-inner" className="cta"><span>READ MORE</span>
-                        <svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px" }}>
-                          <path d="M1,5 L11,5"></path>
-                          <polyline points="8 1 12 5 8 9"></polyline>
-                        </svg>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
-                  <div className="single_blog">
-                    <div className="img_wrapper">
-                    <img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
-                    <div className="time-badge">
-                      ⏱ 3 mins
-                    </div>
-                    </div>
-                    <div className="content_box">
-                      <span>Published Date : <b>17-03-2026</b></span>
-                      <h2><a href="/blog-inner">Professional Ceramic Moulding for Beginner</a></h2>
-                      <p>What if the most exciting tech career in India isnt about building another SaaS.....</p>
-                      <a href="/blog-inner" className="cta"><span>READ MORE</span>
-                        <svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px" }}>
-                          <path d="M1,5 L11,5"></path>
-                          <polyline points="8 1 12 5 8 9"></polyline>
-                        </svg>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
-                  <div className="single_blog">
-                    <div className="img_wrapper">
-                    <img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
-                    <div className="time-badge">
-                      ⏱ 9 mins
-                    </div>
-                    </div>
-                    <div className="content_box">
-                      <span>Published Date : <b>17-03-2026</b></span>
-                      <h2><a href="/blog-inner">Professional Ceramic Moulding for Beginner</a></h2>
-                      <p>What if the most exciting tech career in India isnt about building another SaaS.....</p>
-                      <a href="/blog-inner" className="cta"><span>READ MORE</span>
-                        <svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px" }}>
-                          <path d="M1,5 L11,5"></path>
-                          <polyline points="8 1 12 5 8 9"></polyline>
-                        </svg>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
-                  <div className="single_blog">
-                    <div className="img_wrapper">
-                    <img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
-                    <div className="time-badge">
-                      ⏱ 8 mins
-                    </div>
-                    </div>
-                    <div className="content_box">
-                      <span>Published Date : <b>17-03-2026</b></span>
-                      <h2><a href="/blog-inner">Professional Ceramic Moulding for Beginner</a></h2>
-                      <p>What if the most exciting tech career in India isnt about building another SaaS.....</p>
-                      <a href="/blog-inner" className="cta"><span>READ MORE</span>
-                        <svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px" }}>
-                          <path d="M1,5 L11,5"></path>
-                          <polyline points="8 1 12 5 8 9"></polyline>
-                        </svg>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
-                  <div className="single_blog">
-                    <div className="img_wrapper">
-                    <img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
-                    <div className="time-badge">
-                      ⏱ 5 mins
-                    </div>
-                    </div>
-                    <div className="content_box">
-                      <span>Published Date : <b>17-03-2026</b></span>
-                      <h2><a href="/blog-inner">Professional Ceramic Moulding for Beginner</a></h2>
-                      <p>What if the most exciting tech career in India isnt about building another SaaS.....</p>
-                      <a href="/blog-inner" className="cta"><span>READ MORE</span>
-                        <svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px" }}>
-                          <path d="M1,5 L11,5"></path>
-                          <polyline points="8 1 12 5 8 9"></polyline>
-                        </svg>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
-                  <div className="single_blog">
-                    <div className="img_wrapper">
-                    <img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
-                    <div className="time-badge">
-                      ⏱ 6 mins
-                    </div>
-                    </div>
-                    <div className="content_box">
-                      <span>Published Date : <b>17-03-2026</b></span>
-                      <h2><a href="/blog-inner">Professional Ceramic Moulding for Beginner</a></h2>
-                      <p>What if the most exciting tech career in India isnt about building another SaaS.....</p>
-                      <a href="/blog-inner" className="cta"><span>READ MORE</span>
-                        <svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px" }}>
-                          <path d="M1,5 L11,5"></path>
-                          <polyline points="8 1 12 5 8 9"></polyline>
-                        </svg>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
-                  <div className="single_blog">
-                    <div className="img_wrapper">
-                    <img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
-                    <div className="time-badge">
-                      ⏱ 7 mins
-                    </div>
-                    </div>
-                    <div className="content_box">
-                      <span>Published Date : <b>17-03-2026</b></span>
-                      <h2><a href="/blog-inner">Professional Ceramic Moulding for Beginner</a></h2>
-                      <p>What if the most exciting tech career in India isnt about building another SaaS.....</p>
-                      <a href="/blog-inner" className="cta"><span>READ MORE</span>
-                        <svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px" }}>
-                          <path d="M1,5 L11,5"></path>
-                          <polyline points="8 1 12 5 8 9"></polyline>
-                        </svg>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
-                  <div className="single_blog">
-                    <div className="img_wrapper">
-                    <img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
-                    <div className="time-badge">
-                      ⏱ 9 mins
-                    </div>
-                    </div>
-                    <div className="content_box">
-                      <span>Published Date : <b>17-03-2026</b></span>
-                      <h2><a href="/blog-inner">Professional Ceramic Moulding for Beginner</a></h2>
-                      <p>What if the most exciting tech career in India isnt about building another SaaS.....</p>
-                      <a href="/blog-inner" className="cta"><span>READ MORE</span>
-                        <svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px" }}>
-                          <path d="M1,5 L11,5"></path>
-                          <polyline points="8 1 12 5 8 9"></polyline>
-                        </svg>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
+        <div className="content_box">
+          <span>
+            Published Date : <b>{blog.date}</b>
+          </span>
+
+          <h2>
+            <a href={blog.url}>{blog.title}</a>
+          </h2>
+
+          <p>{blog.description}</p>
+
+          <a href={blog.url} className="cta">
+            <span>READ MORE</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
             </div>
 
             <div className="col-lg-3">

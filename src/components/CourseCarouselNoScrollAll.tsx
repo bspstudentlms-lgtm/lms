@@ -51,14 +51,14 @@ export default function CourseGrid() {
   const [showFilters, setShowFilters] = useState(false);
 
 
-const applyFilterAndClose = (callback: () => void) => {
-  callback();
+  const applyFilterAndClose = (callback: () => void) => {
+    callback();
 
-  // safer mobile check
-  if (typeof window !== "undefined" && window.innerWidth <= 768) {
-    setShowFilters(false);
-  }
-};
+    // safer mobile check
+    if (typeof window !== "undefined" && window.innerWidth <= 768) {
+      setShowFilters(false);
+    }
+  };
 
 
   /* ---------- FETCH ---------- */
@@ -88,35 +88,35 @@ const applyFilterAndClose = (callback: () => void) => {
   }, []);
 
   /* ---------- FILTER LOGIC ---------- */
- const filteredCourses = useMemo(() => {
-  return courses.filter((c) => {
-    const text = [
-      c.title,
-      c.description,
-      c.category,
-      c.level,
-    ]
-      .filter(Boolean) // remove undefined/null
-      .join(" ")
-      .toLowerCase();
+  const filteredCourses = useMemo(() => {
+    return courses.filter((c) => {
+      const text = [
+        c.title,
+        c.description,
+        c.category,
+        c.level,
+      ]
+        .filter(Boolean) // remove undefined/null
+        .join(" ")
+        .toLowerCase();
 
-    const searchText = search.trim().toLowerCase();
+      const searchText = search.trim().toLowerCase();
 
-    if (searchText && !text.includes(searchText)) return false;
+      if (searchText && !text.includes(searchText)) return false;
 
-    if (typeFilter === "course" && c.coursetype !== 1) return false;
-    if (typeFilter === "recorded" && c.coursetype !== 2) return false;
-    if (typeFilter === "live" && c.coursetype !== 3) return false;
+      if (typeFilter === "course" && c.coursetype !== 1) return false;
+      if (typeFilter === "recorded" && c.coursetype !== 2) return false;
+      if (typeFilter === "live" && c.coursetype !== 3) return false;
 
-    if (categoryFilter !== "all" && c.category !== categoryFilter)
-      return false;
+      if (categoryFilter !== "all" && c.category !== categoryFilter)
+        return false;
 
-    if (levelFilter !== "all" && c.level !== levelFilter)
-      return false;
+      if (levelFilter !== "all" && c.level !== levelFilter)
+        return false;
 
-    return true;
-  });
-}, [courses, search, typeFilter, categoryFilter, levelFilter]);
+      return true;
+    });
+  }, [courses, search, typeFilter, categoryFilter, levelFilter]);
 
   const handleFavouriteClick = (course: Course) => {
     setSelectedCourse(course);
@@ -216,108 +216,108 @@ const applyFilterAndClose = (callback: () => void) => {
       <div>
 
         <div className="mobile-filter-btn">
-  <button onClick={() => setShowFilters(true)}>
-    Filters ⚙️
-  </button>
-</div>
+          <button onClick={() => setShowFilters(true)}>
+            Filters ⚙️
+          </button>
+        </div>
 
-<div className={`filters-wrapper ${showFilters ? "show" : ""}`}>
-  
-  {/* CLOSE BUTTON */}
-  <div className="filter-header">
-    <h4>Filters</h4>
-    <button onClick={() => setShowFilters(false)}>✕</button>
-  </div>
+        <div className={`filters-wrapper ${showFilters ? "show" : ""}`}>
 
-
-
-        {/* ================= SEARCH SECTION ================= */}
-        <div className="bg-white rounded-2xl shadow-md p-6 mb-10 space-y-4" style={{ boxShadow: "0 0 10px #cdcdcd", paddingTop: "40px" }}>
+          {/* CLOSE BUTTON */}
+          <div className="filter-header">
+            <h4>Filters</h4>
+            <button onClick={() => setShowFilters(false)}>✕</button>
+          </div>
 
 
-          <input
-  type="text"
-  placeholder="Search courses, webinars, skills..."
-  value={search}
-  onChange={(e) => {
-    setSearch(e.target.value);
-  }}
-  onKeyDown={(e) => {
-    if (e.key === "Enter") {
-      // close filters on mobile
-      if (typeof window !== "undefined" && window.innerWidth <= 768) {
-        setShowFilters(false);
-      }
-    }
-  }}
-  className="w-full border border-gray-200 rounded-xl px-5 py-3 text-sm 
+
+          {/* ================= SEARCH SECTION ================= */}
+          <div className="bg-white rounded-2xl shadow-md p-6 mb-10 space-y-4" style={{ boxShadow: "0 0 10px #cdcdcd", paddingTop: "40px" }}>
+
+
+            <input
+              type="text"
+              placeholder="Search courses, webinars, skills..."
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  // close filters on mobile
+                  if (typeof window !== "undefined" && window.innerWidth <= 768) {
+                    setShowFilters(false);
+                  }
+                }
+              }}
+              className="w-full border border-gray-200 rounded-xl px-5 py-3 text-sm 
   focus:outline-none focus:ring-2 focus:ring-red-500"
-/>
+            />
 
-          {/* FILTER ROW */}
-          <div className="flex flex-wrap items-center justify-between gap-4" style={{ marginTop: "20px" }}>
+            {/* FILTER ROW */}
+            <div className="flex flex-wrap items-center justify-between gap-4" style={{ marginTop: "20px" }}>
 
 
-            <div className="product_filter">
-              <ul className="flex flex-wrap gap-3" style={{ marginBottom: "0px" }}>
-                {[
-                  ["all", "All"],
-                  ["course", "Course"],
-                  ["recorded", "Recorded Webinar"],
-                  ["live", "Live Webinar"],
-                ].map(([key, label]) => (
-                  <li
-                    key={key}
-                    onClick={() =>
-  applyFilterAndClose(() => setTypeFilter(key as any))
-}
-                    className={`filter
-            ${typeFilter === key
-                        ? "active"
-                        : ""
+              <div className="product_filter">
+                <ul className="flex flex-wrap gap-3" style={{ marginBottom: "0px" }}>
+                  {[
+                    ["all", "All"],
+                    ["course", "Course"],
+                    ["recorded", "Recorded Webinar"],
+                    ["live", "Live Webinar"],
+                  ].map(([key, label]) => (
+                    <li
+                      key={key}
+                      onClick={() =>
+                        applyFilterAndClose(() => setTypeFilter(key as any))
                       }
+                      className={`filter
+            ${typeFilter === key
+                          ? "active"
+                          : ""
+                        }
           `}
-                  >
-                    {label}
-                  </li>
-                ))}
-              </ul>
-            </div>
+                    >
+                      {label}
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-            {/* SECONDARY FILTERS */}
-            <div className="flex gap-3 mobileflexDirection">
-              <select
-                value={categoryFilter}
-                onChange={(e) =>
-  applyFilterAndClose(() => setCategoryFilter(e.target.value))
-}
-                className="border border-gray-200 rounded-lg px-4 py-2 text-sm bg-white"
-              >
-                <option value="all">All Categories</option>
-                <option value="Game Design">Game Design</option>
-                <option value="Game Art">Game Art</option>
-                <option value="Game Development">Game Development</option>
-              </select>
+              {/* SECONDARY FILTERS */}
+              <div className="flex gap-3 mobileflexDirection">
+                <select
+                  value={categoryFilter}
+                  onChange={(e) =>
+                    applyFilterAndClose(() => setCategoryFilter(e.target.value))
+                  }
+                  className="border border-gray-200 rounded-lg px-4 py-2 text-sm bg-white"
+                >
+                  <option value="all">All Categories</option>
+                  <option value="Game Design">Game Design</option>
+                  <option value="Game Art">Game Art</option>
+                  <option value="Game Development">Game Development</option>
+                </select>
 
-              <select
-                value={levelFilter}
-                onChange={(e) =>
-  applyFilterAndClose(() => setLevelFilter(e.target.value))
-}
-                className="border border-gray-200 rounded-lg px-4 py-2 text-sm bg-white"
-              >
-                <option value="all">All Levels</option>
-                <option value="Beginner">Beginner</option>
-                <option value="Intermediate">Intermediate</option>
-                <option value="Advanced">Advanced</option>
-              </select>
+                <select
+                  value={levelFilter}
+                  onChange={(e) =>
+                    applyFilterAndClose(() => setLevelFilter(e.target.value))
+                  }
+                  className="border border-gray-200 rounded-lg px-4 py-2 text-sm bg-white"
+                >
+                  <option value="all">All Levels</option>
+                  <option value="Beginner">Beginner</option>
+                  <option value="Intermediate">Intermediate</option>
+                  <option value="Advanced">Advanced</option>
+                </select>
+              </div>
             </div>
           </div>
-        </div>
-  {/* YOUR EXISTING FILTER CODE */}
-  {/* All, Course, Webinar, Dropdowns etc */}
+          {/* YOUR EXISTING FILTER CODE */}
+          {/* All, Course, Webinar, Dropdowns etc */}
 
-</div>
+        </div>
 
         {/* ================= CARDS GRID ================= */}
         {loading ? (

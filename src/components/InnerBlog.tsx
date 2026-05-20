@@ -271,19 +271,7 @@ const InnerBlog = () => {
 						</div>						
 					</div>
 									
-					<div className="sidebar-post">
-						<div className="sidebar_title"><h4>CATEGORIES</h4></div>
-						<div className="single_category">
-							<ul>
-								<li><a href="#">Game Development <sup>11</sup></a></li>
-								<li><a href="#">Game Design <sup>44</sup></a></li>
-								<li><a href="#">Industry Trends <sup>33</sup></a></li>
-								<li><a href="#">AR / VR <sup>14</sup></a></li>
-								<li><a href="#">Game Art <sup>21</sup></a></li>
-								<li><a href="#">Others <sup>01</sup></a></li>
-							</ul>
-						</div>
-					</div>
+		
 
           <div className="sidebar-post">
 						<div className="sidebar_title"><h4>Related Category Posts</h4></div>
