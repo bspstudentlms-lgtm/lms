@@ -187,18 +187,8 @@ const InnerBlog = () => {
     body: formData,
   });
 
-  const message = `
-Hi Team,
+  alert("Saved Successfully");
 
-My Phone Number: ${phoneNumber}
-
-Interested Course: ${course}
-  `;
-
-  window.open(
-    `https://wa.me/919985677746?text=${encodeURIComponent(message)}`,
-    "_blank"
-  );
 };
 
   return (
