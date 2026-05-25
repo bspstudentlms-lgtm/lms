@@ -165,32 +165,77 @@ const InnerBlog = () => {
   const [course, setCourse] =
     useState("");
 
-  const handleWhatsapp = async () => {
+    const [name, setName] = useState("");
+const [comments, setComments] = useState("");
 
-  const apiUrl =
-    "https://script.google.com/macros/s/AKfycbwALq_T9PDlX3cCeTUAvMEr5xgdquqVhcjk0EUk06HEkG6FKXGEc-NQ0elTHQcRXOlG/exec";
 
-  const formData = new FormData();
 
-  formData.append(
-    "phoneNumber",
-    phoneNumber
-  );
+const handleWhatsapp = async () => {
 
-  formData.append(
-    "course",
-    course
-  );
+  try {
 
-  await fetch(apiUrl, {
-    method: "POST",
-    body: formData,
-    mode: "no-cors",
-  });
+    const apiUrl =
+      "https://script.google.com/macros/s/AKfycbwALq_T9PDlX3cCeTUAvMEr5xgdquqVhcjk0EUk06HEkG6FKXGEc-NQ0elTHQcRXOlG/exec";
 
-  alert("Saved Successfully");
+    const formData = new FormData();
+
+    formData.append("name", name);
+    formData.append("phoneNumber", phoneNumber);
+    formData.append("comments", comments);
+
+    await fetch(apiUrl, {
+      method: "POST",
+      body: formData,
+    });
+
+    alert("Saved Successfully");
+
+    // COMPANY WHATSAPP NUMBER
+    const whatsappNumber =
+      "919985677746";
+
+    // MESSAGE
+  const message = encodeURIComponent(`
+🎮 Hello Backstage Pass Institute Of Gaming,
+
+I would like to know more about your courses.
+
+━━━━━━━━━━━━━━━
+
+👤 Name : ${name}
+
+📱 Phone : ${phoneNumber}
+
+📝 Requirement : ${comments}
+
+━━━━━━━━━━━━━━━
+
+Kindly share the course details and fee structure.
+
+Thank you.
+`);
+
+window.open(
+  `https://wa.me/${whatsappNumber}?text=${message}`,
+  "_blank"
+);
+
+    // RESET FIELDS
+    setName("");
+    setPhoneNumber("");
+    setComments("");
+
+  } catch(error) {
+
+    console.log(error);
+
+    alert("Something went wrong");
+
+  }
 
 };
+
+ 
 
   return (
     <>
@@ -303,48 +348,56 @@ const InnerBlog = () => {
                   <div className="desc">
                     Get latest course updates
                   </div>
-                  <form
-                    onSubmit={(e) =>
-                      e.preventDefault()
-                    }
-                  >
+                 <form
+  onSubmit={(e) =>
+    e.preventDefault()
+  }
+>
 
-                    {/* Phone Number */}
-                    <input
-                      type="text"
-                      className="subscribe__input"
-                      placeholder="Enter Phone Number"
-                      value={phoneNumber}
-                      onChange={(e) =>
-                        setPhoneNumber(
-                          e.target.value
-                        )
-                      }
-                    />
+  {/* Name */}
+  <input
+    type="text"
+    className="subscribe__input mb-3"
+    placeholder="Enter Name"
+    value={name}
+    onChange={(e) =>
+      setName(e.target.value)
+    }
+  />
 
-                    {/* Course */}
-                    <input
-                      type="text"
-                      className="subscribe__input mt-3"
-                      placeholder="Enter Course Name"
-                      value={course}
-                      onChange={(e) =>
-                        setCourse(
-                          e.target.value
-                        )
-                      }
-                    />
+  {/* Phone */}
+  <input
+    type="text"
+    className="subscribe__input mb-3"
+    placeholder="Enter Phone Number"
+    value={phoneNumber}
+    onChange={(e) =>
+      setPhoneNumber(e.target.value)
+    }
+  />
 
-                    {/* Button */}
-                    <button
-                      type="button"
-                      className="sub_btn"
-                      onClick={handleWhatsapp}
-                    >
-                      Whatsapp Enquiry
-                    </button>
+  {/* Comments */}
+  <textarea
+    className="subscribe__input mb-3"
+    placeholder="Enter Requirement"
+    style={{borderRadius: "0px"}}
+    rows={4}
+    value={comments}
+    onChange={(e) =>
+      setComments(e.target.value)
+    }
+  />
 
-                  </form>
+  {/* Button */}
+  <button
+    type="button"
+    className="sub_btn"
+    onClick={handleWhatsapp}
+  >
+    Whatsapp Enquiry
+  </button>
+
+</form>
 
                 </div>
 

@@ -2857,6 +2857,16 @@ color: #1a2d62;
 	box-shadow: 0px 0px 150px 0px rgba(78, 67, 250, 0.06);
 	border: 1px solid #ededed;
 }
+
+.subscribe__input {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+textarea.subscribe__input {
+  resize: none;
+  padding-top: 12px;
+}
 .single_popular{
 margin-bottom:20px;
 overflow: hidden;
