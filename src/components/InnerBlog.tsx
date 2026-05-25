@@ -165,10 +165,10 @@ const InnerBlog = () => {
   const [course, setCourse] =
     useState("");
 
- const handleWhatsapp = async () => {
+  const handleWhatsapp = async () => {
 
   const apiUrl =
-    "https://script.google.com/macros/s/AKfycbwALq_T9PDIX3cCeTUAvMEr5xgdquqVhcjk0EUk06HEkG6FKXGEc-NQ0elTHQcRX0IG/exec";
+    "https://script.google.com/macros/s/AKfycbwALq_T9PDlX3cCeTUAvMEr5xgdquqVhcjk0EUk06HEkG6FKXGEc-NQ0elTHQcRXOlG/exec";
 
   const formData = new FormData();
 
@@ -187,7 +187,18 @@ const InnerBlog = () => {
     body: formData,
   });
 
-  alert("Saved Successfully");
+  const message = `
+Hi Team,
+
+My Phone Number: ${phoneNumber}
+
+Interested Course: ${course}
+  `;
+
+  window.open(
+    `https://wa.me/919985677746?text=${encodeURIComponent(message)}`,
+    "_blank"
+  );
 };
 
   return (
