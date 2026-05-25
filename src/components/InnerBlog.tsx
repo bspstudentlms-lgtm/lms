@@ -185,6 +185,7 @@ const InnerBlog = () => {
   await fetch(apiUrl, {
     method: "POST",
     body: formData,
+    mode: "no-cors",
   });
 
   alert("Saved Successfully");
