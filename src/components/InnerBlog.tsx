@@ -168,9 +168,50 @@ const InnerBlog = () => {
     const [name, setName] = useState("");
 const [comments, setComments] = useState("");
 
-
-
+const [errors, setErrors] = useState({
+  name: "",
+  phoneNumber: "",
+  comments: "",
+});
 const handleWhatsapp = async () => {
+
+  let validationErrors = {
+    name: "",
+    phoneNumber: "",
+    comments: "",
+  };
+
+  let isValid = true;
+
+  // NAME VALIDATION
+  if (!name.trim()) {
+    validationErrors.name = "Name is required";
+    isValid = false;
+  }
+
+  // PHONE VALIDATION
+  if (!phoneNumber.trim()) {
+    validationErrors.phoneNumber =
+      "Phone number is required";
+    isValid = false;
+  } else if (
+    !/^[0-9]{10}$/.test(phoneNumber)
+  ) {
+    validationErrors.phoneNumber =
+      "Enter valid 10 digit phone number";
+    isValid = false;
+  }
+
+  // REQUIREMENT VALIDATION
+  if (!comments.trim()) {
+    validationErrors.comments =
+      "Requirement is required";
+    isValid = false;
+  }
+
+  setErrors(validationErrors);
+
+  if (!isValid) return;
 
   try {
 
@@ -188,14 +229,10 @@ const handleWhatsapp = async () => {
       body: formData,
     });
 
-    alert("Saved Successfully");
-
-    // COMPANY WHATSAPP NUMBER
     const whatsappNumber =
       "919985677746";
 
-    // MESSAGE
-  const message = encodeURIComponent(`
+    const message = encodeURIComponent(`
 🎮 Hello Backstage Pass Institute Of Gaming,
 
 I would like to know more about your courses.
@@ -215,24 +252,27 @@ Kindly share the course details and fee structure.
 Thank you.
 `);
 
-window.open(
-  `https://wa.me/${whatsappNumber}?text=${message}`,
-  "_blank"
-);
+    window.open(
+      `https://wa.me/${whatsappNumber}?text=${message}`,
+      "_blank"
+    );
 
-    // RESET FIELDS
+    // RESET
     setName("");
     setPhoneNumber("");
     setComments("");
 
-  } catch(error) {
+    setErrors({
+      name: "",
+      phoneNumber: "",
+      comments: "",
+    });
+
+  } catch (error) {
 
     console.log(error);
 
-    alert("Something went wrong");
-
   }
-
 };
 
  
@@ -356,37 +396,78 @@ window.open(
 
   {/* Name */}
   <input
-    type="text"
-    className="subscribe__input mb-3"
-    placeholder="Enter Name"
-    value={name}
-    onChange={(e) =>
-      setName(e.target.value)
-    }
-  />
+  type="text"
+  className="subscribe__input mb-3"
+  placeholder="Enter Name"
+  value={name}
+  onChange={(e) => {
+    setName(e.target.value);
 
+    setErrors({
+      ...errors,
+      name: "",
+    });
+  }}
+/>
+
+{errors.name && (
+  <p className="text-danger mb-2">
+    {errors.name}
+  </p>
+)}
   {/* Phone */}
-  <input
-    type="text"
-    className="subscribe__input mb-3"
-    placeholder="Enter Phone Number"
-    value={phoneNumber}
-    onChange={(e) =>
-      setPhoneNumber(e.target.value)
-    }
-  />
+<input
+  type="text"
+  className="subscribe__input mb-3"
+  placeholder="Enter Phone Number"
+  value={phoneNumber}
+  maxLength={10}
+  onChange={(e) => {
+
+    const value =
+      e.target.value.replace(/\D/g, "");
+
+    setPhoneNumber(value);
+
+    setErrors({
+      ...errors,
+      phoneNumber: "",
+    });
+  }}
+/>
+
+{errors.phoneNumber && (
+  <p className="text-danger mb-2">
+    {errors.phoneNumber}
+  </p>
+)}
 
   {/* Comments */}
   <textarea
-    className="subscribe__input mb-3"
-    placeholder="Enter Requirement"
-    style={{borderRadius: "0px"}}
-    rows={4}
-    value={comments}
-    onChange={(e) =>
-      setComments(e.target.value)
-    }
-  />
+  className="subscribe__input mb-3"
+  placeholder="Enter Requirement"
+  style={{
+    borderRadius: "0px",
+    paddingLeft: "10px"
+  }}
+  rows={4}
+  value={comments}
+  onChange={(e) => {
+
+    setComments(e.target.value);
+
+    setErrors({
+      ...errors,
+      comments: "",
+    });
+  }}
+/>
+
+{errors.comments && (
+  <p className="text-danger mb-2">
+    {errors.comments}
+  </p>
+)}
 
   {/* Button */}
   <button
@@ -394,7 +475,7 @@ window.open(
     className="sub_btn"
     onClick={handleWhatsapp}
   >
-    Whatsapp Enquiry
+   Enquire Now
   </button>
 
 </form>
