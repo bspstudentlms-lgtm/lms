@@ -29,7 +29,10 @@ type Course = {
 
 type TypeFilter = "all" | "course" | "recorded" | "live";
 
-
+interface Category {
+  cat_id: number;
+  cat_name: string;
+}
 
 /* ================= COMPONENT ================= */
 export default function CourseGrid() {
@@ -39,6 +42,12 @@ export default function CourseGrid() {
   const [email, setEmail] = useState("");
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const [data, setData] = useState([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCatId, setSelectedCatId] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const wordLimit = 14;
 
   /* ---------- SEARCH / FILTER STATE ---------- */
   const [search, setSearch] = useState("");
@@ -62,144 +71,61 @@ export default function CourseGrid() {
 
 
   /* ---------- FETCH ---------- */
-  useEffect(() => {
-    axios
-      .get("https://www.backstagepass.co.in/reactapi/featured_courses_api.php")
-      .then((res) => {
-        const formatted: Course[] = res.data.map((item: any) => ({
-          course_id: Number(item.id),
-          title: item.title,
-          description: item.description || "No description",
-          image: item.image,
-          category: item.category,
-          shortname: item.shortname,
-          level: item.level,
-          urlpath: item.urlpath,
-          mentor_name: item.mentor_name,
-          webinar_datetime: item.webinar_datetime,
-          coursetype: Number(item.coursetype),
-          duration: item.duration || "0:00",
-          tags: [item.category, item.level],
-        }));
-        setCourses(formatted);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, []);
+useEffect(() => {
+  fetch(`https://www.backstagepass.co.in/reactapi/blogapi/categories_list.php?t=${Date.now()}`, {
+    cache: "no-store"
+  })
+    .then(response => response.json())
+    .then(result => {
+      setCategories(result);
+    })
+    .catch(error => {
+      console.error('Error fetching categories:', error);
+    });
+}, []); 
 
   /* ---------- FILTER LOGIC ---------- */
 
-  const [blogs, setBlogs] = useState([
-  {
-    id: 1,
-    title: "Professional Ceramic Moulding for Beginner",
-    description: "What if the most exciting tech career in India isn’t about building another SaaS product?",
-    date: "17-03-2026",
-    time: "5 mins",
-    image: "/assets/images/blog/1.png",
-    url: "/blog-inner",
-    category: "Game Development",
-  },
-  {
-    id: 2,
-    title: "Education Is About Create Leaders For Tomorrow",
-    description: "Learn how modern education is changing the future of creative industries.",
-    date: "20-03-2026",
-    time: "4 mins",
-    image: "/assets/images/blog/2.png",
-    url: "/blog-inner",
-    category: "Industry Trends",
-  },
-  {
-    id: 3,
-    title: "Top 10 Skills Every Game Developer Needs",
-    description: "Master coding, creativity, teamwork, and problem solving in gaming problem solving in gaming.",
-    date: "22-03-2026",
-    time: "6 mins",
-    image: "/assets/images/blog/3.png",
-    url: "/blog-inner",
-    category: "Game Development",
-  },
-  {
-    id: 4,
-    title: "How AR and VR Are Changing Gaming",
-    description: "Explore immersive gaming experiences using AR and VR technologies.",
-    date: "25-03-2026",
-    time: "8 mins",
-    image: "/assets/images/blog/3.png",
-    url: "/blog-inner",
-    category: "AR / VR",
-  },
-  {
-    id: 5,
-    title: "Beginner Guide to Game Art Design",
-    description: "Understand textures, characters, environments, and visual storytelling.",
-    date: "27-03-2026",
-    time: "7 mins",
-    image: "/assets/images/blog/3.png",
-    url: "/blog-inner",
-    category: "Game Art",
-  },
-  {
-    id: 6,
-    title: "Why Unreal Engine Is Popular in 2026",
-    description: "Discover the features that make Unreal Engine the top choice.",
-    date: "29-03-2026",
-    time: "5 mins",
-    image: "/assets/images/blog/3.png",
-    url: "/blog-inner",
-    category: "Game Development",
-  },
-  {
-    id: 7,
-    title: "Career Opportunities in Esports Industry",
-    description: "Gaming is no longer just entertainment — it’s a massive industry.",
-    date: "01-04-2026",
-    time: "9 mins",
-    image: "/assets/images/blog/3.png",
-    url: "/blog-inner",
-    category: "Industry Trends",
-  },
-  {
-    id: 8,
-    title: "Unity vs Unreal Engine Comparison",
-    description: "Which engine should beginners choose for game development?",
-    date: "03-04-2026",
-    time: "6 mins",
-    image: "/assets/images/blog/3.png",
-    url: "/blog-inner",
-    category: "Game Development",
-  },
-  {
-    id: 9,
-    title: "How to Start a Career in Game Design",
-    description: "Build your portfolio and enter the exciting world of game design.",
-    date: "05-04-2026",
-    time: "5 mins",
-    image: "/assets/images/blog/3.png",
-    url: "/blog-inner",
-    category: "Game Design",
-  },
-  {
-    id: 10,
-    title: "Future of Metaverse Gaming",
-    description: "The metaverse is opening new possibilities for players and creators.",
-    date: "08-04-2026",
-    time: "10 mins",
-    image: "/assets/images/blog/3.png",
-    url: "/blog-inner",
-    category: "AR / VR",
-  },
-]);
+  const [blogs, setBlogs] = useState<any[]>([]);
+
+const [currentPage, setCurrentPage] = useState(1);
+
+useEffect(() => {
+  setIsLoading(true);
+
+  const url =
+    selectedCatId === null
+      ? "https://www.backstagepass.co.in/reactapi/blogapi/blog_list.php"
+      : `https://www.backstagepass.co.in/reactapi/blogapi/blog_list.php?categoryId=${selectedCatId}`;
+
+  fetch(url, { cache: "no-store" })
+    .then((response) => response.json())
+    .then((data) => {
+      if (Array.isArray(data)) {
+        setBlogs(data);
+        setCurrentPage(1);
+      } else if (data.status === "empty") {
+        setBlogs([]);
+      }
+
+      setIsLoading(false);
+    })
+    .catch((err) => {
+      console.error("Failed to fetch blogs", err);
+      setIsLoading(false);
+    });
+}, [selectedCatId]);
 
   const filteredBlogs = useMemo(() => {
-  return blogs.filter((blog) => {
-    const searchText = search.trim().toLowerCase();
+  const searchText = search.trim().toLowerCase();
 
+  if (!searchText) return blogs;
+
+  return blogs.filter((blog) => {
     const text = [
-      blog.title,
+      blog.tittle_event,
       blog.description,
-      blog.date,
+      blog.event_s_dt,
     ]
       .filter(Boolean)
       .join(" ")
@@ -245,92 +171,14 @@ export default function CourseGrid() {
     setShowModal(true);
   };
 
-  const handleSubmit = async () => {
-    if (!email || !selectedCourse) return;
+  
+const stripHtml = (html: string) => {
+  return html.replace(/<[^>]*>?/gm, "");
+};
 
-    try {
-      const response = await fetch(
-        "https://www.backstagepass.co.in/reactapi/save_favourite_course.php",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            courseid: selectedCourse.course_id,
-          }),
-        }
-      );
+  
 
-      const result = await response.json();
-
-      if (result.status === "success") {
-        alert("Thanks! You will be notified when the course is live.");
-        setFavourites((prev) => ({
-          ...prev,
-          [selectedCourse.course_id]: true,
-        }));
-        setShowModal(false);
-        setEmail("");
-      } else if (result.status === "exists") {
-        alert("You have already favourited this course.");
-        setShowModal(false);
-      } else {
-        alert(result.message || "Something went wrong");
-      }
-    } catch (error) {
-      alert("Network error. Try again later.");
-      console.error(error);
-    }
-  };
-
-
-  const handleWatchNow = (course: Course) => {
-    const hasAccess = course.is_coursecompleted === null;
-
-    //if (hasAccess) {
-    // user purchased → go inside course
-    window.open(`/${course.urlpath}`);
-    //} else {
-    // user NOT purchased → show popup
-    //setLockedCourse(course);
-    // setShowAccessModal(true);
-    //}
-  };
-
-  const formatWebinar = (dateString?: string) => {
-    if (!dateString) {
-      return {
-        date: "Coming Soon",
-        time: "",
-      };
-    }
-
-    // Fix for Safari parsing issue
-    const dateObj = new Date(dateString.replace(" ", "T"));
-
-    if (isNaN(dateObj.getTime())) {
-      return {
-        date: "Coming Soon",
-        time: "",
-      };
-    }
-
-    return {
-      date: dateObj.toLocaleDateString("en-IN", {
-        weekday: "long",
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      }),
-      time: dateObj.toLocaleTimeString("en-IN", {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      }),
-    };
-  };
+ 
 
   /* ================= RENDER ================= */
   return (
@@ -374,36 +222,49 @@ export default function CourseGrid() {
 
             <div className="col-lg-9">
               <div className="row">
-  {filteredBlogs.map((blog) => (
+ {filteredBlogs.map((item) => (
     <div
-      key={blog.id}
+      key={item.id}
       className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp"
     >
       <div className="single_blog">
         <div className="img_wrapper">
           <img
-            src={blog.image}
+            src={`https://www.backstagepass.co.in/blog_new/uploads/events/${item.card_image}`}
             className="img-fluid"
-            alt={blog.title}
+            alt={item.tittle_event}
           />
 
           <div className="time-badge">
-            ⏱ {blog.time}
+            ⏱ {item.duration} mins
           </div>
         </div>
 
         <div className="content_box">
           <span>
-            Published Date : <b>{blog.date}</b>
+            Published Date : <b>{item.event_s_dt}</b>
           </span>
 
           <h2>
-            <a href={blog.url}>{blog.title}</a>
+            
+              <a
+										href={`/blogs/${item.event_title_url}`}
+										className="cta"
+									>
+              {item.tittle_event}
+              </a>
           </h2>
 
-          <p>{blog.description}</p>
+          <p>
+  {item.description
+    ? stripHtml(item.description).slice(0, 90) + "..."
+    : ""}
+</p>
 
-          <a href={blog.url} className="cta">
+          <a
+          href={`/blogs/${item.event_title_url}`}
+          className="cta"
+        >
             <span>READ MORE</span>
           </a>
         </div>
@@ -418,13 +279,23 @@ export default function CourseGrid() {
   <div className="category_header">CATEGORIES</div>
 
   <ul className="category_list">
-    <li className="active">All</li>
-    <li>Game Development</li>
-    <li>Game Design</li>
-    <li>Industry Trends</li>
-    <li>AR / VR</li>
-    <li>Game Art</li>
-    <li>Others</li>
+    {categories.map((category) => (
+                  <li key={category.cat_id}>
+                    <div className='textrightpc'>
+                      <p
+                        onClick={() =>
+                          setSelectedCatId(
+                            selectedCatId === category.cat_id ? null : category.cat_id
+                          )
+                        }
+                        className={selectedCatId === category.cat_id ? 'selected' : ''}
+                        style={{ userSelect: 'none', cursor: 'pointer' }}
+                      >
+                        {category.cat_name}
+                      </p>
+                    </div>
+                  </li>
+                ))}
   </ul>
 </div>
             </div>

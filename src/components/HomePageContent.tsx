@@ -100,11 +100,38 @@ const styles = `
   100% { transform: translateX(0); }
 }
 `;
+interface Blog {
+  event_title_url: any;
+  event_s_dt: string | number | Date;
+  duration: string;
+  tittle_event: string | undefined;
+  card_image: any;
+  id: number;
+  title: string;
+  carddescription: string;
+}
+
+
 
 const HomePageContent = () => {
 	const [current, setCurrent] = useState(0);
 
 	const [currents, setCurrents] = useState(0);
+	const [blogs, setBlogs] = useState<Blog[]>([]);
+	useEffect(() => {
+		fetch("https://www.backstagepass.co.in/reactapi/blogapi/blog_list.php?categoryId=0")
+			.then((res) => res.json())
+			.then((data) => {
+				if (Array.isArray(data)) {
+					setBlogs(data);
+				} else {
+					setBlogs([]);
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	}, []);
 
 	const [visibleTopics, setVisibleTopics] = useState(6);
 
@@ -391,7 +418,7 @@ const HomePageContent = () => {
 							<div className="single_tp">
 								<h3>Structured Career Paths</h3>
 								<p>We eliminate confusion by providing a clear roadmap. Whether you want to become a game programmer, character artist, or designer, our structured paths show you exactly what to learn, practice, and master to reach your goal.</p>
-
+ 
 							</div>
 						</div>
 					</div>
@@ -894,26 +921,70 @@ const HomePageContent = () => {
 
 
 			<section id="blog" className="blog_area section-padding">
-				<div className="container">
-					<div className="section-title">
-						<h2>News</h2>
-						<p>Our Latest <span><u>Blogs</u></span></p>
-					</div>
-					<div className="row">
-						<div className="col-lg-3 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
+			<div className="container">
+				<div className="section-title">
+					<h2>News</h2>
+					<p>
+						Our Latest <span><u>Blogs</u></span>
+					</p>
+				</div>
+
+				<div className="row">
+					{blogs.slice(0, 4).map((blog, index) => (
+						<div
+							className="col-lg-3 col-sm-4 col-xs-12 wow fadeInUp"
+							data-wow-duration="1s"
+							data-wow-delay="0.1s"
+							data-wow-offset="0"
+							key={index}
+						>
 							<div className="single_blog">
 								<div className="img_wrapper">
-									<img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
+									<img
+										src={`https://backstagepass.co.in/blog_new/uploads/events/${blog.card_image}`}
+										className="img-fluid"
+										alt={blog.tittle_event}
+									/>
+
 									<div className="time-badge">
-										⏱ 9 mins
+										⏱ {blog.duration} mins
 									</div>
 								</div>
+
 								<div className="content_box">
-									<span>Published Date : <b>17-03-2026</b></span>
-									<h2><a href="/blog-inner">Professional Ceramic Moulding for Beginner</a></h2>
-									<p>What if the most exciting tech career in India isnt about building another SaaS.....</p>
-									<a href="/blog-inner" className="cta"><span>READ MORE</span>
-										<svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px" }}>
+									<span>
+										Published Date :{" "}
+										<b>
+											{new Date(blog.event_s_dt).toLocaleDateString(
+												"en-GB"
+											)}
+										</b>
+									</span>
+
+									<h2>
+										<a href={`/blogs/${blog.event_title_url}`}>
+											{blog.tittle_event}
+										</a>
+									</h2>
+
+									<p>
+										{blog.carddescription
+											? blog.carddescription.substring(0, 90) + "..."
+											: ""}
+									</p>
+
+									<a
+										href={`/blogs/${blog.event_title_url}`}
+										className="cta"
+									>
+										<span>READ MORE</span>
+
+										<svg
+											width="13px"
+											height="10px"
+											viewBox="0 0 13 10"
+											style={{ top: "-6px" }}
+										>
 											<path d="M1,5 L11,5"></path>
 											<polyline points="8 1 12 5 8 9"></polyline>
 										</svg>
@@ -921,83 +992,21 @@ const HomePageContent = () => {
 								</div>
 							</div>
 						</div>
-						<div className="col-lg-3 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
-							<div className="single_blog">
-								<div className="img_wrapper">
-									<img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
-									<div className="time-badge">
-										⏱ 9 mins
-									</div>
-								</div>
-								<div className="content_box">
-									<span>Published Date : <b>17-03-2026</b></span>
-									<h2><a href="/blog-inner">Professional Ceramic Moulding for Beginner</a></h2>
-									<p>What if the most exciting tech career in India isnt about building another SaaS.....</p>
-									<a href="/blog-inner" className="cta"><span>READ MORE</span>
-										<svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px" }}>
-											<path d="M1,5 L11,5"></path>
-											<polyline points="8 1 12 5 8 9"></polyline>
-										</svg>
-									</a>
-								</div>
-							</div>
-						</div>
-						<div className="col-lg-3 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
-							<div className="single_blog">
-								<div className="img_wrapper">
-									<img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
-									<div className="time-badge">
-										⏱ 9 mins
-									</div>
-								</div>
-								<div className="content_box">
-									<span>Published Date : <b>17-03-2026</b></span>
-									<h2><a href="/blog-inner">Professional Ceramic Moulding for Beginner</a></h2>
-									<p>What if the most exciting tech career in India isnt about building another SaaS.....</p>
-									<a href="/blog-inner" className="cta"><span>READ MORE</span>
-										<svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px" }}>
-											<path d="M1,5 L11,5"></path>
-											<polyline points="8 1 12 5 8 9"></polyline>
-										</svg>
-									</a>
-								</div>
-							</div>
-						</div>
-						<div className="col-lg-3 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s" data-wow-offset="0">
-							<div className="single_blog">
-								<div className="img_wrapper">
-									<img src="assets/images/blog/2.png" className="img-fluid" alt="image" />
-									<div className="time-badge">
-										⏱ 9 mins
-									</div>
-								</div>
-								<div className="content_box">
-									<span>Published Date : <b>17-03-2026</b></span>
-									<h2><a href="/blog-inner">Professional Ceramic Moulding for Beginner</a></h2>
-									<p>What if the most exciting tech career in India isnt about building another SaaS.....</p>
-									<a href="/blog-inner" className="cta"><span>READ MORE</span>
-										<svg width="13px" height="10px" viewBox="0 0 13 10" style={{ top: "-6px" }}>
-											<path d="M1,5 L11,5"></path>
-											<polyline points="8 1 12 5 8 9"></polyline>
-										</svg>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div className="col-lg-12 text-center">
-						<div className="cc_btn">
-							<button
-								onClick={() => router.push("/blogs")}
-								className="btn_one"
-							>
-								View All Blogs
-							</button>
-						</div>
+					))}
+				</div>
+
+				<div className="col-lg-12 text-center">
+					<div className="cc_btn">
+						<button
+							onClick={() => router.push("/blogs")}
+							className="btn_one"
+						>
+							View All Blogs
+						</button>
 					</div>
 				</div>
-			</section>
-
+			</div>
+		</section>
 			<div className="footer section-padding" style={{ paddingTop: "80px" }}>
 				<div className="container">
 					<div className="row">

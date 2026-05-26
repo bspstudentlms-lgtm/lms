@@ -49,7 +49,13 @@ export default function CourseGrid() {
   const [showAccessModal, setShowAccessModal] = useState(false);
   const [lockedCourse, setLockedCourse] = useState<Course | null>(null);
   const [showFilters, setShowFilters] = useState(false);
+  useEffect(() => {
+    const storedCat = localStorage.getItem("CatId");
 
+    if (storedCat) {
+      setCategoryFilter(storedCat);
+    }
+  }, []);
 
   const applyFilterAndClose = (callback: () => void) => {
     callback();
