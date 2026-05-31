@@ -3,7 +3,10 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
 type User = {
+  id?: string;
   name: string;
+  email?: string;
+  phone?: string;
   role: "student" | "mentor" | "sos";
   mentor_id?: number;
 };
@@ -33,7 +36,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = (userData: User) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
-  };
+    };
 
   const logout = () => {
     setUser(null);

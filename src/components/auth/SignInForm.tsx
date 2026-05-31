@@ -75,7 +75,10 @@ const { login } = useAuth();
        localStorage.setItem("phone", data.phone);
 
       login({
+        id: data.userid,
         name: data.username || "BSP LMS Dashboard",
+        email: email,
+        phone: data.phone,
         role: data.role,
         mentor_id: data.role === "mentor" ? data.mentor_id : undefined,
       });

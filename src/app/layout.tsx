@@ -3,7 +3,7 @@ import "./globals.css";
 import ClientProviders from "@/components/ClientProviders";
 import ConditionalHeader from "../layout/ConditionalHeader"; 
 import AnalyticsInit from "@/components/analytics/AnalyticsInit";
-
+import Msg91Widget from "@/components/chat/Msg91Widget";
 
 const outfit = Outfit({ subsets: ["latin"] });
 
@@ -25,6 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={`${outfit.className} dark:bg-gray-900`}>
+        <Msg91Widget />       
         <AnalyticsInit /> {/* ✅ analytics loaded once */}
         <ClientProviders>
           <ConditionalHeader />
