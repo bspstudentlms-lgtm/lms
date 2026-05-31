@@ -920,7 +920,7 @@ const HomePageContent = () => {
 
 
 
-			<section id="blog" className="blog_area section-padding">
+			<section id="blog" className="blog_area section-padding" style={{display: "none"}}>
 			<div className="container">
 				<div className="section-title">
 					<h2>News</h2>
