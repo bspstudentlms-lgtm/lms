@@ -25,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={`${outfit.className} dark:bg-gray-900`}>
-        <Msg91Widget />       
+        {/* <Msg91Widget />        */}
         <AnalyticsInit /> {/* ✅ analytics loaded once */}
         <ClientProviders>
           <ConditionalHeader />
