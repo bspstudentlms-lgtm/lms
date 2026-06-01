@@ -34,6 +34,7 @@ interface Category {
   cat_name: string;
 }
 
+
 /* ================= COMPONENT ================= */
 export default function CourseGrid() {
   const [favourites, setFavourites] = useState<{ [key: number]: boolean }>({});
@@ -222,7 +223,9 @@ const stripHtml = (html: string) => {
 
             <div className="col-lg-9">
               <div className="row">
- {filteredBlogs.map((item) => (
+                 {filteredBlogs.length > 0 ? (
+    filteredBlogs.map((item) => (
+
     <div
       key={item.id}
       className="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp"
@@ -270,7 +273,13 @@ const stripHtml = (html: string) => {
         </div>
       </div>
     </div>
-  ))}
+ ))
+  ) : (
+    <div className="col-12 text-center py-5">
+  <h4>No Data Found</h4>
+  <p>Try searching with different keywords.</p>
+</div>
+  )}
 </div>
             </div>
 
@@ -279,6 +288,17 @@ const stripHtml = (html: string) => {
   <div className="category_header">CATEGORIES</div>
 
   <ul className="category_list">
+     <li>
+    <div className="textrightpc">
+      <p
+        onClick={() => setSelectedCatId(null)}
+        className={selectedCatId === null ? "selected" : ""}
+        style={{ userSelect: "none", cursor: "pointer" }}
+      >
+        All
+      </p>
+    </div>
+  </li>
     {categories.map((category) => (
                   <li key={category.cat_id}>
                     <div className='textrightpc'>
@@ -297,6 +317,19 @@ const stripHtml = (html: string) => {
                   </li>
                 ))}
   </ul>
+   <style jsx>{`
+    .category_list p {
+      cursor: pointer;
+      padding: 8px 15px;
+      border-radius: 5px;
+    }
+
+    .category_list p.selected {
+      background: #299965;
+      color: #fff;
+      font-weight: 600;
+    }
+  `}</style>
 </div>
             </div>
           </div>

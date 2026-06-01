@@ -593,7 +593,7 @@ if (isNaN(date.getTime())) {
               </div>
                                     
         
-
+{relatedPosts && relatedPosts.length > 0 && (
           <div className="sidebar-post">
                         <div className="sidebar_title"><h4>Related Category Posts</h4></div>
                         {relatedPosts.map((post: any) => (
@@ -615,7 +615,7 @@ if (isNaN(date.getTime())) {
                        
                         
                     </div>
-                        
+                   )}     
                       
               <div className="sidebar-post" onClick={() => handleClick(Number(CatId))}>
                 <div className="sidebar_title"><h4>Ad Banner</h4></div>

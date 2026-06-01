@@ -917,14 +917,10 @@ const HomePageContent = () => {
 		</div>
 	</section> */}
 
-<<<<<<< HEAD
 
 	
 
-			<section id="blog" className="blog_area section-padding" style={{display: "none"}}>
-=======
-			<section id="blog" className="blog_area section-padding">
->>>>>>> ff15728db62c8b73974359643e4e07adcde91721
+			<section id="blog" className="blog_area section-padding" >
 			<div className="container">
 				<div className="section-title">
 					<h2>News</h2>
