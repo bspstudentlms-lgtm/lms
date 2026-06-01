@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-
+import { Poppins } from "next/font/google";
 import BlogAll from "@/components/BlogAll";
 import SiteNavigation from "@/components/SiteNavigation";
 import AppHeaders from "@/layout/AppHeaders";
@@ -27,6 +27,11 @@ const slides = [
   { id: 2, src: "/images/carousel/carousel-02.webp", alt: "Slide 2" },
   { id: 3, src: "/images/carousel/carousel-03.webp", alt: "Slide 3" },
 ];
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 
 const companies = [
   "https://www.guvi.in/assets/BeM-RDUa-amazon.webp",
@@ -86,84 +91,84 @@ const BlogDetails = ({ slug }: Props) => {
   const [loading, setLoading] = useState(true);
   const [recentPosts, setRecentPosts] = useState<BlogPost[]>([]);
   const [error, setError] = useState<any>(null);
-  
-  const [CatId, setCatid] =  useState("");
-  const [phoneNumber, setPhoneNumber] =useState("");
-  
-  const [course, setCourse] =useState("");
-  
+
+  const [CatId, setCatid] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+
+  const [course, setCourse] = useState("");
+
   const [name, setName] = useState("");
   const [comments, setComments] = useState("");
-  
+
   const [errors, setErrors] = useState({
     name: "",
     phoneNumber: "",
     comments: "",
   });
- useEffect(() => {
-  //console.log("Fetching blog:", slug);
+  useEffect(() => {
+    //console.log("Fetching blog:", slug);
 
-  const url = `https://www.backstagepass.co.in/reactapi/blogapi/blog_edit.php?id=${slug}&t=${Date.now()}`;
+    const url = `https://www.backstagepass.co.in/reactapi/blogapi/blog_edit.php?id=${slug}&t=${Date.now()}`;
 
-  fetch(url, { cache: "no-store" })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
+    fetch(url, { cache: "no-store" })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
 
-      return response.json();
-    })
-    .then(async (data) => {
-      //console.log("Fetched data:", data);
+        return response.json();
+      })
+      .then(async (data) => {
+        //console.log("Fetched data:", data);
 
-      if (Array.isArray(data) && data.length > 0) {
-        const blogData = data[0];
+        if (Array.isArray(data) && data.length > 0) {
+          const blogData = data[0];
 
-        setEvent(blogData);
+          setEvent(blogData);
 
-        // categoryId from current blog
-        const selectedCatId = blogData.categoryId;
-        setCatid(selectedCatId);
+          // categoryId from current blog
+          const selectedCatId = blogData.categoryId;
+          setCatid(selectedCatId);
 
-        // Fetch related category posts
-       if (selectedCatId) {
-  const relatedUrl = `https://www.backstagepass.co.in/reactapi/blogapi/blog_list.php?categoryId=${selectedCatId}&blogtitle=${slug} `;
+          // Fetch related category posts
+          if (selectedCatId) {
+            const relatedUrl = `https://www.backstagepass.co.in/reactapi/blogapi/blog_list.php?categoryId=${selectedCatId}&blogtitle=${slug} `;
 
-  const relatedResponse = await fetch(relatedUrl, {
-    cache: "no-store",
-  });
+            const relatedResponse = await fetch(relatedUrl, {
+              cache: "no-store",
+            });
 
-  const relatedData = await relatedResponse.json();
+            const relatedData = await relatedResponse.json();
 
-  if (Array.isArray(relatedData)) {
-    // Remove current blog
-    const filteredPosts = relatedData.filter(
-      (item: any) => Number(item.id) !== Number(blogData.id)
-    );
+            if (Array.isArray(relatedData)) {
+              // Remove current blog
+              const filteredPosts = relatedData.filter(
+                (item: any) => Number(item.id) !== Number(blogData.id)
+              );
 
-    //console.log("Fetched categoryfilterdata:", filteredPosts);
+              //console.log("Fetched categoryfilterdata:", filteredPosts);
 
-    // Latest 5 posts
-    setRelatedPosts(filteredPosts.slice(0, 5));
-  }
-}
-      } else {
-        setEvent(null);
-      }
+              // Latest 5 posts
+              setRelatedPosts(filteredPosts.slice(0, 5));
+            }
+          }
+        } else {
+          setEvent(null);
+        }
 
-      setLoading(false);
-    })
-    .catch((error) => {
-      console.error("Error fetching blog:", error);
-      setError(error);
-      setLoading(false);
-    });
-}, [slug]);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching blog:", error);
+        setError(error);
+        setLoading(false);
+      });
+  }, [slug]);
   useEffect(() => {
     fetch(`https://www.backstagepass.co.in/reactapi/blogapi/blog_list_new.php?id=${slug}`)
       .then(response => response.json())
       .then(jsonData => {
-       // console.log('Fetched data:', jsonData); 
+        // console.log('Fetched data:', jsonData); 
         setRecentPosts(jsonData);
       })
       .catch(error => console.error('Error fetching data:', error));
@@ -250,11 +255,11 @@ const BlogDetails = ({ slug }: Props) => {
   }, []);
   const formatDateToDMY = (dateString: string | number | Date) => {
     const date = new Date(dateString);
-   
 
-if (isNaN(date.getTime())) {
-  return '';
-} 
+
+    if (isNaN(date.getTime())) {
+      return '';
+    }
 
     const day = String(date.getDate()).padStart(2, '0');
 
@@ -278,7 +283,11 @@ if (isNaN(date.getTime())) {
   };
 
   if (loading) {
-    return <p>Loading...</p>;
+    return  <div id="loader-wrapper">
+        <div id="loader"></div>
+        <div className="loader-section section-left"></div>
+        <div className="loader-section section-right"></div>
+      </div>;
   }
 
   if (error) {
@@ -289,23 +298,23 @@ if (isNaN(date.getTime())) {
     return <p>No event data available.</p>;
   }
 
-  
+
   const handleWhatsapp = async () => {
-  
+
     let validationErrors = {
       name: "",
       phoneNumber: "",
       comments: "",
     };
-  
+
     let isValid = true;
-  
+
     // NAME VALIDATION
     if (!name.trim()) {
       validationErrors.name = "Name is required";
       isValid = false;
     }
-  
+
     // PHONE VALIDATION
     if (!phoneNumber.trim()) {
       validationErrors.phoneNumber =
@@ -318,37 +327,37 @@ if (isNaN(date.getTime())) {
         "Enter valid 10 digit phone number";
       isValid = false;
     }
-  
+
     // REQUIREMENT VALIDATION
     if (!comments.trim()) {
       validationErrors.comments =
         "Requirement is required";
       isValid = false;
     }
-  
+
     setErrors(validationErrors);
-  
+
     if (!isValid) return;
-  
+
     try {
-  
+
       const apiUrl =
         "https://script.google.com/macros/s/AKfycbwALq_T9PDlX3cCeTUAvMEr5xgdquqVhcjk0EUk06HEkG6FKXGEc-NQ0elTHQcRXOlG/exec";
-  
+
       const formData = new FormData();
-  
+
       formData.append("name", name);
       formData.append("phoneNumber", phoneNumber);
       formData.append("comments", comments);
-  
+
       await fetch(apiUrl, {
         method: "POST",
         body: formData,
       });
-  
+
       const whatsappNumber =
         "919985677746";
-  
+
       const message = encodeURIComponent(`
   🎮 Hello Backstage Pass Institute Of Gaming,
   
@@ -368,46 +377,51 @@ if (isNaN(date.getTime())) {
   
   Thank you.
   `);
-  
+
       window.open(
         `https://wa.me/${whatsappNumber}?text=${message}`,
         "_blank"
       );
-  
+
       // RESET
       setName("");
       setPhoneNumber("");
       setComments("");
-  
+
       setErrors({
         name: "",
         phoneNumber: "",
         comments: "",
       });
-  
+
     } catch (error) {
-  
+
       console.log(error);
-  
+
     }
   };
   const router = useRouter();
 
- const handleClick = (CatId: number) => {
-  let categoryName = "all";
+  const handleClick = (CatId: number) => {
+    let categoryName = "all";
 
-  if (CatId === 19) {
-    categoryName = "Game Development";
-  } else if (CatId === 20) {
-    categoryName = "Game Design";
-  } else if (CatId === 23) {
-    categoryName = "Game Art";
-  }
+    if (CatId === 19) {
+      categoryName = "Game Development";
+    } else if (CatId === 20) {
+      categoryName = "Game Design";
+    } else if (CatId === 23) {
+      categoryName = "Game Art";
+    }
 
-  localStorage.setItem("CatId", categoryName);
+    localStorage.setItem("CatId", categoryName);
 
-  router.push("/all-courses");
-};
+    router.push("/all-courses");
+  };
+
+  const cleanDescription = event.description.replace(
+  /style="[^"]*"/gi,
+  ""
+);
 
   return (
     <>
@@ -429,205 +443,112 @@ if (isNaN(date.getTime())) {
 
       <br /><br /><br />
 
-    <section className="section-top" style={{padding: "80px 0px"}}>
+      <section className="section-top" style={{ padding: "80px 0px" }}>
         <div className="container">
-            <div className="col-lg-10 offset-lg-1 text-center">
-                <div className="section-top-title wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.3s" data-wow-offset="0">
-                    <h1>{event.tittle_event}</h1>
-                    <ul style={{width: "auto"}}>
-                        <li style={{marginRight: "7px"}}><a href="/">Home </a></li>
-            <li style={{marginRight: "7px"}}><a href="/blogs"> / Blogs </a></li>
-                        <li> / {event.tittle_event} </li>
-                    </ul>
-                </div>
+          <div className="col-lg-10 offset-lg-1 text-center">
+            <div className="section-top-title wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.3s" data-wow-offset="0">
+              <h1>{event.tittle_event}</h1>
+              <ul style={{ width: "auto" }}>
+                <li style={{ marginRight: "7px" }}><a href="/">Home </a></li>
+                <li style={{ marginRight: "7px" }}><a href="/blogs"> / Blogs </a></li>
+                <li> / {event.tittle_event} </li>
+              </ul>
             </div>
+          </div>
         </div>
-    </section>	
-    
+      </section>
 
-  
-    <section className="blog-page section-padding">
-        <div className="container">	
-            <div className="row">
-                <div className="col-lg-8 col-sm-12 col-xs-12">
-                    <div className="arti_single">
-            <p className="datformate">{formatDateToDMY(event.event_s_dt)}</p>
-            <h2 style={{margin: "15px 0px"}}> {event.tittle_event}</h2>
-                        <div className="arti_img_two">
-                            <img title={event.tittle_event}  src={`https://www.backstagepass.co.in/blog_new/uploads/subevents/${event.inner_image}`} alt={event.tittle_event} className="img-fluid"  />
-                        </div>
-            <div className="courses-wrapperb mainpost"><div>
-                 <p className="suprts1" style={{ backgroundColor: "#ffffff" }}>
-                <span dangerouslySetInnerHTML={{ __html: event.description }} />
-              </p>
-    
-    </div></div>
-                        
-                        
-                     
-                       
-                    
-                    </div>	
-                
-            
-                                        
-                </div>		
-                <div className="col-lg-4 col-sm-12 col-xs-12">
-                    
-                    
-                    <div className="sidebar-post">
-                        <div className="sidebar_title"><h4>Recent Posts</h4></div>
-                         {recentPosts.map((post, index) => (
-                        <div className="single_popular" key={index}>
-                            <a href={`/blogs/${post.event_title_url}`}><img src={`https://www.backstagepass.co.in/blog_new/uploads/events/${post.card_image}`} alt={post.tittle_event} loading="lazy" /></a>
-                            <h5><a href={`/blogs/${post.event_title_url}`}>{post.tittle_event}</a></h5>
-                        </div>
-                         ))}
-                        	
-                    </div>
-           <div className="sidebar-post">
 
-                <div className="newsletter-form">
 
-                  <h4>
-                    WhatsApp for get updates
-                  </h4>
-
-                  <div className="desc">
-                    Get latest course updates
-                  </div>
-                 <form
-  onSubmit={(e) =>
-    e.preventDefault()
-  }
->
-
-  {/* Name */}
-  <input
-  type="text"
-  className="subscribe__input mb-3"
-  placeholder="Enter Name"
-  value={name}
-  onChange={(e) => {
-    setName(e.target.value);
-
-    setErrors({
-      ...errors,
-      name: "",
-    });
-  }}
-/>
-
-{errors.name && (
-  <p className="text-danger mb-2">
-    {errors.name}
-  </p>
-)}
-  {/* Phone */}
-<input
-  type="text"
-  className="subscribe__input mb-3"
-  placeholder="Enter Phone Number"
-  value={phoneNumber}
-  maxLength={10}
-  onChange={(e) => {
-
-    const value =
-      e.target.value.replace(/\D/g, "");
-
-    setPhoneNumber(value);
-
-    setErrors({
-      ...errors,
-      phoneNumber: "",
-    });
-  }}
-/>
-
-{errors.phoneNumber && (
-  <p className="text-danger mb-2">
-    {errors.phoneNumber}
-  </p>
-)}
-
-  {/* Comments */}
-  <textarea
-  className="subscribe__input mb-3"
-  placeholder="Enter Requirement"
-  style={{
-    borderRadius: "0px",
-    paddingLeft: "10px"
-  }}
-  rows={4}
-  value={comments}
-  onChange={(e) => {
-
-    setComments(e.target.value);
-
-    setErrors({
-      ...errors,
-      comments: "",
-    });
-  }}
-/>
-
-{errors.comments && (
-  <p className="text-danger mb-2">
-    {errors.comments}
-  </p>
-)}
-
-  {/* Button */}
-  <button
-    type="button"
-    className="sub_btn"
-    onClick={handleWhatsapp}
-  >
-   Enquire Now
-  </button>
-
-</form>
-
+      <section className="blog-page section-padding">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-8 col-sm-12 col-xs-12">
+              <div className="arti_single">
+                <p className="datformate">{formatDateToDMY(event.event_s_dt)}</p>
+                <h2 style={{ margin: "15px 0px" }}> {event.tittle_event}</h2>
+                <div className="arti_img_two">
+                  <img title={event.tittle_event} src={`https://www.backstagepass.co.in/blog_new/uploads/subevents/${event.inner_image}`} alt={event.tittle_event} className="img-fluid" />
                 </div>
+                <div className="courses-wrapperb mainpost"><div>
+                  <div className={poppins.className}>
+  <span
+  dangerouslySetInnerHTML={{
+    __html: cleanDescription,
+  }}
+/>
+</div>
+
+
+                  {/* <p className="suprts1" style={{
+    backgroundColor: "#ffffff",
+    fontFamily: "'Poppins', sans-serif",
+  }}>
+                    <span dangerouslySetInnerHTML={{ __html: event.description }} />
+                  </p> */}
+
+                </div></div>
+
+
+
+
 
               </div>
-                                    
-        
-{relatedPosts && relatedPosts.length > 0 && (
-          <div className="sidebar-post">
-                        <div className="sidebar_title"><h4>Related Category Posts</h4></div>
-                        {relatedPosts.map((post: any) => (
-    <div className="single_popular" key={post.id}>
-      <a href={`/blogs/${post.event_title_url}`}>
-        <img
-          src={`https://www.backstagepass.co.in/blog_new/uploads/events/${post.card_image}`}
-          alt={post.event_nm}
-        />
-      </a>
 
-      <h5>
-        <a href={`/blogs/${post.event_title_url}`}>
-          {post.event_nm} 
-        </a>
-      </h5>
-    </div>
-  ))}
-                       
-                        
+
+
+            </div>
+            <div className="col-lg-4 col-sm-12 col-xs-12">
+
+
+              <div className="sidebar-post">
+                <div className="sidebar_title"><h4>Recent Posts</h4></div>
+                {recentPosts.map((post, index) => (
+                  <div className="single_popular" key={index}>
+                    <a href={`/blogs/${post.event_title_url}`}><img src={`https://www.backstagepass.co.in/blog_new/uploads/events/${post.card_image}`} alt={post.tittle_event} loading="lazy" /></a>
+                    <h5><a href={`/blogs/${post.event_title_url}`}>{post.tittle_event}</a></h5>
+                  </div>
+                ))}
+
+              </div>
+              
+
+
+              {relatedPosts && relatedPosts.length > 0 && (
+                <div className="sidebar-post">
+                  <div className="sidebar_title"><h4>Related Category Posts</h4></div>
+                  {relatedPosts.map((post: any) => (
+                    <div className="single_popular" key={post.id}>
+                      <a href={`/blogs/${post.event_title_url}`}>
+                        <img
+                          src={`https://www.backstagepass.co.in/blog_new/uploads/events/${post.card_image}`}
+                          alt={post.event_nm}
+                        />
+                      </a>
+
+                      <h5>
+                        <a href={`/blogs/${post.event_title_url}`}>
+                          {post.event_nm}
+                        </a>
+                      </h5>
                     </div>
-                   )}     
-                      
+                  ))}
+
+
+                </div>
+              )}
+
               <div className="sidebar-post" onClick={() => handleClick(Number(CatId))}>
                 <div className="sidebar_title"><h4>Ad Banner</h4></div>
                 <div className="sidebar-banner">
                   <a href="/all-courses"><img src="../assets/images/blog/banner.jpg" className="img-fluid" alt="" /> </a>
                 </div>
-              </div>      
-                </div>					
+              </div>
             </div>
+          </div>
         </div>
-    </section>
-            
+      </section>
+
 
 
 
@@ -646,10 +567,10 @@ if (isNaN(date.getTime())) {
                   Create real projects. Build real skills. Grow your career.
                 </p>
                 <ul className="social-home">
-                                <li><a href="https://www.facebook.com/profile.php?id=61588089197582" target="_blank" className="facebook-home"><i className="fa fa-facebook"></i></a></li>
-                                <li><a href="https://www.youtube.com/@backstagepass_online" target="_blank" className="twitter-home"><i className="fa fa-youtube"></i></a></li>
-                                <li><a href="https://www.instagram.com/onlinebackstagepass/" target="_blank" className="instagram-home"><i className="fa fa-instagram"></i></a></li>
-                            </ul>
+                  <li><a href="https://www.facebook.com/profile.php?id=61588089197582" target="_blank" className="facebook-home"><i className="fa fa-facebook"></i></a></li>
+                  <li><a href="https://www.youtube.com/@backstagepass_online" target="_blank" className="twitter-home"><i className="fa fa-youtube"></i></a></li>
+                  <li><a href="https://www.instagram.com/onlinebackstagepass/" target="_blank" className="instagram-home"><i className="fa fa-instagram"></i></a></li>
+                </ul>
               </div>
             </div>
             <div className="col-lg-3 col-sm-6 col-xs-12">
@@ -680,31 +601,31 @@ if (isNaN(date.getTime())) {
               <div className="single_footer">
                 <h4>Contact Info</h4>
                 <div className="sf_contact">
-  <span className="ti-mobile"></span>
-  <h3>Phone number</h3>
-  <p>
-    <a href="tel:+919985677746">
-      +91-9985677746
-    </a>
-  </p>
-</div>
+                  <span className="ti-mobile"></span>
+                  <h3>Phone number</h3>
+                  <p>
+                    <a href="tel:+919985677746">
+                      +91-9985677746
+                    </a>
+                  </p>
+                </div>
                 <div className="sf_contact">
                   <span><i className="fa fa-whatsapp"></i></span>
                   <h3>Whatsapp</h3>
                   <p><a
-      href="https://wa.me/919985677746"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      +91-9985677746
-    </a></p>
+                    href="https://wa.me/919985677746"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    +91-9985677746
+                  </a></p>
                 </div>
                 <div className="sf_contact">
                   <span className="ti-email"></span>
                   <h3>Email Address</h3>
                   <p><a href="mailto:learning@backstagepass.co.in?subject=Course Inquiry&body=Hi, I am interested in your courses">
-  learning@backstagepass.co.in
-</a></p>
+                    learning@backstagepass.co.in
+                  </a></p>
                 </div>
                 {/* <div className="sf_contact">
                   <span className="ti-map"></span>

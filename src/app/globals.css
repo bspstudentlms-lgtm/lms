@@ -1774,7 +1774,7 @@ strong, b {
 }
 
 .category_list li {
-  padding: 13px 18px;
+  padding: 8px 18px;
   border-bottom: 1px solid #ddd;
   font-size: 16px;
   color: #222;
@@ -1788,7 +1788,160 @@ strong, b {
   background: #f5f5f5;
   color: #e60000;
 }
+.suprts1{
+  font-family: "Poppins", sans-serif !important;
+}
 
+/* .mainpost *,
+.suprts1 span p * {
+      font-family: 'Poppins', sans-serif !important;
+    font-size: 19px;
+    color: #222;
+    margin-top: 10px;
+}
+.mainpost *,
+.suprts1 h2 * {
+      font-family: 'Poppins', sans-serif !important;
+    font-size: 25px;
+    color: #222;
+    margin-top: 10px;
+} */
+
+.mainpost ul,
+.mainpost ol {
+  margin: 15px 0 15px 10px !important;
+  padding-left: 0px !important;
+}
+
+.mainpost li {
+  font-family: var(--bs-body-font-family) !important;
+  font-size: 17px !important;
+  font-weight: 500 !important;
+  color: #222 !important;
+  line-height: 1.8 !important;
+  margin-bottom: 8px !important;
+}
+
+/* Links inside lists/content */
+.mainpost a {
+  font-family: var(--bs-body-font-family) !important;
+  font-size: 17px !important;
+  font-weight: 500 !important;
+  color: #ee1b24 !important;
+  text-decoration: none;
+}
+
+.mainpost a:hover {
+  text-decoration: underline;
+}
+
+/* Table */
+.mainpost table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  margin: 20px 0 !important;
+  font-family: var(--bs-body-font-family) !important;
+}
+
+/* Header */
+.mainpost th {
+  font-family: var(--bs-body-font-family) !important;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: #222 !important;
+  padding: 12px !important;
+  border: 1px solid #ddd !important;
+  text-align: left !important;
+}
+
+/* Body Cells */
+.mainpost td {
+  font-family: var(--bs-body-font-family) !important;
+  font-size: 17px !important;
+  font-weight: 500 !important;
+  color: #222 !important;
+  padding: 12px !important;
+  border: 1px solid #ddd !important;
+  vertical-align: top !important;
+}
+
+/* Paragraphs inside table cells */
+.mainpost td p,
+.mainpost th p,
+.mainpost td span,
+.mainpost th span {
+  font-family: var(--bs-body-font-family) !important;
+  font-size: 17px !important;
+  font-weight: 500 !important;
+  color: #222 !important;
+  margin: 0 !important;
+}
+
+/* Alternate Rows */
+.mainpost tbody tr:nth-child(even) {
+  background: #f8f9fa;
+}
+
+/* Responsive Table */
+.mainpost table {
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.mainpost p {
+  font-family: var(--bs-body-font-family) !important;
+  font-size: 17px !important;
+  font-weight: 500 !important;
+  color: #222 !important;
+}
+
+.mainpost h1 {
+  font-family: var(--bs-body-font-family) !important;
+  font-size: 32px !important;
+  font-weight: 700;
+  color: #222 !important;
+  margin: 15px 0px;
+}
+.mainpost h2 {
+  font-family: var(--bs-body-font-family) !important;
+  font-size: 27px !important;
+  font-weight: 700;
+  color: #222 !important;
+  margin: 15px 0px;
+}
+
+.mainpost h3 {
+  font-family: var(--bs-body-font-family) !important;
+  font-size: 24px !important;
+  font-weight: 700;
+  color: #222 !important;
+  margin: 15px 0px;
+}
+
+.mainpost h4 {
+  font-family: var(--bs-body-font-family) !important;
+  font-size: 21px !important;
+  font-weight: 700;
+  color: #222 !important;
+  margin: 15px 0px;
+}
+
+.mainpost h5 {
+  font-family: var(--bs-body-font-family) !important;
+  font-size: 20px !important;
+  font-weight: 700;
+  color: #222 !important;
+  margin: 10px 0px;
+}
+
+.mainpost h6 {
+  font-family: var(--bs-body-font-family) !important;
+  font-size: 19px !important;
+  font-weight: 700;
+  color: #222 !important;
+  margin: 10px 0px;
+}
 
 .course-slide{
     position:relative;
