@@ -19,28 +19,97 @@ export default function Msg91Widget() {
         //   const storedUser = localStorage.getItem("user");
 
         if (!storedUser) {
-          console.log("Guest User");
-          console.log("User not logged in");
+  console.log("Guest User");
+  console.log("User not logged in");
 
-  // Redirect to LMS Google Login
-  //window.location.href = "/signin";
+  const existingScript = document.getElementById("msg91-script");
 
-          const script = document.createElement("script");
-          script.src = "https://blacksea.msg91.com/chat-widget.js";
-          script.async = true;
+  if (existingScript) {
+  console.log("MSG91 Script already loaded");
 
-          script.onload = () => {
-            window.initChatWidget({
-              widgetToken: "e78b8",
-              hide_launcher: false,
-              launch_widget: false,
-            });
-          };
+  const waitForWidget = setInterval(() => {
+    if (window.initChatWidget) {
+      clearInterval(waitForWidget);
 
-          document.body.appendChild(script);
+      window.initChatWidget({
+  widgetToken: "e78b8",
+  unique_id: `guest_${Date.now()}`,
+  name: "Guest",
+  hide_launcher: false,
+  launch_widget: true,
+});
 
-          return;
-        }
+      console.log("GUEST WIDGET REINITIALIZED");
+      setTimeout(() => {
+  const placeholder = document.querySelector(
+    'input[placeholder="Message AI Assistant..."]'
+  ) as HTMLInputElement | null;
+
+  console.log("INPUT FOUND:", placeholder);
+
+  if (placeholder) {
+    placeholder.placeholder = "Type Siva your message here...";
+    console.log("Placeholder updated");
+  }
+}, 5000);
+    }
+  }, 500);
+
+  return;
+}
+
+  const script = document.createElement("script");
+
+  script.id = "msg91-script";
+  script.src = "https://blacksea.msg91.com/chat-widget.js";
+  script.async = true;
+
+  script.onload = () => {
+    console.log("MSG91 GUEST SCRIPT LOADED");
+
+    window.initChatWidget({
+  widgetToken: "e78b8",
+  unique_id: `guest_${Date.now()}`,
+  name: "Guest",
+  hide_launcher: false,
+  launch_widget: true,
+});
+
+    console.log("GUEST WIDGET INITIALIZED");
+    
+    setTimeout(() => {
+    console.log("iframe count", document.querySelectorAll("iframe").length);
+  }, 3000);
+  setTimeout(() => {
+  const placeholder = document.querySelector(
+    'input[placeholder="Message AI Assistant..."]'
+  ) as HTMLInputElement | null;
+
+  console.log("INPUT FOUND:", placeholder);
+  const iframe =
+  document.querySelector("#hello-chatbot-iframe-container iframe");
+
+console.log(iframe);
+
+  if (placeholder) {
+    placeholder.placeholder = "Type Siva your message here...";
+    console.log("Placeholder updated");
+  }
+}, 5000);
+
+
+  };
+
+  script.onerror = () => {
+    console.error("Guest widget script failed");
+  };
+
+  document.body.appendChild(script);
+
+  return;
+}
+
+          
 
         const user = JSON.parse(storedUser);
 
