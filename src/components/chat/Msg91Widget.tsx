@@ -76,6 +76,7 @@ export default function Msg91Widget() {
             });
 
             console.log("GUEST WIDGET INITIALIZED");
+            
 
             setTimeout(() => {
               console.log("iframe count", document.querySelectorAll("iframe").length);
