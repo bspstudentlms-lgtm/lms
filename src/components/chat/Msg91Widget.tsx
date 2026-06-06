@@ -19,97 +19,132 @@ export default function Msg91Widget() {
         //   const storedUser = localStorage.getItem("user");
 
         if (!storedUser) {
-  console.log("Guest User");
-  console.log("User not logged in");
+          console.log("Guest User");
+          console.log("User not logged in");
 
-  const existingScript = document.getElementById("msg91-script");
+          const existingScript = document.getElementById("msg91-script");
 
-  if (existingScript) {
-  console.log("MSG91 Script already loaded");
+          if (existingScript) {
+            console.log("MSG91 Script already loaded");
 
-  const waitForWidget = setInterval(() => {
-    if (window.initChatWidget) {
-      clearInterval(waitForWidget);
+            const waitForWidget = setInterval(() => {
+              if (window.initChatWidget) {
+                clearInterval(waitForWidget);
 
-      window.initChatWidget({
-  widgetToken: "e78b8",
-  unique_id: `guest_${Date.now()}`,
-  name: "Guest",
-  hide_launcher: false,
-  launch_widget: true,
-});
+                window.initChatWidget({
+                  widgetToken: "e78b8",
+                  unique_id: `guest_${Date.now()}`,
+                  name: "Guest",
+                  hide_launcher: false,
+                  launch_widget: true,
+                });
 
-      console.log("GUEST WIDGET REINITIALIZED");
-      setTimeout(() => {
-  const placeholder = document.querySelector(
-    'input[placeholder="Message AI Assistant..."]'
-  ) as HTMLInputElement | null;
+                console.log("GUEST WIDGET REINITIALIZED");
+                setTimeout(() => {
+                  const placeholder = document.querySelector(
+                    'input[placeholder="Message AI Assistant..."]'
+                  ) as HTMLInputElement | null;
 
-  console.log("INPUT FOUND:", placeholder);
+                  console.log("INPUT FOUND:", placeholder);
 
-  if (placeholder) {
-    placeholder.placeholder = "Type Siva your message here...";
-    console.log("Placeholder updated");
-  }
-}, 5000);
-    }
-  }, 500);
+                  if (placeholder) {
+                    placeholder.placeholder = "Type Siva your message here...";
+                    console.log("Placeholder updated");
+                  }
+                }, 5000);
+              }
+            }, 500);
 
-  return;
-}
+            return;
+          }
 
-  const script = document.createElement("script");
+          const script = document.createElement("script");
 
-  script.id = "msg91-script";
-  script.src = "https://blacksea.msg91.com/chat-widget.js";
-  script.async = true;
+          script.id = "msg91-script";
+          script.src = "https://blacksea.msg91.com/chat-widget.js";
+          script.async = true;
 
-  script.onload = () => {
-    console.log("MSG91 GUEST SCRIPT LOADED");
+          script.onload = () => {
+            console.log("MSG91 GUEST SCRIPT LOADED");
 
-    window.initChatWidget({
-  widgetToken: "e78b8",
-  unique_id: `guest_${Date.now()}`,
-  name: "Guest",
-  hide_launcher: false,
-  launch_widget: true,
-});
+            window.initChatWidget({
+              widgetToken: "e78b8",
+              unique_id: `guest_${Date.now()}`,
+              name: "Guest",
+              hide_launcher: false,
+              launch_widget: true,
+            });
 
-    console.log("GUEST WIDGET INITIALIZED");
-    
-    setTimeout(() => {
-    console.log("iframe count", document.querySelectorAll("iframe").length);
-  }, 3000);
-  setTimeout(() => {
-  const placeholder = document.querySelector(
-    'input[placeholder="Message AI Assistant..."]'
-  ) as HTMLInputElement | null;
+            console.log("GUEST WIDGET INITIALIZED");
 
-  console.log("INPUT FOUND:", placeholder);
-  const iframe =
-  document.querySelector("#hello-chatbot-iframe-container iframe");
+            setTimeout(() => {
+              console.log("iframe count", document.querySelectorAll("iframe").length);
+            }, 3000);
+            setTimeout(() => {
+              const placeholder = document.querySelector(
+                'input[placeholder="Message AI Assistant..."]'
+              ) as HTMLInputElement | null;
 
-console.log(iframe);
+              console.log("INPUT FOUND:", placeholder);
+              const iframe =
+                document.querySelector("#hello-chatbot-iframe-container iframe");
 
-  if (placeholder) {
-    placeholder.placeholder = "Type Siva your message here...";
-    console.log("Placeholder updated");
-  }
-}, 5000);
+              console.log(iframe);
+
+              if (placeholder) {
+                placeholder.placeholder = "Type Siva your message here...";
+                console.log("Placeholder updated");
+              }
+            }, 5000);
+
+            setTimeout(() => {
+              try {
+                const iframe = document.getElementById(
+                  "hello-chatbot-iframe-component"
+                ) as HTMLIFrameElement;
+
+                if (!iframe) {
+                  console.log("Iframe not found");
+                  return;
+                }
+
+                const iframeDoc =
+                  iframe.contentDocument ||
+                  iframe.contentWindow?.document;
+
+                const heading = Array.from(
+                  iframeDoc?.querySelectorAll("*") || []
+                ).find(
+                  (el) =>
+                    el.textContent?.trim() ===
+                    "What can I help with?"
+                );
+
+                if (heading) {
+                  heading.textContent =
+                    "How can Backstage Pass help you today?";
+                }
+              } catch (err) {
+                console.error(
+                  "Cross-origin iframe blocked access",
+                  err
+                );
+              }
+            }, 5000);
 
 
-  };
+          };
 
-  script.onerror = () => {
-    console.error("Guest widget script failed");
-  };
+          script.onerror = () => {
+            console.error("Guest widget script failed");
+          };
 
-  document.body.appendChild(script);
+          document.body.appendChild(script);
 
-  return;
-}
+          return;
+        }
 
-          
+
 
         const user = JSON.parse(storedUser);
 
