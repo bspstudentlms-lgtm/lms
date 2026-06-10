@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { signOut } from "next-auth/react";
 
 type User = {
   id?: string;
@@ -44,9 +45,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
     setUser(null);
+
     localStorage.removeItem("user");
+
+    sessionStorage.removeItem("appReloaded");
+    sessionStorage.removeItem("googleReloaded");
+
+    await signOut({
+      callbackUrl: "/signin",
+    });
   };
 
   return (
