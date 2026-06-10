@@ -17,6 +17,11 @@ export default function GoogleSessionSync() {
         phone: "",
         role: "student",
       });
+      
+      if (!sessionStorage.getItem("googleReloaded")) {
+        sessionStorage.setItem("googleReloaded", "true");
+        window.location.reload();
+      }
     }
   }, [session, login]);
 
