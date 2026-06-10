@@ -920,7 +920,7 @@ const HomePageContent = () => {
 
 	
 
-			<section id="blog" className="blog_area section-padding" style={{display: "none"}}>
+			<section id="blog" className="blog_area section-padding">
 			<div className="container">
 				<div className="section-title">
 					<h2>News</h2>
@@ -995,16 +995,18 @@ const HomePageContent = () => {
 					))}
 				</div>
 
+				{blogs.length > 4 && (
 				<div className="col-lg-12 text-center">
 					<div className="cc_btn">
-						<button
-							onClick={() => router.push("/blogs")}
-							className="btn_one"
-						>
-							View All Blogs
-						</button>
+					<button
+						onClick={() => router.push("/blogs")}
+						className="btn_one"
+					>
+						View All Blogs
+					</button>
 					</div>
 				</div>
+				)}
 			</div>
 		</section>
 			<div className="footer section-padding" style={{ paddingTop: "80px" }}>
