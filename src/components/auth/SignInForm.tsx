@@ -85,9 +85,9 @@ const { login } = useAuth();
 
       // ✅ Redirect (no timeout needed)
       if (data.role === "mentor") {
-        router.replace("/mentor-dashboard");
+        window.location.href = "/mentor-dashboard";
       } else {
-        router.replace("/mycourses");
+        window.location.href = "/mycourses";
       }
     } else {
       setError(data.message || "Invalid credentials");
