@@ -8,21 +8,34 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
+
   pages: {
     signIn: "/signin",
   },
-  // callbacks: {
-  //   async redirect({ url, baseUrl }) {
-  //     return baseUrl; // redirects to homepage after login
-  //   },
-  // },
+
   callbacks: {
-  async redirect({ url, baseUrl }) {
-    // allow dynamic return URLs
-    if (url.startsWith(baseUrl)) return url;
-    return baseUrl;
+    async jwt({ token, profile }) {
+      if (profile) {
+        token.id = profile.sub;
+      }
+
+      return token;
+    },
+
+    async session({ session, token }) {
+      if (session.user) {
+        (session.user as any).id = token.id;
+      }
+
+      return session;
+    },
+
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith(baseUrl)) return url;
+
+      return baseUrl;
+    },
   },
-},
 };
 
 export default NextAuth(authOptions);
