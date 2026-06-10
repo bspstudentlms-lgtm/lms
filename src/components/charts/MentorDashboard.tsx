@@ -83,7 +83,15 @@ const SortArrow = ({ column }) => {
 
 
 
+useEffect(() => {
+  if (sessionStorage.getItem("msg91Reload")) {
+    sessionStorage.removeItem("msg91Reload");
 
+    setTimeout(() => {
+      window.location.reload();
+    }, 800);
+  }
+}, []);
 
   useEffect(() => {
     axios

@@ -83,12 +83,16 @@ const { login } = useAuth();
         mentor_id: data.role === "mentor" ? data.mentor_id : undefined,
       });
 
-      // ✅ Redirect (no timeout needed)
-      if (data.role === "mentor") {
-        window.location.href = "/mentor-dashboard";
-      } else {
-        window.location.href = "/mycourses";
-      }
+      sessionStorage.setItem("msg91Reload", "true");
+
+      setTimeout(() => {
+        if (data.role === "mentor") {
+          window.location.href = "/mentor-dashboard";
+        } else {
+          window.location.href = "/mycourses";
+        }
+      }, 500);
+    
     } else {
       setError(data.message || "Invalid credentials");
     }

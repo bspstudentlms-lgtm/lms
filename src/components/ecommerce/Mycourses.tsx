@@ -131,7 +131,15 @@ export default function MyCourses() {
   //     .catch(() => setLoading(false));
   // }, []);
 
+useEffect(() => {
+  if (sessionStorage.getItem("msg91Reload")) {
+    sessionStorage.removeItem("msg91Reload");
 
+    setTimeout(() => {
+      window.location.reload();
+    }, 800);
+  }
+}, []);
 
  useEffect(() => {
   const userId = localStorage.getItem("userId");

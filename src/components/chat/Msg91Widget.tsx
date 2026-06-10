@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 declare global {
   interface Window {
@@ -9,6 +10,7 @@ declare global {
 }
 
 export default function Msg91Widget() {
+  const pathname = usePathname();
   useEffect(() => {
     console.log("MSG91 COMPONENT LOADED");
 
@@ -238,9 +240,10 @@ export default function Msg91Widget() {
         console.error("Widget Init Error", error);
       }
     };
+    console.log("Route changed:", pathname);
 
     loadWidget();
-  }, []);
+  }, [pathname]);
 
   return null;
 }
