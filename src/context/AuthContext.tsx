@@ -37,12 +37,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = (userData: User) => {
     setUser(userData);
     localStorage.setItem("user", JSON.stringify(userData));
-
-    // Reload only once
-    if (!sessionStorage.getItem("appReloaded")) {
-      sessionStorage.setItem("appReloaded", "true");
-      window.location.reload();
-    }
   };
 
   const logout = () => {
