@@ -9,7 +9,10 @@ export default function GoogleSessionSync() {
   const { login } = useAuth();
 
   useEffect(() => {
-    if (session?.user) {
+    if (
+      session?.user &&
+      !localStorage.getItem("user")
+    ) {
       login({
         id: (session.user as any).id || "",
         name: session.user.name || "",
@@ -17,13 +20,8 @@ export default function GoogleSessionSync() {
         phone: "",
         role: "student",
       });
-      
-      if (!sessionStorage.getItem("googleReloaded")) {
-        sessionStorage.setItem("googleReloaded", "true");
-        window.location.reload();
-      }
     }
-  }, [session, login]);
+  }, [session]);
 
   return null;
 }

@@ -31,17 +31,21 @@ export default function UserDropdown() {
   const [email, setEmail] = useState<string | null>(null);
   const { isMobileOpen } = useSidebar();
   useEffect(() => {
-    // Only runs on the client-side
-    const storedusername = localStorage.getItem('username');
-    const storedrole = localStorage.getItem('role');
-    const storedUserId = localStorage.getItem('userId');
-    const storedEmail = localStorage.getItem('email');
+  const loadUser = () => {
+    setUsername(localStorage.getItem("username"));
+    setRole(localStorage.getItem("role"));
+    setUserId(localStorage.getItem("userId"));
+    setEmail(localStorage.getItem("email"));
+  };
 
-    setUsername(storedusername);
-    setRole(storedrole);
-    setUserId(storedUserId);
-    setEmail(storedEmail);
-  }, []);  // The empty array ensures this runs only once after component mounts
+  loadUser();
+
+  window.addEventListener("storage", loadUser);
+
+  return () => {
+    window.removeEventListener("storage", loadUser);
+  };
+}, []);
 
   function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.stopPropagation();
@@ -221,10 +225,15 @@ export default function UserDropdown() {
 
         </ul>
         <button
-          onClick={() => {
+          onClick={async () => {
             localStorage.clear();
             sessionStorage.clear();
-            signOut({ callbackUrl: "/" }); // Redirects to home page after logout
+
+            await signOut({
+              redirect: false,
+            });
+
+            window.location.href = "/";
           }}
           className="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
         >

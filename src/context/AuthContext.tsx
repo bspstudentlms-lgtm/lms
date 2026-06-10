@@ -45,17 +45,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const logout = async () => {
+  const logout = () => {
     setUser(null);
 
     localStorage.removeItem("user");
+    localStorage.removeItem("username");
+    localStorage.removeItem("email");
+    localStorage.removeItem("role");
+    localStorage.removeItem("userId");
 
-    sessionStorage.removeItem("appReloaded");
-    sessionStorage.removeItem("googleReloaded");
-
-    await signOut({
-      callbackUrl: "/signin",
-    });
+    sessionStorage.clear();
   };
 
   return (
