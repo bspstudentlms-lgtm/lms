@@ -54,6 +54,7 @@ export default function CourseGrid() {
 
     if (storedCat) {
       setCategoryFilter(storedCat);
+       localStorage.removeItem("CatId");
     }
   }, []);
 
