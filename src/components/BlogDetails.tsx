@@ -283,11 +283,11 @@ const BlogDetails = ({ slug }: Props) => {
   };
 
   if (loading) {
-    return  <div id="loader-wrapper">
-        <div id="loader"></div>
-        <div className="loader-section section-left"></div>
-        <div className="loader-section section-right"></div>
-      </div>;
+    return <div id="loader-wrapper">
+      <div id="loader"></div>
+      <div className="loader-section section-left"></div>
+      <div className="loader-section section-right"></div>
+    </div>;
   }
 
   if (error) {
@@ -419,9 +419,9 @@ const BlogDetails = ({ slug }: Props) => {
   };
 
   const cleanDescription = event.description.replace(
-  /style="[^"]*"/gi,
-  ""
-);
+    /style="[^"]*"/gi,
+    ""
+  );
 
   return (
     <>
@@ -472,12 +472,12 @@ const BlogDetails = ({ slug }: Props) => {
                 </div>
                 <div className="courses-wrapperb mainpost"><div>
                   <div className={poppins.className}>
-  <span
-  dangerouslySetInnerHTML={{
-    __html: cleanDescription,
-  }}
-/>
-</div>
+                    <span
+                      dangerouslySetInnerHTML={{
+                        __html: cleanDescription,
+                      }}
+                    />
+                  </div>
 
 
                   {/* <p className="suprts1" style={{
@@ -500,18 +500,18 @@ const BlogDetails = ({ slug }: Props) => {
             </div>
             <div className="col-lg-4 col-sm-12 col-xs-12">
 
+              {recentPosts && recentPosts.length > 0 && (
+                <div className="sidebar-post">
+                  <div className="sidebar_title"><h4>Recent Posts</h4></div>
+                  {recentPosts.map((post, index) => (
+                    <div className="single_popular" key={index}>
+                      <a href={`/blogs/${post.event_title_url}`}><img src={`https://www.backstagepass.co.in/blog_new/uploads/events/${post.card_image}`} alt={post.tittle_event} loading="lazy" /></a>
+                      <h5><a href={`/blogs/${post.event_title_url}`}>{post.tittle_event}</a></h5>
+                    </div>
+                  ))}
 
-              <div className="sidebar-post">
-                <div className="sidebar_title"><h4>Recent Posts</h4></div>
-                {recentPosts.map((post, index) => (
-                  <div className="single_popular" key={index}>
-                    <a href={`/blogs/${post.event_title_url}`}><img src={`https://www.backstagepass.co.in/blog_new/uploads/events/${post.card_image}`} alt={post.tittle_event} loading="lazy" /></a>
-                    <h5><a href={`/blogs/${post.event_title_url}`}>{post.tittle_event}</a></h5>
-                  </div>
-                ))}
-
-              </div>
-              
+                </div>
+              )}
 
 
               {relatedPosts && relatedPosts.length > 0 && (
@@ -541,7 +541,7 @@ const BlogDetails = ({ slug }: Props) => {
               <div className="sidebar-post" onClick={() => handleClick(Number(CatId))}>
                 <div className="sidebar_title"><h4>Ad Banner</h4></div>
                 <div className="sidebar-banner">
-                  <a href="/all-courses"><img src="../assets/images/blog/banner.jpg" className="img-fluid" alt="" /> </a>
+                  <a href="/all-courses"><img src="https://www.backstagepass.co.in/adbanner.png" className="img-fluid" alt="" /> </a>
                 </div>
               </div>
             </div>
