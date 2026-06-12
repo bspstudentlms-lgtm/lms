@@ -500,7 +500,7 @@ const BlogDetails = ({ slug }: Props) => {
             </div>
             <div className="col-lg-4 col-sm-12 col-xs-12">
 
-{relatedPosts && relatedPosts.length > 0 && (
+
               <div className="sidebar-post">
                 <div className="sidebar_title"><h4>Recent Posts</h4></div>
                 {recentPosts.map((post, index) => (
@@ -512,7 +512,7 @@ const BlogDetails = ({ slug }: Props) => {
 
               </div>
               
-              )}
+
 
               {relatedPosts && relatedPosts.length > 0 && (
                 <div className="sidebar-post">
