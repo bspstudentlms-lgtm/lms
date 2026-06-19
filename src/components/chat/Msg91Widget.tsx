@@ -38,7 +38,7 @@ export default function Msg91Widget() {
                   unique_id: `guest_${Date.now()}`,
                   name: "Guest",
                   hide_launcher: false,
-                  launch_widget: true,
+                  launch_widget: false,
                 });
 
                 console.log("GUEST WIDGET REINITIALIZED");
