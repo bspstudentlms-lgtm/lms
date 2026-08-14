@@ -182,9 +182,9 @@ const HomePageContent = () => {
 
       <div className="best-cpurse section-padding">
         <div className="container">
-          <div className="section-title">
+          <div className="section-title durga-test">
             <h2>Popular Courses</h2>
-            <p>Choose Our <span>Top Courses</span></p>
+            <p>Choose Our <span>Top Course</span></p>
           </div>
 
 
