@@ -388,7 +388,7 @@ useEffect(() => {
           </div>
 
           {/* Right Side Button */}
-          <div className="call_to_action">
+          <div className="call_to_action test">
             {status === "loading" ? null :
               (status === "authenticated" || localStorage.getItem("email")) ? (
                 <UserDropdown />
