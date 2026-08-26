@@ -564,7 +564,7 @@ const BlogDetails = ({ slug }: Props) => {
               <div className="single_footer">
                 <a><img src="../images/Bsp_White.png" alt="" /></a>
                 <p>Building future game developers through structured, practical learning.
-                  Create real projects. Build real skills. Grow your careers.
+                  Create real projects. Build real skills. Grow your career.
                 </p>
                 <ul className="social-home">
                   <li><a href="https://www.facebook.com/profile.php?id=61588089197582" target="_blank" className="facebook-home"><i className="fa fa-facebook"></i></a></li>
