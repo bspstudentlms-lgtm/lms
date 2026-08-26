@@ -10,7 +10,7 @@ const outfit = Outfit({ subsets: ["latin"] });
 export const metadata = {
   title: "Backstagepass online learning | Online Gaming Courses & certificates",
   description:
-    "Learn with Self-Paced Online Gaming Courses from Top Industry Experts",
+    "Learn with Self-Paced Online Gaming Courses from Top Industry Experts test",
     
   verification: {
     google: "rA-13zNhu6gV6Vo836kTcXNnNi4xzurZjEE4yfv7lw8",
